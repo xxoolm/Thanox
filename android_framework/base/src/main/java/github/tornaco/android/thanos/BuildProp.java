@@ -13,9 +13,9 @@ public final class BuildProp
 
    public static final String THANOS_APP_PKG_NAME = "github.tornaco.android.thanos";
 
-   public static final String FINGERPRINT = "thanos@tornaco:3a198d90-9d6c-3b49-8a68-00d5b19718c2";
+   public static final String FINGERPRINT = "thanos@tornaco:bab8e296-b1d1-397f-ac41-1e68e8209dc2";
 
-   public static final java.util.Date BUILD_DATE = new java.util.Date(1569939826455L);
+   public static final java.util.Date BUILD_DATE = new java.util.Date(1569939952273L);
 
    public static final String ACTIVITY_APP_LOCK_VERIFIER = "github.tornaco.practice.honeycomb.locker.ui.verify.VerifyActivity";
 
