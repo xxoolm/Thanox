@@ -31,14 +31,13 @@ public class AppsManageActivity extends CommonAppListFilterActivity {
     @NonNull
     @Override
     protected AppItemViewClickListener onCreateAppItemViewClickListener() {
-        return appInfo -> {
-
-        };
+        return appInfo -> AppDetailsActivity.start(AppsManageActivity.this, appInfo);
     }
 
     @NonNull
     @Override
     protected CommonAppListFilterViewModel.ListModelLoader onCreateListModelLoader() {
+        String runningBadge = getString(R.string.badge_app_running);
         return index -> {
             ThanosManager thanos = ThanosManager.from(getApplicationContext());
             if (!thanos.isServiceInstalled()) {
@@ -47,7 +46,7 @@ public class AppsManageActivity extends CommonAppListFilterActivity {
             List<AppInfo> installed = Lists.newArrayList(thanos.getPkgManager().getInstalledPkgs(index.flag));
             List<AppListModel> res = new ArrayList<>();
             CollectionUtils.consumeRemaining(installed, appInfo -> {
-                res.add(new AppListModel(appInfo));
+                res.add(new AppListModel(appInfo, thanos.getActivityManager().isPackageRunning(appInfo.getPkgName()) ? runningBadge : null));
             });
             return res;
         };

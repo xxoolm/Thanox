@@ -2,6 +2,7 @@ package github.tornaco.android.thanos.services.pm
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.ServiceManager
@@ -138,12 +139,24 @@ internal class PkgCache {
             Timber.w("thanosAppUid=%s", thanosAppUid)
         }
 
+        val packageInfo = try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                pm.getPackageInfo(pkgName, PackageManager.MATCH_UNINSTALLED_PACKAGES)
+            } else {
+                pm.getPackageInfo(pkgName, PackageManager.GET_UNINSTALLED_PACKAGES)
+            }
+        } catch (nnf: PackageManager.NameNotFoundException) {
+            Timber.e("Error getPackageInfo for $pkgName", nnf)
+            return
+        }
+
         // WhiteList
         when {
 
             whiteList.contains(pkgName) -> whiteListApps.add(
                 this@PkgCache.constructAppInfo(
                     pm,
+                    packageInfo,
                     applicationInfo,
                     AppInfo.FLAGS_WHITE_LISTED
                 )
@@ -152,6 +165,7 @@ internal class PkgCache {
             this@PkgCache.isWebViewProvider(pkgName) -> webViewProviderApps.add(
                 this@PkgCache.constructAppInfo(
                     pm,
+                    packageInfo,
                     applicationInfo,
                     AppInfo.FLAGS_WEB_VIEW_PROVIDER
                 )
@@ -159,22 +173,13 @@ internal class PkgCache {
 
             applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0 ->
                 try {
-                    val packageInfo = try {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            pm.getPackageInfo(pkgName, PackageManager.MATCH_UNINSTALLED_PACKAGES)
-                        } else {
-                            pm.getPackageInfo(pkgName, PackageManager.GET_UNINSTALLED_PACKAGES)
-                        }
-                    } catch (nnf: PackageManager.NameNotFoundException) {
-                        Timber.e("Error getPackageInfo for $pkgName", nnf)
-                        return
-                    }
                     val sharedUserId = packageInfo.sharedUserId
 
                     when {
                         PkgUtils.isSharedUserIdMedia(sharedUserId) -> mediaUidApps.add(
                             this@PkgCache.constructAppInfo(
                                 pm,
+                                packageInfo,
                                 applicationInfo,
                                 AppInfo.FLAGS_SYSTEM_MEDIA
                             )
@@ -182,6 +187,7 @@ internal class PkgCache {
                         PkgUtils.isSharedUserIdPhone(sharedUserId) -> phoneUidApps.add(
                             this@PkgCache.constructAppInfo(
                                 pm,
+                                packageInfo,
                                 applicationInfo,
                                 AppInfo.FLAGS_SYSTEM_PHONE
                             )
@@ -189,6 +195,7 @@ internal class PkgCache {
                         PkgUtils.isSharedUserIdSystem(sharedUserId) -> systemUidApps.add(
                             this@PkgCache.constructAppInfo(
                                 pm,
+                                packageInfo,
                                 applicationInfo,
                                 AppInfo.FLAGS_SYSTEM_UID
                             )
@@ -196,6 +203,7 @@ internal class PkgCache {
                         else -> systemApps.add(
                             this@PkgCache.constructAppInfo(
                                 pm,
+                                packageInfo,
                                 applicationInfo,
                                 AppInfo.FLAGS_SYSTEM
                             )
@@ -205,7 +213,7 @@ internal class PkgCache {
                     Timber.e(e)
                 }
 
-            else -> _3rdApps.add(this@PkgCache.constructAppInfo(pm, applicationInfo, AppInfo.FLAGS_USER))
+            else -> _3rdApps.add(this@PkgCache.constructAppInfo(pm, packageInfo, applicationInfo, AppInfo.FLAGS_USER))
         }
     }
 
@@ -231,13 +239,19 @@ internal class PkgCache {
         Timber.d("onApplicationsParsed")
     }
 
-    private fun constructAppInfo(pm: PackageManager, applicationInfo: ApplicationInfo, flags: Int): AppInfo {
+    private fun constructAppInfo(
+        pm: PackageManager,
+        packageInfo: PackageInfo,
+        applicationInfo: ApplicationInfo,
+        flags: Int
+    ): AppInfo {
         val appInfo = AppInfo()
         appInfo.pkgName = applicationInfo.packageName
         var loadedLabel = applicationInfo.loadLabel(pm)
         if (TextUtils.isEmpty(loadedLabel)) loadedLabel = appInfo.pkgName
         appInfo.appLabel = loadedLabel.toString()
         appInfo.versionCode = applicationInfo.versionCode
+        appInfo.versionName = packageInfo.versionName
         appInfo.flags = flags
         appInfo.uid = applicationInfo.uid
         return appInfo

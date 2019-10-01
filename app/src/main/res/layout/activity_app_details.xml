@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+                name="viewmodel"
+                type="github.tornaco.android.thanos.apps.AppDetailsViewModel"/>
+
+        <variable
+                name="app"
+                type="github.tornaco.android.thanos.core.pm.AppInfo"/>
+
+        <variable
+                name="cate"
+                type="github.tornaco.android.thanos.common.CategoryIndex"/>
+
+    </data>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="?colorPrimary"
+                android:theme="?appbarTheme">
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    app:theme="?toolbarTheme"
+                    app:popupTheme="?appbarPopupTheme"
+                    app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    app:title="@string/app_name"
+                    app:titleTextColor="?menuIconTint">
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <androidx.cardview.widget.CardView
+                android:id="@+id/app_info_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/appbar"
+                app:cardBackgroundColor="?cardsBackgroundColor"
+                app:contentPadding="@dimen/common_view_margin_default"
+                app:cardElevation="@dimen/common_view_elevation"
+                app:cardCornerRadius="@dimen/common_view_corner_radius">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <ImageView android:layout_width="@dimen/app_details_app_icon_w"
+                           android:layout_height="@dimen/app_details_app_icon_h"
+                           android:appIcon="@{app}"
+                           android:layout_centerVertical="true"
+                           android:id="@+id/icon"
+                           tools:src="@mipmap/ic_launcher_round"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          tools:text="Thanox"
+                          android:id="@+id/label"
+                          android:layout_toEndOf="@id/icon"
+                          android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                          android:layout_marginStart="@dimen/common_view_margin_default"
+                          android:text="@{app.appLabel}"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          tools:text="1.0.0-rc1"
+                          android:id="@+id/version"
+                          android:layout_toEndOf="@id/label"
+                          android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                          android:layout_marginStart="@dimen/common_view_margin_small"
+                          android:layout_alignBaseline="@id/label"
+                          android:text="@{app.versionName}"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          tools:text="com.a.c.x.x.x.x.x.c.d.e.r.y.u.g.d.dddd.s.s.s.d.xxxxxxxxxxxxxasss"
+                          android:id="@+id/pkg"
+                          android:layout_below="@id/label"
+                          android:layout_toEndOf="@id/icon"
+                          android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                          android:layout_marginStart="@dimen/common_view_margin_default"
+                          android:text="@{app.pkgName}"/>
+
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          tools:text="10029"
+                          android:layout_below="@id/pkg"
+                          android:id="@+id/uid"
+                          android:layout_toEndOf="@id/icon"
+                          android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                          android:layout_marginStart="@dimen/common_view_margin_default"
+                          android:text="@{String.valueOf(app.uid)}"/>
+
+                <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/badge1"
+                        tools:text="Active"
+                        android:layout_below="@id/uid"
+                        android:layout_toEndOf="@id/icon"
+                        android:visibility="@{cate == null ? View.GONE : View.VISIBLE}"
+                        android:text="@{cate.name()}"
+                        android:layout_marginStart="@dimen/common_view_margin_default"
+                        android:textSize="@dimen/list_item_main_text_size_small"
+                        android:textColor="@color/md_white"
+                        android:background="@color/md_yellow_700"/>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+</layout>

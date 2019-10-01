@@ -48,6 +48,7 @@
         <activity android:name=".apps.AppsManageActivity"/>
         <activity android:name=".privacy.CheatFieldSettingsActivity"/>
         <activity android:name=".start.BgRestrictSettingsActivity"/>
+        <activity android:name=".apps.AppDetailsActivity"/>
     </application>
 
 </manifest>

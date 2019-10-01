@@ -14,6 +14,9 @@
     <dimen name="verify_app_icon_w">42dp</dimen>
     <dimen name="verify_app_icon_h">42dp</dimen>
 
+    <dimen name="app_details_app_icon_w">64dp</dimen>
+    <dimen name="app_details_app_icon_h">64dp</dimen>
+
     <dimen name="list_item_main_text_size_normal">16sp</dimen>
     <dimen name="list_item_main_text_size_small">12sp</dimen>
 

@@ -20,6 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/module_donate_title"
+                app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:titleTextColor="?menuIconTint"
                 app:theme="?toolbarTheme"
                 app:popupTheme="?appbarPopupTheme"/>
