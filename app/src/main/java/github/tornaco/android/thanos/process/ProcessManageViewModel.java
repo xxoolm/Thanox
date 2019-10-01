@@ -80,6 +80,11 @@ public class ProcessManageViewModel extends AndroidViewModel {
                                     .getActivityManager()
                                     .getRunningAppProcessForPackage(s));
 
+                            if (CollectionUtils.isNullOrEmpty(processRecords)) {
+                                Timber.e("Empty processRecords for %s", s);
+                                return;
+                            }
+
                             // Get mem size.
                             long size = getMemSize(processRecords);
 

@@ -438,6 +438,10 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     @ExecuteBySystemHandler
     private void addProcessNameInternal(ProcessRecord processRecord) {
         Timber.v("addProcessNameInternal, processRecord: %s", processRecord);
+        if (processRecord.getPid() ==0) {
+            Timber.e("Invalid pid=0, processRecord %s", processRecord);
+            return;
+        }
         if (processRecord.getPackageName() != null) {
             ProcessRecordList records = processMap.get(processRecord.getPackageName());
             if (records == null) records = new ProcessRecordList(processRecord.getPackageName());
@@ -460,7 +464,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
             ProcessRecordList records = processMap.get(processRecord.getPackageName());
             if (records == null) records = new ProcessRecordList(processRecord.getPackageName());
             boolean removed = records.removeProcessRecord(processRecord);
-            Timber.v("removeProcessNameLocked removed ? %s", removed);
+            Timber.v("removeProcessNameLocked, %s  removed ? %s", processRecord, removed);
             processMap.put(processRecord.getPackageName(), records);
 
             onRunningProcessChanged();
@@ -593,11 +597,13 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     public ProcessRecord[] getRunningAppProcessForPackage(String pkgName) {
         boostPriorityForLockedSection();
         ProcessRecordList processRecordList = processMap.get(pkgName);
-        if (processRecordList == null) return new ProcessRecord[0];
+        if (processRecordList == null) {
+            Timber.e("processRecordList not found for pkg: %s", pkgName);
+            return new ProcessRecord[0];
+        }
         Set<ProcessRecord> records = new HashSet<>();
         DevNull.accept(Observable.fromIterable(processRecordList.getProcessRecords())
                 .filter(processRecord -> processRecord.getPid() != 0)
-                .distinct()
                 .subscribe(records::add));
         try {
             return records.toArray(new ProcessRecord[0]);
@@ -854,7 +860,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
 
     @Override
     public void onTaskRemoving(int callingUid, int taskId) {
-        Timber.v("onTaskRemoving: taskId: %s, callingUid: %s", taskId, callingUid);
+        Timber.d("onTaskRemoving: taskId: %s, callingUid: %s", taskId, callingUid);
         Completable
                 .fromRunnable(() -> onTaskRemovingInternal(callingUid, taskId))
                 .subscribeOn(ThanosSchedulers.serverThread())

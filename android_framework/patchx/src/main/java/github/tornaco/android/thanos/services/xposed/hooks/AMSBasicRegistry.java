@@ -5,7 +5,6 @@ import android.app.ApplicationErrorReport;
 import android.app.IApplicationThread;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Binder;
 import android.util.Log;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -40,7 +39,6 @@ public class AMSBasicRegistry implements IXposedHook {
             hookAMSSystemReady(lpparam);
             hookAMSShutdown(lpparam);
             hookBroadcastIntent(lpparam);
-            hookRemoveTask(lpparam);
             hookHandleApplicationCrash(lpparam);
         }
     }
@@ -132,25 +130,6 @@ public class AMSBasicRegistry implements IXposedHook {
             Timber.i("hookBroadcastIntent, unhooks %s", unHooks);
         } catch (Exception e) {
             Timber.i("hookBroadcastIntent error %s", Log.getStackTraceString(e));
-        }
-    }
-
-    private void hookRemoveTask(XC_LoadPackage.LoadPackageParam lpparam) {
-        try {
-            Class ams = XposedHelpers.findClass("com.android.server.am.ActivityManagerService",
-                    lpparam.classLoader);
-            Set unHooks = XposedBridge.hookAllMethods(ams, "removeTask",
-                    new XC_MethodHook() {
-                        @Override
-                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            super.beforeHookedMethod(param);
-                            int callingUid = Binder.getCallingUid();
-                            int taskId = (int) param.args[0];
-                        }
-                    });
-            Timber.i("hookRemoveTask, unhooks %s", unHooks);
-        } catch (Exception e) {
-            Timber.i("hookRemoveTask error %s", Log.getStackTraceString(e));
         }
     }
 
