@@ -107,6 +107,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_rocket_fill"
+                android:tint="@color/md_white"
                 android:layout_margin="@dimen/common_view_margin_default"/>
     </RelativeLayout>
 </layout>

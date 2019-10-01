@@ -56,7 +56,7 @@
     <string name="feature_category_app_manage">应用</string>
     <string name="feature_title_apps_manager">应用管理</string>
     <string name="activity_title_apps_manager">应用管理（%s）</string>
-    <string name="feature_summary_apps_manager">应用的卸载、冻结、组件管理</string>
+    <string name="feature_summary_apps_manager">应用的配置与管理</string>
 
     <string name="feature_category_privacy">隐私</string>
     <string name="feature_category_remind">提醒</string>
