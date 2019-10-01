@@ -20,4 +20,5 @@ public class Tile {
     @ColorRes
     private int themeColor;
     private boolean atEndOfThisCategory;
+    private boolean disabled;
 }

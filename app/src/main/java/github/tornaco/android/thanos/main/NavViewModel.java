@@ -12,6 +12,7 @@ import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.app.donate.DonateSettings;
 import github.tornaco.android.thanos.apps.AppsManageActivity;
 import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.util.OsUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.dashboard.Tile;
 import github.tornaco.android.thanos.privacy.DataCheatActivity;
@@ -233,6 +234,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .themeColor(R.color.md_grey_700)
                                 .atEndOfThisCategory(true)
                                 .onClickListener(view -> CleanUpOnTaskRemovedActivity.start(getApplication()))
+                                .disabled(OsUtils.isMIUI())
                                 .build(),
 
                         Tile.builder()
@@ -246,6 +248,7 @@ public class NavViewModel extends AndroidViewModel {
                                 })
                                 .build()
                 )
+                .filter(tile -> !tile.isDisabled())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(tile -> {
@@ -319,6 +322,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_light_on_notifiation))
                                 .category(resources.getString(R.string.feature_category_notifiation))
                                 .themeColor(R.color.md_blue_grey_500)
+                                .disabled(OsUtils.isMIUI())
                                 .onClickListener(view -> {
                                 })
                                 .build(),
