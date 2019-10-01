@@ -1,10 +1,10 @@
 package github.tornaco.android.thanos;
 
 import android.app.Application;
+import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 import com.google.common.io.Files;
-import com.osama.firecrasher.CrashLevel;
 import com.osama.firecrasher.FireCrasher;
 import github.tornaco.android.thanos.core.util.DateUtils;
 import github.tornaco.android.thanos.core.util.DevNull;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 class CrashHandler {
-    private static int crashTimes;
 
     static void install(Application application) {
         FireCrasher.INSTANCE.install(application, (throwable, activity) -> {
@@ -31,9 +30,7 @@ class CrashHandler {
                 } catch (IOException ignored) {
                 } finally {
                 }
-            }).subscribeOn(Schedulers.io()).subscribe(() -> {
-                FireCrasher.INSTANCE.recover(CrashLevel.LEVEL_THREE, activity1 -> null);
-            });
+            }).subscribeOn(Schedulers.io()).subscribe(() -> Process.killProcess(Process.myPid()));
             DevNull.accept(dev);
         });
     }
