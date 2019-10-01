@@ -31,7 +31,7 @@ install:
 
 build_script:
   - openssl enc -aes-256-cbc -d -K %K% -iv %IV% -in %APPVEYOR_BUILD_FOLDER%/environment/keys/android-key-enc -out %APPVEYOR_BUILD_FOLDER%/environment/keys/android.jks
-  - gradlew.bat :app:assembleDebug
+  - gradlew.bat :app:assembleRelease
   - cp out\app\outputs\apk\prcBeta\release\app-prc-beta-release.apk .
 
 artifacts:
