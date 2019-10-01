@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            app:title="@string/pre_category_app_feature_config">
+
+
+        <SwitchPreference
+                app:key="@string/key_app_feature_config_start_restrict"
+                app:title="@string/feature_title_start_restrict"
+                app:summary="@string/feature_desc_start_restrict"
+                android:persistent="false"/>
+
+        <SwitchPreference
+                app:key="@string/key_app_feature_config_bg_restrict"
+                app:title="@string/feature_title_bg_restrict"
+                app:summary="@string/feature_desc_bg_restrict"
+                android:persistent="false"/>
+
+        <SwitchPreference
+                app:key="@string/key_app_feature_config_task_clean_up"
+                app:title="@string/feature_title_clean_when_task_removed"
+                app:summary="@string/feature_desc_clean_when_task_removed"
+                android:persistent="false"/>
+
+        <SwitchPreference
+                app:key="@string/key_app_feature_config_privacy_cheat"
+                app:title="@string/feature_title_data_cheat"
+                app:summary="@string/feature_desc_data_cheat"
+                android:persistent="false"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

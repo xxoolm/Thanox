@@ -271,7 +271,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .summary(thanos.isServiceInstalled()
                                         ? resources.getString(R.string.secure_privacy_request_count,
                                         String.valueOf(thanos.getPrivacyManager().getPrivacyDataCheatRequestCount()))
-                                        : null)
+                                        : resources.getString(R.string.feature_desc_data_cheat))
                                 .category(resources.getString(R.string.feature_category_privacy))
                                 .themeColor(R.color.md_grey_500)
                                 .onClickListener(view -> DataCheatActivity.start(getApplication()))
@@ -302,6 +302,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .onClickListener(view -> RemindOpsActivity.start(getApplication()))
                                 .build()
                 )
+                .filter(tile -> !tile.isDisabled())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(tile -> {
@@ -342,6 +343,7 @@ public class NavViewModel extends AndroidViewModel {
                                 })
                                 .build()
                 )
+                .filter(tile -> !tile.isDisabled())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(tile -> {

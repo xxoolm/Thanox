@@ -18,9 +18,20 @@
     <string name="key_original_field_sim_serial" translatable="false">key_original_field_sim_serial</string>
 
     <string name="key_bg_screen_off_clean_up_delay" translatable="false">key_bg_screen_off_clean_up_delay</string>
-    <string name="key_bg_screen_off_clean_up_skip_audio" translatable="false">key_bg_screen_off_clean_up_skip_audio</string>
-    <string name="key_bg_screen_off_clean_up_skip_notification" translatable="false">key_bg_screen_off_clean_up_skip_notification</string>
+    <string name="key_bg_screen_off_clean_up_skip_audio" translatable="false">key_bg_screen_off_clean_up_skip_audio
+    </string>
+    <string name="key_bg_screen_off_clean_up_skip_notification" translatable="false">
+        key_bg_screen_off_clean_up_skip_notification
+    </string>
 
     <string name="key_data_backup" translatable="false">key_data_backup</string>
     <string name="key_data_restore" translatable="false">key_data_restore</string>
+
+    <string name="key_app_feature_config_start_restrict" translatable="false">key_app_feature_config_start_restrict
+    </string>
+    <string name="key_app_feature_config_bg_restrict" translatable="false">key_app_feature_config_bg_restrict</string>
+    <string name="key_app_feature_config_task_clean_up" translatable="false">key_app_feature_config_task_clean_up
+    </string>
+    <string name="key_app_feature_config_privacy_cheat" translatable="false">key_app_feature_config_privacy_cheat
+    </string>
 </resources>

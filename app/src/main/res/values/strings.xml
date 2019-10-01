@@ -69,6 +69,7 @@
     <string name="feature_title_component_replacement">移花接木</string>
 
     <string name="feature_title_data_cheat">隐匿</string>
+    <string name="feature_desc_data_cheat">隐藏手机号，SIM序列等敏感信息</string>
     <string name="activity_title_data_cheat">隐匿</string>
     <string name="feature_summary_pkg_data_cheat">身份隐藏</string>
 
@@ -88,6 +89,7 @@
     <string name="pre_category_data">数据</string>
     <string name="pre_category_about">关于</string>
     <string name="pre_category_dev_tools">开发者</string>
+    <string name="pre_category_app_feature_config">配置项</string>
 
     <string name="pref_title_enable_logging">开启日志</string>
     <string name="pref_summary_enable_logging">你可以从控制台或者劫持框架中获取到输出的日志内容</string>

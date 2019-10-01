@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.common.CategoryIndex;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.databinding.ActivityAppDetailsBinding;
@@ -37,6 +38,17 @@ public class AppDetailsActivity extends ThemeActivity {
         setContentView(binding.getRoot());
         initView();
         initViewModel();
+
+        if (savedInstanceState == null) {
+            FeatureConfigFragment featureConfigFragment = new FeatureConfigFragment();
+            Bundle data = new Bundle();
+            data.putParcelable("app", appInfo);
+            featureConfigFragment.setArguments(data);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, featureConfigFragment)
+                    .commit();
+        }
     }
 
     private boolean resolveIntent() {
