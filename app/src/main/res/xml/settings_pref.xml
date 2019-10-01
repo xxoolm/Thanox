@@ -21,16 +21,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-            app:title="@string/pre_category_strategy">
-
-        <SwitchPreferenceCompat
-                app:key="@string/key_ignore_system_app"
-                app:title="@string/pre_title_ignore_system_app"
-                app:summary="@string/pre_summary_ignore_system_app"
-                app:persistent="false"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
             app:title="@string/pre_category_data">
 
         <Preference
