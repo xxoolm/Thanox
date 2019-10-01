@@ -109,8 +109,8 @@
     <string name="pre_title_restore">恢复</string>
     <string name="pre_sumary_restore">选择一个备份包以恢复Thanox设置</string>
 
-    <string name="pre_message_restore_success">备份成功</string>
-    <string name="pre_message_backup_success">恢复成功</string>
+    <string name="pre_message_restore_success">恢复成功</string>
+    <string name="pre_message_backup_success">备份成功</string>
 
     <string name="pre_cheat_field_category_original">原数据</string>
     <string name="pre_cheat_field_category_cheated">隐匿数据</string>

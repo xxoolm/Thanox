@@ -27,6 +27,49 @@ public class SettingsViewModel extends AndroidViewModel {
         super(application);
     }
 
+    void performRestore(RestoreListener listener, File zipFile) {
+        ThanosManager.from(getApplication())
+                .ifServiceInstalled(thanosManager -> {
+                    File tmpDir = new File(getApplication().getCacheDir(), "restore_tmp");
+
+                    try {
+                        File tmpZipFile = new File(tmpDir, zipFile.getName());
+                        Files.createParentDirs(tmpZipFile);
+                        Files.copy(zipFile, tmpZipFile);
+
+                        ParcelFileDescriptor pfd = ParcelFileDescriptor.open(tmpZipFile, ParcelFileDescriptor.MODE_READ_ONLY);
+                        thanosManager.getBackupAgent().performRestore(pfd, null, null, new IBackupCallback.Stub() {
+
+                            @Override
+                            public void onBackupFinished(String domain, String path) {
+                                // Not for us.
+                            }
+
+                            @Override
+                            public void onRestoreFinished(String domain, String path) {
+                                listener.onSuccess();
+                                Timber.d("onRestoreFinished: " + path);
+                            }
+
+                            @Override
+                            public void onFail(String message) {
+                                listener.onFail(message);
+                                Timber.d("onFail: " + message);
+                            }
+
+                            @Override
+                            public void onProgress(String progressMessage) {
+
+                            }
+                        });
+                    } catch (Exception e) {
+                        listener.onFail(Log.getStackTraceString(e));
+                    } finally {
+                        FileUtils.deleteDirQuiet(tmpDir);
+                    }
+                });
+    }
+
     void performBackup(BackupListener listener) {
         File backupDir = new File(getApplication().getCacheDir(), "backup");
         File externalBackupDir = new File(getApplication().getExternalCacheDir(), "backup");
@@ -103,6 +146,14 @@ public class SettingsViewModel extends AndroidViewModel {
     interface BackupListener {
         @UiThread
         void onSuccess(File dest);
+
+        @UiThread
+        void onFail(String errMsg);
+    }
+
+    interface RestoreListener {
+        @UiThread
+        void onSuccess();
 
         @UiThread
         void onFail(String errMsg);

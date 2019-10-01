@@ -1,7 +1,13 @@
 package github.tornaco.android.thanos.core.util;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import com.google.common.io.Files;
+import github.tornaco.android.thanos.core.annotation.NonNull;
+import github.tornaco.android.thanos.core.annotation.Nullable;
 import github.tornaco.java.common.util.CollectionUtils;
 import github.tornaco.java.common.util.Consumer;
 import github.tornaco.java.common.util.IoUtils;
@@ -143,5 +149,32 @@ public class FileUtils {
             return true;
         }
         return isEmptyDir(dir);
+    }
+
+    @Nullable
+    public static File getFileForUri(Context context, @NonNull Uri uri) {
+        String path;
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(uri, null, null, null, null);
+            if (cursor == null) {
+                return null;
+            }
+            if (cursor.moveToFirst()) {
+                try {
+                    path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    if (path != null) {
+                        return new File(path);
+                    }
+                } catch (Exception e) {
+                    Timber.e("getFileForUri#cursor.getString", e);
+                    return null;
+                }
+            }
+        } finally {
+            IoUtils.closeQuietly(cursor);
+        }
+
+        return null;
     }
 }

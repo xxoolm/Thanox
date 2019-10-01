@@ -1,9 +1,12 @@
 package github.tornaco.android.thanos.settings;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,12 +15,14 @@ import androidx.preference.DropDownPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.app.donate.DonateActivity;
 import github.tornaco.android.thanos.app.donate.DonateSettings;
 import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.util.FileUtils;
 import github.tornaco.android.thanos.core.util.ObjectToStringUtils;
 import github.tornaco.android.thanos.core.util.Optional;
 import github.tornaco.android.thanos.core.util.Timber;
@@ -39,6 +44,7 @@ import java.util.Objects;
 @RuntimePermissions
 public class SettingsFragment extends PreferenceFragmentCompat {
     private final static int REQUEST_CODE_BACKUP_FILE_PICK = 0x100;
+    private final static int REQUEST_CODE_RESTORE_FILE_PICK = 0x200;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -155,6 +161,39 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Timber.d("onActivityResult: %s %s %s", requestCode, resultCode, ObjectToStringUtils.intentToString(data));
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_RESTORE_FILE_PICK) {
+            if (data == null) {
+                Timber.e("No data.");
+                return;
+            }
+
+            Uri uri = data.getData();
+            if (uri == null) {
+                Timber.e("No uri.");
+                return;
+            }
+
+            File file = FileUtils.getFileForUri(Objects.requireNonNull(getContext()), uri);
+            if (file == null) {
+                Timber.e("No file");
+                return;
+            }
+
+            Optional.ofNullable(getActivity())
+                    .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity).performRestore(new SettingsViewModel.RestoreListener() {
+                        @Override
+                        public void onSuccess() {
+                            Snackbar.make(getListView(),
+                                    getString(R.string.pre_message_restore_success),
+                                    Snackbar.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFail(String errMsg) {
+                            Toast.makeText(fragmentActivity.getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
+                        }
+                    }, file));
+        }
     }
 
     @RequiresPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
@@ -163,9 +202,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity).performBackup(new SettingsViewModel.BackupListener() {
                     @Override
                     public void onSuccess(File dest) {
-                        Toast.makeText(fragmentActivity.getApplicationContext(),
-                                getString(R.string.pre_message_restore_success) + "\n" + dest.getAbsolutePath(),
-                                Toast.LENGTH_LONG).show();
+                        Snackbar.make(getListView(),
+                                getString(R.string.pre_message_backup_success) + "\n" + dest.getAbsolutePath(),
+                                Snackbar.LENGTH_INDEFINITE).show();
                     }
 
                     @Override
@@ -179,7 +218,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     void restoreRequested() {
         Intent intent = new Intent("android.intent.action.OPEN_DOCUMENT");
         intent.setType("*/*");
-        startActivityForResult(intent, REQUEST_CODE_BACKUP_FILE_PICK);
+        startActivityForResult(intent, REQUEST_CODE_RESTORE_FILE_PICK);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        SettingsFragmentPermissionRequester.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private static SettingsViewModel obtainViewModel(FragmentActivity activity) {
