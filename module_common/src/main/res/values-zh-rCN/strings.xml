@@ -14,4 +14,6 @@
     <string name="common_menu_title_select_all">全部</string>
     <string name="common_menu_title_un_select_all">全不</string>
     <string name="common_menu_title_search">搜索</string>
+
+    <string name="app_state_disabled">已冻结</string>
 </resources>

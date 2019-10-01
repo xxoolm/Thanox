@@ -10,6 +10,7 @@ import lombok.ToString;
 public class AppListModel extends ListModel<AppListModel> {
     @NonNull
     public AppInfo appInfo;
+    // Extra badge.
     @Nullable
     public String badge;
 

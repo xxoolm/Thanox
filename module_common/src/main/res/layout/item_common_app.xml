@@ -66,12 +66,26 @@
             <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/badge1"
+                    android:id="@+id/state_badge"
                     android:layout_toEndOf="@id/title"
+                    android:layout_centerVertical="true"
+                    android:textSize="@dimen/list_item_main_text_size_small"
+                    android:text="@string/app_state_disabled"
+                    android:visibility="@{app.disabled() ? View.VISIBLE : View.GONE}"
+                    android:textColor="@color/md_black"
+                    android:singleLine="true"
+                    android:background="@color/md_grey_200"/>
+
+            <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/badge1"
+                    android:layout_toEndOf="@id/state_badge"
                     tools:text="Active"
                     android:layout_centerVertical="true"
                     android:textSize="@dimen/list_item_main_text_size_small"
                     android:text="@{badge1}"
+                    android:singleLine="true"
                     android:visibility="@{badge1 == null ? View.GONE : View.VISIBLE}"
                     android:textColor="@color/md_white"
                     android:background="?colorAccent"/>

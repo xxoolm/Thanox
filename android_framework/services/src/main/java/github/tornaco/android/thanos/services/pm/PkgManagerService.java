@@ -1,6 +1,8 @@
 package github.tornaco.android.thanos.services.pm;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.os.Binder;
 import android.os.IBinder;
 import android.os.UserHandle;
 import github.tornaco.android.thanos.core.pm.AppInfo;
@@ -14,6 +16,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PkgManagerService extends SystemService implements IPkgManager {
     private final S s;
@@ -129,6 +132,36 @@ public class PkgManagerService extends SystemService implements IPkgManager {
     @Override
     public boolean isPkgInWhiteList(String pkg) {
         return pkgCache.getWhiteList().contains(pkg);
+    }
+
+    @Override
+    public void setComponentEnabledSetting(ComponentName componentName, int newState, int flags) {
+        executeInternal(() -> Objects.requireNonNull(getContext()).getPackageManager().setComponentEnabledSetting(componentName, newState, flags));
+    }
+
+    @Override
+    public int getComponentEnabledSetting(ComponentName componentName) {
+        long ident = Binder.clearCallingIdentity();
+        try {
+            return Objects.requireNonNull(getContext()).getPackageManager().getComponentEnabledSetting(componentName);
+        } finally {
+            Binder.restoreCallingIdentity(ident);
+        }
+    }
+
+    @Override
+    public int getApplicationEnabledSetting(String packageName) {
+        long ident = Binder.clearCallingIdentity();
+        try {
+            return Objects.requireNonNull(getContext()).getPackageManager().getApplicationEnabledSetting(packageName);
+        } finally {
+            Binder.restoreCallingIdentity(ident);
+        }
+    }
+
+    @Override
+    public void setApplicationEnabledSetting(String packageName, int newState, int flags, boolean tmp) {
+        executeInternal(() -> Objects.requireNonNull(getContext()).getPackageManager().setApplicationEnabledSetting(packageName, newState, flags));
     }
 
     @Override

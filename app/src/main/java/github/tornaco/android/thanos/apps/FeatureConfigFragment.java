@@ -1,8 +1,10 @@
 package github.tornaco.android.thanos.apps;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import github.tornaco.android.thanos.R;
@@ -37,10 +39,50 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
             return;
         }
 
+        bindFeatureConfigPref();
+        bindAppStatePref();
+
+    }
+
+    private void bindFeatureConfigPref() {
         new StartRestrictPref(Objects.requireNonNull(getContext())).bind();
         new BgRestrictPref(getContext()).bind();
         new TaskCleanUp(getContext()).bind();
         new PrivacyCheat(getContext()).bind();
+    }
+
+    private void bindAppStatePref() {
+        ThanosManager thanos = ThanosManager.from(getContext());
+        int state = thanos.getPkgManager().getApplicationEnabledSetting(appInfo.getPkgName());
+        boolean disabled = state != PackageManager.COMPONENT_ENABLED_STATE_ENABLED && state != PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
+        // Current is disabled.
+        Preference toEnablePref = findPreference(getString(R.string.key_app_feature_config_app_to_enable));
+        Objects.requireNonNull(toEnablePref).setVisible(disabled);
+        toEnablePref.setOnPreferenceClickListener(preference -> {
+            thanos.getPkgManager().setApplicationEnabledSetting(
+                    appInfo.getPkgName(),
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    0,
+                    true);
+            // Reload.
+            bindAppStatePref();
+            return true;
+        });
+
+
+        // Current is enabled.
+        Preference toDisablePref = findPreference(getString(R.string.key_app_feature_config_app_to_disable));
+        Objects.requireNonNull(toDisablePref).setVisible(!disabled);
+        toDisablePref.setOnPreferenceClickListener(preference -> {
+            thanos.getPkgManager().setApplicationEnabledSetting(
+                    appInfo.getPkgName(),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    0,
+                    false);
+            // Reload.
+            bindAppStatePref();
+            return true;
+        });
     }
 
     class StartRestrictPref extends FeaturePref {

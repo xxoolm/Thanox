@@ -5,7 +5,6 @@
     <PreferenceCategory
             app:title="@string/pre_category_app_feature_config">
 
-
         <SwitchPreference
                 app:key="@string/key_app_feature_config_start_restrict"
                 app:title="@string/feature_title_start_restrict"
@@ -28,6 +27,22 @@
                 app:key="@string/key_app_feature_config_privacy_cheat"
                 app:title="@string/feature_title_data_cheat"
                 app:summary="@string/feature_desc_data_cheat"
+                android:persistent="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:title="@string/pre_category_app_disable_enable">
+
+        <Preference
+                app:key="@string/key_app_feature_config_app_to_disable"
+                app:title="@string/pref_title_app_to_disable"
+                app:summary="@string/pref_title_app_state_enabled"
+                android:persistent="false"/>
+
+        <Preference
+                app:key="@string/key_app_feature_config_app_to_enable"
+                app:title="@string/pref_title_app_to_enable"
+                app:summary="@string/pref_title_app_state_disabled"
                 android:persistent="false"/>
     </PreferenceCategory>
 

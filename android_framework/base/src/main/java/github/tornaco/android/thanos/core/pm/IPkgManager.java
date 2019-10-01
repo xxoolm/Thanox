@@ -33,6 +33,20 @@ public interface IPkgManager extends android.os.IInterface
     {
       return false;
     }
+    @Override public void setComponentEnabledSetting(android.content.ComponentName componentName, int newState, int flags) throws android.os.RemoteException
+    {
+    }
+    @Override public int getComponentEnabledSetting(android.content.ComponentName componentName) throws android.os.RemoteException
+    {
+      return 0;
+    }
+    @Override public int getApplicationEnabledSetting(java.lang.String packageName) throws android.os.RemoteException
+    {
+      return 0;
+    }
+    @Override public void setApplicationEnabledSetting(java.lang.String packageName, int newState, int flags, boolean tmp) throws android.os.RemoteException
+    {
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -138,6 +152,64 @@ public interface IPkgManager extends android.os.IInterface
           boolean _result = this.isPkgInWhiteList(_arg0);
           reply.writeNoException();
           reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_setComponentEnabledSetting:
+        {
+          data.enforceInterface(descriptor);
+          android.content.ComponentName _arg0;
+          if ((0!=data.readInt())) {
+            _arg0 = android.content.ComponentName.CREATOR.createFromParcel(data);
+          }
+          else {
+            _arg0 = null;
+          }
+          int _arg1;
+          _arg1 = data.readInt();
+          int _arg2;
+          _arg2 = data.readInt();
+          this.setComponentEnabledSetting(_arg0, _arg1, _arg2);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_getComponentEnabledSetting:
+        {
+          data.enforceInterface(descriptor);
+          android.content.ComponentName _arg0;
+          if ((0!=data.readInt())) {
+            _arg0 = android.content.ComponentName.CREATOR.createFromParcel(data);
+          }
+          else {
+            _arg0 = null;
+          }
+          int _result = this.getComponentEnabledSetting(_arg0);
+          reply.writeNoException();
+          reply.writeInt(_result);
+          return true;
+        }
+        case TRANSACTION_getApplicationEnabledSetting:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          int _result = this.getApplicationEnabledSetting(_arg0);
+          reply.writeNoException();
+          reply.writeInt(_result);
+          return true;
+        }
+        case TRANSACTION_setApplicationEnabledSetting:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          int _arg1;
+          _arg1 = data.readInt();
+          int _arg2;
+          _arg2 = data.readInt();
+          boolean _arg3;
+          _arg3 = (0!=data.readInt());
+          this.setApplicationEnabledSetting(_arg0, _arg1, _arg2, _arg3);
+          reply.writeNoException();
           return true;
         }
         default:
@@ -293,6 +365,103 @@ public interface IPkgManager extends android.os.IInterface
         }
         return _result;
       }
+      @Override public void setComponentEnabledSetting(android.content.ComponentName componentName, int newState, int flags) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          if ((componentName!=null)) {
+            _data.writeInt(1);
+            componentName.writeToParcel(_data, 0);
+          }
+          else {
+            _data.writeInt(0);
+          }
+          _data.writeInt(newState);
+          _data.writeInt(flags);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setComponentEnabledSetting, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setComponentEnabledSetting(componentName, newState, flags);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public int getComponentEnabledSetting(android.content.ComponentName componentName) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        int _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          if ((componentName!=null)) {
+            _data.writeInt(1);
+            componentName.writeToParcel(_data, 0);
+          }
+          else {
+            _data.writeInt(0);
+          }
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getComponentEnabledSetting, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getComponentEnabledSetting(componentName);
+          }
+          _reply.readException();
+          _result = _reply.readInt();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public int getApplicationEnabledSetting(java.lang.String packageName) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        int _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(packageName);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getApplicationEnabledSetting, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getApplicationEnabledSetting(packageName);
+          }
+          _reply.readException();
+          _result = _reply.readInt();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public void setApplicationEnabledSetting(java.lang.String packageName, int newState, int flags, boolean tmp) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(packageName);
+          _data.writeInt(newState);
+          _data.writeInt(flags);
+          _data.writeInt(((tmp)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setApplicationEnabledSetting, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setApplicationEnabledSetting(packageName, newState, flags, tmp);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
       public static github.tornaco.android.thanos.core.pm.IPkgManager sDefaultImpl;
     }
     static final int TRANSACTION_getPkgNameForUid = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -301,6 +470,10 @@ public interface IPkgManager extends android.os.IInterface
     static final int TRANSACTION_getAppInfo = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
     static final int TRANSACTION_getWhiteListPkgs = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
     static final int TRANSACTION_isPkgInWhiteList = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
+    static final int TRANSACTION_setComponentEnabledSetting = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
+    static final int TRANSACTION_getComponentEnabledSetting = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
+    static final int TRANSACTION_getApplicationEnabledSetting = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
+    static final int TRANSACTION_setApplicationEnabledSetting = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.pm.IPkgManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -320,4 +493,8 @@ public interface IPkgManager extends android.os.IInterface
   public github.tornaco.android.thanos.core.pm.AppInfo getAppInfo(java.lang.String pkgName) throws android.os.RemoteException;
   public java.lang.String[] getWhiteListPkgs() throws android.os.RemoteException;
   public boolean isPkgInWhiteList(java.lang.String pkg) throws android.os.RemoteException;
+  public void setComponentEnabledSetting(android.content.ComponentName componentName, int newState, int flags) throws android.os.RemoteException;
+  public int getComponentEnabledSetting(android.content.ComponentName componentName) throws android.os.RemoteException;
+  public int getApplicationEnabledSetting(java.lang.String packageName) throws android.os.RemoteException;
+  public void setApplicationEnabledSetting(java.lang.String packageName, int newState, int flags, boolean tmp) throws android.os.RemoteException;
 }

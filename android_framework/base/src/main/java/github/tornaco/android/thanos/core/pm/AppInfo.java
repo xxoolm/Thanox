@@ -1,5 +1,6 @@
 package github.tornaco.android.thanos.core.pm;
 
+import android.content.pm.PackageManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 import github.tornaco.android.thanos.BuildProp;
@@ -37,6 +38,8 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
     private String versionName;
     private int flags;
     private int uid;
+    // Enabled or disabled?
+    private int state;
     // Ignore Parcelable
     private boolean isSelected;
 
@@ -47,6 +50,7 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
         versionName = in.readString();
         flags = in.readInt();
         uid = in.readInt();
+        state = in.readInt();
     }
 
     public static final Creator<AppInfo> CREATOR = new Creator<AppInfo>() {
@@ -74,6 +78,7 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
         dest.writeString(this.versionName);
         dest.writeInt(this.flags);
         dest.writeInt(this.uid);
+        dest.writeInt(this.state);
     }
 
 
@@ -82,6 +87,9 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
     public int compareTo(AppInfo appInfo) {
         if (appInfo == null) return -1;
         if (this.isSelected && !appInfo.isSelected) {
+            return -1;
+        }
+        if (!this.disabled() && appInfo.disabled()) {
             return -1;
         }
         return PinyinComparatorUtils.compare(this.appLabel, appInfo.appLabel);
@@ -105,7 +113,18 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
         return flags == FLAGS_USER;
     }
 
+    public boolean disabled() {
+        return state != PackageManager.COMPONENT_ENABLED_STATE_ENABLED && state != PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
+    }
+
     public static AppInfo dummy() {
-        return new AppInfo(BuildProp.THANOS_APP_PKG_NAME, "Dummy", 0, "0", FLAGS_USER, Integer.MAX_VALUE, false);
+        return new AppInfo(
+                BuildProp.THANOS_APP_PKG_NAME,
+                "Dummy",
+                0,
+                "0",
+                FLAGS_USER,
+                Integer.MAX_VALUE,
+                PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, false);
     }
 }

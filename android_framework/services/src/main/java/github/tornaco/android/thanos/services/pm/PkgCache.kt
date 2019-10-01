@@ -254,6 +254,7 @@ internal class PkgCache {
         appInfo.versionName = packageInfo.versionName
         appInfo.flags = flags
         appInfo.uid = applicationInfo.uid
+        appInfo.state = pm.getApplicationEnabledSetting(appInfo.pkgName)
         return appInfo
     }
 

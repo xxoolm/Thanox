@@ -1,5 +1,6 @@
 package github.tornaco.android.thanos.core.pm;
 
+import android.content.ComponentName;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -59,5 +60,25 @@ public class PackageManager {
     @SneakyThrows
     public boolean isPkgInWhiteList(String pkg) {
         return pm.isPkgInWhiteList(pkg);
+    }
+
+    @SneakyThrows
+    public void setComponentEnabledSetting(ComponentName componentName, int newState, int flags) {
+        pm.setComponentEnabledSetting(componentName, newState, flags);
+    }
+
+    @SneakyThrows
+    public int getComponentEnabledSetting(ComponentName componentName) {
+        return pm.getComponentEnabledSetting(componentName);
+    }
+
+    @SneakyThrows
+    public int getApplicationEnabledSetting(String packageName) {
+        return pm.getApplicationEnabledSetting(packageName);
+    }
+
+    @SneakyThrows
+    public void setApplicationEnabledSetting(String packageName, int newState, int flags, boolean tmp) {
+        pm.setApplicationEnabledSetting(packageName, newState, flags, tmp);
     }
 }

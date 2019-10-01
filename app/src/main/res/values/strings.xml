@@ -90,6 +90,7 @@
     <string name="pre_category_about">关于</string>
     <string name="pre_category_dev_tools">开发者</string>
     <string name="pre_category_app_feature_config">配置项</string>
+    <string name="pre_category_app_disable_enable">冻结</string>
 
     <string name="pref_title_enable_logging">开启日志</string>
     <string name="pref_summary_enable_logging">你可以从控制台或者劫持框架中获取到输出的日志内容</string>
@@ -97,6 +98,11 @@
     <string name="pref_title_build_info_server">核心信息</string>
     <string name="pre_title_ignore_system_app">排除系统应用</string>
     <string name="pre_summary_ignore_system_app">在功能列表中不展示系统应用，这些系统应用也不会被干涉</string>
+
+    <string name="pref_title_app_state_enabled">应用已启用</string>
+    <string name="pref_title_app_to_disable">冻结</string>
+    <string name="pref_title_app_state_disabled">应用已被冻结</string>
+    <string name="pref_title_app_to_enable">解冻</string>
 
     <string name="pre_title_backup">备份</string>
     <string name="pre_summary_backup">备份Thanox设置到外置存储中</string>

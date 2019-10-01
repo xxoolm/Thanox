@@ -34,4 +34,9 @@
     </string>
     <string name="key_app_feature_config_privacy_cheat" translatable="false">key_app_feature_config_privacy_cheat
     </string>
+
+    <string name="key_app_feature_config_app_to_enable" translatable="false">key_app_feature_config_app_to_enable
+    </string>
+    <string name="key_app_feature_config_app_to_disable" translatable="false">key_app_feature_config_app_to_disable
+    </string>
 </resources>
