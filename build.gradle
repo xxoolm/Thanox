@@ -20,5 +20,6 @@ task clean(type: Delete) {
 
 ext {
     thanosApplicationId = "github.tornaco.android.thanos"
-    dogFood = true
+    // Indicate that this build is to internal users.
+    dogFood = false
 }

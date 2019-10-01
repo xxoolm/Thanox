@@ -1,8 +1,8 @@
 <resources>
-    <string name="module_donate_title">购买</string>
+    <string name="module_donate_title">捐赠</string>
 
-    <string name="module_donate_donated">已经购买</string>
-    <string name="module_donate_donated_available">购买后可用</string>
+    <string name="module_donate_donated">我已经捐赠</string>
+    <string name="module_donate_donated_available">捐赠后可用</string>
 
     <string name="module_donate_suggestion_alipay_red_packet">领取支付宝红包</string>
     <string name="module_donate_suggestion_summary_alipay_red_packet">感谢支持%1$s 你也可以去捐赠页面点击，每天都可以哦！</string>
@@ -12,6 +12,6 @@
 
     <string name="module_donate_pay_alipay">支付宝</string>
     <string name="module_donate_pay_wechat">微信</string>
-    <string name="module_donate_donate_intro">如果你想购买本App，请通过以下方式支付8元，支付完点击 [已经购买] 即可。\n\n开发不易，需要花费很多个人精力。\n\n本应用的功能不购买也可使用哦~
+    <string name="module_donate_donate_intro">如果你希望支持作者，保持更新的动力，请使用以下方式捐赠3~6元，完成后点击 [已经捐赠] 即可。\n\n免费开发非常不易，需要花费很多个人精力，且回报甚微，感谢理解。
     </string>
 </resources>
