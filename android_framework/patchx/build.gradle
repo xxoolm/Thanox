@@ -1,0 +1,51 @@
+buildscript {
+    dependencies {
+        classpath deps.kotlin.plugin
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    // Framework
+    compileOnly files('../../android_sdk/27/android-27.jar')
+    compileOnly files('../../android_sdk/27/services-27.jar')
+
+    compileOnly deps.lombok.core
+    annotationProcessor deps.lombok.core
+
+    compileOnly project(":plugins:xposed_hook_annotation")
+    annotationProcessor project(":plugins:xposed_hook_compiler")
+
+    // Sdk
+    implementation project(':android_framework:base')
+    implementation project(':android_framework:services')
+
+    // Xposed
+    compileOnly deps.xposed.api
+
+    // Kt
+    implementation deps.kotlin.stdlib
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+
+buildDir = rootProject.projectDir.path + "/out/framework/patchx"

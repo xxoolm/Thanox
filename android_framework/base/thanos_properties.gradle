@@ -1,0 +1,54 @@
+import java.nio.charset.Charset
+
+apply plugin: 'de.fuerstenau.buildconfig'
+
+Properties serviceProps = new Properties()
+serviceProps.load(project.rootProject.file('thanos.properties').newDataInputStream())
+
+buildConfig {
+    appName = project.name
+    version = version
+
+    clsName = 'BuildProp'
+    packageName = "github.tornaco.android.thanos"
+    charset = 'UTF-8'
+
+    buildConfigField 'Boolean', 'DOG_FOOD', String.valueOf(rootProject.ext.dogFood)
+    buildConfigField 'String', 'THANOS_APP_PKG_NAME', rootProject.ext.thanosApplicationId
+    // UUID from current time.
+    buildConfigField 'String', 'FINGERPRINT', 'thanos@tornaco:' + UUID.nameUUIDFromBytes(
+            String.valueOf(System.currentTimeMillis()).getBytes(Charset.defaultCharset()))
+    buildConfigField 'java.util.Date', 'BUILD_DATE', 'new java.util.Date(' + System.currentTimeMillis() + 'L)'
+
+    // Read props.
+    buildConfigField 'String', 'ACTIVITY_APP_LOCK_VERIFIER', serviceProps.getProperty("locker.verify.activity")
+
+
+    buildConfigField 'Boolean', 'PREF_DEFAULT_BY_PASS_SYSTEM_APPS_ENABLED', serviceProps.getProperty("pref.def.bypass.system.app.enabled")
+    buildConfigField 'Boolean', 'PREF_DEFAULT_START_BLOCKER_ENABLED', serviceProps.getProperty("pref.def.start.blocker.enabled")
+    buildConfigField 'Boolean', 'PREF_DEFAULT_BG_RESTRICT_ENABLED', serviceProps.getProperty("pref.def.background.restrict.enabled")
+
+    // Permissions
+    buildConfigField 'String', 'ACTION_PERMISSION_REQUEST', serviceProps.getProperty("action.permissions.request")
+    buildConfigField 'String', 'EXTRA_PERMISSION_REQUEST', serviceProps.getProperty("extra.permissions.request")
+}
+
+
+// Move build config java files to src dir.
+task moveBuildConfigSources() {
+    doLast {
+        def gen = project.buildDir.path + "/gen/buildconfig/src/main/github"
+        def to = project.projectDir.path + "/src/main/java/"
+        println("Move gen: " + gen)
+        println("to: " + to)
+        ant.move file: gen,
+                todir: to
+
+        def cleanup = project.buildDir.path + "/gen/buildconfig"
+        println("Clean up: " + cleanup)
+        file(cleanup).deleteDir()
+    }
+}
+
+compileJava.dependsOn moveBuildConfigSources
+build.dependsOn moveBuildConfigSources

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="app"
+                type="github.tornaco.android.thanos.core.pm.AppInfo"/>
+
+        <variable
+                name="isLastOne"
+                type="boolean"/>
+
+        <variable
+                name="badge1"
+                type="String"/>
+
+        <variable
+                name="listener"
+                type="github.tornaco.android.thanos.common.AppItemViewActionListener"/>
+
+    </data>
+
+    <RelativeLayout
+            android:id="@+id/app_item_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/list_item_height"
+            android:soundEffectsEnabled="false"
+            android:onClick="@{() -> listener.onAppItemClick(app)}"
+            android:background="?selectableItemBackground">
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/list_item_app_icon_w"
+                android:layout_height="@dimen/list_item_app_icon_h"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dashboard_tile_image_margin_end"
+                android:layout_marginStart="@dimen/dashboard_tile_image_margin_start"
+                android:padding="@dimen/dashboard_tile_image_padding"
+                tools:src="@mipmap/ic_fallback_app_icon"
+                android:appIcon="@{app}"/>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="@dimen/dashboard_category_bot_margin"
+                android:layout_marginEnd="@dimen/dashboard_category_title_margin_end"
+                android:layout_toEndOf="@+id/icon">
+
+            <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fadingEdge="horizontal"
+                    tools:text="Title long name name name name name"
+                    android:text="@{app.appLabel}"
+                    android:ellipsize="middle"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:maxLength="26"
+                    android:layout_marginEnd="@dimen/common_view_margin_default"
+                    android:textAppearance="@style/TextAppearance.TileTitle"/>
+
+            <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/badge1"
+                    android:layout_toEndOf="@id/title"
+                    android:layout_centerVertical="true"
+                    tools:text="Active"
+                    android:textSize="@dimen/list_item_main_text_size_small"
+                    android:text="@{badge1}"
+                    android:visibility="@{badge1 == null ? View.GONE : View.VISIBLE}"
+                    tools:visibility="visible"
+                    android:textColor="@color/md_white"
+                    android:background="?colorAccent"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:soundEffectsEnabled="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/item_switch"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:checked="@{app.isSelected}"
+                    android:switchApp="@{app}"
+                    android:theme="@style/SwitchTheme"
+                    tools:checked="true"
+                    android:switchListener="@{listener}"/>
+        </RelativeLayout>
+
+        <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/icon"
+                android:visibility="invisible"
+                android:background="?android:attr/dividerVertical"/>
+    </RelativeLayout>
+</layout>

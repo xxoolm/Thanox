@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="github.tornaco.android.thanos.core.secure.ops.AppOpsManager"/>
+
+        <variable
+                name="op"
+                type="github.tornaco.thanos.android.ops.model.Op"/>
+
+        <variable
+                name="isLastOne"
+                type="boolean"/>
+
+        <variable
+                name="clickListener"
+                type="github.tornaco.thanos.android.ops.ops.OpItemClickListener"/>
+
+    </data>
+
+    <RelativeLayout
+            android:id="@+id/app_item_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/list_item_height"
+            android:soundEffectsEnabled="false"
+            android:onClick="@{() -> clickListener.onOpItemClick(op)}"
+            android:background="?selectableItemBackground">
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dashboard_tile_image_margin_end"
+                android:layout_marginStart="@dimen/dashboard_tile_image_margin_start"
+                android:padding="@dimen/dashboard_tile_image_padding"
+                tools:src="@drawable/module_ops_ic_contacts_fill"
+                android:tint="?colorAccent"
+                android:opIcon="@{op}"/>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="@dimen/dashboard_category_bot_margin"
+                android:layout_marginEnd="@dimen/dashboard_category_title_margin_end"
+                android:layout_toEndOf="@+id/icon">
+
+            <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fadingEdge="horizontal"
+                    tools:text="@string/app_name"
+                    android:text="@{op.title}"
+                    android:ellipsize="middle"
+                    android:layout_toStartOf="@id/item_switch"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginEnd="@dimen/common_view_margin_default"
+                    android:textAppearance="@style/TextAppearance.TileTitle"/>
+
+            <TextView
+                    android:id="@+id/summary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@android:id/title"
+                    android:layout_below="@id/title"
+                    tools:text="This is summary"
+                    android:ellipsize="end"
+                    android:text="@{op.summary}"
+                    android:maxLines="30"
+                    android:maxLength="24"
+                    android:textAppearance="@style/TextAppearance.TileSubTitle"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:soundEffectsEnabled="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/item_switch"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:checked="@{op.remind}"
+                    android:theme="@style/SwitchTheme"
+                    tools:checked="true"/>
+        </RelativeLayout>
+
+        <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/icon"
+                android:visibility="invisible"
+                android:background="?android:attr/dividerVertical"/>
+    </RelativeLayout>
+</layout>

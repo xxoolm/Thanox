@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            app:title="@string/pre_category_strategy">
+
+        <DropDownPreference
+                app:key="@string/key_bg_screen_off_clean_up_delay"
+                app:title="@string/pre_title_bg_screen_off_clean_up_delay"
+                android:entries="@array/bg_screen_off_clean_delay_entry"
+                android:entryValues="@array/bg_screen_off_clean_delay_value"
+                app:useSimpleSummaryProvider="true"
+                app:persistent="false"/>
+
+        <SwitchPreference
+                app:key="@string/key_bg_screen_off_clean_up_skip_audio"
+                app:title="@string/pre_title_bg_screen_off_clean_up_skip_audio"
+                app:summary="@string/pre_summary_bg_screen_off_clean_up_skip_audio"
+                android:persistent="false"/>
+
+        <SwitchPreference
+                app:key="@string/key_bg_screen_off_clean_up_skip_notification"
+                app:title="@string/pre_title_bg_screen_off_clean_up_skip_notification"
+                android:persistent="false"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

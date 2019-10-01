@@ -1,0 +1,27 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.android.tools.build/gradle/
+    implementation "com.android.tools.build:gradle:3.4.2"
+    implementation 'javassist:javassist:3.12.1.GA'
+
+    implementation gradleApi()
+    implementation localGroovy()
+}
+
+def LOCAL_REPO_URL = "file://$project.projectDir/prebuilt_repo/"
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: LOCAL_REPO_URL) {
+                pom.groupId = "github.tornaco.gradle.plugin.auto.logging"
+                pom.artifactId = "auto_logging_gradle_plugin"
+                pom.version = versions.auto_logging_plugin
+            }
+        }
+    }
+}
+

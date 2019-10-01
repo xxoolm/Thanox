@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="process_manage_categories">
+        <item>@string/app_category_3rd</item>
+        <item>@string/app_category_system</item>
+        <item>@string/app_category_media</item>
+        <item>@string/app_category_phone</item>
+        <item>@string/app_category_web_provider</item>
+        <item>@string/app_category_system_uid</item>
+        <item>@string/app_category_all</item>
+    </string-array>
+
+    <string-array name="swipe_refresh_colors">
+        <item>@color/md_amber_500</item>
+        <item>@color/md_lime_500</item>
+        <item>@color/md_green_500</item>
+        <item>@color/md_red_500</item>
+    </string-array>
+
+    <string-array name="bg_screen_off_clean_delay_entry">
+        <item>No</item>
+        <item>1 min</item>
+        <item>2 min</item>
+        <item>3 min</item>
+        <item>5 min</item>
+        <item>8 min</item>
+        <item>10 min</item>
+    </string-array>
+
+    <string-array name="bg_screen_off_clean_delay_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>8</item>
+        <item>10</item>
+    </string-array>
+</resources>

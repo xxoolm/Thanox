@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View"/>
+        <import type="github.tornaco.android.thanos.main.State"/>
+
+        <variable
+                name="viewmodel"
+                type="github.tornaco.android.thanos.main.NavViewModel"/>
+
+        <variable
+                name="stateBadgeClickListener"
+                type="android.view.View.OnClickListener"/>
+
+        <variable
+                name="tryingBadgeClickListener"
+                type="android.view.View.OnClickListener"/>
+
+    </data>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="?colorPrimary">
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    app:title="@null"
+                    app:titleTextColor="?menuIconTint">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6"
+                        android:visibility="gone"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignBottom="@id/thanos_status_text"
+                        android:tint="@color/md_green_500"
+                        android:thanosStateTint="@{viewmodel.state}"
+                        android:src="@drawable/ic_checkbox_blank_circle_fill"/>
+
+                <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewmodel.channel}"
+                        android:visibility="@{(viewmodel.channel == null) ? View.GONE : View.VISIBLE}"
+                        tools:text="Beta"
+                        android:textColor="@color/md_white"
+                        android:background="@color/md_teal_600"/>
+
+                <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/badge_trying_app"
+                        android:visibility="@{viewmodel.isPaid ? View.GONE : View.VISIBLE}"
+                        tools:text="@string/badge_trying_app"
+                        android:onClick="@{tryingBadgeClickListener}"
+                        android:textColor="@color/md_white"
+                        android:background="@color/md_purple_300"/>
+
+                <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:thanosStateText="@{viewmodel.state}"
+                        android:visibility="@{viewmodel.state == State.Active ? View.GONE : View.VISIBLE}"
+                        tools:text="Active"
+                        android:onClick="@{stateBadgeClickListener}"
+                        android:textColor="@color/md_white"
+                        android:background="@color/md_red_500"/>
+
+            </androidx.appcompat.widget.Toolbar>
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/appbar"
+                        android:layout_marginTop="@dimen/common_view_margin_default"
+                        android:visibility="gone"
+                        android:id="@+id/product_slogan">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="--- THANOS ---"
+                      android:layout_centerInParent="true"
+                      android:textStyle="italic"
+                      android:textAllCaps="true"
+                      android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                      tools:ignore="HardcodedText"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/product_slogan">
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/tabs_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    app:cardBackgroundColor="?cardsBackgroundColor"
+                    app:cardElevation="@dimen/common_view_elevation"
+                    app:cardCornerRadius="@dimen/common_view_corner_radius">
+
+                <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?cardsBackgroundColor"
+                        app:tabIndicatorHeight="@dimen/tab_indicator_height"
+                        app:tabIndicatorColor="@color/md_pink_400"
+                        app:tabIndicatorFullWidth="false"
+                        app:tabIconTint="@null">
+
+                    <com.google.android.material.tabs.TabItem
+                            android:id="@+id/tabItem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:icon="@drawable/ic_space_ship_line_green"/>
+
+                    <com.google.android.material.tabs.TabItem
+                            android:id="@+id/tabItem2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:icon="@drawable/ic_shield_star_fill_red"/>
+
+                    <com.google.android.material.tabs.TabItem
+                            android:id="@+id/tabItem3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:icon="@drawable/ic_lightbulb_fill_yellow"/>
+
+                </com.google.android.material.tabs.TabLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_above="@id/tabs_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</layout>

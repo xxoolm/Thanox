@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="tile"
+                type="github.tornaco.android.thanos.dashboard.Tile"/>
+
+        <variable
+                name="isLastOne"
+                type="boolean"/>
+
+    </data>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/category_title"
+                android:layout_alignParentTop="true"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dashboard_category_title_height"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingEnd="@dimen/dashboard_category_title_margin_start"
+                android:paddingStart="@dimen/dashboard_category_title_margin_start"
+                android:singleLine="true"
+                tools:text="@string/app_name"
+                android:text="@{tile.category}"
+                android:visibility="@{(tile.category == null) ? View.GONE : View.VISIBLE}"
+                android:textAppearance="@style/TextAppearance.CategoryTitle"
+                android:textColor="?colorAccent"/>
+
+        <RelativeLayout
+                android:layout_below="@id/category_title"
+                android:id="@+id/tile_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClickListener="@{tile.onClickListener}"
+                android:minHeight="@dimen/dashboard_tile_minimum_height"
+                android:background="@drawable/clickable_item_background">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/icon"
+                    android:layout_width="@dimen/dashboard_tile_image_size"
+                    android:layout_height="@dimen/dashboard_tile_image_size"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dashboard_tile_image_margin_end"
+                    android:layout_marginStart="@dimen/dashboard_tile_image_margin_start"
+                    android:padding="@dimen/dashboard_tile_image_padding"
+                    android:iconThemeColor="@{tile.themeColor}"
+                    tools:src="@drawable/ic_settings_fill"
+                    android:featureIcon="@{tile.iconRes}"/>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/dashboard_category_bot_margin"
+                    android:layout_marginEnd="@dimen/dashboard_category_title_margin_end"
+                    android:layout_toEndOf="@+id/icon">
+
+                <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="horizontal"
+                        tools:text="@string/app_name"
+                        android:text="@{tile.title}"
+                        android:textAppearance="@style/TextAppearance.TileTitle"/>
+
+                <TextView
+                        android:id="@+id/summary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@android:id/title"
+                        android:layout_below="@id/title"
+                        tools:text="This is summary"
+                        android:ellipsize="end"
+                        android:maxLines="30"
+                        android:text="@{tile.summary}"
+                        android:visibility="@{tile.summary == null ? View.GONE : View.VISIBLE}"
+                        android:textAppearance="@style/TextAppearance.TileSubTitle"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <View android:layout_width="match_parent"
+              android:layout_height="@dimen/dashboard_tile_divider_height"
+              android:visibility="@{tile.atEndOfThisCategory ? View.VISIBLE : View.GONE}"
+              android:background="?android:attr/windowBackground"
+              tools:visibility="visible"
+              android:layout_marginStart="@dimen/dashboard_tile_divider_margin_start"
+              android:layout_below="@id/tile_root"/>
+
+    </RelativeLayout>
+</layout>

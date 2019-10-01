@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_view_margin_tiny">3dp</dimen>
+    <dimen name="common_view_margin_small">6dp</dimen>
+    <dimen name="common_view_margin_middle">12dp</dimen>
+    <dimen name="common_view_margin_default">16dp</dimen>
+    <dimen name="common_view_margin_large">32dp</dimen>
+
+    <dimen name="list_item_app_icon_w">40dp</dimen>
+    <dimen name="list_item_app_icon_h">40dp</dimen>
+    <dimen name="list_item_height">64dp</dimen>
+    <dimen name="list_item_height_small">48dp</dimen>
+
+    <dimen name="verify_app_icon_w">42dp</dimen>
+    <dimen name="verify_app_icon_h">42dp</dimen>
+
+    <dimen name="list_item_main_text_size_normal">16sp</dimen>
+    <dimen name="list_item_main_text_size_small">12sp</dimen>
+
+    <dimen name="common_list_item_height">64dp</dimen>
+    <dimen name="common_grid_item_height">72dp</dimen>
+
+    <dimen name="common_view_elevation">2dp</dimen>
+    <dimen name="common_view_corner_radius">2dp</dimen>
+    <dimen name="common_view_corner_radius_0">0dp</dimen>
+
+    <dimen name="list_item_footer_height">8dp</dimen>
+
+
+    <dimen name="tab_indicator_height">2dp</dimen>
+
+</resources>

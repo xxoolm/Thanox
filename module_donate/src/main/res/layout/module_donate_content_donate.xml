@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:orientation="vertical">
+
+    <github.tornaco.android.thanos.widget.SwitchBar
+            android:id="@+id/switchbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:foreground="?selectableItemBackground"
+            android:theme="?switchBarTheme"
+            tools:ignore="UnusedAttribute"/>
+
+    <TextView
+            android:id="@+id/donate_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_view_margin_default"
+            android:textStyle="bold|italic"
+            android:text="@string/module_donate_donate_intro"
+            android:textSize="18sp"/>
+
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:gravity="bottom"
+                  android:orientation="vertical">
+        <Button
+                android:id="@+id/pay_wechat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_view_margin_default"
+                android:padding="8dp"
+                android:text="@string/module_donate_pay_wechat"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/md_white"
+                android:theme="@style/ModuleDonateButtonBarWeChatPay"/>
+
+        <Button
+                android:id="@+id/pay_ali"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_view_margin_default"
+                android:padding="8dp"
+                android:text="@string/module_donate_pay_alipay"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/md_white"
+                android:theme="@style/ModuleDonateButtonBarAliPay"/>
+    </LinearLayout>
+</LinearLayout>

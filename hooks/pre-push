@@ -1,0 +1,38 @@
+#!/bin/sh
+
+red='\033[0;31m'
+green='\033[0;32m'
+noColor='\033[0m'
+
+projectDir=$(git rev-parse --show-toplevel)
+checkProjects=("android_framework:base")
+
+for project in ${checkProjects[@]}
+do
+    # Android lint check
+    echo "-----------------Starting run android lint for ${project}-----------------"
+    lintReportPath="${project}/build/reports/lint-results.html"
+   
+    for issueCount in $(./gradlew ${project}:lint 2>/dev/null | grep "Ran lint on variant" | egrep -o '[0-9]+')
+    do 
+        if [ $issueCount -ne 0 ]
+        then
+            echo "${red}Failed, ${project} project has ${issueCount} lint issues!${noColor}"
+            echo "Please refer file://${projectDir}/${lintReportPath}"
+            exit 1
+        fi
+    done
+    echo "${green}Successed, no android lint issues found for ${project}${noColor}\n"
+
+    # Checkstyle
+    echo "-----------------Starting run android checkstyle for ${project}-----------------"
+    checkstylePath="${project}/build/reports/checkstyle/checkstyle.html"
+    
+    ./gradlew ${project}:checkstyle >/dev/null
+    checkstyleStatus=$?
+    if [ $checkstyleStatus -ne 0 ]
+    then
+        exit $checkstyleStatus
+    fi
+    echo "${green}Successed, no android checkstyle issues found for ${project}${noColor}\n\n"
+done

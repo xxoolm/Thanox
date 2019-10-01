@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="key_app_theme" translatable="false">key_app_theme</string>
+    <string name="key_app_icon_pack" translatable="false">key_app_icon_pack</string>
+    <string name="key_enable_logging" translatable="false">key_enable_logging</string>
+    <string name="key_build_info_server" translatable="false">key_build_info_server</string>
+    <string name="key_build_info_app" translatable="false">key_build_info_app</string>
+    <string name="key_ignore_system_app" translatable="false">key_ignore_system_app</string>
+    <string name="key_donate" translatable="false">key_donate</string>
+
+    <string name="key_cheat_field_line1_num" translatable="false">key_cheat_field_line1_num</string>
+    <string name="key_cheat_field_device_id" translatable="false">key_cheat_field_device_id</string>
+    <string name="key_cheat_field_sim_serial" translatable="false">key_cheat_field_sim_serial</string>
+    <string name="key_cheat_field_installed_apps" translatable="false">key_cheat_field_installed_apps</string>
+
+    <string name="key_original_field_line1_num" translatable="false">key_original_field_line1_num</string>
+    <string name="key_original_field_device_id" translatable="false">key_original_field_device_id</string>
+    <string name="key_original_field_sim_serial" translatable="false">key_original_field_sim_serial</string>
+
+    <string name="key_bg_screen_off_clean_up_delay" translatable="false">key_bg_screen_off_clean_up_delay</string>
+    <string name="key_bg_screen_off_clean_up_skip_audio" translatable="false">key_bg_screen_off_clean_up_skip_audio</string>
+    <string name="key_bg_screen_off_clean_up_skip_notification" translatable="false">key_bg_screen_off_clean_up_skip_notification</string>
+
+    <string name="key_data_backup" translatable="false">key_data_backup</string>
+    <string name="key_data_restore" translatable="false">key_data_restore</string>
+</resources>

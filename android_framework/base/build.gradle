@@ -1,0 +1,45 @@
+buildscript {
+    dependencies {
+        classpath deps.kotlin.plugin
+        classpath files("${projectDir}/libs/BuildConfigPlugin-1.1.8.jar")
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Framework
+    compileOnly files('../../android_sdk/27/android-27.jar')
+    compileOnly files('../../android_sdk/27/services-27.jar')
+
+    compileOnly deps.lombok.core
+    annotationProcessor deps.lombok.core
+
+    api deps.rx.rxjava2
+
+    // Gson
+    api deps.gson
+
+    api project(':library_java_common')
+
+    // Kt
+    implementation deps.kotlin.stdlib
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+version = "1.0.0"
+
+apply from: 'thanos_properties.gradle'
+apply from: 'aidl.gradle'
+apply from: '../../checkstyle.gradle'
+
+buildDir = rootProject.projectDir.path + "/out/framework/base/"

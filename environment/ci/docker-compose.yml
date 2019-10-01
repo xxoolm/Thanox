@@ -1,0 +1,33 @@
+version: '3'
+services:
+  jenkins:
+    build: ./jenkins
+    image: android/jenkins-android:latest
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ~/docker/volumes/jenkins-android/jenkins_home:/var/jenkins_home
+    networks:
+      network0:
+        aliases:
+          - jenkins
+  emulator:
+    build: ./emulator
+    image: android/android-emulator:latest
+    environment:
+     - EMULATOR="android-28"
+    ports:
+      - "5555:5555"
+      - "80"
+      - "22"
+      - "443"
+      - "5037"
+      - "5554"
+      - "5900"
+    networks:
+      network0:
+        aliases:
+          - emulator
+networks:
+  network0:

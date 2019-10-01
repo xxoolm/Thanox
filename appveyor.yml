@@ -1,0 +1,52 @@
+version: '1.0.0_beta({build})'
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+
+# Start builds on tags only (GitHub, BitBucket, GitLab, Gitea)
+skip_non_tags: true
+
+environment:
+  ANDROID_HOME: C:\android-sdk-windows
+
+
+init:
+  - git config --global core.autocrlf input
+  - echo %APPVEYOR_BUILD_FOLDER%
+
+install:
+  - appveyor DownloadFile https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip
+  - 7z x sdk-tools-windows-4333796.zip -oC:\android-sdk-windows > nul
+  - yes | C:\android-sdk-windows\tools\bin\sdkmanager.bat --licenses > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "platforms;android-28" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "platform-tools" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "build-tools;28.0.3" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "cmake;3.6.4111459" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "patcher;v4" > nul
+  - C:\android-sdk-windows\tools\bin\sdkmanager.bat "ndk-bundle" > nul
+  - set PATH=%PATH%;C:\android-sdk-windows\ndk-bundle;C:\android-sdk-windows\build-tools\28.0.3
+
+build_script:
+  - openssl enc -aes-256-cbc -d -K %K% -iv %IV% -in %APPVEYOR_BUILD_FOLDER%/environment/keys/android-key-enc -out %APPVEYOR_BUILD_FOLDER%/environment/keys/android.jks
+  - gradlew.bat :app:assembleDebug
+  - cp out\app\outputs\apk\prcBeta\release\app-prc-beta-release.apk .
+
+artifacts:
+  - path: app-prc-beta-release.apk
+    name: Releases
+
+pull_requests:
+  do_not_increment_build_number: true
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: "308KDLsJSL92cNktWWDvydxWSG6qTqI3C/f+DElUH3uysKVf3SyKLtYFRe0x86KG"
+  artifact: app-prc-beta-release.apk
+  draft: false
+  prerelease: true
+  on:
+    appveyor_repo_tag: true

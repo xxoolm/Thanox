@@ -1,0 +1,28 @@
+include ':app', ':module_donate', ':module_ops', ':module_easteregg'
+include ':module_locker'
+include ':module_common'
+
+include ':library_java_common'
+
+include ':plugins:xposed_hook_annotation'
+include ':plugins:xposed_hook_compiler'
+include ':plugins:auto_logging_gradle_plugin'
+include ':plugins:permission-requester-annotation'
+include ':plugins:permission-requester-compiler'
+
+include ':third_party:colorpicker'
+include ':third_party:dateformatter'
+include ':third_party:imagepicker'
+include ':third_party:patternlockview'
+include ':third_party:pinlockview'
+include ':third_party:zip4j'
+include ':third_party:recyclerview-fastscroll'
+include ':third_party:search'
+include ':third_party:badge'
+
+include ':android_framework:base'
+include ':android_framework:services'
+include ':android_framework:res'
+include ':android_framework:patchx'
+
+include ':android_framework:packages:installer'

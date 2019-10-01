@@ -1,0 +1,25 @@
+<resources>
+    <string name="module_ops_category_location">位置</string>
+    <string name="module_ops_category_personal">个人</string>
+    <string name="module_ops_category_message">信息</string>
+    <string name="module_ops_category_media">媒体</string>
+    <string name="module_ops_category_device">设备</string>
+    <string name="module_ops_category_bg">后台</string>
+    <string name="module_ops_category_remaning">其他</string>
+
+    <string name="module_ops_feature_title_app_ops_list">权限管理</string>
+    <string name="module_ops_feature_summary_app_ops_list">按应用</string>
+    <string name="module_ops_activity_title_app_ops_list">按应用（%s）</string>
+
+    <string name="module_ops_feature_title_ops_app_list">权限管理</string>
+    <string name="module_ops_feature_summary_ops_app_list">按权限</string>
+    <string name="module_ops_activity_title_ops_app_list">按权限（%s）</string>
+
+    <string name="module_ops_feature_title_ops_remind_list">使用提醒</string>
+    <string name="module_ops_feature_summary_ops_remind">应用使用某些权限时发出提醒</string>
+
+    <string name="module_ops_op_read_contact">读取联系人</string>
+    <string name="module_ops_op_summary_read_contact">读取设备上的联系人数据</string>
+    <string name="module_ops_op_write_contact">修改联系人</string>
+    <string name="module_ops_op_summary_write_contact">新建，删除，修改设备上的联系人数据</string>
+</resources>

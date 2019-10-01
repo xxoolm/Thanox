@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+                name="viewmodel"
+                type="github.tornaco.android.thanos.main.NavViewModel"/>
+
+    </data>
+
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="?cardsBackgroundColor"
+                android:layout_marginTop="@dimen/common_view_margin_small"
+                android:layout_marginStart="@dimen/common_view_margin_small"
+                android:layout_marginEnd="@dimen/common_view_margin_small"
+                app:cardElevation="@dimen/common_view_elevation"
+                android:focusable="true"
+                app:cardCornerRadius="@dimen/common_view_corner_radius">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/features"
+                    android:features="@{viewmodel.expFeatures}"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+</layout>

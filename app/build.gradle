@@ -1,0 +1,135 @@
+import com.google.common.io.Files
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion build_versions.compile_sdk
+    buildToolsVersion build_versions.build_tools
+
+    defaultConfig {
+        applicationId rootProject.ext.thanosApplicationId
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            Properties localProp = new Properties()
+            File propFile = new File("${project.rootProject.rootDir.path}/local.properties")
+            if (propFile.exists()) {
+                //noinspection UnstableApiUsage
+                localProp.load(Files.asByteSource(propFile).openStream())
+            }
+
+            storeFile file("${project.rootProject.rootDir.path}/environment/keys/android.jks")
+
+            storePassword localProp.containsKey("KEYSTORE_PASS") ? localProp.getProperty("KEYSTORE_PASS") : project.hasProperty("KEYSTORE_PASS") ? KEYSTORE_PASS : System.getenv("KEYSTORE_PASS")
+            keyAlias localProp.containsKey("ALIAS_NAME") ? localProp.getProperty("ALIAS_NAME") : (project.hasProperty("ALIAS_NAME") ? ALIAS_NAME : System.getenv("ALIAS_NAME"))
+            keyPassword localProp.containsKey("ALIAS_PASS") ? localProp.getProperty("ALIAS_PASS") : project.hasProperty("ALIAS_PASS") ? ALIAS_PASS : System.getenv("ALIAS_PASS")
+
+            println("keyAlias: ${keyAlias}")
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    // Specifies one flavor dimension.
+    flavorDimensions "target", "channel"
+    productFlavors {
+        row {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // If you are using only one dimension, this property is optional,
+            // and the plugin automatically assigns all the module's flavors to
+            // that dimension.
+            dimension "target"
+            versionNameSuffix "-row"
+        }
+
+        prc {
+            dimension "target"
+            versionNameSuffix "-prc"
+        }
+
+        beta {
+            dimension "channel"
+            versionNameSuffix "-beta"
+        }
+
+        rel {
+            dimension "channel"
+            versionNameSuffix "-rel"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Support Libraries
+    implementation deps.support.app_compat
+    implementation deps.support.material
+    implementation deps.support.recyclerview
+    implementation deps.support.preference
+    implementation deps.support.constraint
+
+    implementation deps.logging.firecrasher
+
+    // Arch
+    annotationProcessor deps.lifecycle.compiler
+
+    // Glide
+    annotationProcessor deps.glide.compiler
+
+    // Test
+    testImplementation deps.junit
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // Xposed
+    compileOnly deps.xposed.api
+
+    compileOnly deps.lombok.core
+    annotationProcessor deps.lombok.core
+
+    compileOnly project(':plugins:permission-requester-annotation')
+    annotationProcessor project(':plugins:permission-requester-compiler')
+
+    // Modules
+    implementation project(':module_common')
+    implementation project(':module_locker')
+    implementation project(':module_donate')
+    implementation project(':module_ops')
+    implementation project(':module_easteregg')
+    implementation project(':android_framework:packages:installer')
+
+    implementation project(':android_framework:services')
+    implementation project(':android_framework:patchx')
+    implementation project(':android_framework:base')
+    implementation project(':android_framework:res')
+
+}
+
+buildDir = rootProject.projectDir.path + "/out/app/"
