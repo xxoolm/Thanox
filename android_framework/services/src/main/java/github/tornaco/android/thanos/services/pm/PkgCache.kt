@@ -3,6 +3,7 @@ package github.tornaco.android.thanos.services.pm
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.ServiceManager
 import android.text.TextUtils
 import android.util.Log
@@ -13,7 +14,6 @@ import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.app.AppResources
 import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.util.*
-import github.tornaco.android.thanos.services.ThanosSchedulers
 import github.tornaco.java.common.util.CollectionUtils
 import github.tornaco.java.common.util.Consumer
 import io.reactivex.Completable
@@ -22,11 +22,13 @@ import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
 import java.util.regex.Pattern
 import kotlin.collections.HashSet
 
 internal class PkgCache {
     private var context: Context? = null
+    private val executor = Executors.newSingleThreadExecutor()
 
     val whiteList = HashSet<String>()
     val whiteListPatterns = ArrayList<Pattern>()
@@ -63,12 +65,6 @@ internal class PkgCache {
 
     @Suppress("DEPRECATION")
     private fun loadInstalledPkgs() {
-        val pm = context!!.packageManager
-        val applicationInfoList = if (OsUtils.isNOrAbove())
-            pm.getInstalledApplications(PackageManager.MATCH_UNINSTALLED_PACKAGES)
-        else
-            pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES)
-
         DevNull.accept(
             Completable.fromAction {
                 clear()
@@ -76,9 +72,8 @@ internal class PkgCache {
                 loadWhiteList()
             }).andThen(Completable.fromAction {
                 cacheWebviewPackacgaes()
-            }).andThen(Observable.fromIterable(applicationInfoList))
-                .observeOn(ThanosSchedulers.serverThread())
-                .subscribeOn(Schedulers.io())
+            }).andThen(Observable.fromIterable(getInstalledApplications()))
+                .subscribeOn(Schedulers.from(executor))
                 .subscribe(io.reactivex.functions.Consumer { applicationInfo ->
                     parseApplication(applicationInfo)
                 }, Rxs.ON_ERROR_LOGGING, Action {
@@ -87,9 +82,17 @@ internal class PkgCache {
         )
     }
 
+    private fun getInstalledApplications(): List<ApplicationInfo> {
+        val pm = context!!.packageManager
+        return if (OsUtils.isNOrAbove())
+            pm.getInstalledApplications(PackageManager.MATCH_UNINSTALLED_PACKAGES)
+        else
+            pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES)
+    }
+
     private fun loadWhiteList() {
         val appResources = AppResources(context, BuildProp.THANOS_APP_PKG_NAME)
-        whiteList.addAll(Arrays.asList(*appResources.getStringArray(Res.Strings.STRING_WHILE_LIST_PACKAGES)))
+        whiteList.addAll(listOf(*appResources.getStringArray(Res.Strings.STRING_WHILE_LIST_PACKAGES)))
         Timber.d("loadWhiteList:\n%s", Arrays.toString(whiteList.toTypedArray()))
     }
 
@@ -112,7 +115,7 @@ internal class PkgCache {
                 val pkgName = info.packageName
                 Timber.d("Add webview provider: " + pkgName + ", description: " + info.description)
 
-                webViewProviderPkgs.add(pkgName)
+                if (!webViewProviderPkgs.contains(pkgName)) webViewProviderPkgs.add(pkgName)
             }
         } catch (e: Throwable) {
             Timber.wtf("Fail cacheWebviewPackacgaes: " + Log.getStackTraceString(e))
@@ -156,7 +159,16 @@ internal class PkgCache {
 
             applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0 ->
                 try {
-                    val packageInfo = pm.getPackageInfo(pkgName, 0)
+                    val packageInfo = try {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            pm.getPackageInfo(pkgName, PackageManager.MATCH_UNINSTALLED_PACKAGES)
+                        } else {
+                            pm.getPackageInfo(pkgName, PackageManager.GET_UNINSTALLED_PACKAGES)
+                        }
+                    } catch (nnf: PackageManager.NameNotFoundException) {
+                        Timber.e("Error getPackageInfo for $pkgName", nnf)
+                        return
+                    }
                     val sharedUserId = packageInfo.sharedUserId
 
                     when {
