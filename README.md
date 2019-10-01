@@ -14,7 +14,7 @@
 
 ## How to use
 
-Reference [User manual](https://tornaco.github.io/Thanox/)
+Reference [User manual](https://tornaco.github.io/Thanox/).
 
 ## Contribute
 
