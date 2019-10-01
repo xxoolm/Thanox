@@ -14,7 +14,7 @@ import lombok.Getter;
 public class BootStrap {
     private static final String LOG_PREFIX = "[ThanosS]";
 
-    private static int currentLogLevel = Log.VERBOSE;
+    private static boolean loggingEnabled = true;
 
     private BootStrap() {
         // Noop.
@@ -32,7 +32,7 @@ public class BootStrap {
         Timber.plant(new Timber.DebugTree() {
             @Override
             protected void log(int priority, String tag, String message, Throwable t) {
-                if (priority < currentLogLevel) return;
+                if (!loggingEnabled) return;
                 String logTag = logTagWithUserId(Timber.tagWithPrefix(LOG_PREFIX, tag));
                 logTag = logTagWithThreadId(logTag);
                 super.log(priority, logTag, message, t);
@@ -81,12 +81,12 @@ public class BootStrap {
         }
     }
 
-    public static void setCurrentLogLevel(int level) {
-        currentLogLevel = level;
+    public static void setLoggingEnabled(boolean enabled) {
+        loggingEnabled = enabled;
     }
 
-    public static int getCurrentLogLevel() {
-        return currentLogLevel;
+    public static boolean isLoggingEnabled() {
+        return loggingEnabled;
     }
 
     private static String logTagWithUserId(String tag) {

@@ -1,9 +1,9 @@
 package github.tornaco.android.thanos.services
 
 import android.content.IntentFilter
-import android.util.Log
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.IThanos
+import github.tornaco.android.thanos.core.T
 import github.tornaco.android.thanos.core.app.IActivityManager
 import github.tornaco.android.thanos.core.app.activity.IActivityStackSupervisor
 import github.tornaco.android.thanos.core.app.event.IEventSubscriber
@@ -121,12 +121,11 @@ internal class ThanosServiceStub(
     }
 
     override fun setLoggingEnabled(enable: Boolean) {
-        if (enable) BootStrap.setCurrentLogLevel(Log.VERBOSE)
-        // Logging error anyway.
-        else BootStrap.setCurrentLogLevel(Log.ERROR)
+        BootStrap.setLoggingEnabled(enable)
+        prefms.putBoolean(T.Settings.PREF_LOGGING_ENABLED.key, enable)
     }
 
     override fun isLoggingEnabled(): Boolean {
-        return BootStrap.getCurrentLogLevel() < Log.ERROR
+        return BootStrap.isLoggingEnabled()
     }
 }

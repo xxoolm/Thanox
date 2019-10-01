@@ -10,6 +10,7 @@ import android.os.Process;
 import android.os.*;
 import android.text.TextUtils;
 import android.util.Log;
+import com.google.common.io.Files;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.Res;
 import github.tornaco.android.thanos.core.T;
@@ -30,10 +31,8 @@ import github.tornaco.android.thanos.core.persist.i.SetRepo;
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
 import github.tornaco.android.thanos.core.util.*;
-import github.tornaco.android.thanos.services.S;
 import github.tornaco.android.thanos.services.SystemService;
-import github.tornaco.android.thanos.services.ThanosSchedulers;
-import github.tornaco.android.thanos.services.ThreadPriorityBooster;
+import github.tornaco.android.thanos.services.*;
 import github.tornaco.android.thanos.services.apihint.Beta;
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler;
 import github.tornaco.android.thanos.services.app.start.StartRecorder;
@@ -52,6 +51,9 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -438,7 +440,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     @ExecuteBySystemHandler
     private void addProcessNameInternal(ProcessRecord processRecord) {
         Timber.v("addProcessNameInternal, processRecord: %s", processRecord);
-        if (processRecord.getPid() ==0) {
+        if (processRecord.getPid() == 0) {
             Timber.e("Invalid pid=0, processRecord %s", processRecord);
             return;
         }
@@ -912,9 +914,24 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         return new long[0];
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public void onApplicationCrashing(String eventType, String processName, ProcessRecord process, String stackTrace) {
-        Timber.w("onApplicationCrashing: %s %s %s %s", eventType, processName, process, stackTrace);
+        Timber.e("onApplicationCrashing: %s %s %s %s", eventType, processName, process, stackTrace);
+        if (BootStrap.isLoggingEnabled()) {
+            Completable.fromRunnable(() -> {
+                // Dump.
+                File logFile = new File(T.baseServerLoggingDir(), "log/crash/" + eventType + "_" + processName + "_" + DateUtils.formatForFileName(System.currentTimeMillis()));
+                Timber.w("Writing to log file: %s", logFile);
+                try {
+                    Files.createParentDirs(logFile);
+                    Files.asByteSink(logFile).asCharSink(Charset.defaultCharset()).write(stackTrace);
+                    Timber.w("Write complete to log file: %s", logFile);
+                } catch (IOException e) {
+                    Timber.e("Fail write log file", e);
+                }
+            }).subscribeOn(Schedulers.io()).subscribe();
+        }
     }
 
     @NonNull

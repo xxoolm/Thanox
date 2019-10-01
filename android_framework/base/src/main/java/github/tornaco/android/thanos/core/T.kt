@@ -20,8 +20,13 @@ object T {
     }
 
     @JvmStatic
-    fun baseServerDataTmpDir(): File {
+    fun baseServerTmpDir(): File {
         return File(baseServerDir(), "tmp")
+    }
+
+    @JvmStatic
+    fun baseServerLoggingDir(): File {
+        return File(baseServerDir(), "logging")
     }
 
     @JvmStatic
@@ -137,6 +142,9 @@ object T {
 
         @JvmField
         val PREF_PRIVACY_ENABLED = ThanosFeature("PREF_PRIVACY_ENABLED", false)
+
+        @JvmField
+        val PREF_LOGGING_ENABLED = ThanosFeature("PREF_LOGGING_ENABLED", true)
     }
 
     object Actions {

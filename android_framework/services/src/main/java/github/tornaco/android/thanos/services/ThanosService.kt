@@ -97,6 +97,8 @@ class ThanosService : SystemService(), S {
     override fun systemReady() {
         super.systemReady()
         SystemServiceLifecycle.systemReady(services)
+
+        initLogging()
     }
 
     override fun shutdown() {
@@ -108,5 +110,13 @@ class ThanosService : SystemService(), S {
         return "ThanosService"
     }
 
+    private fun initLogging() {
+        val preferenceManagerService = preferenceManagerService
+        val loggingEnabled = preferenceManagerService.getBoolean(
+            T.Settings.PREF_LOGGING_ENABLED.key,
+            T.Settings.PREF_LOGGING_ENABLED.defaultValue
+        )
+        BootStrap.setLoggingEnabled(loggingEnabled)
+    }
 
 }

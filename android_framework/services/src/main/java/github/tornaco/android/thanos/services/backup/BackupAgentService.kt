@@ -32,7 +32,7 @@ class BackupAgentService(s: S) : SystemService(), IBackupAgent {
         Preconditions.checkNotNull(callback)
 
         // Create tmp dir.
-        val tmpDir = T.baseServerDataTmpDir()
+        val tmpDir = T.baseServerTmpDir()
 
         try {
             @Suppress("UnstableApiUsage")
@@ -100,7 +100,7 @@ class BackupAgentService(s: S) : SystemService(), IBackupAgent {
         Preconditions.checkNotNull(callback)
 
         // Create tmp dir.
-        val tmpDir = T.baseServerDataTmpDir()
+        val tmpDir = T.baseServerTmpDir()
         val tmpZipFile = File(tmpDir, "thanox_restore_file.zip")
         Timber.d("zipFile : $tmpZipFile")
         // Copy to tmp.zip.
