@@ -38,4 +38,7 @@ interface IThanos {
     String getVersionName();
 
     String whoAreYou();
+
+    boolean isLoggingEnabled();
+    void setLoggingEnabled(boolean enable);
 }

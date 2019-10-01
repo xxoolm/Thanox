@@ -73,6 +73,13 @@ public interface IThanos extends android.os.IInterface
     {
       return null;
     }
+    @Override public boolean isLoggingEnabled() throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public void setLoggingEnabled(boolean enable) throws android.os.RemoteException
+    {
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -259,6 +266,23 @@ public interface IThanos extends android.os.IInterface
           java.lang.String _result = this.whoAreYou();
           reply.writeNoException();
           reply.writeString(_result);
+          return true;
+        }
+        case TRANSACTION_isLoggingEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _result = this.isLoggingEnabled();
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_setLoggingEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _arg0;
+          _arg0 = (0!=data.readInt());
+          this.setLoggingEnabled(_arg0);
+          reply.writeNoException();
           return true;
         }
         default:
@@ -627,6 +651,45 @@ public interface IThanos extends android.os.IInterface
         }
         return _result;
       }
+      @Override public boolean isLoggingEnabled() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isLoggingEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isLoggingEnabled();
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public void setLoggingEnabled(boolean enable) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeInt(((enable)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setLoggingEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setLoggingEnabled(enable);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
       public static github.tornaco.android.thanos.core.IThanos sDefaultImpl;
     }
     static final int TRANSACTION_getServiceManager = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -646,6 +709,8 @@ public interface IThanos extends android.os.IInterface
     static final int TRANSACTION_fingerPrint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
     static final int TRANSACTION_getVersionName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
     static final int TRANSACTION_whoAreYou = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+    static final int TRANSACTION_isLoggingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+    static final int TRANSACTION_setLoggingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.IThanos impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -674,4 +739,6 @@ public interface IThanos extends android.os.IInterface
   public java.lang.String fingerPrint() throws android.os.RemoteException;
   public java.lang.String getVersionName() throws android.os.RemoteException;
   public java.lang.String whoAreYou() throws android.os.RemoteException;
+  public boolean isLoggingEnabled() throws android.os.RemoteException;
+  public void setLoggingEnabled(boolean enable) throws android.os.RemoteException;
 }

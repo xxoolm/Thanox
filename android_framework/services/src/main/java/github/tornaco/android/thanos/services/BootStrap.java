@@ -13,7 +13,8 @@ import lombok.Getter;
 // Do not convert to kotlin.
 public class BootStrap {
     private static final String LOG_PREFIX = "[ThanosS]";
-    private static final int CURRENT_LOG_LEVEL = Log.VERBOSE;
+
+    private static int currentLogLevel = Log.VERBOSE;
 
     private BootStrap() {
         // Noop.
@@ -31,7 +32,7 @@ public class BootStrap {
         Timber.plant(new Timber.DebugTree() {
             @Override
             protected void log(int priority, String tag, String message, Throwable t) {
-                if (priority < CURRENT_LOG_LEVEL) return;
+                if (priority < currentLogLevel) return;
                 String logTag = logTagWithUserId(Timber.tagWithPrefix(LOG_PREFIX, tag));
                 logTag = logTagWithThreadId(logTag);
                 super.log(priority, logTag, message, t);
@@ -78,6 +79,14 @@ public class BootStrap {
         if (state == null || state.ordinal() < BootStrap.State.STARTED.ordinal()) {
             throw new IllegalStateException("System is not ready!!!");
         }
+    }
+
+    public static void setCurrentLogLevel(int level) {
+        currentLogLevel = level;
+    }
+
+    public static int getCurrentLogLevel() {
+        return currentLogLevel;
     }
 
     private static String logTagWithUserId(String tag) {

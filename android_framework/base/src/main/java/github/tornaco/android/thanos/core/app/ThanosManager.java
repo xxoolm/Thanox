@@ -119,6 +119,16 @@ public class ThanosManager {
         return service.getVersionName();
     }
 
+    @SneakyThrows
+    public boolean isLoggingEnabled() {
+        return service.isLoggingEnabled();
+    }
+
+    @SneakyThrows
+    public void setLoggingEnabled(boolean enable) {
+        service.setLoggingEnabled(enable);
+    }
+
     public static ThanosManager from(Context context) {
         return new ThanosManager(context, ThanosManagerNative.getDefault());
     }

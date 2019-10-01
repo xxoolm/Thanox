@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.DropDownPreference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
 import com.bumptech.glide.Glide;
 import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
@@ -114,6 +115,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
 
         // Logging.
+        SwitchPreference loggingPref = findPreference(getString(R.string.key_enable_logging));
+        if (thanos.isServiceInstalled()) {
+            loggingPref.setChecked(thanos.isLoggingEnabled());
+            loggingPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean checked = (boolean) newValue;
+                thanos.setLoggingEnabled(checked);
+                return true;
+            });
+
+        } else {
+            loggingPref.setEnabled(false);
+        }
 
         // About.
         findPreference(getString(R.string.key_donate))

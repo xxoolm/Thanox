@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.services
 
 import android.content.IntentFilter
+import android.util.Log
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.IThanos
 import github.tornaco.android.thanos.core.app.IActivityManager
@@ -117,5 +118,15 @@ internal class ThanosServiceStub(
 
     override fun whoAreYou(): String {
         return "I am Thanox!!!"
+    }
+
+    override fun setLoggingEnabled(enable: Boolean) {
+        if (enable) BootStrap.setCurrentLogLevel(Log.VERBOSE)
+        // Logging error anyway.
+        else BootStrap.setCurrentLogLevel(Log.ERROR)
+    }
+
+    override fun isLoggingEnabled(): Boolean {
+        return BootStrap.getCurrentLogLevel() < Log.ERROR
     }
 }
