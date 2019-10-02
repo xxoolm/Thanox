@@ -159,7 +159,7 @@ internal class PkgCache {
             Timber.e("Error getApplicationEnabledSetting for $pkgName", e)
             return
         }
-        Timber.v("Pkg state: %s", state)
+        Timber.v("Pkg state: %s %s", pkgName, state)
 
         // Idle state.
         val idle = try {
@@ -168,7 +168,7 @@ internal class PkgCache {
             Timber.e("Error get idle state", e)
             false
         }
-        Timber.v("Pkg idle: %s", idle)
+        Timber.v("Pkg idle: %s %s", pkgName, idle)
 
         // WhiteList
         when {
