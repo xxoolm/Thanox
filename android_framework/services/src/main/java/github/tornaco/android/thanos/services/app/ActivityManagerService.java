@@ -921,7 +921,9 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         if (BootStrap.isLoggingEnabled()) {
             Completable.fromRunnable(() -> {
                 // Dump.
-                File logFile = new File(T.baseServerLoggingDir(), "log/crash/" + eventType + "_" + processName + "_" + DateUtils.formatForFileName(System.currentTimeMillis()));
+                File logFile = new File(T.baseServerLoggingDir(), "log/crash/"
+                        + eventType + "_" + processName + "_"
+                        + DateUtils.formatForFileName(System.currentTimeMillis()) + ".log");
                 Timber.w("Writing to log file: %s", logFile);
                 try {
                     Files.createParentDirs(logFile);
