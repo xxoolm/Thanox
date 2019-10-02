@@ -150,6 +150,13 @@ internal class PkgCache {
             return
         }
 
+        val state = try {
+            pm.getApplicationEnabledSetting(pkgName)
+        } catch (e: Exception) {
+            Timber.e("Error getApplicationEnabledSetting for $pkgName", e)
+            return
+        }
+
         // WhiteList
         when {
 
@@ -158,7 +165,8 @@ internal class PkgCache {
                     pm,
                     packageInfo,
                     applicationInfo,
-                    AppInfo.FLAGS_WHITE_LISTED
+                    AppInfo.FLAGS_WHITE_LISTED,
+                    state
                 )
             )
 
@@ -167,7 +175,8 @@ internal class PkgCache {
                     pm,
                     packageInfo,
                     applicationInfo,
-                    AppInfo.FLAGS_WEB_VIEW_PROVIDER
+                    AppInfo.FLAGS_WEB_VIEW_PROVIDER,
+                    state
                 )
             )
 
@@ -181,7 +190,8 @@ internal class PkgCache {
                                 pm,
                                 packageInfo,
                                 applicationInfo,
-                                AppInfo.FLAGS_SYSTEM_MEDIA
+                                AppInfo.FLAGS_SYSTEM_MEDIA,
+                                state
                             )
                         )
                         PkgUtils.isSharedUserIdPhone(sharedUserId) -> phoneUidApps.add(
@@ -189,7 +199,8 @@ internal class PkgCache {
                                 pm,
                                 packageInfo,
                                 applicationInfo,
-                                AppInfo.FLAGS_SYSTEM_PHONE
+                                AppInfo.FLAGS_SYSTEM_PHONE,
+                                state
                             )
                         )
                         PkgUtils.isSharedUserIdSystem(sharedUserId) -> systemUidApps.add(
@@ -197,7 +208,8 @@ internal class PkgCache {
                                 pm,
                                 packageInfo,
                                 applicationInfo,
-                                AppInfo.FLAGS_SYSTEM_UID
+                                AppInfo.FLAGS_SYSTEM_UID,
+                                state
                             )
                         )
                         else -> systemApps.add(
@@ -205,7 +217,8 @@ internal class PkgCache {
                                 pm,
                                 packageInfo,
                                 applicationInfo,
-                                AppInfo.FLAGS_SYSTEM
+                                AppInfo.FLAGS_SYSTEM,
+                                state
                             )
                         )
                     }
@@ -213,7 +226,7 @@ internal class PkgCache {
                     Timber.e(e)
                 }
 
-            else -> _3rdApps.add(this@PkgCache.constructAppInfo(pm, packageInfo, applicationInfo, AppInfo.FLAGS_USER))
+            else -> _3rdApps.add(this@PkgCache.constructAppInfo(pm, packageInfo, applicationInfo, AppInfo.FLAGS_USER, state))
         }
     }
 
@@ -243,7 +256,8 @@ internal class PkgCache {
         pm: PackageManager,
         packageInfo: PackageInfo,
         applicationInfo: ApplicationInfo,
-        flags: Int
+        flags: Int,
+        state: Int
     ): AppInfo {
         val appInfo = AppInfo()
         appInfo.pkgName = applicationInfo.packageName
@@ -254,7 +268,7 @@ internal class PkgCache {
         appInfo.versionName = packageInfo.versionName
         appInfo.flags = flags
         appInfo.uid = applicationInfo.uid
-        appInfo.state = pm.getApplicationEnabledSetting(appInfo.pkgName)
+        appInfo.state = state
         return appInfo
     }
 
