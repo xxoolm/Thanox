@@ -6,6 +6,7 @@ interface IActivityManager {
     void forceStopPackage(String packageName);
 
     void idlePackage(String packageName);
+    boolean isPackageIdle(String packageName);
 
     boolean checkBroadcastingIntent(in Intent intent);
 

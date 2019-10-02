@@ -13,6 +13,7 @@ import com.google.common.collect.Lists
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.app.AppResources
+import github.tornaco.android.thanos.core.app.ThanosManagerNative
 import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.util.*
 import github.tornaco.java.common.util.CollectionUtils
@@ -139,6 +140,7 @@ internal class PkgCache {
             Timber.w("thanosAppUid=%s", thanosAppUid)
         }
 
+        // Loading pkg info.
         val packageInfo = try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 pm.getPackageInfo(pkgName, PackageManager.MATCH_UNINSTALLED_PACKAGES)
@@ -150,12 +152,23 @@ internal class PkgCache {
             return
         }
 
+        // Enabled/Disable state.
         val state = try {
             pm.getApplicationEnabledSetting(pkgName)
         } catch (e: Exception) {
             Timber.e("Error getApplicationEnabledSetting for $pkgName", e)
             return
         }
+        Timber.v("Pkg state: %s", state)
+
+        // Idle state.
+        val idle = try {
+            ThanosManagerNative.getDefault().activityManager.isPackageIdle(pkgName)
+        } catch (e: Exception) {
+            Timber.e("Error get idle state", e)
+            false
+        }
+        Timber.v("Pkg idle: %s", idle)
 
         // WhiteList
         when {
@@ -166,7 +179,8 @@ internal class PkgCache {
                     packageInfo,
                     applicationInfo,
                     AppInfo.FLAGS_WHITE_LISTED,
-                    state
+                    state,
+                    idle
                 )
             )
 
@@ -176,7 +190,8 @@ internal class PkgCache {
                     packageInfo,
                     applicationInfo,
                     AppInfo.FLAGS_WEB_VIEW_PROVIDER,
-                    state
+                    state,
+                    idle
                 )
             )
 
@@ -191,7 +206,8 @@ internal class PkgCache {
                                 packageInfo,
                                 applicationInfo,
                                 AppInfo.FLAGS_SYSTEM_MEDIA,
-                                state
+                                state,
+                                idle
                             )
                         )
                         PkgUtils.isSharedUserIdPhone(sharedUserId) -> phoneUidApps.add(
@@ -200,7 +216,8 @@ internal class PkgCache {
                                 packageInfo,
                                 applicationInfo,
                                 AppInfo.FLAGS_SYSTEM_PHONE,
-                                state
+                                state,
+                                idle
                             )
                         )
                         PkgUtils.isSharedUserIdSystem(sharedUserId) -> systemUidApps.add(
@@ -209,7 +226,8 @@ internal class PkgCache {
                                 packageInfo,
                                 applicationInfo,
                                 AppInfo.FLAGS_SYSTEM_UID,
-                                state
+                                state,
+                                idle
                             )
                         )
                         else -> systemApps.add(
@@ -218,7 +236,8 @@ internal class PkgCache {
                                 packageInfo,
                                 applicationInfo,
                                 AppInfo.FLAGS_SYSTEM,
-                                state
+                                state,
+                                idle
                             )
                         )
                     }
@@ -226,7 +245,16 @@ internal class PkgCache {
                     Timber.e(e)
                 }
 
-            else -> _3rdApps.add(this@PkgCache.constructAppInfo(pm, packageInfo, applicationInfo, AppInfo.FLAGS_USER, state))
+            else -> _3rdApps.add(
+                this@PkgCache.constructAppInfo(
+                    pm,
+                    packageInfo,
+                    applicationInfo,
+                    AppInfo.FLAGS_USER,
+                    state,
+                    idle
+                )
+            )
         }
     }
 
@@ -257,7 +285,8 @@ internal class PkgCache {
         packageInfo: PackageInfo,
         applicationInfo: ApplicationInfo,
         flags: Int,
-        state: Int
+        state: Int,
+        idle: Boolean
     ): AppInfo {
         val appInfo = AppInfo()
         appInfo.pkgName = applicationInfo.packageName
@@ -269,6 +298,7 @@ internal class PkgCache {
         appInfo.flags = flags
         appInfo.uid = applicationInfo.uid
         appInfo.state = state
+        appInfo.isIdle = idle
         return appInfo
     }
 

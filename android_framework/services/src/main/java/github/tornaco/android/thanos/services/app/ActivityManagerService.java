@@ -810,6 +810,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     @Override
     @ExecuteBySystemHandler
     public void forceStopPackage(String packageName) {
+        enforceCallingPermissions();
         Completable.fromRunnable(() -> {
             ActivityManager am = (ActivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.ACTIVITY_SERVICE);
             am.forceStopPackage(packageName);
@@ -846,7 +847,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     @Override
     @ExecuteBySystemHandler
     public void idlePackage(String packageName) {
-
+        enforceCallingPermissions();
         Runnable idle = () -> {
             IUsageStatsManager usm = IUsageStatsManager.Stub.asInterface(ServiceManager
                     .getService(Context.USAGE_STATS_SERVICE));
@@ -859,6 +860,19 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         };
 
         Completable.fromRunnable(idle).subscribeOn(ThanosSchedulers.serverThread()).subscribe();
+    }
+
+    @Override
+    public boolean isPackageIdle(String packageName) {
+        try {
+            IUsageStatsManager usm = IUsageStatsManager.Stub.asInterface(ServiceManager
+                    .getService(Context.USAGE_STATS_SERVICE));
+            boolean res = usm.isAppInactive(packageName, UserHandle.getUserId(Binder.getCallingUid()));
+            Timber.d("Finish query isAppInactive: %s", packageName);
+            return res;
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -1031,5 +1045,22 @@ public class ActivityManagerService extends SystemService implements IActivityMa
 
     private static void publishEventToSubscribersAsync(final ThanosEvent event) {
         EventBus.getInstance().publishEventToSubscribersAsync(event);
+    }
+
+    private void enforceCallingPermissions() {
+        if (Process.myPid() == Binder.getCallingPid()) {
+            return;
+        }
+
+        int callingUid = Binder.getCallingUid();
+        if (PkgUtils.isSystemOrPhoneOrShell(callingUid)) {
+            return;
+        }
+        int thanosAppUid = s.getPkgManagerService().getThanosAppUid();
+        if (thanosAppUid == callingUid) {
+            return;
+        }
+
+        throw new SecurityException("Uid of $callingUid it not allowed to interact with Thanos server");
     }
 }
