@@ -11,6 +11,7 @@ import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.util.OsUtils;
+import github.tornaco.thanos.android.ops.ops.by.app.AppOpsListActivity;
 import lombok.AllArgsConstructor;
 
 import java.util.Objects;
@@ -41,7 +42,15 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
 
         bindFeatureConfigPref();
         bindAppStatePref();
+        bindOpsPref();
+    }
 
+    private void bindOpsPref() {
+        Preference opsPref = findPreference(getString(R.string.key_app_feature_config_ops));
+        Objects.requireNonNull(opsPref).setOnPreferenceClickListener(preference -> {
+            AppOpsListActivity.start(Objects.requireNonNull(getContext()), appInfo);
+            return true;
+        });
     }
 
     private void bindFeatureConfigPref() {

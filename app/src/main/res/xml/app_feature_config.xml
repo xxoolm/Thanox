@@ -46,4 +46,14 @@
                 android:persistent="false"/>
     </PreferenceCategory>
 
+    <PreferenceCategory
+            app:title="@string/feature_category_privacy">
+
+        <Preference
+                app:key="@string/key_app_feature_config_ops"
+                app:title="@string/module_ops_feature_title_app_ops_list"
+                android:persistent="false"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

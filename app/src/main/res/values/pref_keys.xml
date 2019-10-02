@@ -39,4 +39,7 @@
     </string>
     <string name="key_app_feature_config_app_to_disable" translatable="false">key_app_feature_config_app_to_disable
     </string>
+
+    <string name="key_app_feature_config_ops" translatable="false">key_app_feature_config_ops
+    </string>
 </resources>
