@@ -92,6 +92,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     private SetRepo<String> cleanUpTaskRemovalApps;
 
     private Map<String, ProcessRecordList> processMap = new ConcurrentHashMap<>();
+    private Map<String, Integer> processCrashingTimes = new ConcurrentHashMap<>();
 
     private Set<String> startBlockCallerWhiteList = new HashSet<>();
 
@@ -918,6 +919,20 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     @Override
     public void onApplicationCrashing(String eventType, String processName, ProcessRecord process, String stackTrace) {
         Timber.e("onApplicationCrashing: %s %s %s %s", eventType, processName, process, stackTrace);
+
+        if (processName == null) {
+            return;
+        }
+
+        Integer crashTimes = processCrashingTimes.get(processName);
+        int newTimes = crashTimes == null ? 0 : crashTimes + 1;
+        processCrashingTimes.put(processName, newTimes);
+
+        if (newTimes > 6) {
+            Timber.e("This process crash too much times: %s, skip logging.", newTimes);
+            return;
+        }
+
         if (BootStrap.isLoggingEnabled()) {
             Completable.fromRunnable(() -> {
                 // Dump.
