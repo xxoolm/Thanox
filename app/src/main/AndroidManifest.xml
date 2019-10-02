@@ -49,6 +49,13 @@
         <activity android:name=".privacy.CheatFieldSettingsActivity"/>
         <activity android:name=".start.BgRestrictSettingsActivity"/>
         <activity android:name=".apps.AppDetailsActivity"/>
+        <service android:name=".testing.FakeService"
+                 android:exported="true">
+            <intent-filter>
+                <action android:name="github.thanos.app.service.fake.START"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
