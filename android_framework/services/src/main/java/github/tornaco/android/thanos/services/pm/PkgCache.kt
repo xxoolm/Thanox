@@ -13,7 +13,6 @@ import com.google.common.collect.Lists
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.app.AppResources
-import github.tornaco.android.thanos.core.app.ThanosManagerNative
 import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.util.*
 import github.tornaco.java.common.util.CollectionUtils
@@ -162,13 +161,8 @@ internal class PkgCache {
         Timber.v("Pkg state: %s %s", pkgName, state)
 
         // Idle state.
-        val idle = try {
-            ThanosManagerNative.getDefault().activityManager.isPackageIdle(pkgName)
-        } catch (e: Exception) {
-            Timber.e("Error get idle state", e)
-            false
-        }
-        Timber.v("Pkg idle: %s %s", pkgName, idle)
+        // We will not load idle state now.
+        val idle = false
 
         // WhiteList
         when {

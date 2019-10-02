@@ -8,6 +8,7 @@ import android.content.*;
 import android.content.pm.ApplicationInfo;
 import android.os.Process;
 import android.os.*;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import com.google.common.io.Files;
@@ -852,8 +853,14 @@ public class ActivityManagerService extends SystemService implements IActivityMa
             IUsageStatsManager usm = IUsageStatsManager.Stub.asInterface(ServiceManager
                     .getService(Context.USAGE_STATS_SERVICE));
             try {
+                if (OsUtils.isPOrAbove()) {
+                    YesNoDontKnow idleEnabled = isAppIdleEnabledForPOrAbove();
+                    Timber.w("idleEnabled: %s", idleEnabled);
+                }
                 usm.setAppInactive(packageName, true, UserHandle.getUserId(Binder.getCallingUid()));
                 Timber.d("Finish idlePackage: %s", packageName);
+                boolean isIdleNow = isPackageIdle(packageName);
+                Timber.d("Is pkg idle now? %s", isIdleNow);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -932,8 +939,6 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     @SuppressWarnings("UnstableApiUsage")
     @Override
     public void onApplicationCrashing(String eventType, String processName, ProcessRecord process, String stackTrace) {
-        Timber.e("onApplicationCrashing: %s %s %s %s", eventType, processName, process, stackTrace);
-
         if (processName == null) {
             return;
         }
@@ -943,9 +948,11 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         processCrashingTimes.put(processName, newTimes);
 
         if (newTimes > 6) {
-            Timber.e("This process crash too much times: %s, skip logging.", newTimes);
+            Timber.v("This process crash too much times: %s, skip logging.", newTimes);
             return;
         }
+
+        Timber.e("onApplicationCrashing: %s %s %s %s", eventType, processName, process, stackTrace);
 
         if (BootStrap.isLoggingEnabled()) {
             Completable.fromRunnable(() -> {
@@ -1045,6 +1052,38 @@ public class ActivityManagerService extends SystemService implements IActivityMa
 
     private static void publishEventToSubscribersAsync(final ThanosEvent event) {
         EventBus.getInstance().publishEventToSubscribersAsync(event);
+    }
+
+    private YesNoDontKnow isAppIdleEnabledForPOrAbove() {
+        /**
+         * Whether or not App Standby feature is enabled by system. This controls throttling of apps
+         * based on usage patterns and predictions. Platform will turn on this feature if both this
+         * flag and {@link #ADAPTIVE_BATTERY_MANAGEMENT_ENABLED} is on.
+         * Type: int (0 for false, 1 for true)
+         * Default: 1
+         * @see #ADAPTIVE_BATTERY_MANAGEMENT_ENABLED
+         */
+        final String APP_STANDBY_ENABLED = "app_standby_enabled";
+
+        /**
+         * Whether or not adaptive battery feature is enabled by user. Platform will turn on this
+         * feature if both this flag and {@link #APP_STANDBY_ENABLED} is on.
+         * Type: int (0 for false, 1 for true)
+         * Default: 1
+         * @see #APP_STANDBY_ENABLED
+         */
+        final String ADAPTIVE_BATTERY_MANAGEMENT_ENABLED = "adaptive_battery_management_enabled";
+        try {
+            final boolean buildFlag = Objects.requireNonNull(getContext()).getResources().getBoolean(
+                    com.android.internal.R.bool.config_enableAutoPowerModes);
+            final boolean runtimeFlag = Settings.Global.getInt(getContext().getContentResolver(),
+                    APP_STANDBY_ENABLED, 1) == 1
+                    && Settings.Global.getInt(getContext().getContentResolver(),
+                    ADAPTIVE_BATTERY_MANAGEMENT_ENABLED, 1) == 1;
+            return (buildFlag && runtimeFlag) ? YesNoDontKnow.YES : YesNoDontKnow.NO;
+        } catch (Throwable e) {
+            return YesNoDontKnow.DONT_KNOW;
+        }
     }
 
     private void enforceCallingPermissions() {
