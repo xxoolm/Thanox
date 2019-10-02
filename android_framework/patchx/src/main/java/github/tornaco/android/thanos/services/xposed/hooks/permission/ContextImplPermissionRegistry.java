@@ -22,7 +22,7 @@ import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
 
 // For permission enhancement.
 // No need, we will find new solution instead of this hook.
-@XposedHook(targetSdkVersion = {_21, _22, _23, _24, _25, _26, _27, _28, _29}, active = false)
+@XposedHook(targetSdkVersion = {_21, _22, _23, _24, _25, _26, _27, _28, _29}, active = true)
 public class ContextImplPermissionRegistry implements IXposedHook {
 
     private void hookEnforce() {
