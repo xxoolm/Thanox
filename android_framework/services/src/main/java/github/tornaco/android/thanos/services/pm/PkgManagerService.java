@@ -5,8 +5,11 @@ import android.content.Context;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.UserHandle;
+import github.tornaco.android.thanos.BuildProp;
+import github.tornaco.android.thanos.core.T;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.pm.IPkgManager;
+import github.tornaco.android.thanos.core.util.FileUtils;
 import github.tornaco.android.thanos.core.util.Noop;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BackgroundThread;
@@ -14,6 +17,7 @@ import github.tornaco.android.thanos.services.S;
 import github.tornaco.android.thanos.services.SystemService;
 import lombok.Getter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +40,9 @@ public class PkgManagerService extends SystemService implements IPkgManager {
         public void onPackageRemoved(String packageName, int uid) {
             super.onPackageRemoved(packageName, uid);
             getPkgCache().invalidate();
+            if (Objects.equals(packageName, BuildProp.THANOS_APP_PKG_NAME)) {
+                onThanoxAppPackageRemoved();
+            }
         }
 
         @Override
@@ -162,6 +169,15 @@ public class PkgManagerService extends SystemService implements IPkgManager {
     @Override
     public void setApplicationEnabledSetting(String packageName, int newState, int flags, boolean tmp) {
         executeInternal(() -> Objects.requireNonNull(getContext()).getPackageManager().setApplicationEnabledSetting(packageName, newState, flags));
+    }
+
+    private void onThanoxAppPackageRemoved() {
+        // Clean up resources.
+        executeInternal(() -> {
+            File dir = T.baseServerDir();
+            FileUtils.deleteDirQuiet(dir);
+            Timber.w("onThanoxAppPackageRemoved, thanox data has been cleaned.");
+        });
     }
 
     @Override
