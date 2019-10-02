@@ -130,5 +130,5 @@
     <string name="badge_paid_app">已购买</string>
 
     <string name="title_app_notice">注意事项</string>
-    <string name="message_app_notice">Thanox对于新手甚至老鸟都及其危险，请做好启用之后无法开机的准备，启用之前请务必做好数据备份。</string>
+    <string name="message_app_notice">Thanox对于新手甚至老鸟都及其危险，请做好启用之后无法开机的准备，启用之前请务必做好数据备份。\n\n测试版本建议打开Thanox设置，开启日志，如果发现了崩溃重启等异常问题，请将data/system/thanos/logging下的日志反馈</string>
 </resources>
