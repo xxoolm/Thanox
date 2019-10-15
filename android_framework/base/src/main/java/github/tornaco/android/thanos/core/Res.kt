@@ -32,6 +32,7 @@ abstract class Res {
         const val STRING_SERVICE_OP_LABEL_RECORD_AUDIO = "service_op_label_record_audio"
         const val STRING_SERVICE_OP_LABEL_PLAY_AUDIO = "service_op_label_play_audio"
 
+        const val STRING_BG_TASKS_CLEAN_COMPLETE = "service_notification_bg_tasks_clean_complete"
     }
 
     object Drawables {

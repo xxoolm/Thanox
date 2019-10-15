@@ -148,12 +148,12 @@ object T {
     }
 
     object Actions {
-        const val ACTION_FRONT_PKG_CHANGED = "t.a.front_pkg.changed"
-        const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE = "t.a.extra.front_activity.changed.pkg"
+        const val ACTION_FRONT_PKG_CHANGED = "thanox.a.front_pkg.changed"
+        const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE = "thanox.a.extra.front_activity.changed.pkg"
 
-        const val ACTION_RUNNING_PROCESS_CHANGED = "t.a.running_process.changed"
-        const val ACTION_RUNNING_PROCESS_VIEWER = "t.a.running_process.viewer"
-        const val ACTION_RUNNING_PROCESS_CLEAR = "t.a.running_process.clear"
+        const val ACTION_RUNNING_PROCESS_CHANGED = "thanox.a.running_process.changed"
+        const val ACTION_RUNNING_PROCESS_VIEWER = "thanox.a.running_process.viewer"
+        const val ACTION_RUNNING_PROCESS_CLEAR = "thanox.a.running_process.clear"
 
         const val ACTION_LOCKER_VERIFY_ACTION = "github.tornaco.practice.honeycomb.locker.action.VERIFY"
         const val ACTION_LOCKER_VERIFY_EXTRA_PACKAGE = "pkg"
@@ -161,7 +161,7 @@ object T {
     }
 
     object Tags {
-        const val N_TAG_BG_RESTRICT_APPS_CHANGED = "n.tag.bg.restrict.apps.changed"
-        const val N_TAG_PKG_PRIVACY_DATA_CHEATING = "n.tag.privacy.pkg.cheating"
+        const val N_TAG_BG_RESTRICT_APPS_CHANGED = "thanox.n.tag.bg.restrict.apps.changed"
+        const val N_TAG_PKG_PRIVACY_DATA_CHEATING = "thanox.n.tag.privacy.pkg.cheating"
     }
 }

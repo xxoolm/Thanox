@@ -2,6 +2,7 @@ package github.tornaco.android.thanos.main;
 
 import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Intent;
 import android.content.res.Resources;
 import androidx.annotation.NonNull;
 import androidx.databinding.*;
@@ -11,6 +12,7 @@ import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.app.donate.DonateSettings;
 import github.tornaco.android.thanos.apps.AppsManageActivity;
+import github.tornaco.android.thanos.core.T;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.util.OsUtils;
 import github.tornaco.android.thanos.core.util.Timber;
@@ -385,5 +387,9 @@ public class NavViewModel extends AndroidViewModel {
     private String getChannelString() {
         //noinspection ConstantConditions
         return BuildConfig.FLAVOR_channel.equals("beta") ? "BETA" : (BuildConfig.DEBUG ? "DEBUG" : null);
+    }
+
+    void cleanUpBackgroundTasks() {
+        getApplication().sendBroadcast(new Intent(T.Actions.ACTION_RUNNING_PROCESS_CLEAR));
     }
 }

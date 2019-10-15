@@ -11,6 +11,7 @@ import android.os.*;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 import com.google.common.io.Files;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.Res;
@@ -110,6 +111,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         @Override
         public void onReceive(Context context, Intent intent) {
             if (ObjectsUtils.equals(ACTION_RUNNING_PROCESS_CLEAR, intent.getAction())) {
+                Timber.d("Received ACTION_RUNNING_PROCESS_CLEAR");
                 cleanUpBgTasks(false, 0);
             }
         }
@@ -992,13 +994,13 @@ public class ActivityManagerService extends SystemService implements IActivityMa
 
     @ExecuteBySystemHandler
     private void cleanUpBgTasks(boolean onlyWhenIsNotInteractive, long delay) {
-        PowerManager power = (PowerManager) Objects.requireNonNull(getContext()).getSystemService(Context.POWER_SERVICE);
         String[] runningPkgs = getRunningAppPackages();
         Timber.d("Cleaning up background tasks: %s", Arrays.toString(runningPkgs));
 
         DevNull.accept(Observable
                 .fromArray(runningPkgs)
                 .subscribeOn(ThanosSchedulers.serverThread())
+                .observeOn(ThanosSchedulers.serverThread())
                 .delay(Math.max(0, delay), TimeUnit.MILLISECONDS)
                 .distinct()
                 .filter(cleanUpBgTasksFilter(onlyWhenIsNotInteractive))
@@ -1006,7 +1008,22 @@ public class ActivityManagerService extends SystemService implements IActivityMa
                     killProcessForPackage(pkg);
                     forceStopPackage(pkg);
                     Timber.d("Clean up background task: %s", pkg);
-                }, Rxs.ON_ERROR_LOGGING, () -> Timber.d("Clean up background tasks complete")));
+                }, Rxs.ON_ERROR_LOGGING, () -> {
+                    Timber.d("Clean up background tasks complete");
+                    showBgTasksCleanCompleteToast();
+                }));
+    }
+
+    @ExecuteBySystemHandler
+    private void showBgTasksCleanCompleteToast() {
+        executeInternal(() -> {
+            AppResources appResources = new AppResources(getContext(), BuildProp.THANOS_APP_PKG_NAME);
+            Toast.makeText(
+                    Objects.requireNonNull(getContext()),
+                    appResources.getString(Res.Strings.STRING_BG_TASKS_CLEAN_COMPLETE),
+                    Toast.LENGTH_SHORT)
+                    .show();
+        });
     }
 
     private Predicate<String> cleanUpBgTasksFilter(boolean onlyWhenIsNotInteractive) {

@@ -150,7 +150,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         }
 
         val pkgName = pkgNames[0]
-        Timber.d("getInstalledPackages: $pkgName")
+        Timber.v("getInstalledPackages: $pkgName")
 
         val useSet = installedPkgsReturnEmptyRepo[pkgName]
         if (!TextUtils.isEmpty(useSet) && true.toString() == useSet) {
@@ -173,7 +173,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         }
 
         val pkgName = pkgNames[0]
-        Timber.d("getInstalledApplications: $pkgName")
+        Timber.v("getInstalledApplications: $pkgName")
 
         val useSet = installedPkgsReturnEmptyRepo[pkgName]
         if (!TextUtils.isEmpty(useSet) && true.toString() == useSet) {
@@ -312,7 +312,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     }
 
     private fun onFrontPkgChanged(pkg: String) {
-        Timber.d("onFrontPkgChanged: %s", pkg)
+        Timber.v("onFrontPkgChanged: %s", pkg)
         Completable
             .fromRunnable { showPackagePrivacyDataCheatingNotification(pkg) }
             .subscribeOn(ThanosSchedulers.serverThread())

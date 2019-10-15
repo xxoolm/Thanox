@@ -81,7 +81,7 @@ public class TelephonyManagerRegister implements IXposedHook {
                             super.beforeHookedMethod(param);
                             String callPackageName = AndroidAppHelper.currentPackageName();
 
-                            Timber.d("getLine1Number: " + callPackageName);
+                            Timber.v("getLine1Number: " + callPackageName);
 
                             if (callPackageName == null) return;
 
@@ -116,7 +116,7 @@ public class TelephonyManagerRegister implements IXposedHook {
 
                             String callPackageName = AndroidAppHelper.currentPackageName();
 
-                            Timber.d("getSimSerialNumber: " + callPackageName);
+                            Timber.v("getSimSerialNumber: " + callPackageName);
 
                             if (callPackageName == null) return;
 
