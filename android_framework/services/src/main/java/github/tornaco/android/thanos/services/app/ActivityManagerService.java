@@ -1001,45 +1001,48 @@ public class ActivityManagerService extends SystemService implements IActivityMa
                 .subscribeOn(ThanosSchedulers.serverThread())
                 .delay(Math.max(0, delay), TimeUnit.MILLISECONDS)
                 .distinct()
-                .filter(pkg -> {
-
-                            if (!isPkgBgRestricted(pkg)) {
-                                Timber.d("Package %s is not restricted, ignore.", pkg);
-                                return false;
-                            }
-                            if (ObjectsUtils.equals(pkg, getCurrentFrontApp())) {
-                                Timber.d("Package %s is @front, ignore.", pkg);
-                                return false;
-                            }
-                            if (s.getPkgManagerService().isPkgInWhiteList(pkg)) {
-                                Timber.d("Package %s is @white-list, ignore.", pkg);
-                                return false;
-                            }
-                            if (onlyWhenIsNotInteractive && power.isInteractive()) {
-                                Timber.d("Interactive, ignore %s", pkg);
-                                return false;
-                            }
-                            if (!isPackageRunning(pkg)) {
-                                Timber.d("Package %s is not running, ignore.", pkg);
-                                return false;
-                            }
-                            if (bgTaskCleanUpSkipAudioFocused && s.getAudioService().hasAudioFocus(pkg)) {
-                                Timber.d("Package %s has audio focus, ignore.", pkg);
-                                return false;
-                            }
-                            if (bgTaskCleanUpSkipNotificationFocused && s.getNotificationManagerService().hasNotificationRecordsForPackage(pkg)) {
-                                Timber.d("Package %s has notification, ignore.", pkg);
-                                return false;
-                            }
-
-                            return true;
-                        }
-                )
+                .filter(cleanUpBgTasksFilter(onlyWhenIsNotInteractive))
                 .subscribe(pkg -> {
                     killProcessForPackage(pkg);
                     forceStopPackage(pkg);
                     Timber.d("Clean up background task: %s", pkg);
                 }, Rxs.ON_ERROR_LOGGING, () -> Timber.d("Clean up background tasks complete")));
+    }
+
+    private Predicate<String> cleanUpBgTasksFilter(boolean onlyWhenIsNotInteractive) {
+        PowerManager power = (PowerManager) Objects.requireNonNull(getContext()).getSystemService(Context.POWER_SERVICE);
+        return pkg -> {
+            if (!isPkgBgRestricted(pkg)) {
+                Timber.d("Package %s is not restricted, ignore.", pkg);
+                return false;
+            }
+            if (ObjectsUtils.equals(pkg, getCurrentFrontApp())) {
+                Timber.d("Package %s is @front, ignore.", pkg);
+                return false;
+            }
+            if (s.getPkgManagerService().isPkgInWhiteList(pkg)) {
+                Timber.d("Package %s is @white-list, ignore.", pkg);
+                return false;
+            }
+            if (onlyWhenIsNotInteractive && power.isInteractive()) {
+                Timber.d("Interactive, ignore %s", pkg);
+                return false;
+            }
+            if (!isPackageRunning(pkg)) {
+                Timber.d("Package %s is not running, ignore.", pkg);
+                return false;
+            }
+            if (bgTaskCleanUpSkipAudioFocused && s.getAudioService().hasAudioFocus(pkg)) {
+                Timber.d("Package %s has audio focus, ignore.", pkg);
+                return false;
+            }
+            if (bgTaskCleanUpSkipNotificationFocused && s.getNotificationManagerService().hasNotificationRecordsForPackage(pkg)) {
+                Timber.d("Package %s has notification, ignore.", pkg);
+                return false;
+            }
+
+            return true;
+        };
     }
 
     private static void boostPriorityForLockedSection() {
