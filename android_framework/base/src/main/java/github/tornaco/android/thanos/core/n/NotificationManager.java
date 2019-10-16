@@ -26,4 +26,24 @@ public class NotificationManager {
     public void unRegisterObserver(INotificationObserver obs) {
         service.unRegisterObserver(obs);
     }
+
+    @SneakyThrows
+    public void setScreenOnNotificationEnabledForPkg(String pkg, boolean enable) {
+        service.setScreenOnNotificationEnabledForPkg(pkg, enable);
+    }
+
+    @SneakyThrows
+    public boolean isScreenOnNotificationEnabledForPkg(String pkg) {
+        return service.isScreenOnNotificationEnabledForPkg(pkg);
+    }
+
+    @SneakyThrows
+    public void setScreenOnNotificationEnabled(boolean enable) {
+        service.setScreenOnNotificationEnabled(enable);
+    }
+
+    @SneakyThrows
+    public boolean isScreenOnNotificationEnabled() {
+        return service.isScreenOnNotificationEnabled();
+    }
 }

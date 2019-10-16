@@ -90,6 +90,11 @@ object T {
     }
 
     @JvmStatic
+    fun screenOnNotificationPkgsFile(): File {
+        return File(baseServerDataDir(), "screen_on_notification_pkgs.xml")
+    }
+
+    @JvmStatic
     fun serviceInstallName(): String {
         return Context.TV_INPUT_SERVICE
     }
@@ -142,6 +147,9 @@ object T {
 
         @JvmField
         val PREF_PRIVACY_ENABLED = ThanosFeature("PREF_PRIVACY_ENABLED", false)
+
+        @JvmField
+        val PREF_SCREEN_ON_NOTIFICATION_ENABLED = ThanosFeature("PREF_SCREEN_ON_NOTIFICATION_ENABLED", false)
 
         @JvmField
         val PREF_LOGGING_ENABLED = ThanosFeature("PREF_LOGGING_ENABLED", true)

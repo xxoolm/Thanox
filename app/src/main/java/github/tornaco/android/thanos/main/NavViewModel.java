@@ -17,6 +17,7 @@ import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.util.OsUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.dashboard.Tile;
+import github.tornaco.android.thanos.notification.ScreenOnNotificationActivity;
 import github.tornaco.android.thanos.privacy.DataCheatActivity;
 import github.tornaco.android.thanos.start.BackgroundRestrictActivity;
 import github.tornaco.android.thanos.start.StartRestrictActivity;
@@ -334,8 +335,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_light_on_notifiation))
                                 .themeColor(R.color.md_blue_grey_500)
                                 .disabled(OsUtils.isMIUI())
-                                .onClickListener(view -> {
-                                })
+                                .onClickListener(view -> ScreenOnNotificationActivity.start(getApplication()))
                                 .build(),
                         Tile.builder()
                                 .iconRes(R.drawable.ic_guide_fill)

@@ -2,10 +2,16 @@ package github.tornaco.android.thanos.services.n
 
 import android.content.Context
 import android.os.IBinder
+import android.os.PowerManager
 import android.os.RemoteCallbackList
+import android.os.SystemClock
+import github.tornaco.android.thanos.core.T
 import github.tornaco.android.thanos.core.n.INotificationManager
 import github.tornaco.android.thanos.core.n.INotificationObserver
 import github.tornaco.android.thanos.core.n.NotificationRecord
+import github.tornaco.android.thanos.core.persist.RepoFactory
+import github.tornaco.android.thanos.core.persist.StringSetRepo
+import github.tornaco.android.thanos.core.pref.IPrefChangeListener
 import github.tornaco.android.thanos.core.util.Noop
 import github.tornaco.android.thanos.core.util.Preconditions
 import github.tornaco.android.thanos.core.util.Timber
@@ -14,16 +20,52 @@ import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.SystemService
 import github.tornaco.android.thanos.services.ThanosSchedulers
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
+import github.tornaco.java.common.util.ObjectsUtils
 import io.reactivex.Completable
 import java.util.concurrent.ConcurrentHashMap
 
-class NotificationManagerService(s: S) : SystemService(), INotificationManager {
+class NotificationManagerService(private val s: S) : SystemService(), INotificationManager {
 
     private val notificationRecords = ConcurrentHashMap<String, MutableList<NotificationRecord>>()
     private val observers = RemoteCallbackList<INotificationObserver>()
 
+    private lateinit var screenOnNotificationPkgs: StringSetRepo
+
+    private var screenOnNotificationEnabled = false
+
     override fun onStart(context: Context) {
         super.onStart(context)
+        screenOnNotificationPkgs = RepoFactory.get().getOrCreateStringSetRepo(T.screenOnNotificationPkgsFile().path)
+    }
+
+    override fun systemReady() {
+        super.systemReady()
+        initPrefs()
+    }
+
+    private fun initPrefs() {
+        readPrefs()
+        listenToPrefs()
+    }
+
+    private fun readPrefs() {
+        val preferenceManagerService = s.preferenceManagerService
+        this.screenOnNotificationEnabled = preferenceManagerService.getBoolean(
+            T.Settings.PREF_SCREEN_ON_NOTIFICATION_ENABLED.key,
+            T.Settings.PREF_SCREEN_ON_NOTIFICATION_ENABLED.defaultValue
+        )
+    }
+
+    private fun listenToPrefs() {
+        val listener = object : IPrefChangeListener.Stub() {
+            override fun onPrefChanged(key: String) {
+                if (ObjectsUtils.equals(T.Settings.PREF_SCREEN_ON_NOTIFICATION_ENABLED.key, key)) {
+                    Timber.i("Pref changed, reload.")
+                    readPrefs()
+                }
+            }
+        }
+        s.preferenceManagerService.registerSettingsChangeListener(listener)
     }
 
     override fun getNotificationRecordsForPackage(packageName: String?): Array<NotificationRecord> {
@@ -48,7 +90,17 @@ class NotificationManagerService(s: S) : SystemService(), INotificationManager {
         list.add(record)
         notificationRecords[record.pkg] = list
 
+        lightOnScreenIfNeed(record)
+
         notifyNewNotification(record)
+    }
+
+    private fun lightOnScreenIfNeed(record: NotificationRecord) {
+        if (screenOnNotificationEnabled && screenOnNotificationPkgs.has(record.pkg)) {
+            Timber.d("lightOnScreenIfNeed, will light on")
+            val powerManager: PowerManager = context!!.getSystemService(Context.POWER_SERVICE) as PowerManager
+            powerManager.wakeUp(SystemClock.uptimeMillis())
+        }
     }
 
     fun onRemoveNotificationRecord(record: NotificationRecord) {
@@ -111,6 +163,26 @@ class NotificationManagerService(s: S) : SystemService(), INotificationManager {
             .subscribe()
     }
 
+    override fun isScreenOnNotificationEnabledForPkg(pkg: String?): Boolean {
+        return screenOnNotificationPkgs.has(pkg)
+    }
+
+    override fun setScreenOnNotificationEnabledForPkg(pkg: String?, enable: Boolean) {
+        if (enable) screenOnNotificationPkgs.add(pkg) else screenOnNotificationPkgs.remove(pkg)
+    }
+
+    override fun setScreenOnNotificationEnabled(enable: Boolean) {
+        this.screenOnNotificationEnabled = enable
+        val preferenceManagerService = s.preferenceManagerService
+        preferenceManagerService.putBoolean(
+            T.Settings.PREF_SCREEN_ON_NOTIFICATION_ENABLED.key,
+            enable
+        )
+    }
+
+    override fun isScreenOnNotificationEnabled(): Boolean {
+        return screenOnNotificationEnabled
+    }
 
     override fun asBinder(): IBinder {
         return Noop.notSupported()

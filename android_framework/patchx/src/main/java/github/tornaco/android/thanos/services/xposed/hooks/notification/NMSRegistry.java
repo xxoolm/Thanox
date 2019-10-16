@@ -82,7 +82,6 @@ public class NMSRegistry implements IXposedHook {
 
         @Override
         public boolean add(T e) {
-
             boolean added = super.add(e);
             if (added) {
                 Completable.fromRunnable(() -> {

@@ -49,6 +49,7 @@
         <activity android:name=".privacy.CheatFieldSettingsActivity"/>
         <activity android:name=".start.BgRestrictSettingsActivity"/>
         <activity android:name=".apps.AppDetailsActivity"/>
+        <activity android:name=".notification.ScreenOnNotificationActivity"/>
         <service android:name=".testing.FakeService"
                  android:exported="true">
             <intent-filter>
