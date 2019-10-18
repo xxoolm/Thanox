@@ -23,7 +23,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = new int[]{
             R.string.nav_title_boost,
             R.string.nav_title_secure,
-            R.string.nav_title_exp};
+            R.string.nav_title_exp,
+            R.string.nav_title_plugin};
 
     private final Context context;
 
@@ -31,7 +32,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             ImmutableList.of(
                     new BoostFragment(),
                     new SecurityFragment(),
-                    new ExpFragment());
+                    new ExpFragment(),
+                    new PluginFragment());
 
     public SectionsPagerAdapter(AppCompatActivity context, FragmentManager fm) {
         super(fm, FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT);

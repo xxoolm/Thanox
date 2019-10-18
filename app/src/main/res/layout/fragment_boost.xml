@@ -109,6 +109,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_rocket_fill"
+                app:backgroundTint="@color/md_green_500"
                 android:tint="@color/md_white"
                 android:layout_margin="@dimen/common_view_margin_default"/>
     </RelativeLayout>

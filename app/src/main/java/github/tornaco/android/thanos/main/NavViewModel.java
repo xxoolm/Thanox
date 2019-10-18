@@ -326,7 +326,6 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_push_delegate))
                                 .category(resources.getString(R.string.feature_category_notifiation))
                                 .themeColor(R.color.md_purple_400)
-                                .disabled(true)
                                 .onClickListener(view -> {
                                 })
                                 .build(),
@@ -334,14 +333,13 @@ public class NavViewModel extends AndroidViewModel {
                                 .iconRes(R.drawable.ic_notification_badge_fill)
                                 .title(resources.getString(R.string.feature_title_light_on_notifiation))
                                 .themeColor(R.color.md_blue_grey_500)
-                                .disabled(OsUtils.isMIUI())
                                 .onClickListener(view -> ScreenOnNotificationActivity.start(getApplication()))
+                                .atEndOfThisCategory(true)
                                 .build(),
                         Tile.builder()
                                 .iconRes(R.drawable.ic_guide_fill)
                                 .category(resources.getString(R.string.feature_category_ext))
                                 .title(resources.getString(R.string.feature_title_component_replacement))
-                                .disabled(true)
                                 .themeColor(R.color.md_green_a700)
                                 .onClickListener(view -> {
                                 })

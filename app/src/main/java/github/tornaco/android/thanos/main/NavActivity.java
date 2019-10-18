@@ -98,8 +98,17 @@ public class NavActivity extends ThemeActivity implements NavFragment.FragmentAt
         ViewPager viewPager = binding.viewPager;
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = binding.tabs;
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs) {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                setTitle(sectionsPagerAdapter.getPageTitle(position));
+            }
+        });
         tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+
+        // Default title.
+        setTitle(sectionsPagerAdapter.getPageTitle(0));
     }
 
     private void showRebootDialog() {

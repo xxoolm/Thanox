@@ -13,7 +13,10 @@
     <string name="nav_title_boost">加速</string>
     <string name="nav_title_secure">安全</string>
     <string name="nav_title_settings">设置</string>
-    <string name="nav_title_exp">实验室</string>
+    <string name="nav_title_exp">拓展</string>
+    <string name="nav_title_plugin">插件</string>
+
+    <string name="title_no_plugins_installed">暂无插件可用</string>
 
     <string name="title_show_current_activity">显示当前活动</string>
     <string name="reboot_needed">需要重启</string>

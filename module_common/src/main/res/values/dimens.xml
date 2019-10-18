@@ -23,7 +23,7 @@
     <dimen name="common_list_item_height">64dp</dimen>
     <dimen name="common_grid_item_height">72dp</dimen>
 
-    <dimen name="common_view_elevation">2dp</dimen>
+    <dimen name="common_view_elevation">1dp</dimen>
     <dimen name="common_view_corner_radius">2dp</dimen>
     <dimen name="common_view_corner_radius_0">0dp</dimen>
 
