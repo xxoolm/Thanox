@@ -326,6 +326,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_push_delegate))
                                 .category(resources.getString(R.string.feature_category_notifiation))
                                 .themeColor(R.color.md_purple_400)
+                                .disabled(true)
                                 .onClickListener(view -> {
                                 })
                                 .build(),
@@ -341,6 +342,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .category(resources.getString(R.string.feature_category_ext))
                                 .title(resources.getString(R.string.feature_title_component_replacement))
                                 .themeColor(R.color.md_green_a700)
+                                .disabled(true)
                                 .onClickListener(view -> {
                                 })
                                 .build()

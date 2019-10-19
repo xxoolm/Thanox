@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.gladed.androidgitversion' version '0.4.10'
+}
+
 allprojects {
     addRepos(repositories)
 }
@@ -18,8 +22,15 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+androidGitVersion {
+    prefix 'v'
+}
+
 ext {
     thanosApplicationId = "github.tornaco.android.thanos"
     // Indicate that this build is to internal users.
     dogFood = false
+
+    versionCode = androidGitVersion.code() as int
+    versionName = androidGitVersion.name()
 }
