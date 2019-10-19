@@ -15,4 +15,5 @@
     <string name="service_op_label_camera">相机</string>
     <string name="service_op_label_record_audio">录音</string>
     <string name="service_op_label_play_audio">播放音频</string>
+    <string name="service_op_label_location">GPS获取位置信息</string>
 </resources>

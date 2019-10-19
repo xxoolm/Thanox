@@ -143,6 +143,21 @@ public class PkgManagerService extends SystemService implements IPkgManager {
         return pkgCache.getWhiteList().contains(pkg);
     }
 
+    public boolean isSystemUidPkg(String pkg) {
+        AppInfo appInfo = getAppInfo(pkg);
+        return appInfo != null && appInfo.getFlags() == AppInfo.FLAGS_SYSTEM_UID;
+    }
+
+    public boolean isSystemPhonePkg(String pkg) {
+        AppInfo appInfo = getAppInfo(pkg);
+        return appInfo != null && appInfo.getFlags() == AppInfo.FLAGS_SYSTEM_PHONE;
+    }
+
+    public boolean isSystemMediaPkg(String pkg) {
+        AppInfo appInfo = getAppInfo(pkg);
+        return appInfo != null && appInfo.getFlags() == AppInfo.FLAGS_SYSTEM_MEDIA;
+    }
+
     @Override
     public void setComponentEnabledSetting(ComponentName componentName, int newState, int flags) {
         enforceCallingPermissions();

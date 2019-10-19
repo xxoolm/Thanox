@@ -31,6 +31,7 @@ abstract class Res {
         const val STRING_SERVICE_OP_LABEL_CAMERA = "service_op_label_camera"
         const val STRING_SERVICE_OP_LABEL_RECORD_AUDIO = "service_op_label_record_audio"
         const val STRING_SERVICE_OP_LABEL_PLAY_AUDIO = "service_op_label_play_audio"
+        const val STRING_SERVICE_OP_LABEL_LOCATION = "service_op_label_location"
 
         const val STRING_BG_TASKS_CLEAN_COMPLETE = "service_notification_bg_tasks_clean_complete"
     }
@@ -41,6 +42,7 @@ abstract class Res {
         const val DRAWABLE_CAMERA_FILL = "ic_camera_fill"
         const val DRAWABLE_MIC_FILL = "ic_mic_2_fill"
         const val DRAWABLE_MUSIC_FILL = "module_ops_ic_music_fill"
+        const val DRAWABLE_MAP_PIN_FILL = "ic_map_pin_2_fill"
     }
 
 }

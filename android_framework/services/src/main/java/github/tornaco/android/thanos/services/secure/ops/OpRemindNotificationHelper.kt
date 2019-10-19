@@ -18,14 +18,33 @@ import github.tornaco.android.thanos.services.n.SystemUI
 
 class OpRemindNotificationHelper(private val context: Context, private val s: S) {
 
+    private val LOCATION_OPS = intArrayOf(
+        AppOpsManager.OP_COARSE_LOCATION,
+        AppOpsManager.OP_FINE_LOCATION,
+        AppOpsManager.OP_GPS,
+        AppOpsManager.OP_WIFI_SCAN,
+        AppOpsManager.OP_NEIGHBORING_CELLS,
+        AppOpsManager.OP_MONITOR_LOCATION,
+        AppOpsManager.OP_MONITOR_HIGH_POWER_LOCATION
+    )
+
+    private val OP_ALIAS_LOCATION = 0x12345
+
     fun remindOpStart(pkg: String, op: Int) {
         Timber.d("remindOpStart: %s %s", pkg, op)
-        remindAsNotification(pkg, op)
+        remindAsNotification(pkg, mergeOp(op))
     }
 
     fun remindOpFinish(pkg: String, op: Int) {
         Timber.d("remindOpFinish: %s %s", pkg, op)
-        NotificationManagerCompat.from(context).cancel(constructNotificationId(pkg, op))
+        NotificationManagerCompat.from(context).cancel(constructNotificationId(pkg, mergeOp(op)))
+    }
+
+    private fun mergeOp(opOriginal: Int): Int {
+        if (LOCATION_OPS.contains(opOriginal)) {
+            return OP_ALIAS_LOCATION
+        }
+        return opOriginal
     }
 
     private fun constructNotificationId(pkg: String, op: Int): Int {
@@ -76,6 +95,9 @@ class OpRemindNotificationHelper(private val context: Context, private val s: S)
             AppOpsManager.OP_RECORD_AUDIO -> Res.Drawables.DRAWABLE_MIC_FILL
             AppOpsManager.OP_CAMERA -> Res.Drawables.DRAWABLE_CAMERA_FILL
             AppOpsManager.OP_PLAY_AUDIO -> Res.Drawables.DRAWABLE_MUSIC_FILL
+
+            // Merged alias.
+            OP_ALIAS_LOCATION -> Res.Drawables.DRAWABLE_MAP_PIN_FILL
             else -> "Missing..."
         }
     }
@@ -85,6 +107,9 @@ class OpRemindNotificationHelper(private val context: Context, private val s: S)
             AppOpsManager.OP_RECORD_AUDIO -> Res.Strings.STRING_SERVICE_OP_LABEL_RECORD_AUDIO
             AppOpsManager.OP_CAMERA -> Res.Strings.STRING_SERVICE_OP_LABEL_CAMERA
             AppOpsManager.OP_PLAY_AUDIO -> Res.Strings.STRING_SERVICE_OP_LABEL_PLAY_AUDIO
+
+            // Merged alias.
+            OP_ALIAS_LOCATION -> Res.Strings.STRING_SERVICE_OP_LABEL_LOCATION
             else -> "Missing..."
         }
     }

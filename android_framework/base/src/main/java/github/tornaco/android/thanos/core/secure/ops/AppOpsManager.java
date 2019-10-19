@@ -25,6 +25,7 @@ import android.os.IBinder;
 import android.os.UserManager;
 import github.tornaco.android.thanos.core.annotation.Nullable;
 import github.tornaco.android.thanos.core.compat.ManifestCompat;
+import github.tornaco.android.thanos.core.util.ArrayUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -1868,6 +1869,13 @@ public class AppOpsManager {
 
     @SneakyThrows
     public boolean isOpRemindable(int code) {
-        return code == OP_CAMERA || code == OP_RECORD_AUDIO;
+        int[] locationsOps = new int[]{AppOpsManager.OP_COARSE_LOCATION,
+                AppOpsManager.OP_FINE_LOCATION,
+                AppOpsManager.OP_GPS,
+                AppOpsManager.OP_WIFI_SCAN,
+                AppOpsManager.OP_NEIGHBORING_CELLS,
+                AppOpsManager.OP_MONITOR_LOCATION,
+                AppOpsManager.OP_MONITOR_HIGH_POWER_LOCATION};
+        return code == OP_CAMERA || code == OP_RECORD_AUDIO || (ArrayUtils.contains(locationsOps, code));
     }
 }
