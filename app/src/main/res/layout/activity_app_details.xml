@@ -83,21 +83,21 @@
                           android:singleLine="true"
                           android:ellipsize="marquee"
                           android:id="@+id/version"
-                          android:layout_toEndOf="@id/label"
+                          android:layout_below="@id/label"
+                          android:layout_toEndOf="@id/icon"
                           android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                          android:layout_marginStart="@dimen/common_view_margin_small"
-                          android:layout_alignBaseline="@id/label"
-                          android:text="@{app.versionName}"/>
+                          android:layout_marginStart="@dimen/common_view_margin_default"
+                          android:text="@{`` + app.versionName}"/>
 
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           tools:text="com.a.c.x.x.x.x.x.c.d.e.r.y.u.g.d.dddd.s.s.s.d.xxxxxxxxxxxxxasss"
                           android:id="@+id/pkg"
-                          android:layout_below="@id/label"
+                          android:layout_below="@id/version"
                           android:layout_toEndOf="@id/icon"
                           android:textAppearance="@style/TextAppearance.AppCompat.Small"
                           android:layout_marginStart="@dimen/common_view_margin_default"
-                          android:text="@{app.pkgName}"/>
+                          android:text="@{`` + app.pkgName}"/>
 
 
                 <TextView android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
                           android:layout_toEndOf="@id/icon"
                           android:textAppearance="@style/TextAppearance.AppCompat.Small"
                           android:layout_marginStart="@dimen/common_view_margin_default"
-                          android:text="@{String.valueOf(app.uid)}"/>
+                          android:text="@{`uid: ` + String.valueOf(app.uid)}"/>
 
                 <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
                         android:layout_width="wrap_content"
