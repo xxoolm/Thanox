@@ -214,8 +214,7 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
     private fun isOpRemindablePkg(pkg: String?): Boolean {
         return pkg != null
                 && !opRemindWhiteList.contains(pkg)
-                && !s.pkgManagerService.isPkgInWhiteList(pkg)
-                && !s.pkgManagerService.isSystemUidPkg(pkg)
+                && opRemindPkgRepo.has(pkg)
     }
 
     @Throws(RemoteException::class)
