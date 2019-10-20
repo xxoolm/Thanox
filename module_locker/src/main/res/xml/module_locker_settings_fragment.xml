@@ -4,11 +4,11 @@
 
     <PreferenceCategory
             app:title="@string/module_locker_title_security">
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 app:key="@string/module_locker_key_fp"
                 app:persistent="false"
                 app:title="@string/module_locker_title_verify_fp_enabled"/>
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 app:key="@string/module_locker_key_verify_workaround_enabled"
                 app:persistent="false"
                 app:summary="@string/module_locker_summary_verify_workaround_enabled"
@@ -26,17 +26,17 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/module_locker_title_verify_settings">
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 app:key="@string/module_locker_key_re_verify_on_screen_off"
                 app:persistent="false"
                 app:summary="@string/module_locker_summary_re_verify_on_screen_off"
                 app:title="@string/module_locker_title_re_verify_on_screen_off"/>
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 app:key="@string/module_locker_key_re_verify_on_task_removed"
                 app:persistent="false"
                 app:summary="@string/module_locker_summary_re_verify_on_task_removed"
                 app:title="@string/module_locker_title_re_verify_on_task_removed"/>
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 app:key="@string/module_locker_key_re_verify_on_app_switch"
                 app:persistent="false"
                 app:summary="@string/module_locker_summary_re_verify_on_app_switch"

@@ -40,7 +40,7 @@
                 app:title="@string/pre_title_cheat_sim_serial"
                 app:persistent="false"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 app:key="@string/key_cheat_field_installed_apps"
                 app:title="@string/pre_title_cheat_installed_apps"
                 app:persistent="false"/>

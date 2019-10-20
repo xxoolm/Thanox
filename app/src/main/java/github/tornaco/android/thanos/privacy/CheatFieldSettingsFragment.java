@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.util.Optional;
@@ -38,7 +38,7 @@ public class CheatFieldSettingsFragment extends PreferenceFragmentCompat {
         new SimSerial(getString(R.string.key_original_field_sim_serial), true).bind();
         new DeviceId(getString(R.string.key_original_field_device_id), true).bind();
 
-        SwitchPreference switchPreference = findPreference(getString(R.string.key_cheat_field_installed_apps));
+        SwitchPreferenceCompat switchPreference = findPreference(getString(R.string.key_cheat_field_installed_apps));
         Objects.requireNonNull(switchPreference).setChecked(thanos.getPrivacyManager().isInstalledPackagesReturnEmptyEnableForPkg("*"));
         switchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             boolean checked = (boolean) newValue;

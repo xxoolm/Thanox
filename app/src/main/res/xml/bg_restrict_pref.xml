@@ -13,13 +13,13 @@
                 app:useSimpleSummaryProvider="true"
                 app:persistent="false"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 app:key="@string/key_bg_screen_off_clean_up_skip_audio"
                 app:title="@string/pre_title_bg_screen_off_clean_up_skip_audio"
                 app:summary="@string/pre_summary_bg_screen_off_clean_up_skip_audio"
                 android:persistent="false"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 app:key="@string/key_bg_screen_off_clean_up_skip_notification"
                 app:title="@string/pre_title_bg_screen_off_clean_up_skip_notification"
                 android:persistent="false"/>

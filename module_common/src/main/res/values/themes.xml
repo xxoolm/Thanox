@@ -16,7 +16,7 @@
         <item name="android:windowBackground">@color/primary_dark</item>
         <item name="colorBackgroundFloating">@color/primary</item>
         <item name="android:itemBackground">@color/primary_dark</item>
-        <item name="android:track">@drawable/switch_track_material_oos</item>
+        <item name="switchPreferenceCompatStyle">@style/SwitchPrefTheme</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -39,7 +39,7 @@
         <item name="android:windowBackground">@color/md_grey_200</item>
         <item name="colorBackgroundFloating">@color/md_grey_100</item>
         <item name="android:itemBackground">@color/md_grey_100</item>
-
+        <item name="switchPreferenceCompatStyle">@style/SwitchPrefTheme</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
@@ -63,7 +63,7 @@
         <item name="android:windowBackground">@color/md_grey_200</item>
         <item name="colorBackgroundFloating">@color/md_grey_100</item>
         <item name="android:itemBackground">@color/md_grey_100</item>
-
+        <item name="switchPreferenceCompatStyle">@style/SwitchPrefTheme</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
@@ -87,7 +87,7 @@
         <item name="android:windowBackground">@color/md_grey_200</item>
         <item name="colorBackgroundFloating">@color/md_grey_100</item>
         <item name="android:itemBackground">@color/md_grey_100</item>
-
+        <item name="switchPreferenceCompatStyle">@style/SwitchPrefTheme</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
@@ -111,7 +111,7 @@
         <item name="android:windowBackground">@color/md_grey_200</item>
         <item name="colorBackgroundFloating">@color/md_grey_100</item>
         <item name="android:itemBackground">@color/md_grey_100</item>
-
+        <item name="switchPreferenceCompatStyle">@style/SwitchPrefTheme</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
@@ -135,7 +135,7 @@
         <item name="android:windowBackground">@color/md_grey_200</item>
         <item name="colorBackgroundFloating">@color/md_grey_100</item>
         <item name="android:itemBackground">@color/md_grey_100</item>
-
+        <item name="switchPreferenceCompatStyle">@style/SwitchPrefTheme</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 

@@ -3,7 +3,7 @@ package github.tornaco.android.thanos.start;
 import android.os.Bundle;
 import androidx.preference.DropDownPreference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 
@@ -34,7 +34,7 @@ public class BgRestrictSettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        SwitchPreference skipAudio = findPreference(getString(R.string.key_bg_screen_off_clean_up_skip_audio));
+        SwitchPreferenceCompat skipAudio = findPreference(getString(R.string.key_bg_screen_off_clean_up_skip_audio));
         boolean enabledA = thanos.getActivityManager().isBgTaskCleanUpSkipAudioFocusedAppEnabled();
         Objects.requireNonNull(skipAudio).setChecked(enabledA);
         skipAudio.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -43,7 +43,7 @@ public class BgRestrictSettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        SwitchPreference skipN = findPreference(getString(R.string.key_bg_screen_off_clean_up_skip_notification));
+        SwitchPreferenceCompat skipN = findPreference(getString(R.string.key_bg_screen_off_clean_up_skip_notification));
         boolean enabledN = thanos.getActivityManager().isBgTaskCleanUpSkipWhichHasNotificationEnabled();
         Objects.requireNonNull(skipN).setChecked(enabledN);
         skipN.setOnPreferenceChangeListener((preference, newValue) -> {

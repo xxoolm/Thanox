@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
@@ -196,7 +196,7 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
         }
 
         void bind() {
-            SwitchPreference preference = findPreference(key);
+            SwitchPreferenceCompat preference = findPreference(key);
             Objects.requireNonNull(preference).setVisible(visible());
             Objects.requireNonNull(preference).setChecked(current());
             preference.setOnPreferenceChangeListener((preference1, newValue) -> {

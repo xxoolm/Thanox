@@ -60,4 +60,8 @@
 
     <style name="SwitchTheme" parent="Widget.AppCompat.CompoundButton.Switch">
     </style>
+
+    <style name="SwitchPrefTheme" parent="@style/Preference.SwitchPreferenceCompat.Material">
+        <item name="android:widgetLayout">@layout/preference_widget_switch_compat_oos</item>
+    </style>
 </resources>
