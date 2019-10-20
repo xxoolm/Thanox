@@ -26,7 +26,8 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
 
     private var androidService: com.android.internal.app.IAppOpsService? = AndroidAppOpsDefault()
 
-    private lateinit var opRemindRepo: StringSetRepo
+    private lateinit var opRemindOpRepo: StringSetRepo
+    private lateinit var opRemindPkgRepo: StringSetRepo
     private lateinit var opRemindNotificationHelper: OpRemindNotificationHelper
 
     private val opRemindWhiteList: MutableSet<String> = HashSet()
@@ -42,7 +43,8 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
         }
         Timber.d("IAppOpsService of android is: %s", androidService)
 
-        opRemindRepo = RepoFactory.get().getOrCreateStringSetRepo(T.remindOpsFile().path)
+        opRemindOpRepo = RepoFactory.get().getOrCreateStringSetRepo(T.opRemindOpsFile().path)
+        opRemindPkgRepo = RepoFactory.get().getOrCreateStringSetRepo(T.opRemindPkgFile().path)
         opRemindNotificationHelper = OpRemindNotificationHelper(context, s)
     }
 
@@ -198,15 +200,15 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
     override fun setOpRemindEnable(code: Int, enable: Boolean) {
         enforceCallingPermissions()
         if (enable) {
-            opRemindRepo.add(code.toString())
+            opRemindOpRepo.add(code.toString())
         } else {
-            opRemindRepo.remove(code.toString())
+            opRemindOpRepo.remove(code.toString())
         }
     }
 
     @Throws(RemoteException::class)
     override fun isOpRemindEnabled(code: Int): Boolean {
-        return opRemindRepo.has(code.toString())
+        return opRemindOpRepo.has(code.toString())
     }
 
     private fun isOpRemindablePkg(pkg: String?): Boolean {
@@ -242,6 +244,14 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
     @ExecuteBySystemHandler
     private fun onFinishOpInternal(token: IBinder?, code: Int, uid: Int, packageName: String?) {
         packageName?.let { opRemindNotificationHelper.remindOpFinish(it, code) }
+    }
+
+    override fun setPkgOpRemindEnable(pkg: String?, enable: Boolean) {
+        if (enable) opRemindPkgRepo.add(pkg) else opRemindPkgRepo.remove(pkg)
+    }
+
+    override fun isPkgOpRemindEnable(pkg: String?): Boolean {
+        return opRemindPkgRepo.has(pkg)
     }
 
     private fun enforceCallingPermissions() {

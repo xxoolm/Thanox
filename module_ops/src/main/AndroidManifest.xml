@@ -11,5 +11,7 @@
         <activity android:name=".ops.by.ops.OpsAppListActivity"/>
         <activity android:name=".ops.remind.RemindOpsActivity"
                   android:label="@string/module_ops_feature_title_ops_remind_list"/>
+        <activity android:name=".ops.remind.AppListActivity"
+                  android:label="@string/module_ops_title_op_remind_apps"/>
     </application>
 </manifest>

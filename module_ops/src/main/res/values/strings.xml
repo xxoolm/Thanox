@@ -5,7 +5,9 @@
     <string name="module_ops_category_media">媒体</string>
     <string name="module_ops_category_device">设备</string>
     <string name="module_ops_category_bg">后台</string>
-    <string name="module_ops_category_remaning">其他</string>
+    <string name="module_ops_category_remaining">其他</string>
+
+    <string name="module_ops_title_op_remind_apps">受监视的应用</string>
 
     <string name="module_ops_feature_title_app_ops_list">权限管理</string>
     <string name="module_ops_feature_summary_app_ops_list">按应用</string>
@@ -15,7 +17,7 @@
     <string name="module_ops_feature_summary_ops_app_list">按权限</string>
     <string name="module_ops_activity_title_ops_app_list">按权限（%s）</string>
 
-    <string name="module_ops_feature_title_ops_remind_list">使用提醒</string>
+    <string name="module_ops_feature_title_ops_remind_list">OP提醒</string>
     <string name="module_ops_feature_summary_ops_remind">应用使用某些权限时发出提醒</string>
 
     <string name="module_ops_op_read_contact">读取联系人</string>

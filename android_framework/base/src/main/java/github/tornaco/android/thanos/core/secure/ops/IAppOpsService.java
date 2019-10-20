@@ -67,6 +67,13 @@ public interface IAppOpsService extends android.os.IInterface
     {
       return false;
     }
+    @Override public void setPkgOpRemindEnable(java.lang.String pkg, boolean enable) throws android.os.RemoteException
+    {
+    }
+    @Override public boolean isPkgOpRemindEnable(java.lang.String pkg) throws android.os.RemoteException
+    {
+      return false;
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -319,6 +326,27 @@ public interface IAppOpsService extends android.os.IInterface
           int _arg0;
           _arg0 = data.readInt();
           boolean _result = this.isOpRemindEnabled(_arg0);
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_setPkgOpRemindEnable:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _arg1;
+          _arg1 = (0!=data.readInt());
+          this.setPkgOpRemindEnable(_arg0, _arg1);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_isPkgOpRemindEnable:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _result = this.isPkgOpRemindEnable(_arg0);
           reply.writeNoException();
           reply.writeInt(((_result)?(1):(0)));
           return true;
@@ -713,6 +741,47 @@ public interface IAppOpsService extends android.os.IInterface
         }
         return _result;
       }
+      @Override public void setPkgOpRemindEnable(java.lang.String pkg, boolean enable) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(pkg);
+          _data.writeInt(((enable)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setPkgOpRemindEnable, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setPkgOpRemindEnable(pkg, enable);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public boolean isPkgOpRemindEnable(java.lang.String pkg) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(pkg);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isPkgOpRemindEnable, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isPkgOpRemindEnable(pkg);
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       public static github.tornaco.android.thanos.core.secure.ops.IAppOpsService sDefaultImpl;
     }
     static final int TRANSACTION_checkPackage = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -732,6 +801,8 @@ public interface IAppOpsService extends android.os.IInterface
     static final int TRANSACTION_onFinishOp = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
     static final int TRANSACTION_setOpRemindEnable = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
     static final int TRANSACTION_isOpRemindEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+    static final int TRANSACTION_setPkgOpRemindEnable = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+    static final int TRANSACTION_isPkgOpRemindEnable = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.secure.ops.IAppOpsService impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -762,4 +833,6 @@ public interface IAppOpsService extends android.os.IInterface
   public void onFinishOp(android.os.IBinder token, int code, int uid, java.lang.String packageName) throws android.os.RemoteException;
   public void setOpRemindEnable(int code, boolean enable) throws android.os.RemoteException;
   public boolean isOpRemindEnabled(int code) throws android.os.RemoteException;
+  public void setPkgOpRemindEnable(java.lang.String pkg, boolean enable) throws android.os.RemoteException;
+  public boolean isPkgOpRemindEnable(java.lang.String pkg) throws android.os.RemoteException;
 }

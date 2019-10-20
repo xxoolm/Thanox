@@ -85,8 +85,13 @@ object T {
     }
 
     @JvmStatic
-    fun remindOpsFile(): File {
+    fun opRemindOpsFile(): File {
         return File(baseServerDataDir(), "reminding_ops.xml")
+    }
+
+    @JvmStatic
+    fun opRemindPkgFile(): File {
+        return File(baseServerDataDir(), "op_reminding_pkgs.xml")
     }
 
     @JvmStatic

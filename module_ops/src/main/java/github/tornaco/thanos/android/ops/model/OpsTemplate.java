@@ -203,8 +203,8 @@ public class OpsTemplate {
                     true,
                     true,
                     true},
-            R.string.module_ops_category_remaning,
-            R.string.module_ops_category_remaning,
+            R.string.module_ops_category_remaining,
+            R.string.module_ops_category_remaining,
             R.drawable.ic_settings_fill,
             6
     );

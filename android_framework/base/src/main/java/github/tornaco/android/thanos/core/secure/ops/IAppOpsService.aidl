@@ -30,4 +30,7 @@ interface IAppOpsService {
 
     void setOpRemindEnable(int code, boolean enable);
     boolean isOpRemindEnabled(int code);
+
+    void setPkgOpRemindEnable(String pkg, boolean enable);
+    boolean isPkgOpRemindEnable(String pkg);
 }

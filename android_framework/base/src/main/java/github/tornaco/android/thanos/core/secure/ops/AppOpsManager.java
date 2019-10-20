@@ -22,6 +22,7 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.os.UserManager;
 import github.tornaco.android.thanos.core.annotation.Nullable;
 import github.tornaco.android.thanos.core.compat.ManifestCompat;
@@ -1877,5 +1878,15 @@ public class AppOpsManager {
                 AppOpsManager.OP_MONITOR_LOCATION,
                 AppOpsManager.OP_MONITOR_HIGH_POWER_LOCATION};
         return code == OP_CAMERA || code == OP_RECORD_AUDIO || (ArrayUtils.contains(locationsOps, code));
+    }
+
+    @SneakyThrows
+    public void setPkgOpRemindEnable(String pkg, boolean enable) {
+        service.setPkgOpRemindEnable(pkg, enable);
+    }
+
+    @SneakyThrows
+    public boolean isPkgOpRemindEnable(String pkg) {
+        return service.isPkgOpRemindEnable(pkg);
     }
 }

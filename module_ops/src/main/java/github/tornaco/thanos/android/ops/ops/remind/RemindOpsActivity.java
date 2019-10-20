@@ -3,6 +3,8 @@ package github.tornaco.thanos.android.ops.ops.remind;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -11,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.widget.section.StickyHeaderLayoutManager;
+import github.tornaco.thanos.android.ops.R;
 import github.tornaco.thanos.android.ops.databinding.ModuleOpsLayoutRemindOpsListBinding;
 
 import java.util.Objects;
@@ -62,6 +65,20 @@ public class RemindOpsActivity extends ThemeActivity {
     protected void onResume() {
         super.onResume();
         viewModel.start();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.module_ops_op_remind, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_op_remind_apps) {
+            AppListActivity.start(this);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public static RemindableOpsListViewModel obtainViewModel(FragmentActivity activity) {
