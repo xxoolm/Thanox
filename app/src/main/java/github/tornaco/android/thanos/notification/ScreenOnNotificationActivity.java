@@ -1,8 +1,8 @@
 package github.tornaco.android.thanos.notification;
 
 import android.content.Context;
+import android.widget.Switch;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
 import com.google.common.collect.Lists;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.common.AppListModel;
@@ -61,7 +61,7 @@ public class ScreenOnNotificationActivity extends CommonFuncToggleAppListFilterA
     }
 
     @Override
-    protected void onSwitchBarCheckChanged(SwitchCompat switchBar, boolean isChecked) {
+    protected void onSwitchBarCheckChanged(Switch switchBar, boolean isChecked) {
         super.onSwitchBarCheckChanged(switchBar, isChecked);
         ThanosManager.from(getApplicationContext())
                 .ifServiceInstalled(thanosManager ->

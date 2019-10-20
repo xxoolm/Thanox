@@ -35,6 +35,7 @@
     <github.tornaco.android.thanos.widget.ToggleSwitch
             android:id="@+id/switch_widget"
             style="?switchBarTheme"
+            android:track="@drawable/switch_track_material_oos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

@@ -7,11 +7,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -110,7 +110,7 @@ public abstract class CommonFuncToggleAppListFilterActivity extends ThemeActivit
         return false;
     }
 
-    protected void onSwitchBarCheckChanged(SwitchCompat switchBar, boolean isChecked) {
+    protected void onSwitchBarCheckChanged(Switch switchBar, boolean isChecked) {
         // Noop.
     }
 

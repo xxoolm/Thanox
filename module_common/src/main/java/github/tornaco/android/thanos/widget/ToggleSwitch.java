@@ -18,9 +18,9 @@ package github.tornaco.android.thanos.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import androidx.appcompat.widget.SwitchCompat;
+import android.widget.Switch;
 
-public class ToggleSwitch extends SwitchCompat {
+public class ToggleSwitch extends Switch {
 
     private OnBeforeCheckedChangeListener mOnBeforeListener;
 

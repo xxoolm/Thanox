@@ -1,8 +1,8 @@
 package github.tornaco.practice.honeycomb.locker.ui.start;
 
 import android.content.Context;
+import android.widget.Switch;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
 import com.google.common.collect.Lists;
 import github.tornaco.android.thanos.common.AppListModel;
 import github.tornaco.android.thanos.common.CommonFuncToggleAppListFilterActivity;
@@ -67,7 +67,7 @@ public class StartActivity extends CommonFuncToggleAppListFilterActivity {
     }
 
     @Override
-    protected void onSwitchBarCheckChanged(SwitchCompat switchBar, boolean isChecked) {
+    protected void onSwitchBarCheckChanged(Switch switchBar, boolean isChecked) {
         super.onSwitchBarCheckChanged(switchBar, isChecked);
         ThanosManager thanosManager = ThanosManager.from(getApplicationContext());
         if (thanosManager.isServiceInstalled()) {

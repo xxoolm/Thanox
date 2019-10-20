@@ -31,8 +31,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
-import androidx.appcompat.widget.SwitchCompat;
 import github.tornaco.android.thanos.module.common.R;
 import lombok.Getter;
 import lombok.Setter;
@@ -241,7 +241,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
          * @param switchView The Switch view whose state has changed.
          * @param isChecked  The new checked state of switchView.
          */
-        void onSwitchChanged(SwitchCompat switchView, boolean isChecked);
+        void onSwitchChanged(Switch switchView, boolean isChecked);
     }
 
     static class SavedState extends BaseSavedState {

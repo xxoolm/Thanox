@@ -3,8 +3,8 @@ package github.tornaco.android.thanos.app.donate;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.Switch;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SwitchCompat;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.widget.SwitchBar;
@@ -49,7 +49,7 @@ public class DonateActivity extends ThemeActivity implements SwitchBar.OnSwitchC
     }
 
     @Override
-    public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
+    public void onSwitchChanged(Switch switchView, boolean isChecked) {
         DonateSettings.setDonated(getApplicationContext(), isChecked);
     }
 }

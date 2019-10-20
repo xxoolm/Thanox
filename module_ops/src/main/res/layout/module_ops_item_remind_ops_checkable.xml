@@ -75,7 +75,7 @@
                     android:maxLength="24"
                     android:textAppearance="@style/TextAppearance.TileSubTitle"/>
 
-            <androidx.appcompat.widget.SwitchCompat
+            <Switch
                     android:soundEffectsEnabled="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -84,6 +84,7 @@
                     android:layout_centerVertical="true"
                     android:checked="@{op.remind}"
                     android:theme="@style/SwitchTheme"
+                    android:track="@drawable/switch_track_material_oos"
                     tools:checked="true"/>
         </RelativeLayout>
 

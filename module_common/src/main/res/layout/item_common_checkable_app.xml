@@ -87,11 +87,11 @@
                     android:textSize="@dimen/list_item_main_text_size_small"
                     android:text="@{badge1}"
                     android:visibility="@{badge1 == null ? View.GONE : View.VISIBLE}"
-                    tools:visibility="visible"
+                    tools:visibility="gone"
                     android:textColor="@color/md_white"
                     android:background="?colorAccent"/>
 
-            <androidx.appcompat.widget.SwitchCompat
+            <Switch
                     android:soundEffectsEnabled="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -102,6 +102,7 @@
                     android:switchApp="@{app}"
                     android:theme="@style/SwitchTheme"
                     tools:checked="true"
+                    android:track="@drawable/switch_track_material_oos"
                     android:switchListener="@{listener}"/>
         </RelativeLayout>
 

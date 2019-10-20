@@ -1,8 +1,8 @@
 package github.tornaco.android.thanos.task;
 
 import android.content.Context;
+import android.widget.Switch;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.common.CommonFuncToggleAppListFilterActivity;
 import github.tornaco.android.thanos.common.CommonFuncToggleAppListFilterViewModel;
@@ -42,7 +42,7 @@ public class CleanUpOnTaskRemovedActivity extends CommonFuncToggleAppListFilterA
     }
 
     @Override
-    protected void onSwitchBarCheckChanged(SwitchCompat switchBar, boolean isChecked) {
+    protected void onSwitchBarCheckChanged(Switch switchBar, boolean isChecked) {
         super.onSwitchBarCheckChanged(switchBar, isChecked);
         ThanosManager.from(this).getActivityManager().setCleanUpOnTaskRemovalEnabled(isChecked);
     }

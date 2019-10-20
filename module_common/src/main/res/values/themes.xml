@@ -16,6 +16,7 @@
         <item name="android:windowBackground">@color/primary_dark</item>
         <item name="colorBackgroundFloating">@color/primary</item>
         <item name="android:itemBackground">@color/primary_dark</item>
+        <item name="android:track">@drawable/switch_track_material_oos</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
