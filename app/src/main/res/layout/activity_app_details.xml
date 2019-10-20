@@ -79,7 +79,9 @@
 
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          tools:text="1.0.0-rc1"
+                          tools:text="1.0.0-rc1-xxxxxxxxxxxxxxxxxxxxxxxx"
+                          android:singleLine="true"
+                          android:ellipsize="marquee"
                           android:id="@+id/version"
                           android:layout_toEndOf="@id/label"
                           android:textAppearance="@style/TextAppearance.AppCompat.Small"

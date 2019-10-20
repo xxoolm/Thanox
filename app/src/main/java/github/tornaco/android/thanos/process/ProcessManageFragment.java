@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import github.tornaco.android.thanos.R;
+import github.tornaco.android.thanos.apps.AppDetailsActivity;
+import github.tornaco.android.thanos.common.AppItemViewClickListener;
+import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.databinding.FragmentProcessManageBinding;
 
 import java.util.Objects;
@@ -32,7 +35,7 @@ public class ProcessManageFragment extends Fragment {
 
     private void setupView() {
         binding.apps.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.apps.setAdapter(new ProcessManageAdapter());
+        binding.apps.setAdapter(new ProcessManageAdapter(appInfo -> AppDetailsActivity.start(getActivity(), appInfo)));
 
         binding.swipe.setOnRefreshListener(() -> viewModel.start());
         binding.swipe.setColorSchemeColors(getResources().getIntArray(R.array.swipe_refresh_colors));

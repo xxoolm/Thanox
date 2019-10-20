@@ -244,9 +244,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .summary(resources.getString(R.string.feature_summary_apps_manager))
                                 .category(resources.getString(R.string.feature_category_app_manage))
                                 .themeColor(R.color.md_pink_300)
-                                .onClickListener(view -> {
-                                    AppsManageActivity.start(getApplication());
-                                })
+                                .onClickListener(view -> AppsManageActivity.start(getApplication()))
                                 .build()
                 )
                 .filter(tile -> !tile.isDisabled())
