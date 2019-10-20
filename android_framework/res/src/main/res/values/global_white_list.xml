@@ -106,5 +106,6 @@
 
     <string-array name="op_remind_whitelist">
         <item>com.miui.face</item>
+        <item>com.miui.face</item>
     </string-array>
 </resources>
