@@ -97,7 +97,7 @@ public class RecentTaskBlurRegistryOAndAbove implements IXposedHook {
         WindowManagerService wm = BootStrap.THANOS_X.getWindowManagerService();
         ActivityManagerService am = BootStrap.THANOS_X.getActivityManagerService();
 
-        if (ThanosManagerNative.isServiceInstalled()) {
+        if (ThanosManagerNative.isServiceInstalled() && am.isRecentTaskBlurEnabled()) {
             String taskPkgName = am.getPackageNameForTaskId(taskId);
             Timber.v("onSnapshotTask, taskPkgName: " + taskPkgName);
             if (taskPkgName == null) return;
@@ -140,6 +140,9 @@ public class RecentTaskBlurRegistryOAndAbove implements IXposedHook {
 
     private ActivityManager.TaskSnapshot onGetTaskSnapshot(ActivityManager.TaskSnapshot orig, int taskId) {
         ActivityManagerService am = BootStrap.THANOS_X.getActivityManagerService();
+        if (!am.isRecentTaskBlurEnabled()) {
+            return null;
+        }
         String taskPkgName = am.getPackageNameForTaskId(taskId);
         Timber.v("onGetTaskSnapshot, taskPkgName: " + taskPkgName);
         if (taskPkgName == null) {

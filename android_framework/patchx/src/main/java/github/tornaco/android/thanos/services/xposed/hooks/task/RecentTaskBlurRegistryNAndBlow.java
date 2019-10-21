@@ -71,7 +71,7 @@ public class RecentTaskBlurRegistryNAndBlow implements IXposedHook {
         Timber.v("onScreenshotApplicationsNAndBelow: " + pkgName);
         ActivityManagerService ams = BootStrap.THANOS_X.getActivityManagerService();
         //noinspection ConstantConditions
-        if (ams.isPkgRecentTaskBlurEnabled(pkgName) && param.getResult() != null) {
+        if (ams.isRecentTaskBlurEnabled() && ams.isPkgRecentTaskBlurEnabled(pkgName) && param.getResult() != null) {
 
             Bitmap res = (Bitmap) param.getResult();
             Timber.v("onScreenshotApplicationsNAndBelow. res: " + res);
