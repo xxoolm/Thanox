@@ -10,7 +10,6 @@ import androidx.preference.SwitchPreferenceCompat;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
-import github.tornaco.android.thanos.core.util.OsUtils;
 import github.tornaco.thanos.android.ops.ops.by.app.AppOpsListActivity;
 import lombok.AllArgsConstructor;
 
@@ -179,7 +178,7 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
 
         @Override
         boolean visible() {
-            return !OsUtils.isMIUI();
+            return true;
         }
     }
 
