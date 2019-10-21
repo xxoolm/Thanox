@@ -81,4 +81,6 @@ interface IActivityManager {
     long[] getProcessPss(in int[] pids);
 
     void onApplicationCrashing(String eventType, String processName, in ProcessRecord process, String stackTrace);
+
+    String getPackageNameForTaskId(int taskId);
 }

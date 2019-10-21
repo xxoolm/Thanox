@@ -11,6 +11,7 @@ import github.tornaco.android.thanos.services.pm.PkgManagerService
 import github.tornaco.android.thanos.services.push.PushManagerService
 import github.tornaco.android.thanos.services.secure.PrivacyService
 import github.tornaco.android.thanos.services.secure.ops.AppOpsService
+import github.tornaco.android.thanos.services.wm.WindowManagerService
 
 interface S {
     val activityManagerService: ActivityManagerService
@@ -34,4 +35,6 @@ interface S {
     val audioService: AudioService
 
     val backupAgent: BackupAgentService
+
+    val windowManagerService: WindowManagerService
 }

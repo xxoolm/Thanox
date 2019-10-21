@@ -18,6 +18,7 @@ import github.tornaco.android.thanos.core.push.IPushManager
 import github.tornaco.android.thanos.core.secure.IPrivacyManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
 import github.tornaco.android.thanos.core.util.Noop
+import github.tornaco.android.thanos.core.wm.IWindowManager
 import github.tornaco.android.thanos.services.app.*
 import github.tornaco.android.thanos.services.audio.AudioService
 import github.tornaco.android.thanos.services.audio.AudioServiceStub
@@ -37,6 +38,8 @@ import github.tornaco.android.thanos.services.secure.PrivacyManagerStub
 import github.tornaco.android.thanos.services.secure.PrivacyService
 import github.tornaco.android.thanos.services.secure.ops.AppOpsService
 import github.tornaco.android.thanos.services.secure.ops.AppOpsServiceStub
+import github.tornaco.android.thanos.services.wm.WindowManagerService
+import github.tornaco.android.thanos.services.wm.WindowManagerServiceStub
 
 internal class ThanosServiceStub(
     private val ams: ActivityManagerService,
@@ -49,7 +52,8 @@ internal class ThanosServiceStub(
     private val push: PushManagerService,
     private val notification: NotificationManagerService,
     private val audio: AudioService,
-    private val backup: BackupAgentService
+    private val backup: BackupAgentService,
+    private val window: WindowManagerService
 ) : IThanos.Stub() {
 
     override fun getProfileManager(): IProfileManager {
@@ -98,6 +102,10 @@ internal class ThanosServiceStub(
 
     override fun getBackupAgent(): IBackupAgent {
         return BackupAgentServiceStub(backup)
+    }
+
+    override fun getWindowManager(): IWindowManager {
+        return WindowManagerServiceStub(window)
     }
 
     override fun registerEventSubscriber(filter: IntentFilter, subscriber: IEventSubscriber) {

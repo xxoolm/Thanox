@@ -55,6 +55,10 @@ public interface IThanos extends android.os.IInterface
     {
       return null;
     }
+    @Override public github.tornaco.android.thanos.core.wm.IWindowManager getWindowManager() throws android.os.RemoteException
+    {
+      return null;
+    }
     @Override public void registerEventSubscriber(android.content.IntentFilter filter, github.tornaco.android.thanos.core.app.event.IEventSubscriber subscriber) throws android.os.RemoteException
     {
     }
@@ -215,6 +219,14 @@ public interface IThanos extends android.os.IInterface
         {
           data.enforceInterface(descriptor);
           github.tornaco.android.thanos.core.backup.IBackupAgent _result = this.getBackupAgent();
+          reply.writeNoException();
+          reply.writeStrongBinder((((_result!=null))?(_result.asBinder()):(null)));
+          return true;
+        }
+        case TRANSACTION_getWindowManager:
+        {
+          data.enforceInterface(descriptor);
+          github.tornaco.android.thanos.core.wm.IWindowManager _result = this.getWindowManager();
           reply.writeNoException();
           reply.writeStrongBinder((((_result!=null))?(_result.asBinder()):(null)));
           return true;
@@ -546,6 +558,26 @@ public interface IThanos extends android.os.IInterface
         }
         return _result;
       }
+      @Override public github.tornaco.android.thanos.core.wm.IWindowManager getWindowManager() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        github.tornaco.android.thanos.core.wm.IWindowManager _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getWindowManager, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getWindowManager();
+          }
+          _reply.readException();
+          _result = github.tornaco.android.thanos.core.wm.IWindowManager.Stub.asInterface(_reply.readStrongBinder());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       @Override public void registerEventSubscriber(android.content.IntentFilter filter, github.tornaco.android.thanos.core.app.event.IEventSubscriber subscriber) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
@@ -704,13 +736,14 @@ public interface IThanos extends android.os.IInterface
     static final int TRANSACTION_getAudioManager = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
     static final int TRANSACTION_getProfileManager = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
     static final int TRANSACTION_getBackupAgent = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
-    static final int TRANSACTION_registerEventSubscriber = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
-    static final int TRANSACTION_unRegisterEventSubscriber = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
-    static final int TRANSACTION_fingerPrint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
-    static final int TRANSACTION_getVersionName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
-    static final int TRANSACTION_whoAreYou = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
-    static final int TRANSACTION_isLoggingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
-    static final int TRANSACTION_setLoggingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
+    static final int TRANSACTION_getWindowManager = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+    static final int TRANSACTION_registerEventSubscriber = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+    static final int TRANSACTION_unRegisterEventSubscriber = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+    static final int TRANSACTION_fingerPrint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
+    static final int TRANSACTION_getVersionName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+    static final int TRANSACTION_whoAreYou = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+    static final int TRANSACTION_isLoggingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
+    static final int TRANSACTION_setLoggingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.IThanos impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -734,6 +767,7 @@ public interface IThanos extends android.os.IInterface
   public github.tornaco.android.thanos.core.audio.IAudioManager getAudioManager() throws android.os.RemoteException;
   public github.tornaco.android.thanos.core.profile.IProfileManager getProfileManager() throws android.os.RemoteException;
   public github.tornaco.android.thanos.core.backup.IBackupAgent getBackupAgent() throws android.os.RemoteException;
+  public github.tornaco.android.thanos.core.wm.IWindowManager getWindowManager() throws android.os.RemoteException;
   public void registerEventSubscriber(android.content.IntentFilter filter, github.tornaco.android.thanos.core.app.event.IEventSubscriber subscriber) throws android.os.RemoteException;
   public void unRegisterEventSubscriber(github.tornaco.android.thanos.core.app.event.IEventSubscriber subscriber) throws android.os.RemoteException;
   public java.lang.String fingerPrint() throws android.os.RemoteException;

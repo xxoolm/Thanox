@@ -1025,6 +1025,11 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         }
     }
 
+    @Override
+    public String getPackageNameForTaskId(int taskId) {
+        return taskMapping.getPackageNameForTaskId(getContext(), taskId);
+    }
+
     @NonNull
     @Override
     protected String serviceName() {

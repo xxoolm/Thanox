@@ -36,10 +36,13 @@ public class TaskMapping {
             // Assume calling pkg has this permission.
             if (am != null) {
                 List<ActivityManager.RecentTaskInfo> tasks = am.getRecentTasks(99, ActivityManager.RECENT_WITH_EXCLUDED);
+                Timber.v("RecentTaskInfo tasks: %s", tasks);
                 if (tasks != null) {
                     for (ActivityManager.RecentTaskInfo rc : tasks) {
+                        Timber.v("RecentTaskInfo rc: %s, persistentId: %s", rc, (rc == null ? "" : rc.persistentId));
                         if (rc != null && rc.persistentId == taskId) {
                             pkgOfThisTask = PkgUtils.packageNameOf(rc.baseIntent);
+                            Timber.v("RecentTaskInfo pkgOfThisTask: %s", pkgOfThisTask);
                             if (!TextUtils.isEmpty(pkgOfThisTask) && rc.baseIntent.getComponent() != null) {
                                 // Cache.
                                 taskIdCompMap.put(taskId, rc.baseIntent.getComponent());
