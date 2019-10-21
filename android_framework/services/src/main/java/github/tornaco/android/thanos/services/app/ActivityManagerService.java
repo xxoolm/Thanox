@@ -885,6 +885,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     }
 
     @Override
+    @Deprecated
     public void onTaskRemoving(int callingUid, int taskId) {
         Timber.d("onTaskRemoving: taskId: %s, callingUid: %s", taskId, callingUid);
         Completable
@@ -893,6 +894,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
                 .subscribe();
     }
 
+    @Deprecated
     @ExecuteBySystemHandler
     private void onTaskRemovingInternal(int callingUid, int taskId) {
         String pkgName = taskMapping.getPackageNameForTaskId(getContext(), taskId);
@@ -900,6 +902,23 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         if (!TextUtils.isEmpty(pkgName) && cleanUpOnTaskRemovalEnabled && isPkgCleanUpOnTaskRemovalEnabled(pkgName)) {
             Timber.v("onTaskRemovingInternal: will force stop it");
             forceStopPackage(pkgName);
+        }
+    }
+
+    public void onTaskRemoving(String taskPkgName) {
+        Timber.d("onTaskRemoving: taskPkgName: %s", taskPkgName);
+        Completable
+                .fromRunnable(() -> onTaskRemovingInternal(taskPkgName))
+                .subscribeOn(ThanosSchedulers.serverThread())
+                .subscribe();
+    }
+
+    @ExecuteBySystemHandler
+    private void onTaskRemovingInternal(String taskPkgName) {
+        Timber.v("onTaskRemovingInternal: task pkg is: %s", taskPkgName);
+        if (!TextUtils.isEmpty(taskPkgName) && cleanUpOnTaskRemovalEnabled && isPkgCleanUpOnTaskRemovalEnabled(taskPkgName)) {
+            Timber.v("onTaskRemovingInternal: will force stop it");
+            forceStopPackage(taskPkgName);
         }
     }
 

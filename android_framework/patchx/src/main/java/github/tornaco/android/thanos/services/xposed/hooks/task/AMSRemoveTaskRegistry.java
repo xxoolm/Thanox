@@ -1,15 +1,17 @@
 package github.tornaco.android.thanos.services.xposed.hooks.task;
 
-import android.os.Binder;
+import android.content.Intent;
 import android.util.Log;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import github.tornaco.android.thanos.core.IThanos;
-import github.tornaco.android.thanos.core.app.ThanosManagerNative;
 import github.tornaco.android.thanos.core.pm.PackageManager;
+import github.tornaco.android.thanos.core.util.OsUtils;
+import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
+import github.tornaco.android.thanos.services.BootStrap;
+import github.tornaco.android.thanos.services.apihint.Beta;
 import github.tornaco.android.thanos.services.xposed.IXposedHook;
 import github.tornaco.xposed.annotation.XposedHook;
 
@@ -24,41 +26,51 @@ import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
 
 // Hook hookRemoveTask settings.
 @XposedHook(targetSdkVersion = {_21, _22, _23, _24, _25, _26, _27, _28, _29})
+@Beta
 public class AMSRemoveTaskRegistry implements IXposedHook {
 
-    private void hookRemoveTask(XC_LoadPackage.LoadPackageParam lpparam) {
-        Timber.v("hookRemoveTask...");
+    private void hookSuperVisorCleanUpTask(XC_LoadPackage.LoadPackageParam lpparam) {
+        Timber.v("hookSuperVisorCleanUpTask...");
         try {
-            Class ams = XposedHelpers.findClass("com.android.server.am.ActivityManagerService",
-                    lpparam.classLoader);
-            Set unHooks = XposedBridge.hookAllMethods(ams, "removeTask",
+            Class clazz;
+            if (OsUtils.isQOrAbove()) {
+                clazz = XposedHelpers.findClass("com.android.server.wm.ActivityStackSupervisor", lpparam.classLoader);
+            } else if (OsUtils.isOOrAbove()) {
+                clazz = XposedHelpers.findClass("com.android.server.am.ActivityStackSupervisor", lpparam.classLoader);
+            } else {
+                // http://androidxref.com/6.0.1_r10/xref/frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java
+                clazz = XposedHelpers.findClass("com.android.server.am.ActivityManagerService", lpparam.classLoader);
+            }
+            Set unHooks = XposedBridge.hookAllMethods(clazz,
+                    "cleanUpRemovedTaskLocked",
                     new XC_MethodHook() {
                         @Override
-                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            super.beforeHookedMethod(param);
-                            int callingUid = Binder.getCallingUid();
-                            int taskId = (int) param.args[0];
-                            IThanos thanos = ThanosManagerNative.getDefault();
-                            if (thanos != null) {
-                                thanos.getActivityManager().onTaskRemoving(callingUid, taskId);
-                            }
+                        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                            super.afterHookedMethod(param);
+                            // void cleanUpRemovedTaskLocked(TaskRecord tr, boolean killProcess, boolean removeFromRecents)
+                            Object taskRecordObject = param.args[0];
+                            Timber.d("cleanUpRemovedTaskLocked taskRecordObject: %s", taskRecordObject);
+                            Intent intent = (Intent) XposedHelpers.getObjectField(taskRecordObject, "intent");
+                            Timber.d("cleanUpRemovedTaskLocked intent: %s", intent);
+                            String pkgName = PkgUtils.packageNameOf(intent);
+                            BootStrap.THANOS_X.getActivityManagerService().onTaskRemoving(pkgName);
                         }
                     });
-            Timber.v("hookRemoveTask OK:" + unHooks);
+            Timber.v("hookSuperVisorCleanUpTask OK:" + unHooks);
         } catch (Exception e) {
-            Timber.e("Fail hookRemoveTask: " + Log.getStackTraceString(e));
+            Timber.e("Fail hookSuperVisorCleanUpTask: " + Log.getStackTraceString(e));
         }
     }
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
         if (PackageManager.packageNameOfAndroid().equals(lpparam.packageName)) {
-            hookRemoveTask(lpparam);
+            hookSuperVisorCleanUpTask(lpparam);
         }
     }
 
     @Override
-    public void initZygote(StartupParam startupParam) throws Throwable {
+    public void initZygote(StartupParam startupParam) {
         // noop.
     }
 }
