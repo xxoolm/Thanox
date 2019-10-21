@@ -50,6 +50,7 @@
         <activity android:name=".start.BgRestrictSettingsActivity"/>
         <activity android:name=".apps.AppDetailsActivity"/>
         <activity android:name=".notification.ScreenOnNotificationActivity"/>
+        <activity android:name=".task.RecentTaskBlurListActivity"/>
         <service android:name=".testing.FakeService"
                  android:exported="true">
             <intent-filter>

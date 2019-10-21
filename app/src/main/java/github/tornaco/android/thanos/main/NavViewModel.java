@@ -21,6 +21,7 @@ import github.tornaco.android.thanos.privacy.DataCheatActivity;
 import github.tornaco.android.thanos.start.BackgroundRestrictActivity;
 import github.tornaco.android.thanos.start.StartRestrictActivity;
 import github.tornaco.android.thanos.task.CleanUpOnTaskRemovedActivity;
+import github.tornaco.android.thanos.task.RecentTaskBlurListActivity;
 import github.tornaco.java.common.util.CollectionUtils;
 import github.tornaco.java.common.util.ObjectsUtils;
 import github.tornaco.thanos.android.ops.ops.by.app.AppListActivity;
@@ -289,6 +290,13 @@ public class NavViewModel extends AndroidViewModel {
                                 .summary(resources.getString(R.string.module_ops_feature_summary_ops_app_list))
                                 .themeColor(R.color.md_teal_500)
                                 .onClickListener(view -> AllOpsListActivity.start(getApplication()))
+                                .build(),
+                        Tile.builder()
+                                .iconRes(R.drawable.ic_paint_brush_fill)
+                                .title(resources.getString(R.string.feature_title_recent_task_blur))
+                                .summary(resources.getString(R.string.feature_summary_recent_task_blur))
+                                .themeColor(R.color.md_brown_500)
+                                .onClickListener(view -> RecentTaskBlurListActivity.start(getApplication()))
                                 .atEndOfThisCategory(true)
                                 .build(),
 
