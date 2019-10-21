@@ -134,6 +134,22 @@ public interface IActivityManager extends android.os.IInterface
     {
       return false;
     }
+    // Task blur
+
+    @Override public boolean isRecentTaskBlurEnabled() throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public void setRecentTaskBlurEnabled(boolean enable) throws android.os.RemoteException
+    {
+    }
+    @Override public void setPkgRecentTaskBlurEnabled(java.lang.String pkgName, boolean enable) throws android.os.RemoteException
+    {
+    }
+    @Override public boolean isPkgRecentTaskBlurEnabled(java.lang.String pkgName) throws android.os.RemoteException
+    {
+      return false;
+    }
     // Audio focused app.
 
     @Override public boolean isBgTaskCleanUpSkipAudioFocusedAppEnabled() throws android.os.RemoteException
@@ -583,6 +599,44 @@ public interface IActivityManager extends android.os.IInterface
           java.lang.String _arg0;
           _arg0 = data.readString();
           boolean _result = this.isPkgBgRestricted(_arg0);
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_isRecentTaskBlurEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _result = this.isRecentTaskBlurEnabled();
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_setRecentTaskBlurEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _arg0;
+          _arg0 = (0!=data.readInt());
+          this.setRecentTaskBlurEnabled(_arg0);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_setPkgRecentTaskBlurEnabled:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _arg1;
+          _arg1 = (0!=data.readInt());
+          this.setPkgRecentTaskBlurEnabled(_arg0, _arg1);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_isPkgRecentTaskBlurEnabled:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _result = this.isPkgRecentTaskBlurEnabled(_arg0);
           reply.writeNoException();
           reply.writeInt(((_result)?(1):(0)));
           return true;
@@ -1462,6 +1516,88 @@ public interface IActivityManager extends android.os.IInterface
         }
         return _result;
       }
+      // Task blur
+
+      @Override public boolean isRecentTaskBlurEnabled() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isRecentTaskBlurEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isRecentTaskBlurEnabled();
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public void setRecentTaskBlurEnabled(boolean enable) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeInt(((enable)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setRecentTaskBlurEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setRecentTaskBlurEnabled(enable);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public void setPkgRecentTaskBlurEnabled(java.lang.String pkgName, boolean enable) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(pkgName);
+          _data.writeInt(((enable)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setPkgRecentTaskBlurEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setPkgRecentTaskBlurEnabled(pkgName, enable);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public boolean isPkgRecentTaskBlurEnabled(java.lang.String pkgName) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(pkgName);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isPkgRecentTaskBlurEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isPkgRecentTaskBlurEnabled(pkgName);
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       // Audio focused app.
 
       @Override public boolean isBgTaskCleanUpSkipAudioFocusedAppEnabled() throws android.os.RemoteException
@@ -1740,17 +1876,21 @@ public interface IActivityManager extends android.os.IInterface
     static final int TRANSACTION_setBgRestrictEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 30);
     static final int TRANSACTION_setPkgBgRestrictEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 31);
     static final int TRANSACTION_isPkgBgRestricted = (android.os.IBinder.FIRST_CALL_TRANSACTION + 32);
-    static final int TRANSACTION_isBgTaskCleanUpSkipAudioFocusedAppEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 33);
-    static final int TRANSACTION_setBgTaskCleanUpSkipAudioFocusedAppEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 34);
-    static final int TRANSACTION_isBgTaskCleanUpSkipWhichHasNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 35);
-    static final int TRANSACTION_setBgTaskCleanUpSkipWhichHasNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 36);
-    static final int TRANSACTION_setBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 37);
-    static final int TRANSACTION_getBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 38);
-    static final int TRANSACTION_onTaskRemoving = (android.os.IBinder.FIRST_CALL_TRANSACTION + 39);
-    static final int TRANSACTION_notifyTaskCreated = (android.os.IBinder.FIRST_CALL_TRANSACTION + 40);
-    static final int TRANSACTION_getMemoryInfo = (android.os.IBinder.FIRST_CALL_TRANSACTION + 41);
-    static final int TRANSACTION_getProcessPss = (android.os.IBinder.FIRST_CALL_TRANSACTION + 42);
-    static final int TRANSACTION_onApplicationCrashing = (android.os.IBinder.FIRST_CALL_TRANSACTION + 43);
+    static final int TRANSACTION_isRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 33);
+    static final int TRANSACTION_setRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 34);
+    static final int TRANSACTION_setPkgRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 35);
+    static final int TRANSACTION_isPkgRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 36);
+    static final int TRANSACTION_isBgTaskCleanUpSkipAudioFocusedAppEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 37);
+    static final int TRANSACTION_setBgTaskCleanUpSkipAudioFocusedAppEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 38);
+    static final int TRANSACTION_isBgTaskCleanUpSkipWhichHasNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 39);
+    static final int TRANSACTION_setBgTaskCleanUpSkipWhichHasNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 40);
+    static final int TRANSACTION_setBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 41);
+    static final int TRANSACTION_getBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 42);
+    static final int TRANSACTION_onTaskRemoving = (android.os.IBinder.FIRST_CALL_TRANSACTION + 43);
+    static final int TRANSACTION_notifyTaskCreated = (android.os.IBinder.FIRST_CALL_TRANSACTION + 44);
+    static final int TRANSACTION_getMemoryInfo = (android.os.IBinder.FIRST_CALL_TRANSACTION + 45);
+    static final int TRANSACTION_getProcessPss = (android.os.IBinder.FIRST_CALL_TRANSACTION + 46);
+    static final int TRANSACTION_onApplicationCrashing = (android.os.IBinder.FIRST_CALL_TRANSACTION + 47);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.IActivityManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -1801,6 +1941,12 @@ public interface IActivityManager extends android.os.IInterface
   public void setBgRestrictEnabled(boolean enable) throws android.os.RemoteException;
   public void setPkgBgRestrictEnabled(java.lang.String pkgName, boolean enable) throws android.os.RemoteException;
   public boolean isPkgBgRestricted(java.lang.String pkgName) throws android.os.RemoteException;
+  // Task blur
+
+  public boolean isRecentTaskBlurEnabled() throws android.os.RemoteException;
+  public void setRecentTaskBlurEnabled(boolean enable) throws android.os.RemoteException;
+  public void setPkgRecentTaskBlurEnabled(java.lang.String pkgName, boolean enable) throws android.os.RemoteException;
+  public boolean isPkgRecentTaskBlurEnabled(java.lang.String pkgName) throws android.os.RemoteException;
   // Audio focused app.
 
   public boolean isBgTaskCleanUpSkipAudioFocusedAppEnabled() throws android.os.RemoteException;

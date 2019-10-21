@@ -84,6 +84,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     private boolean cleanUpOnTaskRemovalEnabled;
     private boolean bgRestrictEnabled;
     private boolean bgRestrictNotificationEnabled;
+    private boolean recentTaskBlurEnabled;
 
     private boolean bgTaskCleanUpSkipAudioFocused;
     private boolean bgTaskCleanUpSkipNotificationFocused;
@@ -92,6 +93,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     private SetRepo<String> startBlockingApps;
     private SetRepo<String> bgRestrictApps;
     private SetRepo<String> cleanUpTaskRemovalApps;
+    private SetRepo<String> recentTaskBlurApps;
 
     private Map<String, ProcessRecordList> processMap = new ConcurrentHashMap<>();
     private Map<String, Integer> processCrashingTimes = new ConcurrentHashMap<>();
@@ -129,6 +131,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         this.startBlockingApps = RepoFactory.get().getOrCreateStringSetRepo(T.startBlockerRepoFile().getPath());
         this.bgRestrictApps = RepoFactory.get().getOrCreateStringSetRepo(T.bgRestrictRepoFile().getPath());
         this.cleanUpTaskRemovalApps = RepoFactory.get().getOrCreateStringSetRepo(T.cleanUpOnTaskRemovalRepoFile().getPath());
+        this.recentTaskBlurApps = RepoFactory.get().getOrCreateStringSetRepo(T.recentTaskBlurRepoFile().getPath());
     }
 
     @Override
@@ -176,6 +179,9 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         this.bgTaskCleanUpDelayMills = preferenceManagerService.getLong(
                 T.Settings.PREF_BG_TASK_CLEAN_UP_DELAY_MILLS.getKey(),
                 T.Settings.PREF_BG_TASK_CLEAN_UP_DELAY_MILLS.getDefaultValue());
+        this.recentTaskBlurEnabled = preferenceManagerService.getBoolean(
+                T.Settings.PREF_RECENT_TASK_BLUR_ENABLED.getKey(),
+                T.Settings.PREF_RECENT_TASK_BLUR_ENABLED.getDefaultValue());
     }
 
     private void listenToPrefs() {
@@ -791,6 +797,32 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     @Override
     public boolean isPkgBgRestricted(String pkgName) {
         return this.bgRestrictApps.has(pkgName);
+    }
+
+    @Override
+    public boolean isRecentTaskBlurEnabled() {
+        return recentTaskBlurEnabled;
+    }
+
+    @Override
+    public void setRecentTaskBlurEnabled(boolean enable) {
+        this.recentTaskBlurEnabled = enable;
+
+        PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
+        preferenceManagerService.putBoolean(
+                T.Settings.PREF_RECENT_TASK_BLUR_ENABLED.getKey(),
+                enable);
+    }
+
+    @Override
+    public void setPkgRecentTaskBlurEnabled(String pkgName, boolean enable) {
+        if (enable) recentTaskBlurApps.add(pkgName);
+        else recentTaskBlurApps.remove(pkgName);
+    }
+
+    @Override
+    public boolean isPkgRecentTaskBlurEnabled(String pkgName) {
+        return recentTaskBlurApps.has(pkgName);
     }
 
     @Override

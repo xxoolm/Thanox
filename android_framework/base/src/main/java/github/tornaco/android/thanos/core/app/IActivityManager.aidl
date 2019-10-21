@@ -56,6 +56,12 @@ interface IActivityManager {
     void setPkgBgRestrictEnabled(String pkgName, boolean enable);
     boolean isPkgBgRestricted(String pkgName);
 
+    // Task blur
+    boolean isRecentTaskBlurEnabled();
+    void setRecentTaskBlurEnabled(boolean enable);
+    void setPkgRecentTaskBlurEnabled(String pkgName, boolean enable);
+    boolean isPkgRecentTaskBlurEnabled(String pkgName);
+
     // Audio focused app.
     boolean isBgTaskCleanUpSkipAudioFocusedAppEnabled();
     void setBgTaskCleanUpSkipAudioFocusedAppEnabled(boolean enable);

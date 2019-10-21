@@ -45,6 +45,11 @@ object T {
     }
 
     @JvmStatic
+    fun recentTaskBlurRepoFile(): File {
+        return File(baseServerDataDir(), "recent_task_blur_pkgs.xml")
+    }
+
+    @JvmStatic
     fun appLockRepoFile(): File {
         return File(baseServerDataDir(), "app_lock_pkgs.xml")
     }
@@ -136,6 +141,10 @@ object T {
         @JvmField
         val PREF_SHOW_BG_RESTRICT_APPS_NOTIFICATION_ENABLED =
             ThanosFeature("PREF_SHOW_BG_RESTRICT_APPS_NOTIFICATION_ENABLED", false)
+
+        @JvmField
+        val PREF_RECENT_TASK_BLUR_ENABLED =
+            ThanosFeature("PREF_RECENT_TASK_BLUR_ENABLED", false)
 
         @JvmField
         val PREF_APP_LOCK_ENABLED = ThanosFeature("PREF_APP_LOCK_ENABLED", false)

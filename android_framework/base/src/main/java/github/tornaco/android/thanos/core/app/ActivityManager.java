@@ -223,4 +223,24 @@ public class ActivityManager {
     public void setBgTaskCleanUpSkipWhichHasNotificationEnabled(boolean enable) {
         server.setBgTaskCleanUpSkipWhichHasNotificationEnabled(enable);
     }
+
+    @SneakyThrows
+    public boolean isRecentTaskBlurEnabled() {
+        return server.isRecentTaskBlurEnabled();
+    }
+
+    @SneakyThrows
+    public void setRecentTaskBlurEnabled(boolean enable) {
+        server.setRecentTaskBlurEnabled(enable);
+    }
+
+    @SneakyThrows
+    public void setPkgRecentTaskBlurEnabled(String pkgName, boolean enable) {
+        server.setPkgRecentTaskBlurEnabled(pkgName, enable);
+    }
+
+    @SneakyThrows
+    public boolean isPkgRecentTaskBlurEnabled(String pkgName) {
+        return server.isPkgRecentTaskBlurEnabled(pkgName);
+    }
 }
