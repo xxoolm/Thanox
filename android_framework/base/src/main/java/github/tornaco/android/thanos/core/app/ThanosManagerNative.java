@@ -18,4 +18,8 @@ public class ThanosManagerNative {
     public static IThanos getDefault() {
         return sIThanosSingleton.get();
     }
+
+    public static boolean isServiceInstalled() {
+        return ServiceManager.getService(T.serviceInstallName()) != null;
+    }
 }

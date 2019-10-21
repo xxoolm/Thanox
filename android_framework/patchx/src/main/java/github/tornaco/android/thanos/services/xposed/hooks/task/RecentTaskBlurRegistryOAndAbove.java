@@ -11,7 +11,8 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import github.tornaco.android.thanos.core.annotation.RequiresApi;
-import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.app.ThanosManagerNative;
+import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BootStrap;
 import github.tornaco.android.thanos.services.apihint.Beta;
@@ -34,8 +35,10 @@ public class RecentTaskBlurRegistryOAndAbove implements IXposedHook {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        hookTaskSnapshotController(lpparam);
-        hookGetTaskSnapshot(lpparam);
+        if (PackageManager.packageNameOfAndroid().equals(lpparam.packageName)) {
+            hookTaskSnapshotController(lpparam);
+            hookGetTaskSnapshot(lpparam);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -94,7 +97,7 @@ public class RecentTaskBlurRegistryOAndAbove implements IXposedHook {
         WindowManagerService wm = BootStrap.THANOS_X.getWindowManagerService();
         ActivityManagerService am = BootStrap.THANOS_X.getActivityManagerService();
 
-        if (ThanosManager.from(null).isServiceInstalled()) {
+        if (ThanosManagerNative.isServiceInstalled()) {
             String taskPkgName = am.getPackageNameForTaskId(taskId);
             Timber.v("onSnapshotTask, taskPkgName: " + taskPkgName);
             if (taskPkgName == null) return;

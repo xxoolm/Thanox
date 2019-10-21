@@ -10,6 +10,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BootStrap;
 import github.tornaco.android.thanos.services.app.ActivityManagerService;
@@ -24,7 +25,9 @@ import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
 public class RecentTaskBlurRegistryNAndBlow implements IXposedHook {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
-        hookScreenshotApplicationsForNAndBelow(lpparam);
+        if (PackageManager.packageNameOfAndroid().equals(lpparam.packageName)) {
+            hookScreenshotApplicationsForNAndBelow(lpparam);
+        }
     }
 
     /**
