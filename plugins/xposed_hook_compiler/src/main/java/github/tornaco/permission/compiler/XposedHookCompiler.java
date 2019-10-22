@@ -6,10 +6,7 @@ import github.tornaco.permission.compiler.common.Logger;
 import github.tornaco.permission.compiler.common.SettingsProvider;
 import github.tornaco.xposed.annotation.XposedHook;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -26,12 +23,16 @@ import static javax.lang.model.element.Modifier.*;
  * Email: Tornaco@163.com
  */
 @SupportedAnnotationTypes("github.tornaco.xposed.annotation.XposedHook")
+@SupportedOptions("ModuleName")
 public class XposedHookCompiler extends AbstractProcessor {
 
     private static final boolean DEBUG = true;
+    private static final String ENV_KEY_MODULE_NAME = "ModuleName";
 
     private ErrorReporter mErrorReporter;
     private Types mTypes;
+
+    private String registryModuleName;
 
     private final Set<XposedHookInfo> hooks = new HashSet<>();
 
@@ -40,6 +41,13 @@ public class XposedHookCompiler extends AbstractProcessor {
         super.init(processingEnvironment);
         mErrorReporter = new ErrorReporter(processingEnvironment);
         mTypes = processingEnvironment.getTypeUtils();
+
+        Map<String, String> options = processingEnvironment.getOptions();
+        for (String k : options.keySet()) {
+            Logger.debug("processingEnvironment.getOptions() K: %s, V: %s", k, options.get(k));
+        }
+        registryModuleName = options.get(ENV_KEY_MODULE_NAME);
+        Logger.debug("registryModuleName: %s", registryModuleName);
     }
 
     @Override
@@ -65,8 +73,8 @@ public class XposedHookCompiler extends AbstractProcessor {
 
     private void generateSourceFile() {
         // class name
-        String className = "XposedHookRegistry";
-        String pkgName = "github.tornaco.xposed";
+        String className = "XposedHookRegistry_" + registryModuleName.toUpperCase();
+        String pkgName = "github.tornaco.xposed." + registryModuleName.toLowerCase();
         // Create source.
         String source = generateClass(pkgName, className);
 

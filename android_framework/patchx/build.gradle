@@ -10,6 +10,10 @@ buildscript {
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs.add("-AModuleName=patchx")
+}
+
 dependencies {
     // Framework
     compileOnly files('../../android_sdk/27/android-27.jar')
@@ -24,6 +28,8 @@ dependencies {
     // Sdk
     implementation project(':android_framework:base')
     implementation project(':android_framework:services')
+
+    implementation project(':android_framework:patchx-lib')
 
     // Xposed
     compileOnly deps.xposed.api

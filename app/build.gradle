@@ -129,10 +129,10 @@ dependencies {
     implementation project(':android_framework:packages:installer')
 
     implementation project(':android_framework:services')
-    implementation project(':android_framework:patchx')
     implementation project(':android_framework:base')
     implementation project(':android_framework:res')
 
+    implementation project(':android_framework:patchx-entry')
 }
 
 buildDir = rootProject.projectDir.path + "/out/app/"

@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 
 import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
 
-@XposedHook(targetSdkVersion = {_26, _27, _28, _29})
+@XposedHook(targetSdkVersion = {_26, _27, _28})
 @Beta
 public class RecentTaskBlurRegistryOAndAbove implements IXposedHook {
     private static final Executor BLUR_EXE = Executors.newCachedThreadPool();
