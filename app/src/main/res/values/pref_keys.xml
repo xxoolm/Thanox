@@ -34,6 +34,8 @@
     </string>
     <string name="key_app_feature_config_privacy_cheat" translatable="false">key_app_feature_config_privacy_cheat
     </string>
+    <string name="key_app_feature_config_recent_task_blur" translatable="false">key_app_feature_config_recent_task_blur
+    </string>
 
     <string name="key_app_feature_config_app_to_enable" translatable="false">key_app_feature_config_app_to_enable
     </string>

@@ -57,6 +57,7 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
         new BgRestrictPref(getContext()).bind();
         new TaskCleanUp(getContext()).bind();
         new PrivacyCheat(getContext()).bind();
+        new RecentTaskBlur(getContext()).bind();
     }
 
     private void bindAppStatePref() {
@@ -153,6 +154,27 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
             ThanosManager.from(getContext())
                     .getPrivacyManager()
                     .setPkgPrivacyDataCheat(appInfo.getPkgName(), value);
+        }
+    }
+
+    class RecentTaskBlur extends FeaturePref {
+
+        RecentTaskBlur(Context context) {
+            super(context.getString(R.string.key_app_feature_config_recent_task_blur));
+        }
+
+        @Override
+        boolean current() {
+            return ThanosManager.from(getContext())
+                    .getActivityManager()
+                    .isPkgRecentTaskBlurEnabled(appInfo.getPkgName());
+        }
+
+        @Override
+        void setTo(boolean value) {
+            ThanosManager.from(getContext())
+                    .getActivityManager()
+                    .setPkgRecentTaskBlurEnabled(appInfo.getPkgName(), value);
         }
     }
 

@@ -28,6 +28,12 @@
                 app:title="@string/feature_title_data_cheat"
                 app:summary="@string/feature_desc_data_cheat"
                 android:persistent="false"/>
+
+        <SwitchPreferenceCompat
+                app:key="@string/key_app_feature_config_recent_task_blur"
+                app:title="@string/feature_title_recent_task_blur"
+                app:summary="@string/feature_summary_recent_task_blur"
+                android:persistent="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory
