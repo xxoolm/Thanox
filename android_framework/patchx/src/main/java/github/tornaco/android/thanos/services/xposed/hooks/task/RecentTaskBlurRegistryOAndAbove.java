@@ -158,7 +158,13 @@ public class RecentTaskBlurRegistryOAndAbove implements IXposedHook {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onSnapshotTask(final XC_MethodHook.MethodHookParam param) {
-        BLUR_EXE.execute(() -> blurAndCacheAsync(param));
+        BLUR_EXE.execute(() -> {
+            try {
+                blurAndCacheAsync(param);
+            } catch (Throwable e) {
+                Timber.e(e, "Error occur @BLUR_EXE, while call blurAndCacheAsync");
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

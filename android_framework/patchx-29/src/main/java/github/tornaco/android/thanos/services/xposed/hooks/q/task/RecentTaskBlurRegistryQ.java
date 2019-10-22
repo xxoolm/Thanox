@@ -3,6 +3,7 @@ package github.tornaco.android.thanos.services.xposed.hooks.q.task;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.graphics.Bitmap;
+import android.hardware.HardwareBuffer;
 import android.os.Build;
 import android.util.Log;
 import android.util.Pair;
@@ -26,7 +27,7 @@ import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 
 @XposedHook(targetSdkVersion = {_29})
 @Beta
@@ -87,6 +88,7 @@ public class RecentTaskBlurRegistryQ implements IXposedHook {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @SuppressLint("NewApi")
     private void blurAndCacheAsync(XC_MethodHook.MethodHookParam param) {
         Object taskObj = param.args[0];
         Timber.v("onSnapshotTask, taskObj: " + taskObj);
@@ -114,7 +116,17 @@ public class RecentTaskBlurRegistryQ implements IXposedHook {
                         return;
                     }
 
-                    Bitmap hwBitmap = Bitmap.createHardwareBitmap(snapshot.getSnapshot());
+                    // Ref for android Q.
+                    // https://github.com/LineageOS/android_frameworks_base/commit/a0baea28b7f1e42dddbab5d924f284ae6714f6a3#diff-dc086aaa07dcf7c01d3ec78f7229afc5
+                    // Bitmap.wrapHardwareBuffer(
+                    //                HardwareBuffer.createFromGraphicBuffer(snapshot.getSnapshot()),
+                    //                snapshot.getColorSpace());
+
+                    Object hwBuffer = XposedHelpers.callStaticMethod(HardwareBuffer.class, "createFromGraphicBuffer", snapshot.getSnapshot());
+                    Timber.v("onSnapshotTask, hwBuffer: " + hwBuffer);
+                    Object colorSpace = XposedHelpers.callMethod(snapshot, "getColorSpace");
+                    Timber.v("onSnapshotTask, colorSpace: " + colorSpace);
+                    Bitmap hwBitmap = (Bitmap) XposedHelpers.callStaticMethod(Bitmap.class, "wrapHardwareBuffer", hwBuffer, colorSpace);
                     Timber.v("onSnapshotTask, hwBitmap: " + hwBitmap);
                     if (hwBitmap != null) {
                         Bitmap blurBitmap = blurBitmap(hwBitmap, Pair.create(screenSize[0], screenSize[1]));
@@ -158,7 +170,13 @@ public class RecentTaskBlurRegistryQ implements IXposedHook {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onSnapshotTask(final XC_MethodHook.MethodHookParam param) {
-        BLUR_EXE.execute(() -> blurAndCacheAsync(param));
+        BLUR_EXE.execute(() -> {
+            try {
+                blurAndCacheAsync(param);
+            } catch (Throwable e) {
+                Timber.e(e, "Error occur @BLUR_EXE, while call blurAndCacheAsync");
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
