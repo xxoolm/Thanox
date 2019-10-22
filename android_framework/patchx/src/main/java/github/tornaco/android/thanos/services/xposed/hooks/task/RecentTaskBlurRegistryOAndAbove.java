@@ -163,18 +163,20 @@ public class RecentTaskBlurRegistryOAndAbove implements IXposedHook {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Bitmap blurBitmap(Bitmap hwBitmap, Pair<Integer, Integer> screenSize) {
-        return jBlur(hwBitmap, screenSize);
+        return jBlur(hwBitmap);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("NewApi")
-    private Bitmap jBlur(Bitmap hwBitmap, Pair<Integer, Integer> screenSize) {
+    private Bitmap jBlur(Bitmap hwBitmap) {
         Bitmap swBitmap = hwBitmap.copy(Bitmap.Config.ARGB_8888, false);
-        Timber.v("jBlur, copy done");
+        int w = swBitmap.getWidth();
+        int h = swBitmap.getHeight();
+        Timber.v("jBlur, copy done, bitmap w and h: %s-%s", w, h);
         int br = 16;
         swBitmap = RecentTaskBlurUtil.createBlurredBitmap(swBitmap, br, 0.18f);
         Timber.v("jBlur, done");
-        swBitmap = RecentTaskBlurUtil.createScaledBitmap(swBitmap, screenSize.first, screenSize.second);
+        swBitmap = RecentTaskBlurUtil.createScaledBitmap(swBitmap, w, h);
         Timber.v("jBlur, scale done");
         Bitmap newHwBitmap = swBitmap.copy(Bitmap.Config.HARDWARE, false);
         Timber.v("jBlur, copy done");
