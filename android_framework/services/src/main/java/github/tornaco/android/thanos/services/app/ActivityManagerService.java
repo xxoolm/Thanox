@@ -47,6 +47,7 @@ import github.tornaco.java.common.util.CollectionUtils;
 import github.tornaco.java.common.util.ObjectsUtils;
 import io.reactivex.Observable;
 import io.reactivex.*;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
@@ -89,6 +90,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     private boolean bgTaskCleanUpSkipAudioFocused;
     private boolean bgTaskCleanUpSkipNotificationFocused;
     private long bgTaskCleanUpDelayMills;
+    private final CompositeDisposable bgTaskCleanUpDisposable = new CompositeDisposable();
 
     private SetRepo<String> startBlockingApps;
     private SetRepo<String> bgRestrictApps;
@@ -105,6 +107,10 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         public void onEvent(ThanosEvent e) {
             if (ObjectsUtils.equals(Intent.ACTION_SCREEN_OFF, e.getIntent().getAction())) {
                 onScreenOff();
+            }
+
+            if (ObjectsUtils.equals(Intent.ACTION_SCREEN_ON, e.getIntent().getAction())) {
+                onScreenOn();
             }
         }
     };
@@ -143,7 +149,10 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     }
 
     private void registerReceivers() {
-        EventBus.getInstance().registerEventSubscriber(new IntentFilter(Intent.ACTION_SCREEN_OFF), thanosEventsSubscriber);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        EventBus.getInstance().registerEventSubscriber(intentFilter, thanosEventsSubscriber);
         Objects.requireNonNull(getContext()).registerReceiver(thanosBroadcastReceiver, new IntentFilter(ACTION_RUNNING_PROCESS_CLEAR));
     }
 
@@ -1048,12 +1057,20 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         }
     }
 
+    private void onScreenOn() {
+        Timber.d("Handle screen on.");
+        bgTaskCleanUpDisposable.clear();
+    }
+
     @ExecuteBySystemHandler
     private void cleanUpBgTasks(boolean onlyWhenIsNotInteractive, long delay) {
         String[] runningPkgs = getRunningAppPackages();
         Timber.d("Cleaning up background tasks: %s", Arrays.toString(runningPkgs));
 
-        DevNull.accept(Observable
+        // Clear previous.
+        bgTaskCleanUpDisposable.clear();
+
+        bgTaskCleanUpDisposable.add(Observable
                 .fromArray(runningPkgs)
                 .subscribeOn(ThanosSchedulers.serverThread())
                 .observeOn(ThanosSchedulers.serverThread())
