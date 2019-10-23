@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.DropDownPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 import com.bumptech.glide.Glide;
@@ -21,7 +22,10 @@ import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.app.donate.DonateActivity;
 import github.tornaco.android.thanos.app.donate.DonateSettings;
+import github.tornaco.android.thanos.apps.AppDetailsActivity;
 import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.pm.AppInfo;
+import github.tornaco.android.thanos.core.profile.ProfileManager;
 import github.tornaco.android.thanos.core.util.FileUtils;
 import github.tornaco.android.thanos.core.util.ObjectToStringUtils;
 import github.tornaco.android.thanos.core.util.Optional;
@@ -153,6 +157,31 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
         findPreference(getString(R.string.key_data_restore)).setOnPreferenceClickListener(preference -> {
             SettingsFragmentPermissionRequester.restoreRequestedChecked(SettingsFragment.this);
+            return true;
+        });
+
+        // Auto config.
+        SwitchPreferenceCompat autoConfigPref = findPreference(getString(R.string.key_new_installed_apps_config_enabled));
+        autoConfigPref.setChecked(thanos.isServiceInstalled() && thanos.getProfileManager().isAutoApplyForNewInstalledAppsEnabled());
+        autoConfigPref.setOnPreferenceChangeListener((preference, newValue) -> {
+            if (thanos.isServiceInstalled()) {
+                boolean checked = (boolean) newValue;
+                thanos.getProfileManager().setAutoApplyForNewInstalledAppsEnabled(checked);
+            }
+            return true;
+        });
+
+        Preference preference = findPreference(getString(R.string.key_new_installed_apps_config));
+        preference.setOnPreferenceClickListener(preference1 -> {
+            AppInfo appInfo = new AppInfo();
+            appInfo.setSelected(false);
+            appInfo.setPkgName(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME);
+            appInfo.setAppLabel(getString(R.string.pref_title_new_installed_apps_config));
+            appInfo.setDummy(true);
+            appInfo.setVersionCode(-1);
+            appInfo.setVersionCode(-1);
+            appInfo.setUid(-1);
+            AppDetailsActivity.start(getActivity(), appInfo);
             return true;
         });
     }

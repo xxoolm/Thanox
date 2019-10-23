@@ -34,7 +34,8 @@
     </string>
     <string name="key_app_feature_config_privacy_cheat" translatable="false">key_app_feature_config_privacy_cheat
     </string>
-    <string name="key_app_feature_config_recent_task_blur" translatable="false">key_app_feature_config_recent_task_blur
+    <string name="key_app_feature_config_recent_task_blur" translatable="false">
+        key_app_feature_config_recent_task_blur
     </string>
 
     <string name="key_app_feature_config_app_to_enable" translatable="false">key_app_feature_config_app_to_enable
@@ -42,6 +43,8 @@
     <string name="key_app_feature_config_app_to_disable" translatable="false">key_app_feature_config_app_to_disable
     </string>
 
-    <string name="key_app_feature_config_ops" translatable="false">key_app_feature_config_ops
-    </string>
+    <string name="key_app_feature_config_ops" translatable="false">key_app_feature_config_ops</string>
+
+    <string name="key_new_installed_apps_config" translatable="false">key_new_installed_apps_config</string>
+    <string name="key_new_installed_apps_config_enabled" translatable="false">key_new_installed_apps_config_enabled</string>
 </resources>

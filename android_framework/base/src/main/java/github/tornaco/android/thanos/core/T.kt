@@ -167,6 +167,9 @@ object T {
 
         @JvmField
         val PREF_LOGGING_ENABLED = ThanosFeature("PREF_LOGGING_ENABLED", true)
+
+        @JvmField
+        val PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED = ThanosFeature("PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED", false)
     }
 
     object Actions {

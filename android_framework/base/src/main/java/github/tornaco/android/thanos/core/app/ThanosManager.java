@@ -10,6 +10,7 @@ import github.tornaco.android.thanos.core.n.NotificationManager;
 import github.tornaco.android.thanos.core.os.ServiceManager;
 import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.pref.PrefManager;
+import github.tornaco.android.thanos.core.profile.ProfileManager;
 import github.tornaco.android.thanos.core.push.PushManager;
 import github.tornaco.android.thanos.core.secure.PrivacyManager;
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager;
@@ -97,6 +98,11 @@ public class ThanosManager {
     @SneakyThrows
     public BackupAgent getBackupAgent() {
         return new BackupAgent(service.getBackupAgent());
+    }
+
+    @SneakyThrows
+    public ProfileManager getProfileManager() {
+        return new ProfileManager(service.getProfileManager());
     }
 
     @SneakyThrows

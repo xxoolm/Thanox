@@ -66,7 +66,7 @@
                            android:appIcon="@{app}"
                            android:layout_centerVertical="true"
                            android:id="@+id/icon"
-                           tools:src="@mipmap/ic_launcher_round"/>
+                           tools:src="@drawable/ic_settings_line"/>
 
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
@@ -87,12 +87,14 @@
                           android:layout_toEndOf="@id/icon"
                           android:textAppearance="@style/TextAppearance.AppCompat.Small"
                           android:layout_marginStart="@dimen/common_view_margin_default"
+                          android:visibility="@{app.isDummy() ? View.GONE : View.VISIBLE}"
                           android:text="@{`` + app.versionName}"/>
 
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           tools:text="com.a.c.x.x.x.x.x.c.d.e.r.y.u.g.d.dddd.s.s.s.d.xxxxxxxxxxxxxasss"
                           android:id="@+id/pkg"
+                          android:visibility="@{app.isDummy() ? View.GONE : View.VISIBLE}"
                           android:layout_below="@id/version"
                           android:layout_toEndOf="@id/icon"
                           android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -103,6 +105,7 @@
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           tools:text="10029"
+                          android:visibility="@{app.isDummy() ? View.GONE : View.VISIBLE}"
                           android:layout_below="@id/pkg"
                           android:id="@+id/uid"
                           android:layout_toEndOf="@id/icon"

@@ -13,6 +13,17 @@ public class PkgUtils {
     private PkgUtils() {
     }
 
+    public static CharSequence loadNameByPkgName(Context context, String pkg) {
+        PackageManager pm = context.getPackageManager();
+
+        try {
+            ApplicationInfo info = pm.getApplicationInfo(pkg, 8192);
+            return info == null ? null : info.loadLabel(pm);
+        } catch (PackageManager.NameNotFoundException var4) {
+            return null;
+        }
+    }
+
     public static boolean isPkgInstalled(Context context, String pkg) {
         PackageManager pm = context.getPackageManager();
         try {

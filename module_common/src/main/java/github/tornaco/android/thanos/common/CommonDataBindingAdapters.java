@@ -28,6 +28,7 @@ public class CommonDataBindingAdapters {
     public static void setAppIcon(ImageView imageView, AppInfo appInfo) {
         GlideApp.with(imageView)
                 .load(appInfo)
+                .error(R.mipmap.ic_fallback_app_icon)
                 .fallback(R.mipmap.ic_fallback_app_icon)
                 .transition(GenericTransitionOptions.with(R.anim.grow_fade_in))
                 .into(imageView);

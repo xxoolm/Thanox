@@ -42,6 +42,7 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
     private int state;
     // Idle or not?
     private boolean idle;
+    private boolean isDummy;
     // Ignore Parcelable
     private boolean isSelected;
 
@@ -54,6 +55,7 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
         uid = in.readInt();
         state = in.readInt();
         idle = in.readInt() == 1;
+        isDummy = in.readInt() == 1;
     }
 
     public static final Creator<AppInfo> CREATOR = new Creator<AppInfo>() {
@@ -83,6 +85,7 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
         dest.writeInt(this.uid);
         dest.writeInt(this.state);
         dest.writeInt(this.idle ? 1 : 0);
+        dest.writeInt(this.isDummy ? 1 : 0);
     }
 
 
@@ -131,6 +134,7 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
                 Integer.MAX_VALUE,
                 PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
                 false,
-                false);
+                false,
+                true);
     }
 }

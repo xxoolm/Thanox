@@ -61,11 +61,21 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
     }
 
     private void bindAppStatePref() {
+        // Current is disabled.
+        Preference toEnablePref = findPreference(getString(R.string.key_app_feature_config_app_to_enable));
+        Preference toDisablePref = findPreference(getString(R.string.key_app_feature_config_app_to_disable));
+
+        if (appInfo.isDummy()) {
+            Objects.requireNonNull(toEnablePref).setVisible(false);
+            Objects.requireNonNull(toDisablePref).setVisible(false);
+            Objects.requireNonNull(toEnablePref.getParent()).setVisible(false);
+            return;
+        }
+
         ThanosManager thanos = ThanosManager.from(getContext());
         int state = thanos.getPkgManager().getApplicationEnabledSetting(appInfo.getPkgName());
         boolean disabled = state != PackageManager.COMPONENT_ENABLED_STATE_ENABLED && state != PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
-        // Current is disabled.
-        Preference toEnablePref = findPreference(getString(R.string.key_app_feature_config_app_to_enable));
+
         Objects.requireNonNull(toEnablePref).setVisible(disabled);
         toEnablePref.setOnPreferenceClickListener(preference -> {
             thanos.getPkgManager().setApplicationEnabledSetting(
@@ -80,7 +90,6 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
 
 
         // Current is enabled.
-        Preference toDisablePref = findPreference(getString(R.string.key_app_feature_config_app_to_disable));
         Objects.requireNonNull(toDisablePref).setVisible(!disabled);
         toDisablePref.setOnPreferenceClickListener(preference -> {
             thanos.getPkgManager().setApplicationEnabledSetting(

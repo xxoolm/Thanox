@@ -92,6 +92,7 @@
     <string name="pre_title_app_theme">主题</string>
     <string name="pre_title_app_icon_pack">图标包</string>
     <string name="pre_category_strategy">策略</string>
+    <string name="pre_category_profile">情景</string>
     <string name="pre_category_data">数据</string>
     <string name="pre_category_about">关于</string>
     <string name="pre_category_dev_tools">开发者</string>
@@ -115,6 +116,11 @@
     <string name="pre_title_restore">恢复</string>
     <string name="pre_sumary_restore">选择一个备份包以恢复Thanox设置</string>
 
+    <string name="pref_title_new_installed_apps_config_enabled">启用自动配置</string>
+    <string name="pref_summary_new_installed_apps_config_enabled">为新安装的App自动使用模板配置</string>
+    <string name="pref_title_new_installed_apps_config">模板设置</string>
+    <string name="pref_summary_new_installed_apps_config">设置自动应用的模板</string>
+
     <string name="pre_message_restore_success">恢复成功，请尽快重启设备以生效</string>
     <string name="pre_message_backup_success">备份成功</string>
 
@@ -136,5 +142,7 @@
     <string name="badge_paid_app">已购买</string>
 
     <string name="title_app_notice">注意事项</string>
-    <string name="message_app_notice">Thanox对于新手甚至老鸟都及其危险，请做好启用之后无法开机的准备，启用之前请务必做好数据备份。\n\n测试版本建议打开Thanox设置，开启日志，如果发现了崩溃重启等异常问题，请将data/system/thanos/logging下的日志反馈</string>
+    <string name="message_app_notice">
+        Thanox对于新手甚至老鸟都及其危险，请做好启用之后无法开机的准备，启用之前请务必做好数据备份。\n\n测试版本建议打开Thanox设置，开启日志，如果发现了崩溃重启等异常问题，请将data/system/thanos/logging下的日志反馈
+    </string>
 </resources>

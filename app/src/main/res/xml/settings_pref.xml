@@ -21,6 +21,22 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+            app:title="@string/pre_category_profile">
+
+        <SwitchPreferenceCompat
+                app:key="@string/key_new_installed_apps_config_enabled"
+                app:title="@string/pref_title_new_installed_apps_config_enabled"
+                app:summary="@string/pref_summary_new_installed_apps_config_enabled"
+                app:persistent="false"/>
+
+        <Preference
+                app:key="@string/key_new_installed_apps_config"
+                app:title="@string/pref_title_new_installed_apps_config"
+                app:summary="@string/pref_summary_new_installed_apps_config"
+                app:persistent="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
             app:title="@string/pre_category_data">
 
         <Preference

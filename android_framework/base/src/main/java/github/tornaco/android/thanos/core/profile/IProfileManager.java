@@ -7,6 +7,13 @@ public interface IProfileManager extends android.os.IInterface
   /** Default implementation for IProfileManager. */
   public static class Default implements github.tornaco.android.thanos.core.profile.IProfileManager
   {
+    @Override public void setAutoApplyForNewInstalledAppsEnabled(boolean enable) throws android.os.RemoteException
+    {
+    }
+    @Override public boolean isAutoApplyForNewInstalledAppsEnabled() throws android.os.RemoteException
+    {
+      return false;
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -50,6 +57,23 @@ public interface IProfileManager extends android.os.IInterface
           reply.writeString(descriptor);
           return true;
         }
+        case TRANSACTION_setAutoApplyForNewInstalledAppsEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _arg0;
+          _arg0 = (0!=data.readInt());
+          this.setAutoApplyForNewInstalledAppsEnabled(_arg0);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_isAutoApplyForNewInstalledAppsEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _result = this.isAutoApplyForNewInstalledAppsEnabled();
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
         default:
         {
           return super.onTransact(code, data, reply, flags);
@@ -71,8 +95,49 @@ public interface IProfileManager extends android.os.IInterface
       {
         return DESCRIPTOR;
       }
+      @Override public void setAutoApplyForNewInstalledAppsEnabled(boolean enable) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeInt(((enable)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setAutoApplyForNewInstalledAppsEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setAutoApplyForNewInstalledAppsEnabled(enable);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public boolean isAutoApplyForNewInstalledAppsEnabled() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isAutoApplyForNewInstalledAppsEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isAutoApplyForNewInstalledAppsEnabled();
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       public static github.tornaco.android.thanos.core.profile.IProfileManager sDefaultImpl;
     }
+    static final int TRANSACTION_setAutoApplyForNewInstalledAppsEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+    static final int TRANSACTION_isAutoApplyForNewInstalledAppsEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.profile.IProfileManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -84,4 +149,6 @@ public interface IProfileManager extends android.os.IInterface
       return Stub.Proxy.sDefaultImpl;
     }
   }
+  public void setAutoApplyForNewInstalledAppsEnabled(boolean enable) throws android.os.RemoteException;
+  public boolean isAutoApplyForNewInstalledAppsEnabled() throws android.os.RemoteException;
 }

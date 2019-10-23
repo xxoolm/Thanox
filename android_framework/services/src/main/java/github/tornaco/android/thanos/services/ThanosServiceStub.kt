@@ -17,7 +17,6 @@ import github.tornaco.android.thanos.core.profile.IProfileManager
 import github.tornaco.android.thanos.core.push.IPushManager
 import github.tornaco.android.thanos.core.secure.IPrivacyManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
-import github.tornaco.android.thanos.core.util.Noop
 import github.tornaco.android.thanos.core.wm.IWindowManager
 import github.tornaco.android.thanos.services.app.*
 import github.tornaco.android.thanos.services.audio.AudioService
@@ -32,6 +31,8 @@ import github.tornaco.android.thanos.services.perf.PrefManagerStub
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService
 import github.tornaco.android.thanos.services.pm.PkgManagerService
 import github.tornaco.android.thanos.services.pm.PkgManagerStub
+import github.tornaco.android.thanos.services.profile.ProfileService
+import github.tornaco.android.thanos.services.profile.ProfileServiceStub
 import github.tornaco.android.thanos.services.push.PushManagerService
 import github.tornaco.android.thanos.services.push.PushManagerServiceStub
 import github.tornaco.android.thanos.services.secure.PrivacyManagerStub
@@ -53,11 +54,12 @@ internal class ThanosServiceStub(
     private val notification: NotificationManagerService,
     private val audio: AudioService,
     private val backup: BackupAgentService,
-    private val window: WindowManagerService
+    private val window: WindowManagerService,
+    private val profile: ProfileService
 ) : IThanos.Stub() {
 
     override fun getProfileManager(): IProfileManager {
-        return Noop.notSupported()
+        return ProfileServiceStub(profile)
     }
 
     override fun getAppOpsService(): IAppOpsService {

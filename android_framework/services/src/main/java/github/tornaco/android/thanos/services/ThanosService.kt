@@ -14,6 +14,7 @@ import github.tornaco.android.thanos.services.n.NotificationManagerService
 import github.tornaco.android.thanos.services.os.ServiceManagerService
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService
 import github.tornaco.android.thanos.services.pm.PkgManagerService
+import github.tornaco.android.thanos.services.profile.ProfileService
 import github.tornaco.android.thanos.services.push.PushManagerService
 import github.tornaco.android.thanos.services.secure.PrivacyService
 import github.tornaco.android.thanos.services.secure.ops.AppOpsService
@@ -46,6 +47,8 @@ class ThanosService : SystemService(), S {
 
     override val windowManagerService = WindowManagerService(this)
 
+    override val profileService = ProfileService(this)
+
     private val services: Vector<SystemService> = Vector()
 
     init {
@@ -62,6 +65,7 @@ class ThanosService : SystemService(), S {
         services.add(audioService)
         services.add(backupAgent)
         services.add(windowManagerService)
+        services.add(profileService)
     }
 
     override fun onStart(context: Context) {
@@ -84,7 +88,8 @@ class ThanosService : SystemService(), S {
                 notificationManagerService,
                 audioService,
                 backupAgent,
-                windowManagerService
+                windowManagerService,
+                profileService
             ).asBinder()
         )
 
