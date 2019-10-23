@@ -349,6 +349,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
 
         val appLabel = s.pkgManagerService.getAppInfo(pkg).appLabel
 
+        // TODO Extract string res.
         val n = builder
             .setContentTitle("隐私防护")
             .setContentText(appLabel + "已被限制访问真实隐私数据")

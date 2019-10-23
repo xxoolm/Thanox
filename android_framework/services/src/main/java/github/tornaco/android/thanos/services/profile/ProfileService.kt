@@ -1,5 +1,6 @@
 package github.tornaco.android.thanos.services.profile
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.IBinder
 import android.os.UserHandle
@@ -27,7 +28,6 @@ import github.tornaco.java.common.util.ObjectsUtils
 import java.util.*
 
 class ProfileService(private val s: S) : SystemService(), IProfileManager {
-
     private val notificationHelper: NotificationHelper = NotificationHelper()
 
     private var autoApplyForNewInstalledAppsEnabled = false
@@ -38,7 +38,7 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
             Timber.v("onPackageAdded: %s", packageName)
             executeInternal(Runnable {
                 setupAutoConfigForNewInstalledAppsIfNeed(packageName)
-            })
+            }, 6 * 1000 /* Delay to make it safe.*/)
         }
     }
 
@@ -100,6 +100,10 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
         Timber.v("setupAutoConfigForNewInstalledAppsIfNeed: %s", pkg)
         if (!autoApplyForNewInstalledAppsEnabled) return
 
+        if (s.pkgManagerService.getAppInfo(pkg) == null) {
+            Timber.e("setupAutoConfigForNewInstalledAppsIfNeed app not installed!")
+            return
+        }
 
         s.activityManagerService.setPkgBgRestrictEnabled(
             pkg,
@@ -149,21 +153,32 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
 
         val appLabel = PkgUtils.loadNameByPkgName(context, pkg)
 
-//        val viewer = Intent()
-//        viewer.setPackage(BuildProp.THANOS_APP_PKG_NAME)
-//        viewer.setClassName(
-//            BuildProp.THANOS_APP_PKG_NAME,
-//            "github.tornaco.xposedmoduletest.ui.activity.app.PerAppSettingsDashboardActivity"
-//        )
-//        viewer.putExtra("pkg_name", pkg)
-//        viewer.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val viewer = Intent()
+        viewer.setPackage(BuildProp.THANOS_APP_PKG_NAME)
+        viewer.setClassName(
+            BuildProp.THANOS_APP_PKG_NAME,
+            BuildProp.ACTIVITY_APP_DETAILS
+        )
 
+        val appInfo = s.pkgManagerService.getAppInfo(pkg)
+        viewer.putExtra("app", appInfo)
+        viewer.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+        // TODO Extract string res.
         val n = builder
             .setContentTitle("自动配置")
             .setContentText("${appLabel}已经自动启用模板配置")
             .setSmallIcon(android.R.drawable.stat_sys_warning)
             .setAutoCancel(true)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    context,
+                    NotificationIdFactory.getIdByTag(UUID.randomUUID().toString()),
+                    viewer,
+                    0
+                )
+            )
             .build()
 
         if (OsUtils.isMOrAbove()) {

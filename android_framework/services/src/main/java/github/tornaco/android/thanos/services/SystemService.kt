@@ -58,6 +58,15 @@ open class SystemService {
             .subscribeOn(ThanosSchedulers.serverThread()).subscribe()
     }
 
+    /**
+     * Execute in {@link #ThanosSchedulers.serverThread()}
+     */
+    protected fun executeInternal(runnable: Runnable, delayMills: Long) {
+        Completable.fromRunnable(runnable)
+            .delay(delayMills, TimeUnit.MILLISECONDS)
+            .subscribeOn(ThanosSchedulers.serverThread()).subscribe()
+    }
+
     private fun setNotificationReadyDelayed() {
         DevNull.accept(
             Observable

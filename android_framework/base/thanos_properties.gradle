@@ -22,6 +22,7 @@ buildConfig {
 
     // Read props.
     buildConfigField 'String', 'ACTIVITY_APP_LOCK_VERIFIER', serviceProps.getProperty("locker.verify.activity")
+    buildConfigField 'String', 'ACTIVITY_APP_DETAILS', serviceProps.getProperty("thanox.app.details.activity")
 
 
     buildConfigField 'Boolean', 'PREF_DEFAULT_BY_PASS_SYSTEM_APPS_ENABLED', serviceProps.getProperty("pref.def.bypass.system.app.enabled")
