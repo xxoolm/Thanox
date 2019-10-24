@@ -22,25 +22,36 @@ import github.tornaco.android.thanos.core.util.Timber
 import github.tornaco.android.thanos.services.BackgroundThread
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.SystemService
+import github.tornaco.android.thanos.services.ThanosSchedulers
 import github.tornaco.android.thanos.services.n.NotificationHelper
 import github.tornaco.android.thanos.services.n.NotificationIdFactory
 import github.tornaco.android.thanos.services.n.SystemUI
 import github.tornaco.android.thanos.services.pm.PackageMonitor
 import github.tornaco.java.common.util.ObjectsUtils
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ProfileService(private val s: S) : SystemService(), IProfileManager {
     private val notificationHelper: NotificationHelper = NotificationHelper()
 
     private var autoApplyForNewInstalledAppsEnabled = false
 
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
     private val monitor = object : PackageMonitor() {
         override fun onPackageAdded(packageName: String, uid: Int) {
             super.onPackageAdded(packageName, uid)
             Timber.v("onPackageAdded: %s", packageName)
-            executeInternal(Runnable {
-                setupAutoConfigForNewInstalledAppsIfNeed(packageName)
-            }, 6 * 1000 /* Delay to make it safe.*/)
+
+            val disposable = Observable.just(packageName).delay(6, TimeUnit.SECONDS)
+                .observeOn(ThanosSchedulers.serverThread())
+                .observeOn(ThanosSchedulers.serverThread())
+                .subscribe {
+                    setupAutoConfigForNewInstalledAppsIfNeed(packageName)
+                }
+            compositeDisposable.add(disposable)
         }
     }
 
@@ -53,6 +64,7 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
     override fun shutdown() {
         super.shutdown()
         monitor.unregister()
+        compositeDisposable.clear()
     }
 
     private fun initPrefs() {
@@ -102,9 +114,8 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
         Timber.v("setupAutoConfigForNewInstalledAppsIfNeed: %s", pkg)
         if (!autoApplyForNewInstalledAppsEnabled) return
 
-        val appInfo: AppInfo = s.pkgManagerService.getAppInfo(pkg)
+        val appInfo: AppInfo? = s.pkgManagerService.getAppInfo(pkg)
 
-        @Suppress("SENSELESS_COMPARISON")
         if (appInfo == null) {
             Timber.e("setupAutoConfigForNewInstalledAppsIfNeed app not installed!")
             return

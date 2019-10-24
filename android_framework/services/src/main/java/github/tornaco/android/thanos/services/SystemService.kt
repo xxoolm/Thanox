@@ -64,7 +64,8 @@ open class SystemService {
     protected fun executeInternal(runnable: Runnable, delayMills: Long) {
         Completable.fromRunnable(runnable)
             .delay(delayMills, TimeUnit.MILLISECONDS)
-            .subscribeOn(ThanosSchedulers.serverThread()).subscribe()
+            .subscribeOn(ThanosSchedulers.serverThread())
+            .subscribe()
     }
 
     private fun setNotificationReadyDelayed() {

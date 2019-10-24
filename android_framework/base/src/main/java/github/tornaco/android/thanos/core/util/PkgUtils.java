@@ -27,14 +27,14 @@ public class PkgUtils {
     public static boolean isPkgInstalled(Context context, String pkg) {
         PackageManager pm = context.getPackageManager();
         try {
-            ApplicationInfo info = null;
+            ApplicationInfo info;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 info = pm.getApplicationInfo(pkg, PackageManager.MATCH_UNINSTALLED_PACKAGES);
             } else {
                 info = pm.getApplicationInfo(pkg, PackageManager.GET_UNINSTALLED_PACKAGES);
             }
             return info != null;
-        } catch (PackageManager.NameNotFoundException var4) {
+        } catch (Throwable e) {
             return false;
         }
     }
