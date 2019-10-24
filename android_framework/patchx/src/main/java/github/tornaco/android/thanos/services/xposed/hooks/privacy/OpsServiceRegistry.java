@@ -9,6 +9,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import github.tornaco.android.thanos.core.annotation.Keep;
 import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService;
+import github.tornaco.android.thanos.core.util.OsUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BootStrap;
 import github.tornaco.android.thanos.services.apihint.Beta;
@@ -37,7 +38,10 @@ public class OpsServiceRegistry implements IXposedHook {
 
     private void hookOpsStartOp(XC_LoadPackage.LoadPackageParam lpparam) {
         try {
-            Class nms = XposedHelpers.findClass("com.android.server.AppOpsService",
+            Class nms = XposedHelpers.findClass(
+                    OsUtils.isQOrAbove()
+                            ? "com.android.server.appop.AppOpsService"
+                            : "com.android.server.AppOpsService",
                     lpparam.classLoader);
             Set unHooks = XposedBridge.hookAllMethods(nms, "startOperation", new XC_MethodHook() {
                 @Override
@@ -59,7 +63,10 @@ public class OpsServiceRegistry implements IXposedHook {
 
     private void hookOpsFinishOp(XC_LoadPackage.LoadPackageParam lpparam) {
         try {
-            Class nms = XposedHelpers.findClass("com.android.server.AppOpsService",
+            Class nms = XposedHelpers.findClass(
+                    OsUtils.isQOrAbove()
+                            ? "com.android.server.appop.AppOpsService"
+                            : "com.android.server.AppOpsService",
                     lpparam.classLoader);
             Set unHooks = XposedBridge.hookAllMethods(nms, "finishOperation", new XC_MethodHook() {
                 @Override
