@@ -24,7 +24,7 @@ public class PkgOpsLoader {
             AppOpsManager ops = thanos.getAppOpsManager();
             for (int op = 0; op < numOp; op++) {
                 String perm = AppOpsManager.opToPermission(op);
-                boolean hold = permissions.contains(perm);
+                boolean hold = permissions.contains(perm) || appInfo.isDummy();
                 if (hold) {
                     OpsTemplate template = Ops.templateOfOp(op);
                     if (template != null) {

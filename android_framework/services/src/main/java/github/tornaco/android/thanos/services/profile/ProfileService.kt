@@ -10,9 +10,11 @@ import github.tornaco.android.thanos.core.T
 import github.tornaco.android.thanos.core.app.AppResources
 import github.tornaco.android.thanos.core.compat.NotificationCompat
 import github.tornaco.android.thanos.core.compat.NotificationManagerCompat
+import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener
 import github.tornaco.android.thanos.core.profile.IProfileManager
 import github.tornaco.android.thanos.core.profile.ProfileManager
+import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
 import github.tornaco.android.thanos.core.util.Noop
 import github.tornaco.android.thanos.core.util.OsUtils
 import github.tornaco.android.thanos.core.util.PkgUtils
@@ -100,7 +102,10 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
         Timber.v("setupAutoConfigForNewInstalledAppsIfNeed: %s", pkg)
         if (!autoApplyForNewInstalledAppsEnabled) return
 
-        if (s.pkgManagerService.getAppInfo(pkg) == null) {
+        val appInfo: AppInfo = s.pkgManagerService.getAppInfo(pkg)
+
+        @Suppress("SENSELESS_COMPARISON")
+        if (appInfo == null) {
             Timber.e("setupAutoConfigForNewInstalledAppsIfNeed app not installed!")
             return
         }
@@ -133,6 +138,22 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
             pkg,
             s.notificationManagerService.isScreenOnNotificationEnabledForPkg(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)
         )
+
+        // Set ops.
+        val numOp = AppOpsManager._NUM_OP
+        for (i in 0 until numOp) {
+            val templateMode = s.appOpsService.checkOperation(
+                i,
+                -1,
+                ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME
+            )
+            Timber.v("Set op by template: $i, mode: $templateMode")
+            try {
+                s.appOpsService.setMode(i, appInfo.uid, appInfo.pkgName, templateMode)
+            } catch (e: Throwable) {
+                Timber.e(e, "Fail set mode $templateMode for app $appInfo")
+            }
+        }
 
         Timber.d("setupAutoConfigForNewInstalledApps done: %s", pkg)
 

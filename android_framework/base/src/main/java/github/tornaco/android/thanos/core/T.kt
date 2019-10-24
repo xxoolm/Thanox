@@ -100,6 +100,11 @@ object T {
     }
 
     @JvmStatic
+    fun opTemplateFile(): File {
+        return File(baseServerDataDir(), "op_template.xml")
+    }
+
+    @JvmStatic
     fun screenOnNotificationPkgsFile(): File {
         return File(baseServerDataDir(), "screen_on_notification_pkgs.xml")
     }

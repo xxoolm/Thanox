@@ -9,7 +9,9 @@ import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.T
 import github.tornaco.android.thanos.core.app.AppResources
 import github.tornaco.android.thanos.core.persist.RepoFactory
+import github.tornaco.android.thanos.core.persist.StringMapRepo
 import github.tornaco.android.thanos.core.persist.StringSetRepo
+import github.tornaco.android.thanos.core.profile.ProfileManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
 import github.tornaco.android.thanos.core.util.DevNull
 import github.tornaco.android.thanos.core.util.Noop
@@ -28,6 +30,7 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
 
     private lateinit var opRemindOpRepo: StringSetRepo
     private lateinit var opRemindPkgRepo: StringSetRepo
+    private lateinit var opTemplateRepo: StringMapRepo
     private lateinit var opRemindNotificationHelper: OpRemindNotificationHelper
 
     private val opRemindWhiteList: MutableSet<String> = HashSet()
@@ -45,6 +48,7 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
 
         opRemindOpRepo = RepoFactory.get().getOrCreateStringSetRepo(T.opRemindOpsFile().path)
         opRemindPkgRepo = RepoFactory.get().getOrCreateStringSetRepo(T.opRemindPkgFile().path)
+        opTemplateRepo = RepoFactory.get().getOrCreateStringMapRepo(T.opTemplateFile().path)
         opRemindNotificationHelper = OpRemindNotificationHelper(context, s)
     }
 
@@ -110,6 +114,11 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
     @Throws(RemoteException::class)
     override fun setMode(code: Int, uid: Int, packageName: String, mode: Int) {
         enforceCallingPermissions()
+        // Hooks.
+        if (onInterceptSetMode(code, uid, packageName, mode)) {
+            return
+        }
+
         val ident = Binder.clearCallingIdentity()
         try {
             Timber.v("setMode: %s %s %s %s", code, uid, packageName, mode)
@@ -117,6 +126,15 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
         } finally {
             Binder.restoreCallingIdentity(ident)
         }
+    }
+
+    private fun onInterceptSetMode(code: Int, uid: Int, packageName: String, mode: Int): Boolean {
+        if (Objects.equals(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME, packageName)) {
+            opTemplateRepo["$code"] = "$mode"
+            Timber.d("onInterceptSetMode, set op template, code: %s, mode: %s", code, mode)
+            return true
+        }
+        return false
     }
 
     @Throws(RemoteException::class)
@@ -132,16 +150,31 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
 
     @Throws(RemoteException::class)
     override fun checkOperation(code: Int, uid: Int, packageName: String): Int {
+        // Hooks.
+        val mode = onInterceptCheckOperation(code, uid, packageName)
+        if (mode != Int.MIN_VALUE) {
+            return mode
+        }
+
         val ident = Binder.clearCallingIdentity()
         // IllegalArgumentException: Bad operation #71
-        try {
-            return androidService!!.checkOperation(code, uid, packageName)
+        return try {
+            androidService!!.checkOperation(code, uid, packageName)
         } catch (e: Throwable) {
             Timber.w("checkOperation: %s", Log.getStackTraceString(e))
-            return github.tornaco.android.thanos.core.secure.ops.AppOpsManager.MODE_ERRORED
+            github.tornaco.android.thanos.core.secure.ops.AppOpsManager.MODE_ERRORED
         } finally {
             Binder.restoreCallingIdentity(ident)
         }
+    }
+
+    private fun onInterceptCheckOperation(code: Int, uid: Int, packageName: String): Int {
+        if (Objects.equals(packageName, ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)) {
+            val mode: String = opTemplateRepo["$code"]
+                ?: return github.tornaco.android.thanos.core.secure.ops.AppOpsManager.MODE_ALLOWED
+            return mode.toInt()
+        }
+        return Int.MIN_VALUE
     }
 
     override fun setUserRestrictions(restrictions: Bundle, token: IBinder, userHandle: Int) {
