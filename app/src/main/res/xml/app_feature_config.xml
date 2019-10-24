@@ -30,6 +30,17 @@
                 android:persistent="false"/>
 
         <SwitchPreferenceCompat
+                app:key="@string/key_app_feature_config_op_remind"
+                app:title="@string/module_ops_title_op_remind_apps"
+                app:summary="@string/module_ops_feature_summary_ops_remind"
+                android:persistent="false"/>
+
+        <SwitchPreferenceCompat
+                app:key="@string/key_app_feature_config_screen_on_notification"
+                app:title="@string/feature_title_light_on_notifiation"
+                android:persistent="false"/>
+
+        <SwitchPreferenceCompat
                 app:key="@string/key_app_feature_config_recent_task_blur"
                 app:title="@string/feature_title_recent_task_blur"
                 app:summary="@string/feature_summary_recent_task_blur"

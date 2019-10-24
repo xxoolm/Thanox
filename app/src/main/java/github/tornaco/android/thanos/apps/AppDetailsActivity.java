@@ -62,7 +62,7 @@ public class AppDetailsActivity extends ThemeActivity {
     private void initView() {
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        binding.toolbar.setTitle(null);
+        binding.toolbar.setTitle(appInfo.getAppLabel());
         binding.setApp(appInfo);
 
         CategoryIndex categoryIndex = CategoryIndex.fromFlags(appInfo.getFlags());

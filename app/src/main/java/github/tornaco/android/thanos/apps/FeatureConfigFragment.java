@@ -58,6 +58,8 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
         new TaskCleanUp(getContext()).bind();
         new PrivacyCheat(getContext()).bind();
         new RecentTaskBlur(getContext()).bind();
+        new ScreenOnNotification(getContext()).bind();
+        new OpRemind(getContext()).bind();
     }
 
     private void bindAppStatePref() {
@@ -205,6 +207,58 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
             ThanosManager.from(getContext())
                     .getActivityManager()
                     .setPkgCleanUpOnTaskRemovalEnabled(appInfo.getPkgName(), value);
+        }
+
+        @Override
+        boolean visible() {
+            return true;
+        }
+    }
+
+    class OpRemind extends FeaturePref {
+
+        OpRemind(Context context) {
+            super(context.getString(R.string.key_app_feature_config_op_remind));
+        }
+
+        @Override
+        boolean current() {
+            return ThanosManager.from(getContext())
+                    .getAppOpsManager()
+                    .isPkgOpRemindEnable(appInfo.getPkgName());
+        }
+
+        @Override
+        void setTo(boolean value) {
+            ThanosManager.from(getContext())
+                    .getAppOpsManager()
+                    .setPkgOpRemindEnable(appInfo.getPkgName(), value);
+        }
+
+        @Override
+        boolean visible() {
+            return true;
+        }
+    }
+
+    class ScreenOnNotification extends FeaturePref {
+
+        ScreenOnNotification(Context context) {
+            super(context.getString(R.string.key_app_feature_config_screen_on_notification));
+        }
+
+        @Override
+        boolean current() {
+            return ThanosManager.from(getContext())
+                    .getNotificationManager()
+                    .isScreenOnNotificationEnabledForPkg(appInfo.getPkgName());
+        }
+
+        @Override
+        void setTo(boolean value) {
+            ThanosManager.from(getContext())
+                    .getNotificationManager()
+                    .setScreenOnNotificationEnabledForPkg(appInfo.getPkgName(), value);
         }
 
         @Override

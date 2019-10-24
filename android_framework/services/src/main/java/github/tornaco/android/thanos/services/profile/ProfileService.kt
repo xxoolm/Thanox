@@ -125,6 +125,14 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
             pkg,
             s.privacyService.isPkgPrivacyDataCheat(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)
         )
+        s.appOpsService.setPkgOpRemindEnable(
+            pkg,
+            s.appOpsService.isPkgOpRemindEnable(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)
+        )
+        s.notificationManagerService.setScreenOnNotificationEnabledForPkg(
+            pkg,
+            s.notificationManagerService.isScreenOnNotificationEnabledForPkg(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)
+        )
 
         Timber.d("setupAutoConfigForNewInstalledApps done: %s", pkg)
 

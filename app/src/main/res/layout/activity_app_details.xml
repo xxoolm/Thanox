@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/appbar"
                 app:cardBackgroundColor="?cardsBackgroundColor"
-                android:visibility="@{app.isDummy() ? View.GONE : View.VISIBLE}"
+                android:visibility="gone"
                 app:contentPadding="@dimen/common_view_margin_default"
                 app:cardElevation="@dimen/common_view_elevation"
                 app:cardCornerRadius="@dimen/common_view_corner_radius">

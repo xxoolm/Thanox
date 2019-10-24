@@ -34,6 +34,10 @@
     </string>
     <string name="key_app_feature_config_privacy_cheat" translatable="false">key_app_feature_config_privacy_cheat
     </string>
+    <string name="key_app_feature_config_op_remind" translatable="false">key_app_feature_config_op_remind
+    </string>
+    <string name="key_app_feature_config_screen_on_notification" translatable="false">key_app_feature_config_screen_on_notification
+    </string>
     <string name="key_app_feature_config_recent_task_blur" translatable="false">
         key_app_feature_config_recent_task_blur
     </string>
