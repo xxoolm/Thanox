@@ -51,6 +51,7 @@
         <activity android:name=".apps.AppDetailsActivity" android:exported="true" android:enabled="true"/>
         <activity android:name=".notification.ScreenOnNotificationActivity"/>
         <activity android:name=".task.RecentTaskBlurListActivity"/>
+        <activity android:name=".power.SmartStandbyActivity"/>
         <service android:name=".testing.FakeService"
                  android:exported="true">
             <intent-filter>

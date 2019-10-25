@@ -77,6 +77,10 @@
     <string name="feature_title_smart_app_standby">智能休眠</string>
     <string name="feature_summary_smart_app_standby">应用回到后台后自动进入休眠状态</string>
 
+    <string name="dialog_title_smart_app_standby_need_enable_platform_app_idle">开启自适应电池</string>
+    <string name="dialog_message_smart_app_standby_need_enable_platform_app_idle">智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作
+    </string>
+
     <string name="feature_title_data_cheat">隐匿</string>
     <string name="feature_desc_data_cheat">隐藏手机号，SIM序列等敏感信息</string>
     <string name="activity_title_data_cheat">隐匿</string>

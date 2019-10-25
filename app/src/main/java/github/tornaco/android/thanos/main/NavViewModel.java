@@ -17,6 +17,7 @@ import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.dashboard.Tile;
 import github.tornaco.android.thanos.notification.ScreenOnNotificationActivity;
+import github.tornaco.android.thanos.power.SmartStandbyActivity;
 import github.tornaco.android.thanos.privacy.DataCheatActivity;
 import github.tornaco.android.thanos.start.BackgroundRestrictActivity;
 import github.tornaco.android.thanos.start.StartRestrictActivity;
@@ -356,6 +357,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .themeColor(R.color.md_amber_500)
                                 .atEndOfThisCategory(true)
                                 .onClickListener(view -> {
+                                    SmartStandbyActivity.start(getApplication());
                                 })
                                 .build()
                 )
