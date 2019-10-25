@@ -109,6 +109,9 @@
     <string name="pre_title_ignore_system_app">排除系统应用</string>
     <string name="pre_summary_ignore_system_app">在功能列表中不展示系统应用，这些系统应用也不会被干涉</string>
 
+    <string name="pref_title_icon_maker_remix_icon">图标提供者</string>
+    <string name="pref_summary_icon_maker_remix_icon">Remix Design © 2018 https://remixicon.com/</string>
+
     <string name="pref_title_app_state_enabled">应用已启用</string>
     <string name="pref_title_app_to_disable">冻结</string>
     <string name="pref_title_app_state_disabled">应用已被冻结</string>
