@@ -3,7 +3,6 @@ package github.tornaco.android.thanos.core.app;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.os.RemoteException;
 import github.tornaco.android.thanos.core.app.start.StartRecord;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
 import lombok.AllArgsConstructor;
