@@ -887,19 +887,23 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         return pid;
     }
 
+    @Override
+    public int isPlatformAppIdleEnabled() {
+        if (OsUtils.isPOrAbove()) {
+            return isAppIdleEnabledForPOrAbove().code;
+        }
+        // We think it is enabled.
+        return YesNoDontKnow.YES.code;
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
     @ExecuteBySystemHandler
     public void idlePackage(String packageName) {
         enforceCallingPermissions();
         Runnable idle = () -> {
-            IUsageStatsManager usm = IUsageStatsManager.Stub.asInterface(ServiceManager
-                    .getService(Context.USAGE_STATS_SERVICE));
+            IUsageStatsManager usm = IUsageStatsManager.Stub.asInterface(ServiceManager.getService(Context.USAGE_STATS_SERVICE));
             try {
-                if (OsUtils.isPOrAbove()) {
-                    YesNoDontKnow idleEnabled = isAppIdleEnabledForPOrAbove();
-                    Timber.w("idleEnabled: %s", idleEnabled);
-                }
                 usm.setAppInactive(packageName, true, UserHandle.getUserId(Binder.getCallingUid()));
                 Timber.d("Finish idlePackage: %s", packageName);
                 boolean isIdleNow = isPackageIdle(packageName);
@@ -1167,14 +1171,16 @@ public class ActivityManagerService extends SystemService implements IActivityMa
          */
         final String ADAPTIVE_BATTERY_MANAGEMENT_ENABLED = "adaptive_battery_management_enabled";
         try {
-            final boolean buildFlag = Objects.requireNonNull(getContext()).getResources().getBoolean(
-                    com.android.internal.R.bool.config_enableAutoPowerModes);
+            // Objects.requireNonNull(getContext()).getResources().getBoolean(
+            //                    com.android.internal.R.bool.config_enableAutoPowerModes);
+            final boolean buildFlag = true;
             final boolean runtimeFlag = Settings.Global.getInt(getContext().getContentResolver(),
                     APP_STANDBY_ENABLED, 1) == 1
                     && Settings.Global.getInt(getContext().getContentResolver(),
                     ADAPTIVE_BATTERY_MANAGEMENT_ENABLED, 1) == 1;
             return (buildFlag && runtimeFlag) ? YesNoDontKnow.YES : YesNoDontKnow.NO;
         } catch (Throwable e) {
+            Timber.e(e, "Fail query isAppIdleEnabledForPOrAbove");
             return YesNoDontKnow.DONT_KNOW;
         }
     }

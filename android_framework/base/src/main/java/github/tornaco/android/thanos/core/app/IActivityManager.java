@@ -198,6 +198,10 @@ public interface IActivityManager extends android.os.IInterface
     {
       return null;
     }
+    @Override public int isPlatformAppIdleEnabled() throws android.os.RemoteException
+    {
+      return 0;
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -775,6 +779,14 @@ public interface IActivityManager extends android.os.IInterface
           java.lang.String _result = this.getPackageNameForTaskId(_arg0);
           reply.writeNoException();
           reply.writeString(_result);
+          return true;
+        }
+        case TRANSACTION_isPlatformAppIdleEnabled:
+        {
+          data.enforceInterface(descriptor);
+          int _result = this.isPlatformAppIdleEnabled();
+          reply.writeNoException();
+          reply.writeInt(_result);
           return true;
         }
         default:
@@ -1876,6 +1888,26 @@ public interface IActivityManager extends android.os.IInterface
         }
         return _result;
       }
+      @Override public int isPlatformAppIdleEnabled() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        int _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isPlatformAppIdleEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isPlatformAppIdleEnabled();
+          }
+          _reply.readException();
+          _result = _reply.readInt();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       public static github.tornaco.android.thanos.core.app.IActivityManager sDefaultImpl;
     }
     static final int TRANSACTION_getCurrentFrontApp = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -1927,6 +1959,7 @@ public interface IActivityManager extends android.os.IInterface
     static final int TRANSACTION_getProcessPss = (android.os.IBinder.FIRST_CALL_TRANSACTION + 46);
     static final int TRANSACTION_onApplicationCrashing = (android.os.IBinder.FIRST_CALL_TRANSACTION + 47);
     static final int TRANSACTION_getPackageNameForTaskId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 48);
+    static final int TRANSACTION_isPlatformAppIdleEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 49);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.IActivityManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -2001,4 +2034,5 @@ public interface IActivityManager extends android.os.IInterface
   public long[] getProcessPss(int[] pids) throws android.os.RemoteException;
   public void onApplicationCrashing(java.lang.String eventType, java.lang.String processName, github.tornaco.android.thanos.core.process.ProcessRecord process, java.lang.String stackTrace) throws android.os.RemoteException;
   public java.lang.String getPackageNameForTaskId(int taskId) throws android.os.RemoteException;
+  public int isPlatformAppIdleEnabled() throws android.os.RemoteException;
 }

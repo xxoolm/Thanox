@@ -83,4 +83,6 @@ interface IActivityManager {
     void onApplicationCrashing(String eventType, String processName, in ProcessRecord process, String stackTrace);
 
     String getPackageNameForTaskId(int taskId);
+
+    int isPlatformAppIdleEnabled();
 }
