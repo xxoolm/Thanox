@@ -56,9 +56,7 @@ public class SmartStandbyActivity extends CommonFuncToggleAppListFilterActivity 
                 .isServiceInstalled() && ThanosManager.from(getApplicationContext())
                 .getActivityManager().isPlatformAppIdleEnabled() == YesNoDontKnow.YES.code;
         if (!isPlatformAppIdleEnabled) {
-            switchBar.setEnabled(false);
-            switchBar.setBackgroundColor(getColor(R.color.md_grey_500));
-            switchBar.setOnClickListener(view -> showPlatformAppIdleEnableDialog());
+            showPlatformAppIdleEnableDialog();
         }
     }
 
@@ -95,8 +93,11 @@ public class SmartStandbyActivity extends CommonFuncToggleAppListFilterActivity 
     private void showPlatformAppIdleEnableDialog() {
         new AlertDialog.Builder(SmartStandbyActivity.this)
                 .setTitle(R.string.dialog_title_smart_app_standby_need_enable_platform_app_idle)
-                .setMessage(R.string.feature_summary_smart_app_standby)
-                .setCancelable(true)
+                .setMessage(R.string.dialog_message_smart_app_standby_need_enable_platform_app_idle)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                    // Noop.
+                })
                 .show();
     }
 }
