@@ -330,7 +330,6 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_push_delegate))
                                 .category(resources.getString(R.string.feature_category_notifiation))
                                 .themeColor(R.color.md_purple_400)
-                                .disabled(true)
                                 .onClickListener(view -> {
                                 })
                                 .build(),
@@ -346,7 +345,16 @@ public class NavViewModel extends AndroidViewModel {
                                 .category(resources.getString(R.string.feature_category_ext))
                                 .title(resources.getString(R.string.feature_title_component_replacement))
                                 .themeColor(R.color.md_green_a700)
-                                .disabled(true)
+                                .onClickListener(view -> {
+                                })
+                                .build(),
+                        Tile.builder()
+                                .iconRes(R.drawable.ic_loader_2_fill)
+                                .category(resources.getString(R.string.feature_category_power_save))
+                                .title(resources.getString(R.string.feature_title_smart_app_standby))
+                                .summary(resources.getString(R.string.feature_summary_smart_app_standby))
+                                .themeColor(R.color.md_amber_500)
+                                .atEndOfThisCategory(true)
                                 .onClickListener(view -> {
                                 })
                                 .build()
