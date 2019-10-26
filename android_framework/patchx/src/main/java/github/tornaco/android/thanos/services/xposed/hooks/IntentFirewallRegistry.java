@@ -49,9 +49,11 @@ public class IntentFirewallRegistry implements IXposedHook {
                             super.beforeHookedMethod(param);
                             Intent intent = (Intent) param.args[1];
                             ComponentName componentName = (ComponentName) param.args[0];
+                            if (componentName == null) {
+                                return;
+                            }
                             int callerID = (int) param.args[2];
-                            boolean res =
-                                    BootStrap.THANOS_X.getActivityManagerService()
+                            boolean res = BootStrap.THANOS_X.getActivityManagerService()
                                             .checkService(intent, componentName, callerID);
                             if (!res) {
                                 param.setResult(false);

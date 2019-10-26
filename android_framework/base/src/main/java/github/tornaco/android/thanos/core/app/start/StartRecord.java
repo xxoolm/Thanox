@@ -14,6 +14,7 @@ import lombok.ToString;
 public final class StartRecord implements Parcelable {
 
     private int method;
+    private String requestPayload;
     private long whenByMills;
     private String packageName;
     private String starterPackageName;
@@ -22,6 +23,7 @@ public final class StartRecord implements Parcelable {
 
     private StartRecord(Parcel in) {
         method = in.readInt();
+        requestPayload = in.readString();
         whenByMills = in.readLong();
         packageName = in.readString();
         starterPackageName = in.readString();
@@ -49,6 +51,7 @@ public final class StartRecord implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(method);
+        parcel.writeString(requestPayload);
         parcel.writeLong(whenByMills);
         parcel.writeString(packageName);
         parcel.writeString(starterPackageName);
