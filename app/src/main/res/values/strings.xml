@@ -76,7 +76,7 @@
     <string name="feature_category_power_save">电源</string>
     <string name="feature_title_component_replacement">移花接木</string>
     <string name="feature_title_smart_app_standby">智能休眠</string>
-    <string name="feature_summary_smart_app_standby">应用回到后台后自动进入休眠状态</string>
+    <string name="feature_summary_smart_app_standby">未充电时，应用回到后台自动休眠</string>
 
     <string name="dialog_title_smart_app_standby_need_enable_platform_app_idle">开启自适应电池</string>
     <string name="dialog_message_smart_app_standby_need_enable_platform_app_idle">智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\nThanox当前无法准确判断你的系统是否支持并开启了该选项。
