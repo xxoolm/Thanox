@@ -109,7 +109,7 @@
                     android:singleLine="true"
                     android:visibility="@{badge2 == null ? View.GONE : View.VISIBLE}"
                     android:textColor="@color/md_white"
-                    android:background="@color/md_blue_grey_500"/>
+                    android:background="@color/md_blue_grey_200"/>
 
         </RelativeLayout>
 

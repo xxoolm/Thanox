@@ -107,7 +107,7 @@
                     android:visibility="@{badge2 == null ? View.GONE : View.VISIBLE}"
                     tools:visibility="visible"
                     android:textColor="@color/md_white"
-                    android:background="@color/md_blue_grey_500"/>
+                    android:background="@color/md_blue_grey_200"/>
 
             <Switch
                     android:soundEffectsEnabled="false"
