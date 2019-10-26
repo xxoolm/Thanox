@@ -13,6 +13,10 @@
                 type="String"/>
 
         <variable
+                name="badge2"
+                type="String"/>
+
+        <variable
                 name="isLastOne"
                 type="boolean"/>
 
@@ -58,6 +62,7 @@
                     tools:text="@string/app_name"
                     android:text="@{app.appLabel}"
                     android:ellipsize="middle"
+                    android:maxLength="18"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/common_view_margin_default"
@@ -82,6 +87,7 @@
                     android:id="@+id/badge1"
                     android:layout_toEndOf="@id/state_badge"
                     tools:text="Active"
+                    tools:visibility="visible"
                     android:layout_centerVertical="true"
                     android:textSize="@dimen/list_item_main_text_size_small"
                     android:text="@{badge1}"
@@ -89,6 +95,21 @@
                     android:visibility="@{badge1 == null ? View.GONE : View.VISIBLE}"
                     android:textColor="@color/md_white"
                     android:background="?colorAccent"/>
+
+            <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/badge2"
+                    android:layout_toEndOf="@id/badge1"
+                    tools:text="Active"
+                    tools:visibility="visible"
+                    android:layout_centerVertical="true"
+                    android:textSize="@dimen/list_item_main_text_size_small"
+                    android:text="@{badge2}"
+                    android:singleLine="true"
+                    android:visibility="@{badge2 == null ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/md_white"
+                    android:background="@color/md_blue_grey_500"/>
 
         </RelativeLayout>
 

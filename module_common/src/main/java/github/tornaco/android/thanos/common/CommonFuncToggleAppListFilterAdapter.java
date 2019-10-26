@@ -63,6 +63,7 @@ class CommonFuncToggleAppListFilterAdapter extends RecyclerView.Adapter<CommonFu
             }
         });
         holder.binding.setBadge1(model.badge);
+        holder.binding.setBadge2(model.badge2);
         holder.binding.executePendingBindings();
     }
 

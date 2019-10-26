@@ -24,7 +24,8 @@
     <string name="reboot_now">立即重启</string>
     <string name="reboot_later">稍后重启</string>
 
-    <string name="badge_app_running">运行中</string>
+    <string name="badge_app_running">运行</string>
+    <string name="badge_app_idle">休眠</string>
 
     <string name="boost_status_running_apps">个应用正在运行</string>
     <string name="boost_status_blocked_start_count">已阻止%s次应用启动请求</string>

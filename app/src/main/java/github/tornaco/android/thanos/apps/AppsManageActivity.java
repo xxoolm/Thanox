@@ -38,6 +38,7 @@ public class AppsManageActivity extends CommonAppListFilterActivity {
     @Override
     protected CommonAppListFilterViewModel.ListModelLoader onCreateListModelLoader() {
         String runningBadge = getString(R.string.badge_app_running);
+        String idleBadge = getApplicationContext().getString(R.string.badge_app_idle);
         return index -> {
             ThanosManager thanos = ThanosManager.from(getApplicationContext());
             if (!thanos.isServiceInstalled()) {
@@ -46,7 +47,10 @@ public class AppsManageActivity extends CommonAppListFilterActivity {
             List<AppInfo> installed = Lists.newArrayList(thanos.getPkgManager().getInstalledPkgs(index.flag));
             List<AppListModel> res = new ArrayList<>();
             CollectionUtils.consumeRemaining(installed, appInfo -> {
-                res.add(new AppListModel(appInfo, thanos.getActivityManager().isPackageRunning(appInfo.getPkgName()) ? runningBadge : null));
+                res.add(new AppListModel(
+                        appInfo,
+                        thanos.getActivityManager().isPackageRunning(appInfo.getPkgName()) ? runningBadge : null,
+                        thanos.getActivityManager().isPackageIdle(appInfo.getPkgName()) ? idleBadge : null));
             });
             return res;
         };

@@ -85,4 +85,9 @@ interface IActivityManager {
     String getPackageNameForTaskId(int taskId);
 
     int isPlatformAppIdleEnabled();
+
+    boolean isSmartStandByEnabled();
+    void setSmartStandByEnabled(boolean enable);
+    void setPkgSmartStandByEnabled(String pkgName, boolean enable);
+    boolean isPkgSmartStandByEnabled(String pkgName);
 }

@@ -253,4 +253,24 @@ public class ActivityManager {
     public int isPlatformAppIdleEnabled() {
         return server.isPlatformAppIdleEnabled();
     }
+
+    @SneakyThrows
+    public boolean isSmartStandByEnabled() {
+        return server.isSmartStandByEnabled();
+    }
+
+    @SneakyThrows
+    public void setSmartStandByEnabled(boolean enable) {
+        server.setSmartStandByEnabled(enable);
+    }
+
+    @SneakyThrows
+    public void setPkgSmartStandByEnabled(String pkgName, boolean enable) {
+        server.setPkgSmartStandByEnabled(pkgName, enable);
+    }
+
+    @SneakyThrows
+    public boolean isPkgSmartStandByEnabled(String pkgName) {
+        return server.isPkgSmartStandByEnabled(pkgName);
+    }
 }

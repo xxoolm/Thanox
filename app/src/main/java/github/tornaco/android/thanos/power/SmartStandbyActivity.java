@@ -79,12 +79,15 @@ public class SmartStandbyActivity extends CommonFuncToggleAppListFilterActivity 
             if (!thanos.isServiceInstalled()) return Lists.newArrayListWithCapacity(0);
 
             String runningBadge = getApplicationContext().getString(R.string.badge_app_running);
+            String idleBadge = getApplicationContext().getString(R.string.badge_app_idle);
             ActivityManager am = thanos.getActivityManager();
             List<AppInfo> installed = Lists.newArrayList(thanos.getPkgManager().getInstalledPkgs(index.flag));
             List<AppListModel> res = new ArrayList<>();
             CollectionUtils.consumeRemaining(installed, appInfo -> {
-                appInfo.setSelected(!am.isPkgBgRestricted(appInfo.getPkgName()));
-                res.add(new AppListModel(appInfo, thanos.getActivityManager().isPackageRunning(appInfo.getPkgName()) ? runningBadge : null));
+                appInfo.setSelected(am.isPkgSmartStandByEnabled(appInfo.getPkgName()));
+                res.add(new AppListModel(appInfo,
+                        thanos.getActivityManager().isPackageRunning(appInfo.getPkgName()) ? runningBadge : null,
+                        thanos.getActivityManager().isPackageIdle(appInfo.getPkgName()) ? idleBadge : null));
             });
             return res;
         };

@@ -13,6 +13,14 @@ public class AppListModel extends ListModel<AppListModel> {
     // Extra badge.
     @Nullable
     public String badge;
+    @Nullable
+    public String badge2;
+
+    public AppListModel(@NonNull AppInfo appInfo, @Nullable String badge, @Nullable String badge2) {
+        this.appInfo = appInfo;
+        this.badge = badge;
+        this.badge2 = badge2;
+    }
 
     public AppListModel(@NonNull AppInfo appInfo, @Nullable String badge) {
         this.appInfo = appInfo;

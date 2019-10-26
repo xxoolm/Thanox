@@ -896,6 +896,26 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         return YesNoDontKnow.YES.code;
     }
 
+    @Override
+    public boolean isSmartStandByEnabled() throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public void setSmartStandByEnabled(boolean enable) throws RemoteException {
+
+    }
+
+    @Override
+    public void setPkgSmartStandByEnabled(String pkgName, boolean enable) throws RemoteException {
+
+    }
+
+    @Override
+    public boolean isPkgSmartStandByEnabled(String pkgName) throws RemoteException {
+        return false;
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
     @ExecuteBySystemHandler
@@ -925,7 +945,8 @@ public class ActivityManagerService extends SystemService implements IActivityMa
             Timber.d("Finish query isAppInactive: %s", packageName);
             return res;
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            Timber.e(e, "Fail call usm isAppInactive");
+            return false;
         }
     }
 

@@ -202,6 +202,20 @@ public interface IActivityManager extends android.os.IInterface
     {
       return 0;
     }
+    @Override public boolean isSmartStandByEnabled() throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public void setSmartStandByEnabled(boolean enable) throws android.os.RemoteException
+    {
+    }
+    @Override public void setPkgSmartStandByEnabled(java.lang.String pkgName, boolean enable) throws android.os.RemoteException
+    {
+    }
+    @Override public boolean isPkgSmartStandByEnabled(java.lang.String pkgName) throws android.os.RemoteException
+    {
+      return false;
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -787,6 +801,44 @@ public interface IActivityManager extends android.os.IInterface
           int _result = this.isPlatformAppIdleEnabled();
           reply.writeNoException();
           reply.writeInt(_result);
+          return true;
+        }
+        case TRANSACTION_isSmartStandByEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _result = this.isSmartStandByEnabled();
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_setSmartStandByEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _arg0;
+          _arg0 = (0!=data.readInt());
+          this.setSmartStandByEnabled(_arg0);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_setPkgSmartStandByEnabled:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _arg1;
+          _arg1 = (0!=data.readInt());
+          this.setPkgSmartStandByEnabled(_arg0, _arg1);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_isPkgSmartStandByEnabled:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _result = this.isPkgSmartStandByEnabled(_arg0);
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
           return true;
         }
         default:
@@ -1908,6 +1960,86 @@ public interface IActivityManager extends android.os.IInterface
         }
         return _result;
       }
+      @Override public boolean isSmartStandByEnabled() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isSmartStandByEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isSmartStandByEnabled();
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public void setSmartStandByEnabled(boolean enable) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeInt(((enable)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setSmartStandByEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setSmartStandByEnabled(enable);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public void setPkgSmartStandByEnabled(java.lang.String pkgName, boolean enable) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(pkgName);
+          _data.writeInt(((enable)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setPkgSmartStandByEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setPkgSmartStandByEnabled(pkgName, enable);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public boolean isPkgSmartStandByEnabled(java.lang.String pkgName) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(pkgName);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isPkgSmartStandByEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isPkgSmartStandByEnabled(pkgName);
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       public static github.tornaco.android.thanos.core.app.IActivityManager sDefaultImpl;
     }
     static final int TRANSACTION_getCurrentFrontApp = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -1960,6 +2092,10 @@ public interface IActivityManager extends android.os.IInterface
     static final int TRANSACTION_onApplicationCrashing = (android.os.IBinder.FIRST_CALL_TRANSACTION + 47);
     static final int TRANSACTION_getPackageNameForTaskId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 48);
     static final int TRANSACTION_isPlatformAppIdleEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 49);
+    static final int TRANSACTION_isSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 50);
+    static final int TRANSACTION_setSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 51);
+    static final int TRANSACTION_setPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 52);
+    static final int TRANSACTION_isPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 53);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.IActivityManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -2035,4 +2171,8 @@ public interface IActivityManager extends android.os.IInterface
   public void onApplicationCrashing(java.lang.String eventType, java.lang.String processName, github.tornaco.android.thanos.core.process.ProcessRecord process, java.lang.String stackTrace) throws android.os.RemoteException;
   public java.lang.String getPackageNameForTaskId(int taskId) throws android.os.RemoteException;
   public int isPlatformAppIdleEnabled() throws android.os.RemoteException;
+  public boolean isSmartStandByEnabled() throws android.os.RemoteException;
+  public void setSmartStandByEnabled(boolean enable) throws android.os.RemoteException;
+  public void setPkgSmartStandByEnabled(java.lang.String pkgName, boolean enable) throws android.os.RemoteException;
+  public boolean isPkgSmartStandByEnabled(java.lang.String pkgName) throws android.os.RemoteException;
 }

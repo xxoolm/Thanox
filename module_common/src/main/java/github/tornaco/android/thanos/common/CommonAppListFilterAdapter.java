@@ -38,6 +38,7 @@ class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppListFilte
         holder.binding.setIsLastOne(false);
         holder.binding.setListener(itemViewClickListener);
         holder.binding.setBadge1(model.badge);
+        holder.binding.setBadge2(model.badge2);
         holder.binding.executePendingBindings();
     }
 
