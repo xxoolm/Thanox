@@ -63,12 +63,9 @@ public class SmartStandbyActivity extends CommonFuncToggleAppListFilterActivity 
     @NonNull
     @Override
     protected OnAppItemSelectStateChangeListener onCreateAppItemSelectStateChangeListener() {
-        return new OnAppItemSelectStateChangeListener() {
-            @Override
-            public void onAppItemSelectionChanged(AppInfo appInfo, boolean selected) {
-
-            }
-        };
+        return (appInfo, selected) -> ThanosManager.from(getApplicationContext())
+                .ifServiceInstalled(thanosManager ->
+                        thanosManager.getActivityManager().setPkgSmartStandByEnabled(appInfo.getPkgName(), selected));
     }
 
     @NonNull

@@ -50,6 +50,11 @@ object T {
     }
 
     @JvmStatic
+    fun smartStandByRepoFile(): File {
+        return File(baseServerDataDir(), "smart_stand_by_pkgs.xml")
+    }
+
+    @JvmStatic
     fun appLockRepoFile(): File {
         return File(baseServerDataDir(), "app_lock_pkgs.xml")
     }
@@ -152,6 +157,10 @@ object T {
             ThanosFeature("PREF_RECENT_TASK_BLUR_ENABLED", false)
 
         @JvmField
+        val PREF_SMART_STANDBY_ENABLED =
+            ThanosFeature("PREF_SMART_STANDBY_ENABLED", false)
+
+        @JvmField
         val PREF_APP_LOCK_ENABLED = ThanosFeature("PREF_APP_LOCK_ENABLED", false)
         @JvmField
         val PREF_APP_LOCK_METHOD = ThanosFeature("PREF_APP_LOCK_METHOD", ActivityStackSupervisor.LockerMethod.NONE)
@@ -174,7 +183,8 @@ object T {
         val PREF_LOGGING_ENABLED = ThanosFeature("PREF_LOGGING_ENABLED", true)
 
         @JvmField
-        val PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED = ThanosFeature("PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED", false)
+        val PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED =
+            ThanosFeature("PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED", false)
     }
 
     object Actions {

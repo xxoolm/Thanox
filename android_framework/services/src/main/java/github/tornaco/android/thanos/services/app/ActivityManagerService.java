@@ -86,6 +86,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     private boolean bgRestrictEnabled;
     private boolean bgRestrictNotificationEnabled;
     private boolean recentTaskBlurEnabled;
+    private boolean smartStandByEnabled;
 
     private boolean bgTaskCleanUpSkipAudioFocused;
     private boolean bgTaskCleanUpSkipNotificationFocused;
@@ -96,6 +97,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     private SetRepo<String> bgRestrictApps;
     private SetRepo<String> cleanUpTaskRemovalApps;
     private SetRepo<String> recentTaskBlurApps;
+    private SetRepo<String> smartStandByApps;
 
     private Map<String, ProcessRecordList> processMap = new ConcurrentHashMap<>();
     private Map<String, Integer> processCrashingTimes = new ConcurrentHashMap<>();
@@ -138,6 +140,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         this.bgRestrictApps = RepoFactory.get().getOrCreateStringSetRepo(T.bgRestrictRepoFile().getPath());
         this.cleanUpTaskRemovalApps = RepoFactory.get().getOrCreateStringSetRepo(T.cleanUpOnTaskRemovalRepoFile().getPath());
         this.recentTaskBlurApps = RepoFactory.get().getOrCreateStringSetRepo(T.recentTaskBlurRepoFile().getPath());
+        this.smartStandByApps = RepoFactory.get().getOrCreateStringSetRepo(T.smartStandByRepoFile().getPath());
     }
 
     @Override
@@ -191,6 +194,9 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         this.recentTaskBlurEnabled = preferenceManagerService.getBoolean(
                 T.Settings.PREF_RECENT_TASK_BLUR_ENABLED.getKey(),
                 T.Settings.PREF_RECENT_TASK_BLUR_ENABLED.getDefaultValue());
+        this.smartStandByEnabled = preferenceManagerService.getBoolean(
+                T.Settings.PREF_SMART_STANDBY_ENABLED.getKey(),
+                T.Settings.PREF_SMART_STANDBY_ENABLED.getDefaultValue());
     }
 
     private void listenToPrefs() {
@@ -901,23 +907,29 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     }
 
     @Override
-    public boolean isSmartStandByEnabled() throws RemoteException {
-        return false;
+    public boolean isSmartStandByEnabled() {
+        return smartStandByEnabled;
     }
 
     @Override
-    public void setSmartStandByEnabled(boolean enable) throws RemoteException {
+    public void setSmartStandByEnabled(boolean enable) {
+        this.smartStandByEnabled = enable;
 
+        PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
+        preferenceManagerService.putBoolean(
+                T.Settings.PREF_SMART_STANDBY_ENABLED.getKey(),
+                enable);
     }
 
     @Override
-    public void setPkgSmartStandByEnabled(String pkgName, boolean enable) throws RemoteException {
-
+    public void setPkgSmartStandByEnabled(String pkgName, boolean enable) {
+        if (enable) smartStandByApps.add(pkgName);
+        else smartStandByApps.remove(pkgName);
     }
 
     @Override
-    public boolean isPkgSmartStandByEnabled(String pkgName) throws RemoteException {
-        return false;
+    public boolean isPkgSmartStandByEnabled(String pkgName) {
+        return smartStandByApps.has(pkgName);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
