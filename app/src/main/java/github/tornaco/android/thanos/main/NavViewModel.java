@@ -346,6 +346,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .category(resources.getString(R.string.feature_category_ext))
                                 .title(resources.getString(R.string.feature_title_component_replacement))
                                 .themeColor(R.color.md_green_a700)
+                                .atEndOfThisCategory(true)
                                 .onClickListener(view -> {
                                 })
                                 .build(),
@@ -355,7 +356,6 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_smart_app_standby))
                                 .summary(resources.getString(R.string.feature_summary_smart_app_standby))
                                 .themeColor(R.color.md_amber_500)
-                                .atEndOfThisCategory(true)
                                 .onClickListener(view -> {
                                     SmartStandbyActivity.start(getApplication());
                                 })
