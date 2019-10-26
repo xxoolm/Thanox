@@ -189,7 +189,8 @@ object T {
 
     object Actions {
         const val ACTION_FRONT_PKG_CHANGED = "thanox.a.front_pkg.changed"
-        const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE = "thanox.a.extra.front_activity.changed.pkg"
+        const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_FROM = "thanox.a.extra.front_activity.changed.pkg.from"
+        const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO = "thanox.a.extra.front_activity.changed.pkg.to"
 
         const val ACTION_RUNNING_PROCESS_CHANGED = "thanox.a.running_process.changed"
         const val ACTION_RUNNING_PROCESS_VIEWER = "thanox.a.running_process.viewer"

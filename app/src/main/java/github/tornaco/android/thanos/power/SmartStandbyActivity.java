@@ -36,28 +36,23 @@ public class SmartStandbyActivity extends CommonFuncToggleAppListFilterActivity 
     @Override
     protected void onSwitchBarCheckChanged(Switch switchBar, boolean isChecked) {
         super.onSwitchBarCheckChanged(switchBar, isChecked);
-        boolean isPlatformAppIdleEnabled = ThanosManager.from(getApplicationContext())
-                .isServiceInstalled() && ThanosManager.from(getApplicationContext())
-                .getActivityManager().isPlatformAppIdleEnabled() == YesNoDontKnow.YES.code;
+
+        ThanosManager.from(getApplicationContext()).ifServiceInstalled(thanosManager ->
+                thanosManager.getActivityManager().setSmartStandByEnabled(isChecked));
+
+        showPlatformAppIdleEnableDialogIfMissingPlatformSupport();
     }
 
     @Override
     protected boolean getSwitchBarCheckState() {
-        boolean isPlatformAppIdleEnabled = ThanosManager.from(getApplicationContext())
-                .isServiceInstalled() && ThanosManager.from(getApplicationContext())
-                .getActivityManager().isPlatformAppIdleEnabled() == YesNoDontKnow.YES.code;
-        return isPlatformAppIdleEnabled;
+        return ThanosManager.from(getApplicationContext()).isServiceInstalled()
+                && ThanosManager.from(getApplicationContext()).getActivityManager().isSmartStandByEnabled();
     }
 
     @Override
     protected void onSetupSwitchBar(SwitchBar switchBar) {
         super.onSetupSwitchBar(switchBar);
-        boolean isPlatformAppIdleEnabled = ThanosManager.from(getApplicationContext())
-                .isServiceInstalled() && ThanosManager.from(getApplicationContext())
-                .getActivityManager().isPlatformAppIdleEnabled() == YesNoDontKnow.YES.code;
-        if (!isPlatformAppIdleEnabled) {
-            showPlatformAppIdleEnableDialog();
-        }
+        showPlatformAppIdleEnableDialogIfMissingPlatformSupport();
     }
 
     @NonNull
@@ -88,6 +83,15 @@ public class SmartStandbyActivity extends CommonFuncToggleAppListFilterActivity 
             });
             return res;
         };
+    }
+
+    private void showPlatformAppIdleEnableDialogIfMissingPlatformSupport() {
+        boolean isPlatformAppIdleEnabled = ThanosManager.from(getApplicationContext())
+                .isServiceInstalled() && ThanosManager.from(getApplicationContext())
+                .getActivityManager().isPlatformAppIdleEnabled() == YesNoDontKnow.YES.code;
+        if (!isPlatformAppIdleEnabled) {
+            showPlatformAppIdleEnableDialog();
+        }
     }
 
     private void showPlatformAppIdleEnableDialog() {

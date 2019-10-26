@@ -117,6 +117,18 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         }
     };
 
+    private final IEventSubscriber frontEventSubscriber = new IEventSubscriber.Stub() {
+        @Override
+        public void onEvent(ThanosEvent event) {
+            executeInternal(() -> {
+                Intent intent = event.getIntent();
+                String from = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_FROM);
+                String to = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO);
+                onFrontPackageChangedInternal(from, to);
+            });
+        }
+    };
+
     private final BroadcastReceiver thanosBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -152,10 +164,11 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     }
 
     private void registerReceivers() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
-        EventBus.getInstance().registerEventSubscriber(intentFilter, thanosEventsSubscriber);
+        IntentFilter screenFilter = new IntentFilter();
+        screenFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        screenFilter.addAction(Intent.ACTION_SCREEN_ON);
+        EventBus.getInstance().registerEventSubscriber(screenFilter, thanosEventsSubscriber);
+        EventBus.getInstance().registerEventSubscriber(new IntentFilter(T.Actions.ACTION_FRONT_PKG_CHANGED), frontEventSubscriber);
         Objects.requireNonNull(getContext()).registerReceiver(thanosBroadcastReceiver, new IntentFilter(ACTION_RUNNING_PROCESS_CLEAR));
     }
 
@@ -945,7 +958,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
                 boolean isIdleNow = isPackageIdle(packageName);
                 Timber.d("Is pkg idle now? %s", isIdleNow);
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                Timber.e(e, "Error calling usm.setAppInactive");
             }
         };
 
@@ -961,7 +974,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
             Timber.d("Finish query isAppInactive: %s", packageName);
             return res;
         } catch (RemoteException e) {
-            Timber.e(e, "Fail call usm isAppInactive");
+            Timber.e(e, "Error call usm.isAppInactive");
             return false;
         }
     }
@@ -1220,6 +1233,27 @@ public class ActivityManagerService extends SystemService implements IActivityMa
             Timber.e(e, "Fail query isAppIdleEnabledForPOrAbove");
             return YesNoDontKnow.DONT_KNOW;
         }
+    }
+
+    private void onFrontPackageChangedInternal(String from, String to) {
+        Timber.d("onFrontPackageChangedInternal: %s %s", from, to);
+        // Check smart standby.
+        doSmartStandByForPkgIfNeed(from);
+    }
+
+    private void doSmartStandByForPkgIfNeed(String pkg) {
+        Timber.v("doSmartStandByForPkgIfNeed: %s", pkg);
+        if (!smartStandByEnabled) {
+            Timber.v("doSmartStandByForPkgIfNeed, smartStandByEnabled is false");
+            return;
+        }
+        if (!isPkgSmartStandByEnabled(pkg)) {
+            Timber.v("doSmartStandByForPkgIfNeed, isPkgSmartStandByEnabled is false");
+            return;
+        }
+
+        Timber.d("doSmartStandByForPkg: %s", pkg);
+        idlePackage(pkg);
     }
 
     private void enforceCallingPermissions() {

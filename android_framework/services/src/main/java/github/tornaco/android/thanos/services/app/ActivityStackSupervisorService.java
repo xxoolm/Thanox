@@ -188,15 +188,12 @@ public class ActivityStackSupervisorService extends SystemService implements IAc
         Timber.d("reportActivityLaunchingInternal: %s %s", intent, reason);
 
         String pkg = PkgUtils.packageNameOf(intent);
-        boolean changed = !ObjectsUtils.equals(currentPresentPkgName.get(), pkg);
+        String last = currentPresentPkgName.get();
+        boolean changed = !ObjectsUtils.equals(last, pkg);
         currentPresentPkgName.set(pkg);
 
         if (changed) {
-            // Broadcast.
-            Intent changedIntent = new Intent(T.Actions.ACTION_FRONT_PKG_CHANGED);
-            changedIntent.putExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE, currentPresentPkgName.get());
-            ThanosEvent event = new ThanosEvent(changedIntent);
-            EventBus.getInstance().publishEventToSubscribersAsync(event);
+            onFrontPackageChangedInternal(last, pkg);
         }
     }
 
@@ -322,6 +319,16 @@ public class ActivityStackSupervisorService extends SystemService implements IAc
     @Logging
     private void onRequestRuntimePermissions(String[] permissions) {
         Timber.d("onRequestRuntimePermissions: %s", Arrays.toString(permissions));
+    }
+
+    private void onFrontPackageChangedInternal(String from, String to) {
+        Timber.d("onFrontPackageChangedInternal: %s %s", from, to);
+        // Broadcast.
+        Intent changedIntent = new Intent(T.Actions.ACTION_FRONT_PKG_CHANGED);
+        changedIntent.putExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO, to);
+        changedIntent.putExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_FROM, from);
+        ThanosEvent event = new ThanosEvent(changedIntent);
+        EventBus.getInstance().publishEventToSubscribersAsync(event);
     }
 
     @Builder

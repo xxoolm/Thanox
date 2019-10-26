@@ -56,8 +56,8 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     private val frontEventSubscriber = object : IEventSubscriber.Stub() {
         override fun onEvent(e: ThanosEvent) {
             val intent = e.intent
-            val pkg = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE)
-            onFrontPkgChanged(pkg)
+            val to = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO)
+            onFrontPkgChanged(to)
         }
     }
 
