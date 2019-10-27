@@ -1110,11 +1110,11 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     private void onScreenOff() {
         Timber.d("Handle screen off.");
 
+        // Check smart standby apps before clean up.
+        doSmartStandByForEnabledPkgsIfNeed("onScreenOff.");
+
         if (bgRestrictEnabled) {
-            cleanUpBgTasks(true, bgTaskCleanUpDelayMills, () -> {
-                // Check smart standby apps after clean up complete.
-                doSmartStandByForEnabledPkgsIfNeed("onScreenOff & cleanUpBgTasks complete.");
-            });
+            cleanUpBgTasks(true, bgTaskCleanUpDelayMills);
         }
     }
 
