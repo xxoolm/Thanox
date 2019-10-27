@@ -1111,11 +1111,11 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         Timber.d("Handle screen off.");
 
         if (bgRestrictEnabled) {
-            cleanUpBgTasks(true, bgTaskCleanUpDelayMills);
+            cleanUpBgTasks(true, bgTaskCleanUpDelayMills, () -> {
+                // Check smart standby apps after clean up complete.
+                doSmartStandByForEnabledPkgsIfNeed("onScreenOff & cleanUpBgTasks complete.");
+            });
         }
-
-        // Check smart standby apps.
-        doSmartStandByForEnabledPkgsIfNeed("onScreenOff");
     }
 
     private void onScreenOn() {
@@ -1125,6 +1125,11 @@ public class ActivityManagerService extends SystemService implements IActivityMa
 
     @ExecuteBySystemHandler
     private void cleanUpBgTasks(boolean onlyWhenIsNotInteractive, long delay) {
+        cleanUpBgTasks(onlyWhenIsNotInteractive, delay, null);
+    }
+
+    @ExecuteBySystemHandler
+    private void cleanUpBgTasks(boolean onlyWhenIsNotInteractive, long delay, Runnable onComplete) {
         String[] runningPkgs = getRunningAppPackages();
         Timber.d("Cleaning up background tasks: %s", Arrays.toString(runningPkgs));
 
@@ -1145,6 +1150,9 @@ public class ActivityManagerService extends SystemService implements IActivityMa
                 }, Rxs.ON_ERROR_LOGGING, () -> {
                     Timber.d("Clean up background tasks complete");
                     showBgTasksCleanCompleteToast();
+                    if (onComplete != null) {
+                        onComplete.run();
+                    }
                 }));
     }
 
@@ -1278,7 +1286,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
 
     @ExecuteBySystemHandler
     private void doSmartStandByForPkgIfNeed(String pkg) {
-        Timber.v("doSmartStandByForPkgIfNeed: %s", pkg);
+        Timber.v("Maybe, doSmartStandByForPkgIfNeed: %s", pkg);
         if (!smartStandByEnabled) {
             Timber.v("doSmartStandByForPkgIfNeed, smartStandByEnabled is false");
             return;
@@ -1287,12 +1295,16 @@ public class ActivityManagerService extends SystemService implements IActivityMa
             Timber.v("doSmartStandByForPkgIfNeed, isPkgSmartStandByEnabled is false");
             return;
         }
+        if (!isPackageRunning(pkg)) {
+            Timber.v("doSmartStandByForPkgIfNeed, isPackageRunning is false");
+            return;
+        }
         if (isPackageIdle(pkg)) {
             Timber.v("doSmartStandByForPkgIfNeed, isPackageIdle is true");
             return;
         }
 
-        Timber.d("doSmartStandByForPkg: %s", pkg);
+        Timber.d("Now, doSmartStandByForPkg: %s", pkg);
         idlePackage(pkg);
     }
 
