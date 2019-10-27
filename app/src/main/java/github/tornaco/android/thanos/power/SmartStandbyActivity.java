@@ -1,6 +1,8 @@
 package github.tornaco.android.thanos.power;
 
 import android.content.Context;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -85,6 +87,19 @@ public class SmartStandbyActivity extends CommonFuncToggleAppListFilterActivity 
         };
     }
 
+    @Override
+    protected void onInflateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.smart_standby_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_show_feature_desc) {
+            showSmartStandByFeatureDescDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void showPlatformAppIdleEnableDialogIfMissingPlatformSupport() {
         boolean isPlatformAppIdleEnabled = ThanosManager.from(getApplicationContext())
                 .isServiceInstalled() && ThanosManager.from(getApplicationContext())
@@ -98,6 +113,17 @@ public class SmartStandbyActivity extends CommonFuncToggleAppListFilterActivity 
         new AlertDialog.Builder(SmartStandbyActivity.this)
                 .setTitle(R.string.dialog_title_smart_app_standby_need_enable_platform_app_idle)
                 .setMessage(R.string.dialog_message_smart_app_standby_need_enable_platform_app_idle)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                    // Noop.
+                })
+                .show();
+    }
+
+    private void showSmartStandByFeatureDescDialog() {
+        new AlertDialog.Builder(SmartStandbyActivity.this)
+                .setTitle(R.string.feature_title_smart_app_standby)
+                .setMessage(R.string.feature_desc_smart_app_standby)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
                     // Noop.

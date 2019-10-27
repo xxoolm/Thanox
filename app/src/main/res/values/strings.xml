@@ -77,9 +77,17 @@
     <string name="feature_title_component_replacement">移花接木</string>
     <string name="feature_title_smart_app_standby">智能休眠</string>
     <string name="feature_summary_smart_app_standby">未充电时，应用回到后台自动休眠</string>
+    <string name="feature_desc_smart_app_standby">
+        1. 应用回到后台会被自动休眠。\n
+        2. 设置了智能休眠的应用将被限制自动启动。\n
+        3. 智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\n
+        4. 在系统电池优化白名单中的应用将不会被休眠。\n
+        5. 充电时将不会休眠应用。
+    </string>
 
     <string name="dialog_title_smart_app_standby_need_enable_platform_app_idle">开启自适应电池</string>
-    <string name="dialog_message_smart_app_standby_need_enable_platform_app_idle">智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\nThanox当前无法准确判断你的系统是否支持并开启了该选项。
+    <string name="dialog_message_smart_app_standby_need_enable_platform_app_idle">
+        智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\n\nThanox当前无法准确判断你的系统是否支持并开启了该选项。
     </string>
 
     <string name="feature_title_data_cheat">隐匿</string>
@@ -156,4 +164,6 @@
     <string name="message_app_notice">
         Thanox对于新手甚至老鸟都及其危险，请做好启用之后无法开机的准备，启用之前请务必做好数据备份。\n\n测试版本建议打开Thanox设置，开启日志，如果发现了崩溃重启等异常问题，请将data/system/thanos/logging下的日志反馈
     </string>
+
+    <string name="menu_title_feature_desc">功能介绍</string>
 </resources>

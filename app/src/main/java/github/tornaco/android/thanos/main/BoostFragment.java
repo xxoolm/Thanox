@@ -34,12 +34,7 @@ public class BoostFragment extends NavFragment {
         boostBinding.features.setLayoutManager(new GridLayoutManager(getContext(), 1));
         boostBinding.features.setAdapter(new DashboardAdapter());
         boostBinding.statusCard.setOnClickListener(view -> ProcessManageActivity.start(getContext()));
-        boostBinding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navViewModel.cleanUpBackgroundTasks();
-            }
-        });
+        boostBinding.fab.setOnClickListener(view -> navViewModel.cleanUpBackgroundTasks());
     }
 
     @Override
