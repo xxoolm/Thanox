@@ -107,13 +107,15 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     private final IEventSubscriber thanosEventsSubscriber = new IEventSubscriber.Stub() {
         @Override
         public void onEvent(ThanosEvent e) {
-            if (ObjectsUtils.equals(Intent.ACTION_SCREEN_OFF, e.getIntent().getAction())) {
-                onScreenOff();
-            }
+            executeInternal(() -> {
+                if (ObjectsUtils.equals(Intent.ACTION_SCREEN_OFF, e.getIntent().getAction())) {
+                    onScreenOff();
+                }
 
-            if (ObjectsUtils.equals(Intent.ACTION_SCREEN_ON, e.getIntent().getAction())) {
-                onScreenOn();
-            }
+                if (ObjectsUtils.equals(Intent.ACTION_SCREEN_ON, e.getIntent().getAction())) {
+                    onScreenOn();
+                }
+            });
         }
     };
 
@@ -1104,11 +1106,16 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         return Noop.notSupported();
     }
 
+    @ExecuteBySystemHandler
     private void onScreenOff() {
         Timber.d("Handle screen off.");
+
         if (bgRestrictEnabled) {
             cleanUpBgTasks(true, bgTaskCleanUpDelayMills);
         }
+
+        // Check smart standby apps.
+        doSmartStandByForEnabledPkgsIfNeed("onScreenOff");
     }
 
     private void onScreenOn() {
@@ -1235,12 +1242,41 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         }
     }
 
+    @ExecuteBySystemHandler
     private void onFrontPackageChangedInternal(String from, String to) {
         Timber.d("onFrontPackageChangedInternal: %s %s", from, to);
-        // Check smart standby.
+        // Check smart standby for this pkg.
         doSmartStandByForPkgIfNeed(from);
+        // Check other apps.
+        doSmartStandByForEnabledPkgsIfNeed("onFrontPackageChangedInternal");
     }
 
+    @ExecuteBySystemHandler
+    private void doSmartStandByForEnabledPkgsIfNeed(String reason) {
+        Timber.d("doSmartStandByForEnabledPkgsIfNeed, reason: %s", reason);
+        if (!smartStandByEnabled) {
+            Timber.v("doSmartStandByForEnabledPkgsIfNeed, smartStandByEnabled is false");
+            return;
+        }
+
+        if (smartStandByApps.size() > 0) {
+            String[] enabledPkgs = smartStandByApps.getAll().toArray(new String[0]);
+            doSmartStandByForPkgsIfNeed(enabledPkgs);
+        }
+    }
+
+    @ExecuteBySystemHandler
+    private void doSmartStandByForPkgsIfNeed(String... pkgs) {
+        if (!smartStandByEnabled) {
+            Timber.v("doSmartStandByForPkgsIfNeed, smartStandByEnabled is false");
+            return;
+        }
+        for (String pkg : pkgs) {
+            doSmartStandByForPkgIfNeed(pkg);
+        }
+    }
+
+    @ExecuteBySystemHandler
     private void doSmartStandByForPkgIfNeed(String pkg) {
         Timber.v("doSmartStandByForPkgIfNeed: %s", pkg);
         if (!smartStandByEnabled) {
@@ -1249,6 +1285,10 @@ public class ActivityManagerService extends SystemService implements IActivityMa
         }
         if (!isPkgSmartStandByEnabled(pkg)) {
             Timber.v("doSmartStandByForPkgIfNeed, isPkgSmartStandByEnabled is false");
+            return;
+        }
+        if (isPackageIdle(pkg)) {
+            Timber.v("doSmartStandByForPkgIfNeed, isPackageIdle is true");
             return;
         }
 
