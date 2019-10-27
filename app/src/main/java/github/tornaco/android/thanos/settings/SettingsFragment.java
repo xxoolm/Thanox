@@ -114,6 +114,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         findPreference(getString(R.string.key_build_info_app))
                 .setOnPreferenceClickListener(preference -> {
                     PlatLogoActivity.start(getActivity());
+                    Toast.makeText(getActivity(), "Thanox is build against Android 10", Toast.LENGTH_LONG).show();
                     return true;
                 });
         if (thanos.isServiceInstalled()) {

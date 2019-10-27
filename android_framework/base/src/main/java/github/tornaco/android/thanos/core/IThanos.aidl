@@ -14,6 +14,7 @@ import github.tornaco.android.thanos.core.audio.IAudioManager;
 import github.tornaco.android.thanos.core.profile.IProfileManager;
 import github.tornaco.android.thanos.core.backup.IBackupAgent;
 import github.tornaco.android.thanos.core.wm.IWindowManager;
+import github.tornaco.android.thanos.core.power.IPowerManager;
 
 import android.content.IntentFilter;
 
@@ -32,6 +33,7 @@ interface IThanos {
     IProfileManager getProfileManager();
     IBackupAgent getBackupAgent();
     IWindowManager getWindowManager();
+    IPowerManager getPowerManager();
 
     void registerEventSubscriber(in IntentFilter filter, in IEventSubscriber subscriber);
     void unRegisterEventSubscriber(in IEventSubscriber subscriber);

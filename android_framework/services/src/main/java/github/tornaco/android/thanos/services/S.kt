@@ -8,6 +8,7 @@ import github.tornaco.android.thanos.services.n.NotificationManagerService
 import github.tornaco.android.thanos.services.os.ServiceManagerService
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService
 import github.tornaco.android.thanos.services.pm.PkgManagerService
+import github.tornaco.android.thanos.services.power.PowerService
 import github.tornaco.android.thanos.services.profile.ProfileService
 import github.tornaco.android.thanos.services.push.PushManagerService
 import github.tornaco.android.thanos.services.secure.PrivacyService
@@ -40,4 +41,6 @@ interface S {
     val windowManagerService: WindowManagerService
 
     val profileService: ProfileService
+
+    val powerService: PowerService
 }

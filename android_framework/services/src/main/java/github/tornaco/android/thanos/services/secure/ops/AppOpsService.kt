@@ -15,16 +15,15 @@ import github.tornaco.android.thanos.core.profile.ProfileManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
 import github.tornaco.android.thanos.core.util.DevNull
 import github.tornaco.android.thanos.core.util.Noop
-import github.tornaco.android.thanos.core.util.PkgUtils
 import github.tornaco.android.thanos.core.util.Timber
 import github.tornaco.android.thanos.services.S
-import github.tornaco.android.thanos.services.SystemService
+import github.tornaco.android.thanos.services.ThanoxSystemService
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
 import lombok.SneakyThrows
 import java.util.*
 import kotlin.collections.HashSet
 
-class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
+class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
     private var androidService: com.android.internal.app.IAppOpsService? = AndroidAppOpsDefault()
 
@@ -284,23 +283,6 @@ class AppOpsService(private val s: S) : SystemService(), IAppOpsService {
 
     override fun isPkgOpRemindEnable(pkg: String?): Boolean {
         return opRemindPkgRepo.has(pkg)
-    }
-
-    private fun enforceCallingPermissions() {
-        if (Process.myPid() == Binder.getCallingPid()) {
-            return
-        }
-
-        val callingUid = Binder.getCallingUid()
-        if (PkgUtils.isSystemOrPhoneOrShell(callingUid)) {
-            return
-        }
-        val thanosAppUid = s.pkgManagerService.thanosAppUid
-        if (thanosAppUid == callingUid) {
-            return
-        }
-
-        throw SecurityException("Uid of $callingUid it not allowed to interact with Thanos server")
     }
 
     override fun asBinder(): IBinder {

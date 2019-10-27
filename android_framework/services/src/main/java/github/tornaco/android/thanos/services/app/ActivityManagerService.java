@@ -33,7 +33,6 @@ import github.tornaco.android.thanos.core.persist.i.SetRepo;
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
 import github.tornaco.android.thanos.core.util.*;
-import github.tornaco.android.thanos.services.SystemService;
 import github.tornaco.android.thanos.services.*;
 import github.tornaco.android.thanos.services.apihint.Beta;
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler;
@@ -66,12 +65,11 @@ import static github.tornaco.android.thanos.core.T.Actions.ACTION_RUNNING_PROCES
 import static github.tornaco.android.thanos.core.T.Tags.N_TAG_BG_RESTRICT_APPS_CHANGED;
 import static github.tornaco.android.thanos.core.compat.NotificationCompat.VISIBILITY_PUBLIC;
 
-public class ActivityManagerService extends SystemService implements IActivityManager {
+public class ActivityManagerService extends ThanoxSystemService implements IActivityManager {
 
     private static ThreadPriorityBooster sThreadPriorityBooster
             = new ThreadPriorityBooster(Process.THREAD_PRIORITY_FOREGROUND, Process.THREAD_GROUP_RT_APP);
 
-    private final S s;
     private final StartRecorder startRecorder = new StartRecorder();
 
     private final ProcessStartCheckHelper processStartCheckHelper = new ProcessStartCheckHelper();
@@ -142,7 +140,7 @@ public class ActivityManagerService extends SystemService implements IActivityMa
     };
 
     public ActivityManagerService(S s) {
-        this.s = s;
+        super(s);
         this.taskMapping = new TaskMapping();
         this.notificationHelper = new NotificationHelper();
     }
@@ -1306,22 +1304,5 @@ public class ActivityManagerService extends SystemService implements IActivityMa
 
         Timber.d("Now, doSmartStandByForPkg: %s", pkg);
         idlePackage(pkg);
-    }
-
-    private void enforceCallingPermissions() {
-        if (Process.myPid() == Binder.getCallingPid()) {
-            return;
-        }
-
-        int callingUid = Binder.getCallingUid();
-        if (PkgUtils.isSystemOrPhoneOrShell(callingUid)) {
-            return;
-        }
-        int thanosAppUid = s.getPkgManagerService().getThanosAppUid();
-        if (thanosAppUid == callingUid) {
-            return;
-        }
-
-        throw new SecurityException("Uid of $callingUid it not allowed to interact with Thanos server");
     }
 }

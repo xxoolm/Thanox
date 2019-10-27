@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.Process;
 import android.os.UserHandle;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.T;
@@ -12,11 +11,10 @@ import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.pm.IPkgManager;
 import github.tornaco.android.thanos.core.util.FileUtils;
 import github.tornaco.android.thanos.core.util.Noop;
-import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BackgroundThread;
 import github.tornaco.android.thanos.services.S;
-import github.tornaco.android.thanos.services.SystemService;
+import github.tornaco.android.thanos.services.ThanoxSystemService;
 import lombok.Getter;
 
 import java.io.File;
@@ -24,9 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PkgManagerService extends SystemService implements IPkgManager {
-    private final S s;
-
+public class PkgManagerService extends ThanoxSystemService implements IPkgManager {
     @Getter
     private final PkgCache pkgCache = new PkgCache();
 
@@ -55,7 +51,7 @@ public class PkgManagerService extends SystemService implements IPkgManager {
     };
 
     public PkgManagerService(S s) {
-        this.s = s;
+        super(s);
     }
 
     @Override
@@ -197,23 +193,6 @@ public class PkgManagerService extends SystemService implements IPkgManager {
             FileUtils.deleteDirQuiet(dir);
             Timber.w("onThanoxAppPackageRemoved, thanox data has been cleaned.");
         });
-    }
-
-    private void enforceCallingPermissions() {
-        if (Process.myPid() == Binder.getCallingPid()) {
-            return;
-        }
-
-        int callingUid = Binder.getCallingUid();
-        if (PkgUtils.isSystemOrPhoneOrShell(callingUid)) {
-            return;
-        }
-        int thanosAppUid = s.getPkgManagerService().getThanosAppUid();
-        if (thanosAppUid == callingUid) {
-            return;
-        }
-
-        throw new SecurityException("Uid of $callingUid it not allowed to interact with Thanos server");
     }
 
     @Override

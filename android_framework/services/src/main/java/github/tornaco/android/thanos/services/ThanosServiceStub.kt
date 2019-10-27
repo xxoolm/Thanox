@@ -12,6 +12,7 @@ import github.tornaco.android.thanos.core.backup.IBackupAgent
 import github.tornaco.android.thanos.core.n.INotificationManager
 import github.tornaco.android.thanos.core.os.IServiceManager
 import github.tornaco.android.thanos.core.pm.IPkgManager
+import github.tornaco.android.thanos.core.power.IPowerManager
 import github.tornaco.android.thanos.core.pref.IPrefManager
 import github.tornaco.android.thanos.core.profile.IProfileManager
 import github.tornaco.android.thanos.core.push.IPushManager
@@ -31,6 +32,8 @@ import github.tornaco.android.thanos.services.perf.PrefManagerStub
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService
 import github.tornaco.android.thanos.services.pm.PkgManagerService
 import github.tornaco.android.thanos.services.pm.PkgManagerStub
+import github.tornaco.android.thanos.services.power.PowerService
+import github.tornaco.android.thanos.services.power.PowerServiceStub
 import github.tornaco.android.thanos.services.profile.ProfileService
 import github.tornaco.android.thanos.services.profile.ProfileServiceStub
 import github.tornaco.android.thanos.services.push.PushManagerService
@@ -55,7 +58,8 @@ internal class ThanosServiceStub(
     private val audio: AudioService,
     private val backup: BackupAgentService,
     private val window: WindowManagerService,
-    private val profile: ProfileService
+    private val profile: ProfileService,
+    private val power: PowerService
 ) : IThanos.Stub() {
 
     override fun getProfileManager(): IProfileManager {
@@ -88,6 +92,10 @@ internal class ThanosServiceStub(
 
     override fun getPrivacyManager(): IPrivacyManager {
         return PrivacyManagerStub(priv)
+    }
+
+    override fun getPowerManager(): IPowerManager {
+        return PowerServiceStub(power)
     }
 
     override fun getPushManager(): IPushManager {

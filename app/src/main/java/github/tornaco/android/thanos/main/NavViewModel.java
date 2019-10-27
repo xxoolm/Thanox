@@ -93,7 +93,8 @@ public class NavViewModel extends AndroidViewModel {
     }
 
     void reboot() {
-
+        ThanosManager.from(getApplication())
+                .ifServiceInstalled(thanosManager -> thanosManager.getPowerManager().reboot());
     }
 
     private void loadState() {
