@@ -102,6 +102,9 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     private Set<String> startBlockCallerWhiteList = new HashSet<>();
 
+    // Last recent used 5 apps.
+    private final LinkedList<AppLaunchRecord> appLaunchRecords = new LinkedList<>();
+
     private final IEventSubscriber thanosEventsSubscriber = new IEventSubscriber.Stub() {
         @Override
         public void onEvent(ThanosEvent e) {
@@ -945,6 +948,11 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         return smartStandByApps.has(pkgName);
     }
 
+    @Override
+    public String[] getLastRecentUsedPackages(int count) {
+        return new String[0];
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
     @ExecuteBySystemHandler
@@ -1251,6 +1259,9 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     @ExecuteBySystemHandler
     private void onFrontPackageChangedInternal(String from, String to) {
         Timber.d("onFrontPackageChangedInternal: %s %s", from, to);
+        // Record launch.
+        appLaunchRecords.addFirst(new AppLaunchRecord(to, System.currentTimeMillis()));
+
         // Check smart standby for this pkg.
         doSmartStandByForPkgIfNeed(from);
         // Check other apps.

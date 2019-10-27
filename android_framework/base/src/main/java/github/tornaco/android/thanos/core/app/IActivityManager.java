@@ -216,6 +216,10 @@ public interface IActivityManager extends android.os.IInterface
     {
       return false;
     }
+    @Override public java.lang.String[] getLastRecentUsedPackages(int count) throws android.os.RemoteException
+    {
+      return null;
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -839,6 +843,16 @@ public interface IActivityManager extends android.os.IInterface
           boolean _result = this.isPkgSmartStandByEnabled(_arg0);
           reply.writeNoException();
           reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_getLastRecentUsedPackages:
+        {
+          data.enforceInterface(descriptor);
+          int _arg0;
+          _arg0 = data.readInt();
+          java.lang.String[] _result = this.getLastRecentUsedPackages(_arg0);
+          reply.writeNoException();
+          reply.writeStringArray(_result);
           return true;
         }
         default:
@@ -2040,6 +2054,27 @@ public interface IActivityManager extends android.os.IInterface
         }
         return _result;
       }
+      @Override public java.lang.String[] getLastRecentUsedPackages(int count) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        java.lang.String[] _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeInt(count);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getLastRecentUsedPackages, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getLastRecentUsedPackages(count);
+          }
+          _reply.readException();
+          _result = _reply.createStringArray();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       public static github.tornaco.android.thanos.core.app.IActivityManager sDefaultImpl;
     }
     static final int TRANSACTION_getCurrentFrontApp = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -2096,6 +2131,7 @@ public interface IActivityManager extends android.os.IInterface
     static final int TRANSACTION_setSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 51);
     static final int TRANSACTION_setPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 52);
     static final int TRANSACTION_isPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 53);
+    static final int TRANSACTION_getLastRecentUsedPackages = (android.os.IBinder.FIRST_CALL_TRANSACTION + 54);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.IActivityManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -2175,4 +2211,5 @@ public interface IActivityManager extends android.os.IInterface
   public void setSmartStandByEnabled(boolean enable) throws android.os.RemoteException;
   public void setPkgSmartStandByEnabled(java.lang.String pkgName, boolean enable) throws android.os.RemoteException;
   public boolean isPkgSmartStandByEnabled(java.lang.String pkgName) throws android.os.RemoteException;
+  public java.lang.String[] getLastRecentUsedPackages(int count) throws android.os.RemoteException;
 }

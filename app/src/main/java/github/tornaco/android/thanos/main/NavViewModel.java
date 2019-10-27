@@ -332,12 +332,14 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_push_delegate))
                                 .category(resources.getString(R.string.feature_category_notifiation))
                                 .themeColor(R.color.md_purple_400)
+                                .disabled(true)
                                 .onClickListener(view -> {
                                 })
                                 .build(),
                         Tile.builder()
                                 .iconRes(R.drawable.ic_notification_badge_fill)
                                 .title(resources.getString(R.string.feature_title_light_on_notifiation))
+                                .category(resources.getString(R.string.feature_category_notifiation))
                                 .themeColor(R.color.md_blue_grey_500)
                                 .onClickListener(view -> ScreenOnNotificationActivity.start(getApplication()))
                                 .atEndOfThisCategory(true)
@@ -357,9 +359,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_smart_app_standby))
                                 .summary(resources.getString(R.string.feature_summary_smart_app_standby))
                                 .themeColor(R.color.md_amber_500)
-                                .onClickListener(view -> {
-                                    SmartStandbyActivity.start(getApplication());
-                                })
+                                .onClickListener(view -> SmartStandbyActivity.start(getApplication()))
                                 .build()
                 )
                 .filter(tile -> !tile.isDisabled())

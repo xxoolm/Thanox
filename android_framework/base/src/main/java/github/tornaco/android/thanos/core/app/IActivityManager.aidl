@@ -90,4 +90,6 @@ interface IActivityManager {
     void setSmartStandByEnabled(boolean enable);
     void setPkgSmartStandByEnabled(String pkgName, boolean enable);
     boolean isPkgSmartStandByEnabled(String pkgName);
+
+    String[] getLastRecentUsedPackages(int count);
 }
