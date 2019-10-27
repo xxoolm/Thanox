@@ -17,6 +17,7 @@ public class ProcessModel implements Comparable<ProcessModel> {
     private AppInfo appInfo;
     private long size;
     private String sizeStr;
+    private String badge1, badge2;
 
     @Override
     public int compareTo(ProcessModel processModel) {

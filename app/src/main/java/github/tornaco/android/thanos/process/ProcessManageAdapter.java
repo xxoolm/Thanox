@@ -33,6 +33,8 @@ public class ProcessManageAdapter extends RecyclerView.Adapter<ProcessManageAdap
         ProcessModel model = processModels.get(position);
         holder.binding.setProcess(model);
         holder.binding.setIsLastOne(false);
+        holder.binding.setBadge1(model.getBadge1());
+        holder.binding.setBadge2(model.getBadge2());
         holder.binding.setListener(view -> listener.onAppItemClick(model.getAppInfo()));
         holder.binding.executePendingBindings();
     }

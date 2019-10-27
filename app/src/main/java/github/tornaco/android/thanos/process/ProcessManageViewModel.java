@@ -9,12 +9,13 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableList;
 import androidx.lifecycle.AndroidViewModel;
+import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.common.CategoryIndex;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
-import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.core.util.Rxs;
+import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.java.common.util.CollectionUtils;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
@@ -47,7 +48,13 @@ public class ProcessManageViewModel extends AndroidViewModel {
     }
 
     private void loadProcess() {
+        if (!thanos.isServiceInstalled()) {
+            return;
+        }
+
         isDataLoading.set(true);
+        String idleBadge = getApplication().getString(R.string.badge_app_idle);
+
         disposables.add(Single.create(
                 (SingleOnSubscribe<List<String>>) emitter -> {
                     try {
@@ -91,7 +98,13 @@ public class ProcessManageViewModel extends AndroidViewModel {
                             String sizeStr = Formatter.formatShortFileSize(
                                     getApplication().getApplicationContext(), size);
 
-                            ProcessModel processModel = new ProcessModel(processRecords, appInfo, size, sizeStr);
+                            ProcessModel processModel = new ProcessModel(
+                                    processRecords,
+                                    appInfo,
+                                    size,
+                                    sizeStr,
+                                    null,
+                                    (thanos.getActivityManager().isPackageIdle(appInfo.getPkgName()) ? idleBadge : null));
                             processModels.add(processModel);
                         } catch (RemoteException e) {
                             Timber.e(e);

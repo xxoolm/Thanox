@@ -16,7 +16,13 @@
                 name="listener"
                 type="android.view.View.OnClickListener"/>
 
+        <variable
+                name="badge1"
+                type="String"/>
 
+        <variable
+                name="badge2"
+                type="String"/>
     </data>
 
     <RelativeLayout
@@ -52,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fadingEdge="horizontal"
-                    tools:text="@string/app_name"
+                    tools:text="Long title long 123445"
                     android:text="@{process.appInfo.appLabel}"
                     android:maxLength="24"
                     android:textAppearance="@style/TextAppearance.TileTitle"/>
@@ -70,6 +76,39 @@
                     android:maxLength="24"
                     android:visibility="visible"
                     android:textAppearance="@style/TextAppearance.TileSubTitle"/>
+
+            <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/badge1"
+                    android:layout_toStartOf="@id/badge2"
+                    android:layout_marginStart="@dimen/common_view_margin_default"
+                    tools:text="Active"
+                    tools:visibility="visible"
+                    android:layout_centerVertical="true"
+                    android:textSize="@dimen/list_item_main_text_size_small"
+                    android:text="@{badge1}"
+                    android:singleLine="true"
+                    android:visibility="@{badge1 == null ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/md_white"
+                    android:background="?colorAccent"/>
+
+
+            <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/badge2"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/common_view_margin_default"
+                    tools:text="Active"
+                    tools:visibility="visible"
+                    android:layout_centerVertical="true"
+                    android:textSize="@dimen/list_item_main_text_size_small"
+                    android:text="@{badge2}"
+                    android:singleLine="true"
+                    android:visibility="@{badge2 == null ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/md_white"
+                    android:background="@color/md_blue_grey_200"/>
 
         </RelativeLayout>
 
