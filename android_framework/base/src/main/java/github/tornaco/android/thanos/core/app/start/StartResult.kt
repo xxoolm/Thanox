@@ -58,6 +58,8 @@ class StartResult : Parcelable {
         val BY_PASS_SMS_APP = StartResult(true, "BY_PASS_SMS_APP")
         @JvmField
         val BLOCKED_IN_BLOCK_LIST = StartResult(false, "BLOCKED_IN_BLOCK_LIST")
+        @JvmField
+        val BLOCKED_IN_SMART_STAND_BY_LIST = StartResult(false, "BLOCKED_IN_SMART_STAND_BY_LIST")
 
         @JvmField
         val CREATOR: Parcelable.Creator<StartResult> = object : Parcelable.Creator<StartResult> {

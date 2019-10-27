@@ -79,10 +79,9 @@
     <string name="feature_summary_smart_app_standby">未充电时，应用回到后台自动休眠</string>
     <string name="feature_desc_smart_app_standby">
         1. 应用回到后台会被自动休眠。\n
-        2. 设置了智能休眠的应用将被限制自动启动。\n
-        3. 智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\n
-        4. 在系统电池优化白名单中的应用将不会被休眠。\n
-        5. 充电时将不会休眠应用。
+        2. 智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\n
+        3. 在系统电池优化白名单中的应用将不会被休眠。\n
+        4. 充电时将不会休眠应用。
     </string>
 
     <string name="dialog_title_smart_app_standby_need_enable_platform_app_idle">开启自适应电池</string>
