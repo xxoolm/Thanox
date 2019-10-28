@@ -24,6 +24,52 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppThemeRed" parent="Theme.MaterialComponents">
+        <item name="colorAccent">@color/md_red_400</item>
+        <item name="colorAccentDark">@color/md_red_400</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="menuIconTint">@color/md_red_400</item>
+        <item name="switchBarTheme">@style/SwitchBarTheme</item>
+        <item name="appbarPopupTheme">@style/PopupOverlay</item>
+        <item name="appbarTheme">@style/AppBarOverlay</item>
+        <item name="toolbarTheme">@style/ToolbarThemeCommon</item>
+        <item name="cardsBackgroundColor">@color/primary_light</item>
+        <item name="cardsBackgroundSecondaryColor">@color/primary</item>
+        <item name="android:windowBackground">@color/primary_dark</item>
+        <item name="colorBackgroundFloating">@color/primary</item>
+        <item name="android:itemBackground">@color/primary_dark</item>
+        <item name="switchPreferenceCompatStyle">@style/SwitchPrefTheme</item>
+    </style>
+
+    <style name="AppThemeRed.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppThemeAmber" parent="Theme.MaterialComponents">
+        <item name="colorAccent">@color/md_amber_900</item>
+        <item name="colorAccentDark">@color/md_amber_900</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="menuIconTint">@color/md_amber_900</item>
+        <item name="switchBarTheme">@style/SwitchBarTheme</item>
+        <item name="appbarPopupTheme">@style/PopupOverlay</item>
+        <item name="appbarTheme">@style/AppBarOverlay</item>
+        <item name="toolbarTheme">@style/ToolbarThemeCommon</item>
+        <item name="cardsBackgroundColor">@color/primary_light</item>
+        <item name="cardsBackgroundSecondaryColor">@color/primary</item>
+        <item name="android:windowBackground">@color/primary_dark</item>
+        <item name="colorBackgroundFloating">@color/primary</item>
+        <item name="android:itemBackground">@color/primary_dark</item>
+        <item name="switchPreferenceCompatStyle">@style/SwitchPrefTheme</item>
+    </style>
+
+    <style name="AppThemeAmber.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="AppThemeLight" parent="Theme.MaterialComponents.Light">
         <item name="colorAccent">@color/md_blue_a700</item>
         <item name="colorAccentDark">@color/md_blue_a700</item>
@@ -151,6 +197,8 @@
         <item>Light amber</item>
         <item>Light black</item>
         <item>Dark</item>
+        <item>DarkRed</item>
+        <item>DarkAmber</item>
     </string-array>
 
     <string-array name="themes_value">
@@ -160,5 +208,7 @@
         <item>LightAmber</item>
         <item>LightBlack</item>
         <item>Dark</item>
+        <item>DarkRed</item>
+        <item>DarkAmber</item>
     </string-array>
 </resources>

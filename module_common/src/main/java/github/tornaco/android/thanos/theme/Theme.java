@@ -12,7 +12,9 @@ public enum Theme {
     LightAmber(R.style.AppThemeLightAmber_NoActionBar),
     LightBlack(R.style.AppThemeLightBlack_NoActionBar),
 
-    Dark(R.style.AppTheme_NoActionBar);
+    Dark(R.style.AppTheme_NoActionBar),
+    DarkAmber(R.style.AppThemeAmber_NoActionBar),
+    DarkRed(R.style.AppThemeRed_NoActionBar);
 
     @StyleRes
     public int themeRes;

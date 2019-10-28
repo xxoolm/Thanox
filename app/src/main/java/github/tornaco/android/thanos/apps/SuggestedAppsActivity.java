@@ -41,7 +41,7 @@ public class SuggestedAppsActivity extends ThemeActivity {
         }
 
         // List.
-        binding.apps.setLayoutManager(new GridLayoutManager(this, 3));
+        binding.apps.setLayoutManager(new GridLayoutManager(this, 4));
         binding.apps.setAdapter(new SuggestedAppsAdapter(new AppItemViewActionListener() {
             @Override
             public void onAppItemClick(AppInfo appInfo) {

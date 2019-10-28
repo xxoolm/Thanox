@@ -62,7 +62,7 @@ public class SuggestedAppsViewModel extends AndroidViewModel {
             return new ArrayList<>(0);
         }
         List<AppListModel> res = new ArrayList<>();
-        for (String pkg : thanosManager.getActivityManager().getLastRecentUsedPackages(12)) {
+        for (String pkg : thanosManager.getActivityManager().getLastRecentUsedPackages(20)) {
             AppInfo appInfo = thanosManager.getPkgManager().getAppInfo(pkg);
             if (appInfo != null) {
                 AppListModel model = new AppListModel(appInfo);

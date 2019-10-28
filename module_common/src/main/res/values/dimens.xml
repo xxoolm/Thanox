@@ -18,7 +18,8 @@
     <dimen name="app_details_app_icon_h">64dp</dimen>
 
     <dimen name="list_item_main_text_size_normal">16sp</dimen>
-    <dimen name="list_item_main_text_size_small">10sp</dimen>
+    <dimen name="list_item_main_text_size_ext_small">10sp</dimen>
+    <dimen name="list_item_main_text_size_small">12sp</dimen>
 
     <dimen name="common_list_item_height">64dp</dimen>
     <dimen name="common_grid_item_height">72dp</dimen>
