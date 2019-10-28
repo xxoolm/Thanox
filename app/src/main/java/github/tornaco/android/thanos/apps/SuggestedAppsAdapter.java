@@ -1,18 +1,20 @@
-package github.tornaco.android.thanos.common;
+package github.tornaco.android.thanos.apps;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import github.tornaco.android.thanos.module.common.databinding.ItemCommonAppBinding;
+import github.tornaco.android.thanos.common.AppItemViewClickListener;
+import github.tornaco.android.thanos.common.AppListModel;
+import github.tornaco.android.thanos.databinding.ItemSuggestedAppBinding;
 import github.tornaco.java.common.util.Consumer;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppListFilterAdapter.VH>
+public class SuggestedAppsAdapter extends RecyclerView.Adapter<SuggestedAppsAdapter.VH>
         implements Consumer<List<AppListModel>> {
 
     private final List<AppListModel> processModels = new ArrayList<>();
@@ -20,7 +22,7 @@ public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppLi
     @Nullable
     private final AppItemViewClickListener itemViewClickListener;
 
-    public CommonAppListFilterAdapter(
+    public SuggestedAppsAdapter(
             @Nullable AppItemViewClickListener itemViewClickListener) {
         this.itemViewClickListener = itemViewClickListener;
     }
@@ -28,17 +30,14 @@ public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppLi
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new VH(ItemCommonAppBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new VH(ItemSuggestedAppBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         AppListModel model = processModels.get(position);
         holder.binding.setApp(model.appInfo);
-        holder.binding.setIsLastOne(false);
         holder.binding.setListener(itemViewClickListener);
-        holder.binding.setBadge1(model.badge);
-        holder.binding.setBadge2(model.badge2);
         holder.binding.executePendingBindings();
     }
 
@@ -56,9 +55,9 @@ public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppLi
 
     @Getter
     static final class VH extends RecyclerView.ViewHolder {
-        private ItemCommonAppBinding binding;
+        private ItemSuggestedAppBinding binding;
 
-        VH(@NonNull ItemCommonAppBinding binding) {
+        VH(@NonNull ItemSuggestedAppBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

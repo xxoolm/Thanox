@@ -273,4 +273,9 @@ public class ActivityManager {
     public boolean isPkgSmartStandByEnabled(String pkgName) {
         return server.isPkgSmartStandByEnabled(pkgName);
     }
+
+    @SneakyThrows
+    public String[] getLastRecentUsedPackages(int count) {
+        return server.getLastRecentUsedPackages(count);
+    }
 }

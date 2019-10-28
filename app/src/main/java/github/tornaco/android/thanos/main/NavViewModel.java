@@ -12,6 +12,7 @@ import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.app.donate.DonateSettings;
 import github.tornaco.android.thanos.apps.AppsManageActivity;
+import github.tornaco.android.thanos.apps.SuggestedAppsActivity;
 import github.tornaco.android.thanos.core.T;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.util.Timber;
@@ -247,7 +248,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .summary(resources.getString(R.string.feature_summary_apps_manager))
                                 .category(resources.getString(R.string.feature_category_app_manage))
                                 .themeColor(R.color.md_pink_300)
-                                .onClickListener(view -> AppsManageActivity.start(getApplication()))
+                                .onClickListener(view -> SuggestedAppsActivity.start(getApplication()))
                                 .build()
                 )
                 .filter(tile -> !tile.isDisabled())

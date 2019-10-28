@@ -929,6 +929,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @Override
     public void setSmartStandByEnabled(boolean enable) {
+        enforceCallingPermissions();
         this.smartStandByEnabled = enable;
 
         PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
@@ -939,6 +940,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @Override
     public void setPkgSmartStandByEnabled(String pkgName, boolean enable) {
+        enforceCallingPermissions();
         if (enable) smartStandByApps.add(pkgName);
         else smartStandByApps.remove(pkgName);
     }
@@ -950,7 +952,12 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @Override
     public String[] getLastRecentUsedPackages(int count) {
-        return new String[0];
+        enforceCallingPermissions();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            if (i < appLaunchRecords.size()) list.add(appLaunchRecords.get(i).getPkg());
+        }
+        return list.toArray(new String[0]);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -1260,7 +1267,9 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     private void onFrontPackageChangedInternal(String from, String to) {
         Timber.d("onFrontPackageChangedInternal: %s %s", from, to);
         // Record launch.
-        appLaunchRecords.addFirst(new AppLaunchRecord(to, System.currentTimeMillis()));
+        AppLaunchRecord appLaunchRecord = new AppLaunchRecord(to, System.currentTimeMillis());
+        appLaunchRecords.remove(appLaunchRecord);
+        appLaunchRecords.addFirst(appLaunchRecord);
 
         // Check smart standby for this pkg.
         doSmartStandByForPkgIfNeed(from);
