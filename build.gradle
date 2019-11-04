@@ -24,6 +24,7 @@ task clean(type: Delete) {
 
 androidGitVersion {
     prefix 'v'
+    codeFormat = 'MMNNPPRRB'
 }
 
 ext {
