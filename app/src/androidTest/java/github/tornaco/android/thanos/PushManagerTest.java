@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.UUID;
+
 import static github.tornaco.android.thanos.core.app.ThanosManager.from;
 
 @RunWith(AndroidJUnit4.class)
@@ -31,6 +33,6 @@ public class PushManagerTest {
 
         pushManager.unRegisterChannel(PushChannel.MIPUSH);
 
-        pushManager.registerChannel(new PushChannel(new String[]{"Noop"}, "test:pc1"));
+        pushManager.registerChannel(new PushChannel(new String[]{"Noop"}, "test:pc1", UUID.randomUUID().toString()));
     }
 }
