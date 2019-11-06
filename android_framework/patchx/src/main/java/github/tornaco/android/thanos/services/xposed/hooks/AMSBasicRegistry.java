@@ -6,10 +6,15 @@ import android.app.IApplicationThread;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import java.util.List;
+import java.util.Set;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import github.tornaco.android.thanos.core.annotation.Nullable;
 import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
 import github.tornaco.android.thanos.core.util.OsUtils;
@@ -23,10 +28,15 @@ import io.reactivex.Completable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.AllArgsConstructor;
 
-import java.util.List;
-import java.util.Set;
-
-import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._21;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._22;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._23;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._24;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._25;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._26;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._27;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._28;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 
 @AllArgsConstructor
 @XposedHook(targetSdkVersion = {_21, _22, _23, _24, _25, _26, _27, _28, _29})
@@ -173,6 +183,21 @@ public class AMSBasicRegistry implements IXposedHook {
 
         static <T> AMSLruProcessListProxy<T> newProxy(List<T> orig) {
             return new AMSLruProcessListProxy<>(orig);
+        }
+
+        @Override
+        public T get(int i) {
+            return getSafety(i);
+        }
+
+        @Nullable
+        private T getSafety(int i) {
+            int size = size();
+            if (i >= size) {
+                Timber.e("Trying to get of index %s, but size is %s", i, size);
+                return null;
+            }
+            return super.get(i);
         }
 
         @Override
