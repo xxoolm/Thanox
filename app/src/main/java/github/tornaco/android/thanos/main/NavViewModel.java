@@ -4,14 +4,23 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Intent;
 import android.content.res.Resources;
+
 import androidx.annotation.NonNull;
-import androidx.databinding.*;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.databinding.ObservableList;
+import androidx.databinding.ObservableLong;
 import androidx.lifecycle.AndroidViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.app.donate.DonateSettings;
-import github.tornaco.android.thanos.apps.AppsManageActivity;
 import github.tornaco.android.thanos.apps.SuggestedAppsActivity;
 import github.tornaco.android.thanos.core.T;
 import github.tornaco.android.thanos.core.app.ThanosManager;
@@ -24,6 +33,7 @@ import github.tornaco.android.thanos.start.BackgroundRestrictActivity;
 import github.tornaco.android.thanos.start.StartRestrictActivity;
 import github.tornaco.android.thanos.task.CleanUpOnTaskRemovedActivity;
 import github.tornaco.android.thanos.task.RecentTaskBlurListActivity;
+import github.tornaco.android.thanox.module.activity.trampoline.ActivityTrampolineActivity;
 import github.tornaco.java.common.util.CollectionUtils;
 import github.tornaco.java.common.util.ObjectsUtils;
 import github.tornaco.thanos.android.ops.ops.by.app.AppListActivity;
@@ -36,9 +46,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class NavViewModel extends AndroidViewModel {
     @Getter
@@ -143,7 +150,8 @@ public class NavViewModel extends AndroidViewModel {
                 try {
                     ActivityManager.MemoryInfo memoryInfo = thanosManager.getActivityManager().getMemoryInfo();
                     if (memoryInfo != null) singleEmitter.onSuccess(memoryInfo);
-                    else singleEmitter.onError(new NullPointerException("Null memoryInfo from server."));
+                    else
+                        singleEmitter.onError(new NullPointerException("Null memoryInfo from server."));
                 } catch (Throwable e) {
                     singleEmitter.onError(e);
                 }
@@ -348,10 +356,11 @@ public class NavViewModel extends AndroidViewModel {
                         Tile.builder()
                                 .iconRes(R.drawable.ic_guide_fill)
                                 .category(resources.getString(R.string.feature_category_ext))
-                                .title(resources.getString(R.string.feature_title_component_replacement))
+                                .title(resources.getString(R.string.module_activity_trampoline_app_name))
                                 .themeColor(R.color.md_green_a700)
                                 .atEndOfThisCategory(true)
                                 .onClickListener(view -> {
+                                    ActivityTrampolineActivity.start(getApplication());
                                 })
                                 .build(),
                         Tile.builder()

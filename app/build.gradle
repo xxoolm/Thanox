@@ -126,6 +126,7 @@ dependencies {
     implementation project(':module_donate')
     implementation project(':module_ops')
     implementation project(':module_easteregg')
+    implementation project(':module_activity_trampoline')
     implementation project(':android_framework:packages:installer')
 
     implementation project(':android_framework:services')

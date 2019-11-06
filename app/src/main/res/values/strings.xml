@@ -76,7 +76,6 @@
 
     <string name="feature_category_ext">拓展</string>
     <string name="feature_category_power_save">电源</string>
-    <string name="feature_title_component_replacement">移花接木</string>
     <string name="feature_title_smart_app_standby">智能休眠</string>
     <string name="feature_summary_smart_app_standby">未充电时，应用回到后台自动休眠</string>
     <string name="feature_desc_smart_app_standby">
