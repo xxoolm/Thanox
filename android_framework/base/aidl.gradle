@@ -38,6 +38,7 @@ task idlGen {
 
         }
     }
+    group "idl"
 }
 
 compileJava.dependsOn idlGen

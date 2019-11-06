@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
                 name="viewmodel"
-                type="github.tornaco.android.thanos.main.NavViewModel"/>
+                type="github.tornaco.android.thanos.main.NavViewModel" />
 
     </data>
 
@@ -20,23 +20,33 @@
         <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="?cardsBackgroundColor"
-                android:layout_marginTop="@dimen/common_view_margin_small"
-                android:layout_marginBottom="@dimen/common_view_margin_small"
                 android:layout_marginStart="@dimen/common_view_margin_small"
+                android:layout_marginTop="@dimen/common_view_margin_small"
                 android:layout_marginEnd="@dimen/common_view_margin_small"
-                app:cardElevation="@dimen/common_view_elevation"
+                android:layout_marginBottom="@dimen/common_view_margin_small"
                 android:focusable="true"
-                app:cardCornerRadius="@dimen/common_view_corner_radius">
+                app:cardBackgroundColor="?cardsBackgroundColor"
+                app:cardCornerRadius="@dimen/common_view_corner_radius"
+                app:cardElevation="@dimen/common_view_elevation">
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:text="@string/title_no_plugins_installed"/>
+                    android:text="@string/title_no_plugins_installed"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
         </androidx.cardview.widget.CardView>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/common_view_margin_default"
+                android:src="@drawable/ic_add_fill"
+                android:tint="@color/md_white"
+                app:backgroundTint="@color/md_blue_a700" />
     </RelativeLayout>
 </layout>

@@ -3,6 +3,7 @@ package github.tornaco.android.thanos.core.app.activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -107,6 +108,16 @@ public class ActivityStackSupervisor {
     @SneakyThrows
     public void setFingerPrintEnabled(boolean enable) {
         supervisor.setFingerPrintEnabled(enable);
+    }
+
+    @SneakyThrows
+    public void addComponentReplacement(ComponentName from, ComponentName to) {
+        supervisor.addComponentReplacement(from, to);
+    }
+
+    @SneakyThrows
+    public void removeComponentReplacement(ComponentName from) {
+        supervisor.removeComponentReplacement(from);
     }
 
 }

@@ -73,6 +73,12 @@ public interface IActivityStackSupervisor extends android.os.IInterface
     @Override public void setFingerPrintEnabled(boolean enable) throws android.os.RemoteException
     {
     }
+    @Override public void addComponentReplacement(android.content.ComponentName from, android.content.ComponentName to) throws android.os.RemoteException
+    {
+    }
+    @Override public void removeComponentReplacement(android.content.ComponentName from) throws android.os.RemoteException
+    {
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -339,6 +345,41 @@ public interface IActivityStackSupervisor extends android.os.IInterface
           boolean _arg0;
           _arg0 = (0!=data.readInt());
           this.setFingerPrintEnabled(_arg0);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_addComponentReplacement:
+        {
+          data.enforceInterface(descriptor);
+          android.content.ComponentName _arg0;
+          if ((0!=data.readInt())) {
+            _arg0 = android.content.ComponentName.CREATOR.createFromParcel(data);
+          }
+          else {
+            _arg0 = null;
+          }
+          android.content.ComponentName _arg1;
+          if ((0!=data.readInt())) {
+            _arg1 = android.content.ComponentName.CREATOR.createFromParcel(data);
+          }
+          else {
+            _arg1 = null;
+          }
+          this.addComponentReplacement(_arg0, _arg1);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_removeComponentReplacement:
+        {
+          data.enforceInterface(descriptor);
+          android.content.ComponentName _arg0;
+          if ((0!=data.readInt())) {
+            _arg0 = android.content.ComponentName.CREATOR.createFromParcel(data);
+          }
+          else {
+            _arg0 = null;
+          }
+          this.removeComponentReplacement(_arg0);
           reply.writeNoException();
           return true;
         }
@@ -777,6 +818,63 @@ public interface IActivityStackSupervisor extends android.os.IInterface
           _data.recycle();
         }
       }
+      @Override public void addComponentReplacement(android.content.ComponentName from, android.content.ComponentName to) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          if ((from!=null)) {
+            _data.writeInt(1);
+            from.writeToParcel(_data, 0);
+          }
+          else {
+            _data.writeInt(0);
+          }
+          if ((to!=null)) {
+            _data.writeInt(1);
+            to.writeToParcel(_data, 0);
+          }
+          else {
+            _data.writeInt(0);
+          }
+          boolean _status = mRemote.transact(Stub.TRANSACTION_addComponentReplacement, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().addComponentReplacement(from, to);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public void removeComponentReplacement(android.content.ComponentName from) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          if ((from!=null)) {
+            _data.writeInt(1);
+            from.writeToParcel(_data, 0);
+          }
+          else {
+            _data.writeInt(0);
+          }
+          boolean _status = mRemote.transact(Stub.TRANSACTION_removeComponentReplacement, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().removeComponentReplacement(from);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
       public static github.tornaco.android.thanos.core.app.activity.IActivityStackSupervisor sDefaultImpl;
     }
     static final int TRANSACTION_checkActivity = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -797,6 +895,8 @@ public interface IActivityStackSupervisor extends android.os.IInterface
     static final int TRANSACTION_isLockerKeySet = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
     static final int TRANSACTION_isFingerPrintEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
     static final int TRANSACTION_setFingerPrintEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+    static final int TRANSACTION_addComponentReplacement = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
+    static final int TRANSACTION_removeComponentReplacement = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.activity.IActivityStackSupervisor impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -828,4 +928,6 @@ public interface IActivityStackSupervisor extends android.os.IInterface
   public boolean isLockerKeySet(int method) throws android.os.RemoteException;
   public boolean isFingerPrintEnabled() throws android.os.RemoteException;
   public void setFingerPrintEnabled(boolean enable) throws android.os.RemoteException;
+  public void addComponentReplacement(android.content.ComponentName from, android.content.ComponentName to) throws android.os.RemoteException;
+  public void removeComponentReplacement(android.content.ComponentName from) throws android.os.RemoteException;
 }

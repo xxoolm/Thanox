@@ -34,4 +34,7 @@ interface IActivityStackSupervisor {
 
     boolean isFingerPrintEnabled();
     void setFingerPrintEnabled(boolean enable);
+
+    void addComponentReplacement(in ComponentName from, in ComponentName to);
+    void removeComponentReplacement(in ComponentName from);
 }

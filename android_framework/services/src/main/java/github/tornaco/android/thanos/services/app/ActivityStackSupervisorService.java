@@ -9,6 +9,17 @@ import android.os.IBinder;
 import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.Log;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.T;
 import github.tornaco.android.thanos.core.annotation.GuardedBy;
@@ -19,6 +30,7 @@ import github.tornaco.android.thanos.core.app.activity.IVerifyCallback;
 import github.tornaco.android.thanos.core.app.activity.VerifyResult;
 import github.tornaco.android.thanos.core.app.event.ThanosEvent;
 import github.tornaco.android.thanos.core.persist.RepoFactory;
+import github.tornaco.android.thanos.core.persist.StringMapRepo;
 import github.tornaco.android.thanos.core.persist.i.SetRepo;
 import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener;
@@ -26,8 +38,8 @@ import github.tornaco.android.thanos.core.util.Noop;
 import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.S;
-import github.tornaco.android.thanos.services.SystemService;
 import github.tornaco.android.thanos.services.ThanosSchedulers;
+import github.tornaco.android.thanos.services.ThanoxSystemService;
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService;
 import github.tornaco.java.common.util.ObjectsUtils;
 import io.reactivex.Completable;
@@ -35,20 +47,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
-
 @SuppressWarnings("FieldCanBeLocal")
-public class ActivityStackSupervisorService extends SystemService implements IActivityStackSupervisor {
-    private final String ACTION_SYSTEM_REQUEST_PERMISSIONS = "android.content.pm.action.REQUEST_PERMISSIONS";
-    private final String EXTRA_SYSTEM_REQUEST_PERMISSIONS = "android.content.pm.extra.REQUEST_PERMISSIONS_NAMES";
+public class ActivityStackSupervisorService extends ThanoxSystemService implements IActivityStackSupervisor {
 
     private static final AtomicInteger S_REQ = new AtomicInteger(0);
-
-    private final S s;
 
     private final Set<String> verifiedPackages = new HashSet<>();
     @SuppressLint("UseSparseArrays")
@@ -62,16 +64,19 @@ public class ActivityStackSupervisorService extends SystemService implements IAc
     private boolean fingerPrintEnabled;
     private int lockerMethod = ActivityStackSupervisor.LockerMethod.NONE;
 
+    private StringMapRepo componentReplacementRepo;
+
     private final AtomicReference<String> currentPresentPkgName = new AtomicReference<>(PackageManager.packageNameOfAndroid());
 
     public ActivityStackSupervisorService(S s) {
-        this.s = s;
+        super(s);
     }
 
     @Override
     public void onStart(Context context) {
         super.onStart(context);
         this.lockingApps = RepoFactory.get().getOrCreateStringSetRepo(T.appLockRepoFile().getPath());
+        this.componentReplacementRepo = RepoFactory.get().getOrCreateStringMapRepo(T.componentReplacementRepoFile().getPath());
     }
 
     @Override
@@ -124,15 +129,24 @@ public class ActivityStackSupervisorService extends SystemService implements IAc
 
     @Override
     public Intent replaceActivityStartingIntent(Intent intent) {
-        if (intent != null && ObjectsUtils.equals(ACTION_SYSTEM_REQUEST_PERMISSIONS, intent.getAction())) {
-            String[] permissions = intent.getStringArrayExtra(EXTRA_SYSTEM_REQUEST_PERMISSIONS);
-            Timber.d("Captured permission request, permissions: %s, current package installer is: %s",
-                    Arrays.toString(permissions), intent.getPackage());
-            Completable.fromAction(() -> onRequestRuntimePermissions(permissions))
-                    .subscribeOn(ThanosSchedulers.serverThread())
-                    .subscribe();
+        ComponentName cName = intent.getComponent();
+        if (cName == null) {
+            return intent;
         }
-        return intent;
+
+        String cString = cName.flattenToString();
+        boolean hasReplacement = componentReplacementRepo.hasNoneNullValue(cString);
+        if (!hasReplacement) {
+            return intent;
+        }
+        String replacement = componentReplacementRepo.get(cString);
+        ComponentName newCName = ComponentName.unflattenFromString(replacement);
+        if (newCName == null) {
+            return intent;
+        }
+        Timber.d("Replace component from: %s; to: %s", cName, newCName);
+
+        return intent.setComponent(newCName);
     }
 
     @Override
@@ -288,6 +302,18 @@ public class ActivityStackSupervisorService extends SystemService implements IAc
         fingerPrintEnabled = enable;
         PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
         preferenceManagerService.putBoolean(T.Settings.PREF_APP_LOCK_FP_ENABLED.getKey(), enable);
+    }
+
+    @Override
+    public void addComponentReplacement(ComponentName from, ComponentName to) {
+        enforceCallingPermissions();
+        componentReplacementRepo.put(from.flattenToString(), to.flattenToString());
+    }
+
+    @Override
+    public void removeComponentReplacement(ComponentName from) {
+        enforceCallingPermissions();
+        componentReplacementRepo.remove(from.flattenToString());
     }
 
     @Override

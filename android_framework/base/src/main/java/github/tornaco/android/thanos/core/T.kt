@@ -60,6 +60,11 @@ object T {
     }
 
     @JvmStatic
+    fun componentReplacementRepoFile(): File {
+        return File(baseServerDataDir(), "component_replacements.xml")
+    }
+
+    @JvmStatic
     fun appOpsRepoFile(): File {
         return File(baseServerDataDir(), "app_ops.xml")
     }
