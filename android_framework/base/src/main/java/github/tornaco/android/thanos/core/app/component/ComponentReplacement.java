@@ -11,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ComponentReplacement implements Parcelable {
+public final class ComponentReplacement implements Parcelable {
 
     public ComponentName from, to;
 
