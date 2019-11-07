@@ -73,11 +73,15 @@ public interface IActivityStackSupervisor extends android.os.IInterface
     @Override public void setFingerPrintEnabled(boolean enable) throws android.os.RemoteException
     {
     }
-    @Override public void addComponentReplacement(android.content.ComponentName from, android.content.ComponentName to) throws android.os.RemoteException
+    @Override public void addComponentReplacement(github.tornaco.android.thanos.core.app.component.ComponentReplacement replacement) throws android.os.RemoteException
     {
     }
-    @Override public void removeComponentReplacement(android.content.ComponentName from) throws android.os.RemoteException
+    @Override public void removeComponentReplacement(github.tornaco.android.thanos.core.app.component.ComponentReplacement replacement) throws android.os.RemoteException
     {
+    }
+    @Override public github.tornaco.android.thanos.core.app.component.ComponentReplacement[] getComponentReplacements() throws android.os.RemoteException
+    {
+      return null;
     }
     @Override
     public android.os.IBinder asBinder() {
@@ -351,36 +355,37 @@ public interface IActivityStackSupervisor extends android.os.IInterface
         case TRANSACTION_addComponentReplacement:
         {
           data.enforceInterface(descriptor);
-          android.content.ComponentName _arg0;
+          github.tornaco.android.thanos.core.app.component.ComponentReplacement _arg0;
           if ((0!=data.readInt())) {
-            _arg0 = android.content.ComponentName.CREATOR.createFromParcel(data);
+            _arg0 = github.tornaco.android.thanos.core.app.component.ComponentReplacement.CREATOR.createFromParcel(data);
           }
           else {
             _arg0 = null;
           }
-          android.content.ComponentName _arg1;
-          if ((0!=data.readInt())) {
-            _arg1 = android.content.ComponentName.CREATOR.createFromParcel(data);
-          }
-          else {
-            _arg1 = null;
-          }
-          this.addComponentReplacement(_arg0, _arg1);
+          this.addComponentReplacement(_arg0);
           reply.writeNoException();
           return true;
         }
         case TRANSACTION_removeComponentReplacement:
         {
           data.enforceInterface(descriptor);
-          android.content.ComponentName _arg0;
+          github.tornaco.android.thanos.core.app.component.ComponentReplacement _arg0;
           if ((0!=data.readInt())) {
-            _arg0 = android.content.ComponentName.CREATOR.createFromParcel(data);
+            _arg0 = github.tornaco.android.thanos.core.app.component.ComponentReplacement.CREATOR.createFromParcel(data);
           }
           else {
             _arg0 = null;
           }
           this.removeComponentReplacement(_arg0);
           reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_getComponentReplacements:
+        {
+          data.enforceInterface(descriptor);
+          github.tornaco.android.thanos.core.app.component.ComponentReplacement[] _result = this.getComponentReplacements();
+          reply.writeNoException();
+          reply.writeTypedArray(_result, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
           return true;
         }
         default:
@@ -818,29 +823,22 @@ public interface IActivityStackSupervisor extends android.os.IInterface
           _data.recycle();
         }
       }
-      @Override public void addComponentReplacement(android.content.ComponentName from, android.content.ComponentName to) throws android.os.RemoteException
+      @Override public void addComponentReplacement(github.tornaco.android.thanos.core.app.component.ComponentReplacement replacement) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
-          if ((from!=null)) {
+          if ((replacement!=null)) {
             _data.writeInt(1);
-            from.writeToParcel(_data, 0);
-          }
-          else {
-            _data.writeInt(0);
-          }
-          if ((to!=null)) {
-            _data.writeInt(1);
-            to.writeToParcel(_data, 0);
+            replacement.writeToParcel(_data, 0);
           }
           else {
             _data.writeInt(0);
           }
           boolean _status = mRemote.transact(Stub.TRANSACTION_addComponentReplacement, _data, _reply, 0);
           if (!_status && getDefaultImpl() != null) {
-            getDefaultImpl().addComponentReplacement(from, to);
+            getDefaultImpl().addComponentReplacement(replacement);
             return;
           }
           _reply.readException();
@@ -850,22 +848,22 @@ public interface IActivityStackSupervisor extends android.os.IInterface
           _data.recycle();
         }
       }
-      @Override public void removeComponentReplacement(android.content.ComponentName from) throws android.os.RemoteException
+      @Override public void removeComponentReplacement(github.tornaco.android.thanos.core.app.component.ComponentReplacement replacement) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
-          if ((from!=null)) {
+          if ((replacement!=null)) {
             _data.writeInt(1);
-            from.writeToParcel(_data, 0);
+            replacement.writeToParcel(_data, 0);
           }
           else {
             _data.writeInt(0);
           }
           boolean _status = mRemote.transact(Stub.TRANSACTION_removeComponentReplacement, _data, _reply, 0);
           if (!_status && getDefaultImpl() != null) {
-            getDefaultImpl().removeComponentReplacement(from);
+            getDefaultImpl().removeComponentReplacement(replacement);
             return;
           }
           _reply.readException();
@@ -874,6 +872,26 @@ public interface IActivityStackSupervisor extends android.os.IInterface
           _reply.recycle();
           _data.recycle();
         }
+      }
+      @Override public github.tornaco.android.thanos.core.app.component.ComponentReplacement[] getComponentReplacements() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        github.tornaco.android.thanos.core.app.component.ComponentReplacement[] _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getComponentReplacements, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getComponentReplacements();
+          }
+          _reply.readException();
+          _result = _reply.createTypedArray(github.tornaco.android.thanos.core.app.component.ComponentReplacement.CREATOR);
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
       }
       public static github.tornaco.android.thanos.core.app.activity.IActivityStackSupervisor sDefaultImpl;
     }
@@ -897,6 +915,7 @@ public interface IActivityStackSupervisor extends android.os.IInterface
     static final int TRANSACTION_setFingerPrintEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
     static final int TRANSACTION_addComponentReplacement = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
     static final int TRANSACTION_removeComponentReplacement = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
+    static final int TRANSACTION_getComponentReplacements = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.activity.IActivityStackSupervisor impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -928,6 +947,7 @@ public interface IActivityStackSupervisor extends android.os.IInterface
   public boolean isLockerKeySet(int method) throws android.os.RemoteException;
   public boolean isFingerPrintEnabled() throws android.os.RemoteException;
   public void setFingerPrintEnabled(boolean enable) throws android.os.RemoteException;
-  public void addComponentReplacement(android.content.ComponentName from, android.content.ComponentName to) throws android.os.RemoteException;
-  public void removeComponentReplacement(android.content.ComponentName from) throws android.os.RemoteException;
+  public void addComponentReplacement(github.tornaco.android.thanos.core.app.component.ComponentReplacement replacement) throws android.os.RemoteException;
+  public void removeComponentReplacement(github.tornaco.android.thanos.core.app.component.ComponentReplacement replacement) throws android.os.RemoteException;
+  public github.tornaco.android.thanos.core.app.component.ComponentReplacement[] getComponentReplacements() throws android.os.RemoteException;
 }

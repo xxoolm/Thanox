@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.core.app.activity;
 
 import github.tornaco.android.thanos.core.app.activity.IVerifyCallback;
+import github.tornaco.android.thanos.core.app.component.ComponentReplacement;
 
 interface IActivityStackSupervisor {
     boolean checkActivity(in ComponentName componentName);
@@ -35,6 +36,8 @@ interface IActivityStackSupervisor {
     boolean isFingerPrintEnabled();
     void setFingerPrintEnabled(boolean enable);
 
-    void addComponentReplacement(in ComponentName from, in ComponentName to);
-    void removeComponentReplacement(in ComponentName from);
+    void addComponentReplacement(in ComponentReplacement replacement);
+    void removeComponentReplacement(in ComponentReplacement replacement);
+
+    ComponentReplacement[] getComponentReplacements();
 }

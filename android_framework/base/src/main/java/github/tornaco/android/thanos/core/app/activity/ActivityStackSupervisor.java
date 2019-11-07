@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 
+import github.tornaco.android.thanos.core.app.component.ComponentReplacement;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -111,13 +112,18 @@ public class ActivityStackSupervisor {
     }
 
     @SneakyThrows
-    public void addComponentReplacement(ComponentName from, ComponentName to) {
-        supervisor.addComponentReplacement(from, to);
+    public void addComponentReplacement(ComponentReplacement replacement) {
+        supervisor.addComponentReplacement(replacement);
     }
 
     @SneakyThrows
-    public void removeComponentReplacement(ComponentName from) {
-        supervisor.removeComponentReplacement(from);
+    public void removeComponentReplacement(ComponentReplacement replacement) {
+        supervisor.removeComponentReplacement(replacement);
+    }
+
+    @SneakyThrows
+    public ComponentReplacement[] getComponentReplacements() {
+        return supervisor.getComponentReplacements();
     }
 
 }

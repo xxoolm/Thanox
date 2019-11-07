@@ -30,6 +30,7 @@
                     app:theme="?toolbarTheme"
                     app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:titleTextColor="?menuIconTint"
+                    app:title="@string/module_activity_trampoline_app_name"
                     tools:title="Title very long very very long!!!!">
 
             </androidx.appcompat.widget.Toolbar>

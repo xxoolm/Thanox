@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,6 +29,7 @@ import github.tornaco.android.thanos.core.app.activity.ActivityStackSupervisor;
 import github.tornaco.android.thanos.core.app.activity.IActivityStackSupervisor;
 import github.tornaco.android.thanos.core.app.activity.IVerifyCallback;
 import github.tornaco.android.thanos.core.app.activity.VerifyResult;
+import github.tornaco.android.thanos.core.app.component.ComponentReplacement;
 import github.tornaco.android.thanos.core.app.event.ThanosEvent;
 import github.tornaco.android.thanos.core.persist.RepoFactory;
 import github.tornaco.android.thanos.core.persist.StringMapRepo;
@@ -305,15 +307,20 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     }
 
     @Override
-    public void addComponentReplacement(ComponentName from, ComponentName to) {
+    public void addComponentReplacement(ComponentReplacement replacement) {
         enforceCallingPermissions();
-        componentReplacementRepo.put(from.flattenToString(), to.flattenToString());
+        componentReplacementRepo.put(replacement.from.flattenToString(), replacement.to.flattenToString());
     }
 
     @Override
-    public void removeComponentReplacement(ComponentName from) {
+    public void removeComponentReplacement(ComponentReplacement replacement) {
         enforceCallingPermissions();
-        componentReplacementRepo.remove(from.flattenToString());
+        componentReplacementRepo.remove(replacement.from.flattenToString());
+    }
+
+    @Override
+    public ComponentReplacement[] getComponentReplacements() throws RemoteException {
+        return new ComponentReplacement[0];
     }
 
     @Override
