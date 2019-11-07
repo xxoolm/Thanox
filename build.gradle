@@ -29,7 +29,9 @@ task clean(type: Delete) {
 
 androidGitVersion {
     prefix 'v'
-    codeFormat = 'MMNNPPRRB'
+    codeFormat = 'MMNNPPRR'
+    // 1000000
+    // 1000003
 }
 
 ext {
