@@ -6,6 +6,7 @@ import android.app.IApplicationThread;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -58,12 +59,6 @@ public class AMSBasicRegistry implements IXposedHook {
                                     ? ((List) XposedHelpers.getObjectField(XposedHelpers.getObjectField(param.thisObject, "mProcessList"), "mLruProcesses"))
                                     : (List) XposedHelpers.getObjectField(param.thisObject, "mLruProcesses");
                     Timber.d("mLruProcesses: " + mLruProcesses);
-                    @SuppressWarnings("unchecked")
-                    List proxyList = AMSLruProcessListProxy.newProxy(mLruProcesses);
-                    XposedHelpers.setObjectField(OsUtils.isQOrAbove()
-                                    ? XposedHelpers.getObjectField(param.thisObject, "mProcessList")
-                                    : param.thisObject,
-                            "mLruProcesses", proxyList);
 
                     Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
                     BootStrap.start(context);
@@ -163,73 +158,5 @@ public class AMSBasicRegistry implements IXposedHook {
     @Override
     public void initZygote(StartupParam startupParam) {
         // Nothing.
-    }
-
-    private static class AMSLruProcessListProxy<T> extends ListProxy<T> {
-
-        AMSLruProcessListProxy(List<T> orig) {
-            super(orig);
-        }
-
-        static <T> AMSLruProcessListProxy<T> newProxy(List<T> orig) {
-            return new AMSLruProcessListProxy<>(orig);
-        }
-
-        @Override
-        public void add(int i, T e) {
-            super.add(i, e);
-            Completable.fromRunnable(() -> {
-                ProcessRecord processRecord = ProcessRecordUtils.fromLegacy(e);
-                if (processRecord == null) {
-                    return;
-                }
-                BootStrap.THANOS_X
-                        .getActivityManagerService()
-                        .addProcessNameLocked(processRecord);
-            }).subscribeOn(Schedulers.trampoline()).subscribe();
-        }
-
-        @Override
-        public boolean add(T e) {
-            Completable.fromRunnable(() -> {
-                ProcessRecord processRecord = ProcessRecordUtils.fromLegacy(e);
-                if (processRecord == null) {
-                    return;
-                }
-                BootStrap.THANOS_X
-                        .getActivityManagerService()
-                        .addProcessNameLocked(processRecord);
-            }).subscribeOn(Schedulers.trampoline()).subscribe();
-            return super.add(e);
-        }
-
-        @Override
-        public boolean remove(Object object) {
-            Completable.fromRunnable(() -> {
-                ProcessRecord processRecord = ProcessRecordUtils.fromLegacy(object);
-                if (processRecord == null) {
-                    return;
-                }
-                BootStrap.THANOS_X
-                        .getActivityManagerService()
-                        .removeProcessNameLocked(processRecord);
-            }).subscribeOn(Schedulers.trampoline()).subscribe();
-            return super.remove(object);
-        }
-
-        @Override
-        public T remove(int i) {
-            T removed = super.remove(i);
-            Completable.fromRunnable(() -> {
-                ProcessRecord processRecord = ProcessRecordUtils.fromLegacy(removed);
-                if (processRecord == null) {
-                    return;
-                }
-                BootStrap.THANOS_X
-                        .getActivityManagerService()
-                        .removeProcessNameLocked(processRecord);
-            }).subscribeOn(Schedulers.trampoline()).subscribe();
-            return removed;
-        }
     }
 }

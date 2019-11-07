@@ -20,10 +20,6 @@ interface IActivityManager {
 
     void onStartProcessLocked(in ProcessRecord processRecord);
 
-    void removeProcessNameLocked(in ProcessRecord processRecord);
-
-    void addProcessNameLocked(in ProcessRecord processRecord);
-
     ProcessRecord[] getRunningAppProcess();
     String[] getRunningAppPackages();
 

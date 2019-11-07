@@ -12,7 +12,9 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.google.common.io.Files;
+
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.Res;
 import github.tornaco.android.thanos.core.T;
@@ -269,7 +271,8 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         if (service == null) return new StartResultExt(StartResult.BY_PASS_BAD_ARGS, null);
 
         final String servicePkg = service.getPackageName();
-        if (TextUtils.isEmpty(servicePkg)) return new StartResultExt(StartResult.BY_PASS_BAD_ARGS, null);
+        if (TextUtils.isEmpty(servicePkg))
+            return new StartResultExt(StartResult.BY_PASS_BAD_ARGS, null);
 
         // Whitelist.
         if (s.getPkgManagerService().isPkgInWhiteList(servicePkg)) {
@@ -365,9 +368,11 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     private StartResultExt checkBroadcastInternal(final Intent intent, int receiverUid, String receiverPkgName, int callerUid) {
         Timber.v("checkBroadcastInternal: %s %s %s %s", intent, receiverUid, receiverPkgName, callerUid);
-        if (receiverUid == callerUid) return new StartResultExt(StartResult.BY_PASS_SAME_CALLING_UID, null);
+        if (receiverUid == callerUid)
+            return new StartResultExt(StartResult.BY_PASS_SAME_CALLING_UID, null);
 
-        if (TextUtils.isEmpty(receiverPkgName)) return new StartResultExt(StartResult.BY_PASS_BAD_ARGS, null);
+        if (TextUtils.isEmpty(receiverPkgName))
+            return new StartResultExt(StartResult.BY_PASS_BAD_ARGS, null);
 
         // Whitelist.
         if (s.getPkgManagerService().isPkgInWhiteList(receiverPkgName)
@@ -475,58 +480,6 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     @Override
     public void onStartProcessLocked(ProcessRecord processRecord) {
         Timber.v("onStartProcessLocked, processRecord: %s", processRecord);
-    }
-
-    @Override
-    public void addProcessNameLocked(ProcessRecord processRecord) {
-        Completable.fromRunnable(() -> addProcessNameInternal(processRecord)).subscribeOn(ThanosSchedulers.serverThread()).subscribe();
-    }
-
-    @ExecuteBySystemHandler
-    private void addProcessNameInternal(ProcessRecord processRecord) {
-        Timber.v("addProcessNameInternal, processRecord: %s", processRecord);
-        if (processRecord.getPid() == 0) {
-            Timber.e("Invalid pid=0, processRecord %s", processRecord);
-            return;
-        }
-        if (processRecord.getPackageName() != null) {
-            ProcessRecordList records = processMap.get(processRecord.getPackageName());
-            if (records == null) records = new ProcessRecordList(processRecord.getPackageName());
-            records.addProcessRecord(processRecord);
-            processMap.put(processRecord.getPackageName(), records);
-
-            onRunningProcessChanged();
-        }
-    }
-
-    @Override
-    public void removeProcessNameLocked(ProcessRecord processRecord) {
-        Completable.fromRunnable(() -> removeProcessNameInternal(processRecord)).subscribeOn(ThanosSchedulers.serverThread()).subscribe();
-    }
-
-    @ExecuteBySystemHandler
-    private void removeProcessNameInternal(ProcessRecord processRecord) {
-        Timber.v("removeProcessNameInternal, processRecord: %s", processRecord);
-        if (processRecord.getPackageName() != null) {
-            ProcessRecordList records = processMap.get(processRecord.getPackageName());
-            if (records == null) records = new ProcessRecordList(processRecord.getPackageName());
-            boolean removed = records.removeProcessRecord(processRecord);
-            Timber.v("removeProcessNameLocked, %s  removed ? %s", processRecord, removed);
-            processMap.put(processRecord.getPackageName(), records);
-
-            onRunningProcessChanged();
-        }
-    }
-
-    @ExecuteBySystemHandler
-    private void onRunningProcessChanged() {
-        EventBus.getInstance().publishEventToSubscribersAsync(
-                new ThanosEvent(new Intent(T.Actions.ACTION_RUNNING_PROCESS_CHANGED)));
-
-        Completable
-                .fromRunnable(this::maybeShowBgRestrictNotification)
-                .subscribeOn(ThanosSchedulers.serverThread())
-                .subscribe();
     }
 
     private void maybeShowBgRestrictNotification() {
