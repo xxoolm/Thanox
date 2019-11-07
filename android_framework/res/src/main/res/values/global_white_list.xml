@@ -80,6 +80,30 @@
         <item>github.tornaco.xposedmoduletest</item>
         <item>de.robv.android.xposed.installer</item>
 
+        <item>com.qualcomm.uimremoteclient</item>
+        <item>com.qualcomm.qti.uceShimService</item>
+        <item>vendor.qti.hardware.cacert.server</item>
+        <item>com.qualcomm.qti.telephonyservice</item>
+        <item>vendor.qti.iwlan</item>
+        <item>com.qualcomm.uimremoteserver</item>
+        <item>com.qti.qualcomm.datastatusnotification</item>
+        <item>com.qualcomm.qti.callfeaturessetting</item>
+        <item>com.miui.vsimcore</item>
+        <item>com.qti.qualcomm.deviceinfo</item>
+        <item>com.android.ons</item>
+        <item>com.android.stk</item>
+        <item>org.codeaurora.ims</item>
+        <item>com.qualcomm.qti.dynamicddsservice</item>
+        <item>com.qualcomm.qcrilmsgtunnel</item>
+        <item>com.qti.dpmserviceapp</item>
+        <item>com.qti.xdivert</item>
+        <item>com.qualcomm.qti.cne</item>
+        <item>com.qualcomm.qti.lpa</item>
+        <item>com.qualcomm.qti.uim</item>
+        <item>com.qualcomm.qti.uimGbaApp</item>
+        <item>com.android.providers.telephony</item>
+        <item>com.android.mms.service</item>
+        <item>com.android.phone</item>
     </string-array>
 
     <string-array name="white_list_packages_hooks">

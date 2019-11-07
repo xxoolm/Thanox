@@ -44,12 +44,6 @@ public interface IActivityManager extends android.os.IInterface
     @Override public void onStartProcessLocked(github.tornaco.android.thanos.core.process.ProcessRecord processRecord) throws android.os.RemoteException
     {
     }
-    @Override public void removeProcessNameLocked(github.tornaco.android.thanos.core.process.ProcessRecord processRecord) throws android.os.RemoteException
-    {
-    }
-    @Override public void addProcessNameLocked(github.tornaco.android.thanos.core.process.ProcessRecord processRecord) throws android.os.RemoteException
-    {
-    }
     @Override public github.tornaco.android.thanos.core.process.ProcessRecord[] getRunningAppProcess() throws android.os.RemoteException
     {
       return null;
@@ -404,34 +398,6 @@ public interface IActivityManager extends android.os.IInterface
             _arg0 = null;
           }
           this.onStartProcessLocked(_arg0);
-          reply.writeNoException();
-          return true;
-        }
-        case TRANSACTION_removeProcessNameLocked:
-        {
-          data.enforceInterface(descriptor);
-          github.tornaco.android.thanos.core.process.ProcessRecord _arg0;
-          if ((0!=data.readInt())) {
-            _arg0 = github.tornaco.android.thanos.core.process.ProcessRecord.CREATOR.createFromParcel(data);
-          }
-          else {
-            _arg0 = null;
-          }
-          this.removeProcessNameLocked(_arg0);
-          reply.writeNoException();
-          return true;
-        }
-        case TRANSACTION_addProcessNameLocked:
-        {
-          data.enforceInterface(descriptor);
-          github.tornaco.android.thanos.core.process.ProcessRecord _arg0;
-          if ((0!=data.readInt())) {
-            _arg0 = github.tornaco.android.thanos.core.process.ProcessRecord.CREATOR.createFromParcel(data);
-          }
-          else {
-            _arg0 = null;
-          }
-          this.addProcessNameLocked(_arg0);
           reply.writeNoException();
           return true;
         }
@@ -1119,56 +1085,6 @@ public interface IActivityManager extends android.os.IInterface
           boolean _status = mRemote.transact(Stub.TRANSACTION_onStartProcessLocked, _data, _reply, 0);
           if (!_status && getDefaultImpl() != null) {
             getDefaultImpl().onStartProcessLocked(processRecord);
-            return;
-          }
-          _reply.readException();
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-      }
-      @Override public void removeProcessNameLocked(github.tornaco.android.thanos.core.process.ProcessRecord processRecord) throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          if ((processRecord!=null)) {
-            _data.writeInt(1);
-            processRecord.writeToParcel(_data, 0);
-          }
-          else {
-            _data.writeInt(0);
-          }
-          boolean _status = mRemote.transact(Stub.TRANSACTION_removeProcessNameLocked, _data, _reply, 0);
-          if (!_status && getDefaultImpl() != null) {
-            getDefaultImpl().removeProcessNameLocked(processRecord);
-            return;
-          }
-          _reply.readException();
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-      }
-      @Override public void addProcessNameLocked(github.tornaco.android.thanos.core.process.ProcessRecord processRecord) throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          if ((processRecord!=null)) {
-            _data.writeInt(1);
-            processRecord.writeToParcel(_data, 0);
-          }
-          else {
-            _data.writeInt(0);
-          }
-          boolean _status = mRemote.transact(Stub.TRANSACTION_addProcessNameLocked, _data, _reply, 0);
-          if (!_status && getDefaultImpl() != null) {
-            getDefaultImpl().addProcessNameLocked(processRecord);
             return;
           }
           _reply.readException();
@@ -2087,51 +2003,49 @@ public interface IActivityManager extends android.os.IInterface
     static final int TRANSACTION_checkBroadcast = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
     static final int TRANSACTION_checkStartProcess = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
     static final int TRANSACTION_onStartProcessLocked = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
-    static final int TRANSACTION_removeProcessNameLocked = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
-    static final int TRANSACTION_addProcessNameLocked = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
-    static final int TRANSACTION_getRunningAppProcess = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
-    static final int TRANSACTION_getRunningAppPackages = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
-    static final int TRANSACTION_getRunningServiceLegacy = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
-    static final int TRANSACTION_getRunningAppProcessLegacy = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
-    static final int TRANSACTION_getRunningAppsCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
-    static final int TRANSACTION_getRunningAppProcessForPackage = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
-    static final int TRANSACTION_isPackageRunning = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
-    static final int TRANSACTION_getStartRecordsByPackageName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
-    static final int TRANSACTION_getStartRecordsBlockedCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
-    static final int TRANSACTION_isStartBlockEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
-    static final int TRANSACTION_setStartBlockEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
-    static final int TRANSACTION_setPkgStartBlockEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 23);
-    static final int TRANSACTION_isPkgStartBlocking = (android.os.IBinder.FIRST_CALL_TRANSACTION + 24);
-    static final int TRANSACTION_isCleanUpOnTaskRemovalEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 25);
-    static final int TRANSACTION_setCleanUpOnTaskRemovalEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
-    static final int TRANSACTION_setPkgCleanUpOnTaskRemovalEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 27);
-    static final int TRANSACTION_isPkgCleanUpOnTaskRemovalEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 28);
-    static final int TRANSACTION_isBgRestrictEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 29);
-    static final int TRANSACTION_setBgRestrictEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 30);
-    static final int TRANSACTION_setPkgBgRestrictEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 31);
-    static final int TRANSACTION_isPkgBgRestricted = (android.os.IBinder.FIRST_CALL_TRANSACTION + 32);
-    static final int TRANSACTION_isRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 33);
-    static final int TRANSACTION_setRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 34);
-    static final int TRANSACTION_setPkgRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 35);
-    static final int TRANSACTION_isPkgRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 36);
-    static final int TRANSACTION_isBgTaskCleanUpSkipAudioFocusedAppEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 37);
-    static final int TRANSACTION_setBgTaskCleanUpSkipAudioFocusedAppEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 38);
-    static final int TRANSACTION_isBgTaskCleanUpSkipWhichHasNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 39);
-    static final int TRANSACTION_setBgTaskCleanUpSkipWhichHasNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 40);
-    static final int TRANSACTION_setBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 41);
-    static final int TRANSACTION_getBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 42);
-    static final int TRANSACTION_onTaskRemoving = (android.os.IBinder.FIRST_CALL_TRANSACTION + 43);
-    static final int TRANSACTION_notifyTaskCreated = (android.os.IBinder.FIRST_CALL_TRANSACTION + 44);
-    static final int TRANSACTION_getMemoryInfo = (android.os.IBinder.FIRST_CALL_TRANSACTION + 45);
-    static final int TRANSACTION_getProcessPss = (android.os.IBinder.FIRST_CALL_TRANSACTION + 46);
-    static final int TRANSACTION_onApplicationCrashing = (android.os.IBinder.FIRST_CALL_TRANSACTION + 47);
-    static final int TRANSACTION_getPackageNameForTaskId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 48);
-    static final int TRANSACTION_isPlatformAppIdleEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 49);
-    static final int TRANSACTION_isSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 50);
-    static final int TRANSACTION_setSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 51);
-    static final int TRANSACTION_setPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 52);
-    static final int TRANSACTION_isPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 53);
-    static final int TRANSACTION_getLastRecentUsedPackages = (android.os.IBinder.FIRST_CALL_TRANSACTION + 54);
+    static final int TRANSACTION_getRunningAppProcess = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
+    static final int TRANSACTION_getRunningAppPackages = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
+    static final int TRANSACTION_getRunningServiceLegacy = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+    static final int TRANSACTION_getRunningAppProcessLegacy = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+    static final int TRANSACTION_getRunningAppsCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+    static final int TRANSACTION_getRunningAppProcessForPackage = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
+    static final int TRANSACTION_isPackageRunning = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+    static final int TRANSACTION_getStartRecordsByPackageName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+    static final int TRANSACTION_getStartRecordsBlockedCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
+    static final int TRANSACTION_isStartBlockEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
+    static final int TRANSACTION_setStartBlockEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
+    static final int TRANSACTION_setPkgStartBlockEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
+    static final int TRANSACTION_isPkgStartBlocking = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
+    static final int TRANSACTION_isCleanUpOnTaskRemovalEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 23);
+    static final int TRANSACTION_setCleanUpOnTaskRemovalEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 24);
+    static final int TRANSACTION_setPkgCleanUpOnTaskRemovalEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 25);
+    static final int TRANSACTION_isPkgCleanUpOnTaskRemovalEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
+    static final int TRANSACTION_isBgRestrictEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 27);
+    static final int TRANSACTION_setBgRestrictEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 28);
+    static final int TRANSACTION_setPkgBgRestrictEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 29);
+    static final int TRANSACTION_isPkgBgRestricted = (android.os.IBinder.FIRST_CALL_TRANSACTION + 30);
+    static final int TRANSACTION_isRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 31);
+    static final int TRANSACTION_setRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 32);
+    static final int TRANSACTION_setPkgRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 33);
+    static final int TRANSACTION_isPkgRecentTaskBlurEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 34);
+    static final int TRANSACTION_isBgTaskCleanUpSkipAudioFocusedAppEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 35);
+    static final int TRANSACTION_setBgTaskCleanUpSkipAudioFocusedAppEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 36);
+    static final int TRANSACTION_isBgTaskCleanUpSkipWhichHasNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 37);
+    static final int TRANSACTION_setBgTaskCleanUpSkipWhichHasNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 38);
+    static final int TRANSACTION_setBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 39);
+    static final int TRANSACTION_getBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 40);
+    static final int TRANSACTION_onTaskRemoving = (android.os.IBinder.FIRST_CALL_TRANSACTION + 41);
+    static final int TRANSACTION_notifyTaskCreated = (android.os.IBinder.FIRST_CALL_TRANSACTION + 42);
+    static final int TRANSACTION_getMemoryInfo = (android.os.IBinder.FIRST_CALL_TRANSACTION + 43);
+    static final int TRANSACTION_getProcessPss = (android.os.IBinder.FIRST_CALL_TRANSACTION + 44);
+    static final int TRANSACTION_onApplicationCrashing = (android.os.IBinder.FIRST_CALL_TRANSACTION + 45);
+    static final int TRANSACTION_getPackageNameForTaskId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 46);
+    static final int TRANSACTION_isPlatformAppIdleEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 47);
+    static final int TRANSACTION_isSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 48);
+    static final int TRANSACTION_setSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 49);
+    static final int TRANSACTION_setPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 50);
+    static final int TRANSACTION_isPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 51);
+    static final int TRANSACTION_getLastRecentUsedPackages = (android.os.IBinder.FIRST_CALL_TRANSACTION + 52);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.IActivityManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -2153,8 +2067,6 @@ public interface IActivityManager extends android.os.IInterface
   public boolean checkBroadcast(android.content.Intent intent, int receiverUid, int callerUid) throws android.os.RemoteException;
   public boolean checkStartProcess(android.content.pm.ApplicationInfo applicationInfo, java.lang.String hostType, java.lang.String hostName) throws android.os.RemoteException;
   public void onStartProcessLocked(github.tornaco.android.thanos.core.process.ProcessRecord processRecord) throws android.os.RemoteException;
-  public void removeProcessNameLocked(github.tornaco.android.thanos.core.process.ProcessRecord processRecord) throws android.os.RemoteException;
-  public void addProcessNameLocked(github.tornaco.android.thanos.core.process.ProcessRecord processRecord) throws android.os.RemoteException;
   public github.tornaco.android.thanos.core.process.ProcessRecord[] getRunningAppProcess() throws android.os.RemoteException;
   public java.lang.String[] getRunningAppPackages() throws android.os.RemoteException;
   public java.util.List<android.app.ActivityManager.RunningServiceInfo> getRunningServiceLegacy(int max) throws android.os.RemoteException;

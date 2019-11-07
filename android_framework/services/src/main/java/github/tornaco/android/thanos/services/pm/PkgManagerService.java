@@ -5,22 +5,28 @@ import android.content.Context;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.UserHandle;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.T;
+import github.tornaco.android.thanos.core.annotation.Nullable;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.pm.IPkgManager;
+import github.tornaco.android.thanos.core.pm.PackageManager;
+import github.tornaco.android.thanos.core.util.ArrayUtils;
 import github.tornaco.android.thanos.core.util.FileUtils;
 import github.tornaco.android.thanos.core.util.Noop;
+import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BackgroundThread;
 import github.tornaco.android.thanos.services.S;
 import github.tornaco.android.thanos.services.ThanoxSystemService;
 import lombok.Getter;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class PkgManagerService extends ThanoxSystemService implements IPkgManager {
     @Getter
@@ -75,9 +81,29 @@ public class PkgManagerService extends ThanoxSystemService implements IPkgManage
 
     @Override
     public String[] getPkgNameForUid(int uid) {
+        // If this is system@1000, return 'android'
+        if (PkgUtils.isSystemCall(uid)) {
+            return new String[]{PackageManager.packageNameOfAndroid()};
+        }
+        // If this is system/phone...etc <=2000, return 'android'
+        if (PkgUtils.isSystemOrPhoneOrShell(uid)) {
+            return new String[]{PackageManager.packageNameOfAndroid()};
+        }
         return getPkgCache().getUid2Pkg().containsKey(uid)
                 ? getPkgCache().getUid2Pkg().get(uid).toArray(new String[0])
                 : null;
+    }
+
+    @Nullable
+    public String getFirstPkgNameForUid(int uid) {
+        String[] all = getPkgNameForUid(uid);
+        if (ArrayUtils.isEmpty(all)) {
+            return null;
+        }
+        if (all.length > 1) {
+            Timber.e(new Throwable("Here"), "Found more than 1 pkgs for uid: %s, they are: %s", uid, Arrays.toString(all));
+        }
+        return all[0];
     }
 
     @Override

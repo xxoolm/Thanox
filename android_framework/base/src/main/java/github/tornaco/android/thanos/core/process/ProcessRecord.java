@@ -2,12 +2,13 @@ package github.tornaco.android.thanos.core.process;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.Objects;
+
 import github.tornaco.java.common.util.ObjectsUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.Objects;
 
 @AllArgsConstructor
 @Getter
@@ -17,7 +18,6 @@ public class ProcessRecord implements Parcelable {
     private final String packageName;
     private final String processName;
     private final long pid;
-    private final int userId;
     boolean notResponding;
     boolean crashing;
 
@@ -25,7 +25,6 @@ public class ProcessRecord implements Parcelable {
         packageName = in.readString();
         processName = in.readString();
         pid = in.readLong();
-        userId = in.readInt();
         notResponding = in.readInt() != 0;
         crashing = in.readInt() != 0;
     }
@@ -52,7 +51,6 @@ public class ProcessRecord implements Parcelable {
         parcel.writeString(packageName);
         parcel.writeString(processName);
         parcel.writeLong(pid);
-        parcel.writeInt(userId);
         parcel.writeInt(notResponding ? 1 : 0);
         parcel.writeInt(crashing ? 1 : 0);
     }

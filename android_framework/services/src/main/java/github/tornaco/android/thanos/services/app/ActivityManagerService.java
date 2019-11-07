@@ -1,19 +1,47 @@
 package github.tornaco.android.thanos.services.app;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
+import android.app.ActivityManagerNative;
 import android.app.Notification;
-import android.app.*;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.usage.IUsageStatsManager;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.os.Binder;
+import android.os.Build;
+import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.Process;
-import android.os.*;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.io.Files;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.Res;
@@ -34,8 +62,20 @@ import github.tornaco.android.thanos.core.persist.RepoFactory;
 import github.tornaco.android.thanos.core.persist.i.SetRepo;
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
-import github.tornaco.android.thanos.core.util.*;
-import github.tornaco.android.thanos.services.*;
+import github.tornaco.android.thanos.core.util.ArrayUtils;
+import github.tornaco.android.thanos.core.util.DateUtils;
+import github.tornaco.android.thanos.core.util.DevNull;
+import github.tornaco.android.thanos.core.util.Noop;
+import github.tornaco.android.thanos.core.util.OsUtils;
+import github.tornaco.android.thanos.core.util.PkgUtils;
+import github.tornaco.android.thanos.core.util.Rxs;
+import github.tornaco.android.thanos.core.util.Timber;
+import github.tornaco.android.thanos.core.util.YesNoDontKnow;
+import github.tornaco.android.thanos.services.BootStrap;
+import github.tornaco.android.thanos.services.S;
+import github.tornaco.android.thanos.services.ThanosSchedulers;
+import github.tornaco.android.thanos.services.ThanoxSystemService;
+import github.tornaco.android.thanos.services.ThreadPriorityBooster;
 import github.tornaco.android.thanos.services.apihint.Beta;
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler;
 import github.tornaco.android.thanos.services.app.start.StartRecorder;
@@ -46,21 +86,15 @@ import github.tornaco.android.thanos.services.n.SystemUI;
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService;
 import github.tornaco.java.common.util.CollectionUtils;
 import github.tornaco.java.common.util.ObjectsUtils;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.*;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.SingleTransformer;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import static github.tornaco.android.thanos.core.T.Actions.ACTION_RUNNING_PROCESS_CLEAR;
 import static github.tornaco.android.thanos.core.T.Actions.ACTION_RUNNING_PROCESS_VIEWER;
@@ -99,7 +133,6 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     private SetRepo<String> recentTaskBlurApps;
     private SetRepo<String> smartStandByApps;
 
-    private Map<String, ProcessRecordList> processMap = new ConcurrentHashMap<>();
     private Map<String, Integer> processCrashingTimes = new ConcurrentHashMap<>();
 
     private Set<String> startBlockCallerWhiteList = new HashSet<>();
@@ -551,8 +584,12 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     public ProcessRecord[] getRunningAppProcess() {
         boostPriorityForLockedSection();
         Set<ProcessRecord> records = new HashSet<>();
-        CollectionUtils.consumeRemaining(processMap.values(),
-                processRecordList -> records.addAll(processRecordList.getProcessRecords()));
+        CollectionUtils.consumeRemaining(getRunningAppProcessLegacy(), runningAppProcessInfo -> {
+            String[] pkgList = runningAppProcessInfo.pkgList;
+            if (!ArrayUtils.isEmpty(pkgList)) {
+                records.add(new ProcessRecord(pkgList[0], runningAppProcessInfo.processName, runningAppProcessInfo.pid, false, false));
+            }
+        });
         try {
             return records.toArray(new ProcessRecord[0]);
         } finally {
@@ -569,17 +606,21 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     private String[] getRunningAppPackagesFilter(@Nullable Predicate<String> predicate) {
         boostPriorityForLockedSection();
         List<String> records = new ArrayList<>();
-
-        DevNull.accept(Observable.fromIterable(processMap.values())
-                .distinct()
-                .filter(processRecordList -> processRecordList != null && !processRecordList.isEmpty())
-                .toSortedList()
-                .flatMapObservable((Function<List<ProcessRecordList>, ObservableSource<ProcessRecordList>>) Observable::fromIterable)
-                .map(ProcessRecordList::getPackageName)
-                .distinct()
-                .filter(predicate)
-                .toList()
-                .subscribe((Consumer<List<String>>) records::addAll));
+        List<ActivityManager.RunningAppProcessInfo> processRecordList = getRunningAppProcessLegacy();
+        CollectionUtils.consumeRemaining(processRecordList, runningAppProcessInfo -> {
+            try {
+                String[] pkgList = runningAppProcessInfo.pkgList;
+                if (!ArrayUtils.isEmpty(pkgList)) {
+                    for (String pkg : pkgList) {
+                        if (pkg != null && predicate.test(pkg)) {
+                            records.add(pkg);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        });
 
         try {
             return records.toArray(new String[0]);
@@ -596,15 +637,21 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     @Override
     public ProcessRecord[] getRunningAppProcessForPackage(String pkgName) {
         boostPriorityForLockedSection();
-        ProcessRecordList processRecordList = processMap.get(pkgName);
-        if (processRecordList == null) {
+
+        List<ActivityManager.RunningAppProcessInfo> processRecordList = getRunningAppProcessLegacy();
+        if (CollectionUtils.isNullOrEmpty(processRecordList)) {
             Timber.e("processRecordList not found for pkg: %s", pkgName);
             return new ProcessRecord[0];
         }
+
         Set<ProcessRecord> records = new HashSet<>();
-        DevNull.accept(Observable.fromIterable(processRecordList.getProcessRecords())
-                .filter(processRecord -> processRecord.getPid() != 0)
-                .subscribe(records::add));
+        CollectionUtils.consumeRemaining(processRecordList, runningAppProcessInfo -> {
+            String[] pkgList = runningAppProcessInfo.pkgList;
+            if (!ArrayUtils.isEmpty(pkgList) && ArrayUtils.contains(pkgList, pkgName)) {
+                records.add(new ProcessRecord(pkgName, runningAppProcessInfo.processName, runningAppProcessInfo.pid, false, false));
+            }
+        });
+
         try {
             return records.toArray(new ProcessRecord[0]);
         } finally {
@@ -614,6 +661,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @Override
     public List<ActivityManager.RunningAppProcessInfo> getRunningAppProcessLegacy() {
+        Stopwatch stopwatch = Stopwatch.createStarted();
         ActivityManager activityManager = (ActivityManager) Objects.requireNonNull(getContext())
                 .getSystemService(Context.ACTIVITY_SERVICE);
         final long id = Binder.clearCallingIdentity();
@@ -626,6 +674,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
             Timber.e("getRunningAppProcesses: " + Log.getStackTraceString(e));
         } finally {
             Binder.restoreCallingIdentity(id);
+            Timber.v("ActivityManager.getRunningAppProcessLegacy taken %s:ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         }
         return new ArrayList<>(0);
     }
@@ -655,8 +704,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @Override
     public boolean isPackageRunning(String pkgName) {
-        ProcessRecordList records = processMap.get(pkgName);
-        return records != null && !records.isEmpty();
+        return !ArrayUtils.isEmpty(getRunningAppProcessForPackage(pkgName));
     }
 
     @Override
@@ -859,9 +907,9 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     private Set<Long> getAllPidForPackage(String pkgName) {
         Set<Long> pid = new HashSet<>();
-        ProcessRecordList processRecordList = processMap.get(pkgName);
-        if (processRecordList == null || processRecordList.isEmpty()) return pid;
-        CollectionUtils.consumeRemaining(processRecordList.getProcessRecords(),
+        ProcessRecord[] processRecordList = getRunningAppProcessForPackage(pkgName);
+        if (ArrayUtils.isEmpty(processRecordList)) return pid;
+        CollectionUtils.consumeRemaining(processRecordList,
                 processRecord -> pid.add(processRecord.getPid()));
         return pid;
     }
@@ -1110,7 +1158,6 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
                 .distinct()
                 .filter(cleanUpBgTasksFilter(onlyWhenIsNotInteractive))
                 .subscribe(pkg -> {
-                    killProcessForPackage(pkg);
                     forceStopPackage(pkg);
                     Timber.d("Clean up background task: %s", pkg);
                 }, Rxs.ON_ERROR_LOGGING, () -> {

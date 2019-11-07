@@ -3,12 +3,13 @@ package github.tornaco.android.thanos.core.app;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+
+import java.util.List;
+
 import github.tornaco.android.thanos.core.app.start.StartRecord;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-
-import java.util.List;
 
 @AllArgsConstructor
 public class ActivityManager {
@@ -57,16 +58,6 @@ public class ActivityManager {
     @SneakyThrows
     public void onStartProcessLocked(ProcessRecord processRecord) {
         server.onStartProcessLocked(processRecord);
-    }
-
-    @SneakyThrows
-    public void removeProcessNameLocked(ProcessRecord processRecord) {
-        server.removeProcessNameLocked(processRecord);
-    }
-
-    @SneakyThrows
-    public void addProcessNameLocked(ProcessRecord processRecord) {
-        server.addProcessNameLocked(processRecord);
     }
 
     @SneakyThrows

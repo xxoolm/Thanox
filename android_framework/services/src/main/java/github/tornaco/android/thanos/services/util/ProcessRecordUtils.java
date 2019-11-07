@@ -1,11 +1,12 @@
 package github.tornaco.android.thanos.services.util;
 
 import android.content.pm.ApplicationInfo;
+
+import java.util.Objects;
+
 import de.robv.android.xposed.XposedHelpers;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
 import github.tornaco.android.thanos.core.util.Timber;
-
-import java.util.Objects;
 
 public class ProcessRecordUtils {
     private ProcessRecordUtils() {
@@ -24,6 +25,6 @@ public class ProcessRecordUtils {
         String processName = (String) XposedHelpers
                 .getObjectField(legacy, "processName");
         int pid = XposedHelpers.getIntField(legacy, "pid");
-        return new ProcessRecord(applicationInfo.packageName, processName, pid, -1, false, false);
+        return new ProcessRecord(applicationInfo.packageName, processName, pid, false, false);
     }
 }
