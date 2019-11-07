@@ -612,7 +612,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
                 String[] pkgList = runningAppProcessInfo.pkgList;
                 if (!ArrayUtils.isEmpty(pkgList)) {
                     for (String pkg : pkgList) {
-                        if (pkg != null && predicate.test(pkg)) {
+                        if (pkg != null && !records.contains(pkg) && predicate.test(pkg)) {
                             records.add(pkg);
                         }
                     }
