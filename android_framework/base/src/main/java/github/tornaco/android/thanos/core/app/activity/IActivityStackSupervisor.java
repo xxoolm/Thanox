@@ -83,6 +83,13 @@ public interface IActivityStackSupervisor extends android.os.IInterface
     {
       return null;
     }
+    @Override public void setActivityTrampolineEnabled(boolean enabled) throws android.os.RemoteException
+    {
+    }
+    @Override public boolean isActivityTrampolineEnabled() throws android.os.RemoteException
+    {
+      return false;
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -386,6 +393,23 @@ public interface IActivityStackSupervisor extends android.os.IInterface
           github.tornaco.android.thanos.core.app.component.ComponentReplacement[] _result = this.getComponentReplacements();
           reply.writeNoException();
           reply.writeTypedArray(_result, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
+          return true;
+        }
+        case TRANSACTION_setActivityTrampolineEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _arg0;
+          _arg0 = (0!=data.readInt());
+          this.setActivityTrampolineEnabled(_arg0);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_isActivityTrampolineEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _result = this.isActivityTrampolineEnabled();
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
           return true;
         }
         default:
@@ -893,6 +917,45 @@ public interface IActivityStackSupervisor extends android.os.IInterface
         }
         return _result;
       }
+      @Override public void setActivityTrampolineEnabled(boolean enabled) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeInt(((enabled)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setActivityTrampolineEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setActivityTrampolineEnabled(enabled);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public boolean isActivityTrampolineEnabled() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isActivityTrampolineEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isActivityTrampolineEnabled();
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       public static github.tornaco.android.thanos.core.app.activity.IActivityStackSupervisor sDefaultImpl;
     }
     static final int TRANSACTION_checkActivity = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -916,6 +979,8 @@ public interface IActivityStackSupervisor extends android.os.IInterface
     static final int TRANSACTION_addComponentReplacement = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
     static final int TRANSACTION_removeComponentReplacement = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
     static final int TRANSACTION_getComponentReplacements = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
+    static final int TRANSACTION_setActivityTrampolineEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
+    static final int TRANSACTION_isActivityTrampolineEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.activity.IActivityStackSupervisor impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -950,4 +1015,6 @@ public interface IActivityStackSupervisor extends android.os.IInterface
   public void addComponentReplacement(github.tornaco.android.thanos.core.app.component.ComponentReplacement replacement) throws android.os.RemoteException;
   public void removeComponentReplacement(github.tornaco.android.thanos.core.app.component.ComponentReplacement replacement) throws android.os.RemoteException;
   public github.tornaco.android.thanos.core.app.component.ComponentReplacement[] getComponentReplacements() throws android.os.RemoteException;
+  public void setActivityTrampolineEnabled(boolean enabled) throws android.os.RemoteException;
+  public boolean isActivityTrampolineEnabled() throws android.os.RemoteException;
 }

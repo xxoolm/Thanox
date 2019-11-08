@@ -137,18 +137,22 @@ object T {
     object Settings {
         // Server Settings.
         @JvmField
-        val PREF_BY_PASS_SYSTEM_APPS_ENABLED = ThanosFeature("PREF_BY_PASS_SYSTEM_APPS_ENABLED", true)
+        val PREF_BY_PASS_SYSTEM_APPS_ENABLED =
+            ThanosFeature("PREF_BY_PASS_SYSTEM_APPS_ENABLED", true)
         @JvmField
         val PREF_START_BLOCKER_ENABLED = ThanosFeature("PREF_START_BLOCKER_ENABLED", false)
 
         @JvmField
         val PREF_BG_RESTRICT_ENABLED = ThanosFeature("PREF_BG_RESTRICT_ENABLED", false)
         @JvmField
-        val PREF_BG_TASK_CLEAN_UP_SKIP_AUDIO_FOCUSED = ThanosFeature("PREF_BG_TASK_CLEAN_UP_SKIP_AUDIO_FOCUSED", false)
+        val PREF_BG_TASK_CLEAN_UP_SKIP_AUDIO_FOCUSED =
+            ThanosFeature("PREF_BG_TASK_CLEAN_UP_SKIP_AUDIO_FOCUSED", false)
         @JvmField
-        val PREF_BG_TASK_CLEAN_UP_SKIP_NOTIFICATION = ThanosFeature("PREF_BG_TASK_CLEAN_UP_SKIP_NOTIFICATION", false)
+        val PREF_BG_TASK_CLEAN_UP_SKIP_NOTIFICATION =
+            ThanosFeature("PREF_BG_TASK_CLEAN_UP_SKIP_NOTIFICATION", false)
         @JvmField
-        val PREF_BG_TASK_CLEAN_UP_DELAY_MILLS = ThanosFeature("PREF_BG_TASK_CLEAN_UP_DELAY_MILLS", 0L /*Noop*/)
+        val PREF_BG_TASK_CLEAN_UP_DELAY_MILLS =
+            ThanosFeature("PREF_BG_TASK_CLEAN_UP_DELAY_MILLS", 0L /*Noop*/)
 
         @JvmField
         val PREF_CLEAN_UP_ON_TASK_REMOVED = ThanosFeature("PREF_CLEAN_UP_ON_TASK_REMOVED", false)
@@ -166,15 +170,22 @@ object T {
             ThanosFeature("PREF_SMART_STANDBY_ENABLED", false)
 
         @JvmField
+        val PREF_ACTIVITY_TRAMPOLINE_ENABLED =
+            ThanosFeature("PREF_ACTIVITY_TRAMPOLINE_ENABLED", false)
+
+        @JvmField
         val PREF_APP_LOCK_ENABLED = ThanosFeature("PREF_APP_LOCK_ENABLED", false)
         @JvmField
-        val PREF_APP_LOCK_METHOD = ThanosFeature("PREF_APP_LOCK_METHOD", ActivityStackSupervisor.LockerMethod.NONE)
+        val PREF_APP_LOCK_METHOD =
+            ThanosFeature("PREF_APP_LOCK_METHOD", ActivityStackSupervisor.LockerMethod.NONE)
         @JvmField
         val PREF_APP_LOCK_FP_ENABLED = ThanosFeature("PREF_APP_LOCK_FP_ENABLED", false)
         @JvmField
-        val PREF_APP_LOCK_WORKAROUND_ENABLED = ThanosFeature("PREF_APP_LOCK_WORKAROUND_ENABLED", false)
+        val PREF_APP_LOCK_WORKAROUND_ENABLED =
+            ThanosFeature("PREF_APP_LOCK_WORKAROUND_ENABLED", false)
         @JvmField
-        val PREF_APP_LOCK_KEY_PREFIX_ = ThanosFeature("PREF_APP_LOCK_KEY_PREFIX_", "PREF_APP_LOCK_KEY_PREFIX_")
+        val PREF_APP_LOCK_KEY_PREFIX_ =
+            ThanosFeature("PREF_APP_LOCK_KEY_PREFIX_", "PREF_APP_LOCK_KEY_PREFIX_")
         @JvmField
         val PREF_APP_LOCK_WORKAROUND_DELAY = ThanosFeature("PREF_APP_LOCK_WORKAROUND_DELAY", 300L)
 
@@ -182,7 +193,8 @@ object T {
         val PREF_PRIVACY_ENABLED = ThanosFeature("PREF_PRIVACY_ENABLED", false)
 
         @JvmField
-        val PREF_SCREEN_ON_NOTIFICATION_ENABLED = ThanosFeature("PREF_SCREEN_ON_NOTIFICATION_ENABLED", false)
+        val PREF_SCREEN_ON_NOTIFICATION_ENABLED =
+            ThanosFeature("PREF_SCREEN_ON_NOTIFICATION_ENABLED", false)
 
         @JvmField
         val PREF_LOGGING_ENABLED = ThanosFeature("PREF_LOGGING_ENABLED", true)
@@ -194,13 +206,16 @@ object T {
 
     object Actions {
         const val ACTION_FRONT_PKG_CHANGED = "thanox.a.front_pkg.changed"
-        const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_FROM = "thanox.a.extra.front_activity.changed.pkg.from"
-        const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO = "thanox.a.extra.front_activity.changed.pkg.to"
+        const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_FROM =
+            "thanox.a.extra.front_activity.changed.pkg.from"
+        const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO =
+            "thanox.a.extra.front_activity.changed.pkg.to"
 
         const val ACTION_RUNNING_PROCESS_VIEWER = "thanox.a.running_process.viewer"
         const val ACTION_RUNNING_PROCESS_CLEAR = "thanox.a.running_process.clear"
 
-        const val ACTION_LOCKER_VERIFY_ACTION = "github.tornaco.practice.honeycomb.locker.action.VERIFY"
+        const val ACTION_LOCKER_VERIFY_ACTION =
+            "github.tornaco.practice.honeycomb.locker.action.VERIFY"
         const val ACTION_LOCKER_VERIFY_EXTRA_PACKAGE = "pkg"
         const val ACTION_LOCKER_VERIFY_EXTRA_REQUEST_CODE = "request_code"
     }

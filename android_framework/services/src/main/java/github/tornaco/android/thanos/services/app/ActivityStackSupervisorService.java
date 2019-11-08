@@ -67,6 +67,7 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     private boolean fingerPrintEnabled;
     private int lockerMethod = ActivityStackSupervisor.LockerMethod.NONE;
 
+    private boolean activityTrampolineEnabled;
     private StringMapRepo componentReplacementRepo;
 
     private final AtomicReference<String> currentPresentPkgName = new AtomicReference<>(PackageManager.packageNameOfAndroid());
@@ -107,6 +108,10 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         this.lockerMethod = preferenceManagerService.getInt(
                 T.Settings.PREF_APP_LOCK_METHOD.getKey(),
                 T.Settings.PREF_APP_LOCK_METHOD.getDefaultValue());
+
+        this.activityTrampolineEnabled = preferenceManagerService.getBoolean(
+                T.Settings.PREF_ACTIVITY_TRAMPOLINE_ENABLED.getKey(),
+                T.Settings.PREF_ACTIVITY_TRAMPOLINE_ENABLED.getDefaultValue());
     }
 
     private void listenToPrefs() {
@@ -117,7 +122,8 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
                 if (ObjectsUtils.equals(T.Settings.PREF_APP_LOCK_ENABLED.getKey(), key)
                         || ObjectsUtils.equals(T.Settings.PREF_APP_LOCK_METHOD.getKey(), key)
                         || ObjectsUtils.equals(T.Settings.PREF_APP_LOCK_FP_ENABLED.getKey(), key)
-                        || ObjectsUtils.equals(T.Settings.PREF_APP_LOCK_WORKAROUND_ENABLED.getKey(), key)) {
+                        || ObjectsUtils.equals(T.Settings.PREF_APP_LOCK_WORKAROUND_ENABLED.getKey(), key)
+                        || ObjectsUtils.equals(T.Settings.PREF_ACTIVITY_TRAMPOLINE_ENABLED.getKey(), key)) {
                     Timber.i("Pref changed, reload.");
                     readPrefs();
                 }
@@ -132,6 +138,10 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
 
     @Override
     public Intent replaceActivityStartingIntent(Intent intent) {
+        if (!activityTrampolineEnabled) {
+            return intent;
+        }
+
         ComponentName cName = intent.getComponent();
         if (cName == null) {
             return intent;
@@ -336,6 +346,19 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
             }
         }
         return res.toArray(new ComponentReplacement[0]);
+    }
+
+    @Override
+    public void setActivityTrampolineEnabled(boolean enabled) {
+        enforceCallingPermissions();
+        activityTrampolineEnabled = enabled;
+        PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
+        preferenceManagerService.putBoolean(T.Settings.PREF_ACTIVITY_TRAMPOLINE_ENABLED.getKey(), enabled);
+    }
+
+    @Override
+    public boolean isActivityTrampolineEnabled() {
+        return this.activityTrampolineEnabled;
     }
 
     @Override

@@ -64,17 +64,21 @@ public class ActivityTrampolineActivity extends ThemeActivity {
         });
     }
 
-    protected void onSetupSwitchBar(SwitchBar switchBar) {
+    private void onSetupSwitchBar(SwitchBar switchBar) {
         switchBar.setChecked(getSwitchBarCheckState());
         switchBar.addOnSwitchChangeListener(this::onSwitchBarCheckChanged);
     }
 
-    protected boolean getSwitchBarCheckState() {
-        return false;
+    private boolean getSwitchBarCheckState() {
+        return ThanosManager.from(getApplicationContext()).isServiceInstalled()
+                && ThanosManager.from(getApplicationContext()).getActivityStackSupervisor()
+                .isActivityTrampolineEnabled();
     }
 
-    protected void onSwitchBarCheckChanged(Switch switchBar, boolean isChecked) {
-        // Noop.
+    private void onSwitchBarCheckChanged(Switch switchBar, boolean isChecked) {
+        ThanosManager.from(getApplicationContext())
+                .ifServiceInstalled(thanosManager -> thanosManager.getActivityStackSupervisor()
+                        .setActivityTrampolineEnabled(isChecked));
     }
 
     private void setupViewModel() {

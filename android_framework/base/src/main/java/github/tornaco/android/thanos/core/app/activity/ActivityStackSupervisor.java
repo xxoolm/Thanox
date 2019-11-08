@@ -126,4 +126,13 @@ public class ActivityStackSupervisor {
         return supervisor.getComponentReplacements();
     }
 
+    @SneakyThrows
+    public void setActivityTrampolineEnabled(boolean enabled) {
+        supervisor.setActivityTrampolineEnabled(enabled);
+    }
+
+    @SneakyThrows
+    public boolean isActivityTrampolineEnabled() {
+        return supervisor.isActivityTrampolineEnabled();
+    }
 }

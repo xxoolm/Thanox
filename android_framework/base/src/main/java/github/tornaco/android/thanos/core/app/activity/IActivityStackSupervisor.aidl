@@ -40,4 +40,7 @@ interface IActivityStackSupervisor {
     void removeComponentReplacement(in ComponentReplacement replacement);
 
     ComponentReplacement[] getComponentReplacements();
+
+    void setActivityTrampolineEnabled(boolean enabled);
+    boolean isActivityTrampolineEnabled();
 }
