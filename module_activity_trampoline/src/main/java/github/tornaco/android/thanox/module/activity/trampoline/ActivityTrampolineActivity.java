@@ -1,5 +1,6 @@
 package github.tornaco.android.thanox.module.activity.trampoline;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,10 +13,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.app.component.ComponentReplacement;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.widget.SwitchBar;
 import github.tornaco.android.thanox.module.activity.trampoline.databinding.ModuleActivityTrampolineActivityBinding;
+import github.tornaco.java.common.util.Consumer;
 
 public class ActivityTrampolineActivity extends ThemeActivity {
     private ModuleActivityTrampolineActivityBinding binding;
@@ -50,6 +54,18 @@ public class ActivityTrampolineActivity extends ThemeActivity {
 
         // Switch.
         onSetupSwitchBar(binding.switchBar);
+
+        binding.fab.setOnClickListener(v -> {
+            ThanosManager.from(getApplicationContext())
+                    .ifServiceInstalled(new Consumer<ThanosManager>() {
+                        @Override
+                        public void accept(ThanosManager thanosManager) {
+                            ComponentName from = ComponentName.unflattenFromString("com.xiaomi.xmsf/com.xiaomi.xmsf.push.service.HttpService");
+                            ComponentName to = ComponentName.unflattenFromString("com.xiaomi.xmsf/com.xiaomi.xmsf.push.service.HttpService");
+                            thanosManager.getActivityStackSupervisor().addComponentReplacement(new ComponentReplacement(from, to));
+                        }
+                    });
+        });
     }
 
     protected void onSetupSwitchBar(SwitchBar switchBar) {
