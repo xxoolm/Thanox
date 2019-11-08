@@ -6,13 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -319,8 +320,22 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     }
 
     @Override
-    public ComponentReplacement[] getComponentReplacements() throws RemoteException {
-        return new ComponentReplacement[0];
+    public ComponentReplacement[] getComponentReplacements() {
+        enforceCallingPermissions();
+
+        List<ComponentReplacement> res = new ArrayList<>();
+        Map<String, String> snapshot = componentReplacementRepo.snapshot();
+        for (String key : snapshot.keySet()) {
+            String value = snapshot.get(key);
+            try {
+                ComponentName from = ComponentName.unflattenFromString(key);
+                ComponentName to = ComponentName.unflattenFromString(value);
+                res.add(new ComponentReplacement(from, to));
+            } catch (Throwable e) {
+                Timber.e(e, "Error parse ComponentName, key is %s, value is %s", key, value);
+            }
+        }
+        return res.toArray(new ComponentReplacement[0]);
     }
 
     @Override

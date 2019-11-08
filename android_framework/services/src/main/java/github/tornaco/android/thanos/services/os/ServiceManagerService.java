@@ -25,7 +25,7 @@ public class ServiceManagerService extends SystemService implements IServiceMana
 
     public void addService(String name, IBinder binder) {
         if (hasService(name)) {
-            throw new SecurityException("Service dup.");
+            throw new SecurityException("Service snapshot.");
         }
         serviceCache.putIfAbsent(name, binder);
     }

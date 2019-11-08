@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface MapRepo<K, V> extends Map<K, V> , Repo{
 
-    Map<K, V> dup();
+    Map<K, V> snapshot();
 
     boolean hasNoneNullValue(K k);
 }

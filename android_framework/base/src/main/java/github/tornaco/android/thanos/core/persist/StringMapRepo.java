@@ -156,7 +156,7 @@ public class StringMapRepo implements MapRepo<String, String> {
     }
 
     @Override
-    public Map<String, String> dup() {
+    public Map<String, String> snapshot() {
         return new HashMap<>(mStorage);
     }
 
