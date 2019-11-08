@@ -69,7 +69,7 @@
                     android:drawableStart="@drawable/module_activity_trampoline_ic_guide_fill"
                     android:ellipsize="middle"
                     android:fadingEdge="horizontal"
-                    android:gravity="center"
+                    android:gravity="center|start"
                     android:text="@{replacement.to.flattenToString()}"
                     android:textAppearance="@style/TextAppearance.TileSubTitle"
                     android:textColor="?colorAccent"

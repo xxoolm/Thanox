@@ -3,23 +3,26 @@ package github.tornaco.android.thanox.module.activity.trampoline;
 import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import github.tornaco.android.thanos.core.app.ThanosManager;
-import github.tornaco.android.thanos.core.app.component.ComponentReplacement;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.widget.SwitchBar;
 import github.tornaco.android.thanox.module.activity.trampoline.databinding.ModuleActivityTrampolineActivityBinding;
-import github.tornaco.java.common.util.Consumer;
 
 public class ActivityTrampolineActivity extends ThemeActivity {
     private ModuleActivityTrampolineActivityBinding binding;
@@ -57,14 +60,7 @@ public class ActivityTrampolineActivity extends ThemeActivity {
 
         binding.fab.setOnClickListener(v -> {
             ThanosManager.from(getApplicationContext())
-                    .ifServiceInstalled(new Consumer<ThanosManager>() {
-                        @Override
-                        public void accept(ThanosManager thanosManager) {
-                            ComponentName from = ComponentName.unflattenFromString("com.xiaomi.xmsf/com.xiaomi.xmsf.push.service.HttpService");
-                            ComponentName to = ComponentName.unflattenFromString("com.xiaomi.xmsf/com.xiaomi.xmsf.push.service.HttpService");
-                            thanosManager.getActivityStackSupervisor().addComponentReplacement(new ComponentReplacement(from, to));
-                        }
-                    });
+                    .ifServiceInstalled(thanosManager -> showAddReplacementDialog(null, null));
         });
     }
 
@@ -88,6 +84,70 @@ public class ActivityTrampolineActivity extends ThemeActivity {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         binding.executePendingBindings();
+    }
+
+    private void showAddReplacementDialog(String from, String to) {
+        View layout = LayoutInflater.from(this).inflate(R.layout.module_activity_trampoline_comp_replace_editor, null, false);
+
+        final AppCompatEditText fromEditText = layout.findViewById(R.id.from_comp);
+        fromEditText.setText(from);
+
+        final AppCompatEditText toEditText = layout.findViewById(R.id.to_comp);
+        toEditText.setText(to);
+
+        AlertDialog d = new AlertDialog.Builder(ActivityTrampolineActivity.this)
+                .setTitle(R.string.module_activity_trampoline_add_dialog_title)
+                .setView(layout)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok, (dialog, which) ->
+                        onRequestAddNewReplacement(
+                                fromEditText.getEditableText().toString(),
+                                toEditText.getEditableText().toString()))
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+        d.show();
+    }
+
+    private void onRequestAddNewReplacement(String f, String t) {
+        if (TextUtils.isEmpty(f) || TextUtils.isEmpty(t) || TextUtils.isEmpty(f.trim()) || TextUtils.isEmpty(t.trim())) {
+            showComponentEmptyTips();
+            return;
+        }
+        ComponentName fromCompName = ComponentName.unflattenFromString(f);
+        if (fromCompName == null) {
+            showComponentFromInvalidTips();
+            return;
+        }
+        ComponentName toCompName = ComponentName.unflattenFromString(t);
+        if (toCompName == null) {
+            showComponentToInvalidTips();
+            return;
+        }
+        viewModel.onRequestAddNewReplacement(fromCompName, toCompName);
+    }
+
+    private void showComponentFromInvalidTips() {
+        Toast.makeText(
+                ActivityTrampolineActivity.this,
+                R.string.module_activity_trampoline_add_invalid_from_component
+                , Toast.LENGTH_LONG)
+                .show();
+    }
+
+    private void showComponentToInvalidTips() {
+        Toast.makeText(
+                ActivityTrampolineActivity.this,
+                R.string.module_activity_trampoline_add_invalid_to_component
+                , Toast.LENGTH_LONG)
+                .show();
+    }
+
+    private void showComponentEmptyTips() {
+        Toast.makeText(
+                ActivityTrampolineActivity.this,
+                R.string.module_activity_trampoline_add_empty_component
+                , Toast.LENGTH_LONG)
+                .show();
     }
 
     public static TrampolineViewModel obtainViewModel(FragmentActivity activity) {

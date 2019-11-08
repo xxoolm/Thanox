@@ -1,6 +1,7 @@
 package github.tornaco.android.thanox.module.activity.trampoline;
 
 import android.app.Application;
+import android.content.ComponentName;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.app.component.ComponentReplacement;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.util.Rxs;
 import github.tornaco.java.common.util.CollectionUtils;
@@ -82,6 +84,16 @@ public class TrampolineViewModel extends AndroidViewModel {
         super.onCleared();
         CollectionUtils.consumeRemaining(disposables, Disposable::dispose);
         unRegisterEventReceivers();
+    }
+
+    void onRequestAddNewReplacement(ComponentName f, ComponentName t) {
+        ThanosManager.from(getApplication())
+                .ifServiceInstalled(thanosManager -> {
+                    thanosManager.getActivityStackSupervisor()
+                            .addComponentReplacement(new ComponentReplacement(f, t));
+                    // Reload.
+                    loadModels();
+                });
     }
 
     public interface TrampolineLoader {
