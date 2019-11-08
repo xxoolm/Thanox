@@ -6,7 +6,9 @@
     <data>
 
         <import type="android.view.View" />
-
+        <variable
+                name="viewModel"
+                type="github.tornaco.android.thanox.module.activity.trampoline.TrampolineViewModel"/>
     </data>
 
 
@@ -37,21 +39,31 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/appbar"
-                android:orientation="vertical">
+                android:layout_below="@id/appbar">
+
+            <github.tornaco.android.thanos.widget.SwitchBar
+                    android:id="@+id/switch_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:foreground="?selectableItemBackground"
+                    android:theme="?switchBarTheme"
+                    tools:ignore="UnusedAttribute"/>
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/swipe"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:id="@+id/swipe"
+                    app:refreshing="@{viewModel.isDataLoading}">
 
                 <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-                        android:id="@+id/apps"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="?cardsBackgroundColor" />
+                        android:id="@+id/replacements"
+                        android:background="?cardsBackgroundColor"
+                        android:replacements="@{viewModel.replacements}"/>
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>

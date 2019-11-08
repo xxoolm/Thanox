@@ -9,12 +9,11 @@ import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.AndroidViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import github.tornaco.android.thanos.core.app.ThanosManager;
-import github.tornaco.android.thanos.core.app.component.ComponentReplacement;
+import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.util.Rxs;
 import github.tornaco.java.common.util.CollectionUtils;
 import io.reactivex.Observable;
@@ -31,15 +30,21 @@ public class TrampolineViewModel extends AndroidViewModel {
 
     @Getter
     private final ObservableBoolean isDataLoading = new ObservableBoolean(false);
-    protected final List<Disposable> disposables = new ArrayList<>();
+    private final List<Disposable> disposables = new ArrayList<>();
     @Getter
-    protected final ObservableArrayList<ComponentReplacement> listModels = new ObservableArrayList<>();
+    private final ObservableArrayList<ActivityTrampolineModel> replacements = new ObservableArrayList<>();
 
     private TrampolineLoader trampolineLoader = () -> {
-        List<ComponentReplacement> res = new ArrayList<>();
+        List<ActivityTrampolineModel> res = new ArrayList<>();
         ThanosManager.from(getApplication())
-                .ifServiceInstalled(thanosManager -> res.addAll(Arrays.asList(thanosManager.getActivityStackSupervisor()
-                        .getComponentReplacements())));
+                .ifServiceInstalled(thanosManager -> CollectionUtils.consumeRemaining(thanosManager.getActivityStackSupervisor()
+                        .getComponentReplacements(), componentReplacement -> {
+                    AppInfo appInfo = thanosManager.getPkgManager().getAppInfo(componentReplacement.from.getPackageName());
+                    if (appInfo != null) {
+                        ActivityTrampolineModel model = new ActivityTrampolineModel(componentReplacement, appInfo);
+                        res.add(model);
+                    }
+                }));
         return res;
     };
 
@@ -56,14 +61,14 @@ public class TrampolineViewModel extends AndroidViewModel {
         if (isDataLoading.get()) return;
         isDataLoading.set(true);
         disposables.add(Single
-                .create((SingleOnSubscribe<List<ComponentReplacement>>) emitter ->
+                .create((SingleOnSubscribe<List<ActivityTrampolineModel>>) emitter ->
                         emitter.onSuccess(Objects.requireNonNull(trampolineLoader.load())))
-                .flatMapObservable((Function<List<ComponentReplacement>,
-                        ObservableSource<ComponentReplacement>>) Observable::fromIterable)
+                .flatMapObservable((Function<List<ActivityTrampolineModel>,
+                        ObservableSource<ActivityTrampolineModel>>) Observable::fromIterable)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> listModels.clear())
-                .subscribe(listModels::add, Rxs.ON_ERROR_LOGGING, () -> isDataLoading.set(false)));
+                .doOnSubscribe(disposable -> replacements.clear())
+                .subscribe(replacements::add, Rxs.ON_ERROR_LOGGING, () -> isDataLoading.set(false)));
     }
 
     private void registerEventReceivers() {
@@ -81,6 +86,6 @@ public class TrampolineViewModel extends AndroidViewModel {
 
     public interface TrampolineLoader {
         @WorkerThread
-        List<ComponentReplacement> load();
+        List<ActivityTrampolineModel> load();
     }
 }
