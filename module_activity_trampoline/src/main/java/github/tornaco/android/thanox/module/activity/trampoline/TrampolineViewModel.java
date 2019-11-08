@@ -42,10 +42,8 @@ public class TrampolineViewModel extends AndroidViewModel {
                 .ifServiceInstalled(thanosManager -> CollectionUtils.consumeRemaining(thanosManager.getActivityStackSupervisor()
                         .getComponentReplacements(), componentReplacement -> {
                     AppInfo appInfo = thanosManager.getPkgManager().getAppInfo(componentReplacement.from.getPackageName());
-                    if (appInfo != null) {
-                        ActivityTrampolineModel model = new ActivityTrampolineModel(componentReplacement, appInfo);
-                        res.add(model);
-                    }
+                    ActivityTrampolineModel model = new ActivityTrampolineModel(componentReplacement, appInfo);
+                    res.add(model);
                 }));
         return res;
     };
@@ -91,6 +89,16 @@ public class TrampolineViewModel extends AndroidViewModel {
                 .ifServiceInstalled(thanosManager -> {
                     thanosManager.getActivityStackSupervisor()
                             .addComponentReplacement(new ComponentReplacement(f, t));
+                    // Reload.
+                    loadModels();
+                });
+    }
+
+    void onRequestRemoveNewReplacement(ComponentName f, ComponentName t) {
+        ThanosManager.from(getApplication())
+                .ifServiceInstalled(thanosManager -> {
+                    thanosManager.getActivityStackSupervisor()
+                            .removeComponentReplacement(new ComponentReplacement(f, t));
                     // Reload.
                     loadModels();
                 });

@@ -2,6 +2,7 @@ package github.tornaco.android.thanox.module.activity.trampoline;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -19,12 +21,13 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.app.component.ComponentReplacement;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.widget.SwitchBar;
 import github.tornaco.android.thanox.module.activity.trampoline.databinding.ModuleActivityTrampolineActivityBinding;
 
-public class ActivityTrampolineActivity extends ThemeActivity {
+public class ActivityTrampolineActivity extends ThemeActivity implements ActivityTrampolineItemClickListener {
     private ModuleActivityTrampolineActivityBinding binding;
     private TrampolineViewModel viewModel;
 
@@ -51,7 +54,7 @@ public class ActivityTrampolineActivity extends ThemeActivity {
 
         // List.
         binding.replacements.setLayoutManager(new LinearLayoutManager(this));
-        binding.replacements.setAdapter(new ActivityTrampolineAdapter());
+        binding.replacements.setAdapter(new ActivityTrampolineAdapter(this));
         binding.swipe.setOnRefreshListener(() -> viewModel.start());
         binding.swipe.setColorSchemeColors(getResources().getIntArray(github.tornaco.android.thanos.module.common.R.array.common_swipe_refresh_colors));
 
@@ -60,7 +63,7 @@ public class ActivityTrampolineActivity extends ThemeActivity {
 
         binding.fab.setOnClickListener(v -> {
             ThanosManager.from(getApplicationContext())
-                    .ifServiceInstalled(thanosManager -> showAddReplacementDialog(null, null));
+                    .ifServiceInstalled(thanosManager -> showAddReplacementDialog(null, null, false));
         });
     }
 
@@ -90,7 +93,7 @@ public class ActivityTrampolineActivity extends ThemeActivity {
         binding.executePendingBindings();
     }
 
-    private void showAddReplacementDialog(String from, String to) {
+    private void showAddReplacementDialog(String from, String to, boolean canDelete) {
         View layout = LayoutInflater.from(this).inflate(R.layout.module_activity_trampoline_comp_replace_editor, null, false);
 
         final AppCompatEditText fromEditText = layout.findViewById(R.id.from_comp);
@@ -100,7 +103,9 @@ public class ActivityTrampolineActivity extends ThemeActivity {
         toEditText.setText(to);
 
         AlertDialog d = new AlertDialog.Builder(ActivityTrampolineActivity.this)
-                .setTitle(R.string.module_activity_trampoline_add_dialog_title)
+                .setTitle(canDelete
+                        ? R.string.module_activity_trampoline_edit_dialog_title
+                        : R.string.module_activity_trampoline_add_dialog_title)
                 .setView(layout)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.ok, (dialog, which) ->
@@ -109,7 +114,30 @@ public class ActivityTrampolineActivity extends ThemeActivity {
                                 toEditText.getEditableText().toString()))
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
+        if (canDelete) {
+            d.setButton(DialogInterface.BUTTON_NEUTRAL,
+                    getString(R.string.module_activity_trampoline_add_dialog_delete),
+                    (dialog, which) -> onRequestDeleteNewReplacement(from, to));
+        }
         d.show();
+    }
+
+    private void onRequestDeleteNewReplacement(String f, String t) {
+        if (TextUtils.isEmpty(f) || TextUtils.isEmpty(t) || TextUtils.isEmpty(f.trim()) || TextUtils.isEmpty(t.trim())) {
+            showComponentEmptyTips();
+            return;
+        }
+        ComponentName fromCompName = ComponentName.unflattenFromString(f);
+        if (fromCompName == null) {
+            showComponentFromInvalidTips();
+            return;
+        }
+        ComponentName toCompName = ComponentName.unflattenFromString(t);
+        if (toCompName == null) {
+            showComponentToInvalidTips();
+            return;
+        }
+        viewModel.onRequestRemoveNewReplacement(fromCompName, toCompName);
     }
 
     private void onRequestAddNewReplacement(String f, String t) {
@@ -152,6 +180,11 @@ public class ActivityTrampolineActivity extends ThemeActivity {
                 R.string.module_activity_trampoline_add_empty_component
                 , Toast.LENGTH_LONG)
                 .show();
+    }
+
+    @Override
+    public void onItemClick(@NonNull ComponentReplacement replacement) {
+        showAddReplacementDialog(replacement.from.flattenToString(), replacement.to.flattenToString(), true);
     }
 
     public static TrampolineViewModel obtainViewModel(FragmentActivity activity) {

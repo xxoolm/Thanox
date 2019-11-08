@@ -15,6 +15,10 @@
                 type="github.tornaco.android.thanos.core.app.component.ComponentReplacement" />
 
         <variable
+                name="listener"
+                type="github.tornaco.android.thanox.module.activity.trampoline.ActivityTrampolineItemClickListener" />
+
+        <variable
                 name="isLastOne"
                 type="boolean" />
     </data>
@@ -25,6 +29,7 @@
             android:layout_height="wrap_content"
             android:background="?selectableItemBackground"
             android:minHeight="@dimen/list_item_height"
+            android:onClick="@{() -> listener.onItemClick(replacement)}"
             android:soundEffectsEnabled="false">
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -47,16 +52,30 @@
                 android:layout_toEndOf="@+id/icon">
 
             <TextView
-                    android:id="@+id/from"
+                    android:id="@+id/app_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
+                    android:layout_marginTop="@dimen/common_view_margin_small"
+                    android:layout_marginEnd="@dimen/common_view_margin_default"
+                    android:ellipsize="middle"
+                    android:fadingEdge="horizontal"
+                    android:text="@{app != null ? app.appLabel : @string/module_activity_trampoline_app_not_installed}"
+                    android:textAppearance="@style/TextAppearance.TileTitle"
+                    tools:text="@string/app_name" />
+
+            <TextView
+                    android:id="@+id/from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/app_label"
+                    android:layout_alignParentStart="true"
                     android:layout_marginEnd="@dimen/common_view_margin_default"
                     android:ellipsize="middle"
                     android:fadingEdge="horizontal"
                     android:text="@{replacement.from.flattenToString()}"
-                    android:textAppearance="@style/TextAppearance.TileTitle"
+                    android:textAppearance="@style/TextAppearance.TileSubTitle"
                     tools:text="@string/app_name" />
 
             <TextView
@@ -66,6 +85,7 @@
                     android:layout_below="@id/from"
                     android:layout_alignParentStart="true"
                     android:layout_marginEnd="@dimen/common_view_margin_default"
+                    android:layout_marginBottom="@dimen/common_view_margin_small"
                     android:drawableStart="@drawable/module_activity_trampoline_ic_guide_fill"
                     android:ellipsize="middle"
                     android:fadingEdge="horizontal"

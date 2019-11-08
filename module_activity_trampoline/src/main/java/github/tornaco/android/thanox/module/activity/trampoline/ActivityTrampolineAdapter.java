@@ -18,6 +18,12 @@ class ActivityTrampolineAdapter extends RecyclerView.Adapter<ActivityTrampolineA
 
     private final List<ActivityTrampolineModel> replacements = new ArrayList<>();
 
+    private ActivityTrampolineItemClickListener listener;
+
+    ActivityTrampolineAdapter(ActivityTrampolineItemClickListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,6 +36,7 @@ class ActivityTrampolineAdapter extends RecyclerView.Adapter<ActivityTrampolineA
         ActivityTrampolineModel model = replacements.get(position);
         holder.itemBinding.setReplacement(model.getReplacement());
         holder.itemBinding.setApp(model.getApp());
+        holder.itemBinding.setListener(listener);
         holder.itemBinding.executePendingBindings();
     }
 
