@@ -25,8 +25,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/icon"
-                android:layout_width="@dimen/list_item_app_icon_h"
-                android:layout_height="@dimen/list_item_height_small"
+                android:layout_width="@dimen/suggested_app_icon_w"
+                android:layout_height="@dimen/suggested_app_icon_h"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/dashboard_tile_image_margin_end"
                 android:padding="@dimen/dashboard_tile_image_padding"
