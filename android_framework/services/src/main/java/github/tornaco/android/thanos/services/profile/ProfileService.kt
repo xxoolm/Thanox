@@ -45,7 +45,7 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
             super.onPackageAdded(packageName, uid)
             Timber.v("onPackageAdded: %s", packageName)
 
-            val disposable = Observable.just(packageName).delay(6, TimeUnit.SECONDS)
+            val disposable = Observable.just(packageName).delay(8, TimeUnit.SECONDS)
                 .observeOn(ThanosSchedulers.serverThread())
                 .observeOn(ThanosSchedulers.serverThread())
                 .subscribe {
@@ -166,6 +166,10 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
                 -1,
                 ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME
             )
+            if (templateMode != AppOpsManager.MODE_IGNORED) {
+                Timber.d("Op $i is not MODE_IGNORED, no need to set...")
+                continue
+            }
             Timber.v("Set op by template: $i, mode: $templateMode")
             try {
                 s.appOpsService.setMode(i, appInfo.uid, appInfo.pkgName, templateMode)
