@@ -50,6 +50,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     private lateinit var privacyDataCheatPkgRepo: StringSetRepo
 
     private var privacyEnabled = false
+    private var privacyNotificationEnabled = false
 
     private var privacyRequestHandleTimes = 0L
 
@@ -70,7 +71,8 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         installedPkgsReturnEmptyRepo =
             RepoFactory.get().getOrCreateStringMapRepo(T.privacyInstalledPkgsReturnEmptyFile().path)
 
-        privacyDataCheatPkgRepo = RepoFactory.get().getOrCreateStringSetRepo(T.privacyPkgSettingsFile().path)
+        privacyDataCheatPkgRepo =
+            RepoFactory.get().getOrCreateStringSetRepo(T.privacyPkgSettingsFile().path)
     }
 
     override fun systemReady() {
@@ -90,12 +92,19 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
             T.Settings.PREF_PRIVACY_ENABLED.key,
             T.Settings.PREF_PRIVACY_ENABLED.defaultValue
         )
+        this.privacyNotificationEnabled = preferenceManagerService.getBoolean(
+            T.Settings.PREF_PRIVACY_N_ENABLED.key,
+            T.Settings.PREF_PRIVACY_N_ENABLED.defaultValue
+        )
+
     }
 
     private fun listenToPrefs() {
         val listener = object : IPrefChangeListener.Stub() {
             override fun onPrefChanged(key: String) {
-                if (ObjectsUtils.equals(T.Settings.PREF_PRIVACY_ENABLED.key, key)) {
+                if (ObjectsUtils.equals(T.Settings.PREF_PRIVACY_ENABLED.key, key)
+                    || ObjectsUtils.equals(T.Settings.PREF_PRIVACY_N_ENABLED.key, key)
+                ) {
                     Timber.i("Pref changed, reload.")
                     readPrefs()
                 }
@@ -114,6 +123,20 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         val preferenceManagerService = s.preferenceManagerService
         preferenceManagerService.putBoolean(
             T.Settings.PREF_PRIVACY_ENABLED.key,
+            enabled
+        )
+    }
+
+    override fun isPrivacyNotificationEnabled(): Boolean {
+        return privacyNotificationEnabled
+    }
+
+    override fun setPrivacyNotificationEnabled(enabled: Boolean) {
+        privacyNotificationEnabled = enabled
+
+        val preferenceManagerService = s.preferenceManagerService
+        preferenceManagerService.putBoolean(
+            T.Settings.PREF_PRIVACY_N_ENABLED.key,
             enabled
         )
     }
@@ -261,7 +284,11 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     override fun getOriginalDeviceId(): String {
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
-                emitter.onSuccess(Optional.ofNullable(TelephonyManager.from(context).deviceId).orElse(NPEFixing.emptyString()))
+                emitter.onSuccess(
+                    Optional.ofNullable(TelephonyManager.from(context).deviceId).orElse(
+                        NPEFixing.emptyString()
+                    )
+                )
             })
             .subscribeOn(ThanosSchedulers.serverThread())
             .timeout(300, TimeUnit.MILLISECONDS)
@@ -273,7 +300,11 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     override fun getOriginalLine1Number(): String {
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
-                emitter.onSuccess(Optional.ofNullable(TelephonyManager.from(context).line1Number).orElse(NPEFixing.emptyString()))
+                emitter.onSuccess(
+                    Optional.ofNullable(TelephonyManager.from(context).line1Number).orElse(
+                        NPEFixing.emptyString()
+                    )
+                )
             })
             .subscribeOn(ThanosSchedulers.serverThread())
             .timeout(300, TimeUnit.MILLISECONDS)
@@ -285,7 +316,11 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     override fun getOriginalSimSerialNumber(): String {
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
-                emitter.onSuccess(Optional.ofNullable(TelephonyManager.from(context).simSerialNumber).orElse(NPEFixing.emptyString()))
+                emitter.onSuccess(
+                    Optional.ofNullable(TelephonyManager.from(context).simSerialNumber).orElse(
+                        NPEFixing.emptyString()
+                    )
+                )
             })
             .subscribeOn(ThanosSchedulers.serverThread())
             .timeout(300, TimeUnit.MILLISECONDS)
@@ -320,7 +355,9 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     }
 
     private fun showPackagePrivacyDataCheatingNotification(pkg: String) {
+        if (!privacyNotificationEnabled) return
         if (!isNotificationPostReady) return
+        if (!privacyEnabled) return
 
         // Cancel first.
         NotificationManagerCompat.from(context)

@@ -87,6 +87,13 @@ public interface IPrivacyManager extends android.os.IInterface
     {
       return 0L;
     }
+    @Override public boolean isPrivacyNotificationEnabled() throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public void setPrivacyNotificationEnabled(boolean enabled) throws android.os.RemoteException
+    {
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -343,6 +350,23 @@ public interface IPrivacyManager extends android.os.IInterface
           long _result = this.getPrivacyDataCheatRequestCount();
           reply.writeNoException();
           reply.writeLong(_result);
+          return true;
+        }
+        case TRANSACTION_isPrivacyNotificationEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _result = this.isPrivacyNotificationEnabled();
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_setPrivacyNotificationEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _arg0;
+          _arg0 = (0!=data.readInt());
+          this.setPrivacyNotificationEnabled(_arg0);
+          reply.writeNoException();
           return true;
         }
         default:
@@ -808,6 +832,45 @@ public interface IPrivacyManager extends android.os.IInterface
         }
         return _result;
       }
+      @Override public boolean isPrivacyNotificationEnabled() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isPrivacyNotificationEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isPrivacyNotificationEnabled();
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public void setPrivacyNotificationEnabled(boolean enabled) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeInt(((enabled)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setPrivacyNotificationEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setPrivacyNotificationEnabled(enabled);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
       public static github.tornaco.android.thanos.core.secure.IPrivacyManager sDefaultImpl;
     }
     static final int TRANSACTION_isPrivacyEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -831,6 +894,8 @@ public interface IPrivacyManager extends android.os.IInterface
     static final int TRANSACTION_isInstalledPackagesReturnEmptyEnableForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
     static final int TRANSACTION_getPrivacyDataCheatPkgCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
     static final int TRANSACTION_getPrivacyDataCheatRequestCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
+    static final int TRANSACTION_isPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
+    static final int TRANSACTION_setPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.secure.IPrivacyManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -865,4 +930,6 @@ public interface IPrivacyManager extends android.os.IInterface
   public boolean isInstalledPackagesReturnEmptyEnableForPkg(java.lang.String pkg) throws android.os.RemoteException;
   public int getPrivacyDataCheatPkgCount() throws android.os.RemoteException;
   public long getPrivacyDataCheatRequestCount() throws android.os.RemoteException;
+  public boolean isPrivacyNotificationEnabled() throws android.os.RemoteException;
+  public void setPrivacyNotificationEnabled(boolean enabled) throws android.os.RemoteException;
 }

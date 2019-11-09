@@ -197,6 +197,9 @@ object T {
         val PREF_PRIVACY_ENABLED = ThanosFeature("PREF_PRIVACY_ENABLED", false)
 
         @JvmField
+        val PREF_PRIVACY_N_ENABLED = ThanosFeature("PREF_PRIVACY_N_ENABLED", true)
+
+        @JvmField
         val PREF_SCREEN_ON_NOTIFICATION_ENABLED =
             ThanosFeature("PREF_SCREEN_ON_NOTIFICATION_ENABLED", false)
 

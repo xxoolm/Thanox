@@ -31,4 +31,7 @@ interface IPrivacyManager {
 
     int getPrivacyDataCheatPkgCount();
     long getPrivacyDataCheatRequestCount();
+
+    boolean isPrivacyNotificationEnabled();
+    void setPrivacyNotificationEnabled(boolean enabled);
 }

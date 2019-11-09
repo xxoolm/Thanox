@@ -3,6 +3,7 @@ package github.tornaco.android.thanos.core.secure;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.location.Location;
+
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -113,5 +114,15 @@ public class PrivacyManager {
     @SneakyThrows
     public boolean isInstalledPackagesReturnEmptyEnableForPkg(String pkg) {
         return server.isInstalledPackagesReturnEmptyEnableForPkg(pkg);
+    }
+
+    @SneakyThrows
+    public boolean isPrivacyNotificationEnabled() {
+        return server.isPrivacyNotificationEnabled();
+    }
+
+    @SneakyThrows
+    public void setPrivacyNotificationEnabled(boolean enabled) {
+        server.setPrivacyNotificationEnabled(enabled);
     }
 }

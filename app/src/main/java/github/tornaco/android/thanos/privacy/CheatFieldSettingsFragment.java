@@ -2,17 +2,19 @@ package github.tornaco.android.thanos.privacy;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
+
+import java.util.Objects;
+
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.util.Optional;
 import lombok.AllArgsConstructor;
-
-import java.util.Objects;
 
 public class CheatFieldSettingsFragment extends PreferenceFragmentCompat {
 
@@ -43,6 +45,14 @@ public class CheatFieldSettingsFragment extends PreferenceFragmentCompat {
         switchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             boolean checked = (boolean) newValue;
             thanos.getPrivacyManager().setInstalledPackagesReturnEmptyEnableForPkg("*", checked);
+            return true;
+        });
+
+        SwitchPreferenceCompat showNotificationPref = findPreference(getString(R.string.key_cheat_field_show_cheated_app_notifications));
+        Objects.requireNonNull(showNotificationPref).setChecked(thanos.getPrivacyManager().isPrivacyNotificationEnabled());
+        showNotificationPref.setOnPreferenceChangeListener((preference, newValue) -> {
+            boolean checked = (boolean) newValue;
+            thanos.getPrivacyManager().setPrivacyNotificationEnabled(checked);
             return true;
         });
     }
