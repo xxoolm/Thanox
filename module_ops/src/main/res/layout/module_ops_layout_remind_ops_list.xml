@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
                 name="viewModel"
-                type="github.tornaco.thanos.android.ops.ops.remind.RemindableOpsListViewModel"/>
+                type="github.tornaco.thanos.android.ops.ops.remind.RemindableOpsListViewModel" />
 
     </data>
 
@@ -29,33 +30,34 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    app:theme="?toolbarTheme"
                     app:popupTheme="?appbarPopupTheme"
-                    tools:title="Title very long very very long!!!!"
+                    app:theme="?toolbarTheme"
                     app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    app:titleTextColor="?menuIconTint">
+                    app:titleTextColor="?menuIconTint"
+                    tools:title="Title very long very very long!!!!">
 
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/appbar">
+                android:layout_below="@id/appbar"
+                android:orientation="vertical">
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/swipe"
                     app:refreshing="@{viewModel.isDataLoading}">
 
                 <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+                        android:id="@+id/apps"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/apps"
                         android:background="?cardsBackgroundColor"
-                        android:opGroups="@{viewModel.opGroups}"/>
+                        android:opGroups="@{viewModel.opGroups}"
+                        app:fastScrollEnabled="false" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>

@@ -47,6 +47,29 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppThemeBlueOrange" parent="Theme.MaterialComponents.Light">
+        <item name="colorAccent">@color/md_blue_a700</item>
+        <item name="colorAccentDark">@color/md_blue_a700</item>
+        <item name="colorPrimary">@color/md_blue_a700</item>
+        <item name="colorPrimaryDark">@color/md_blue_a700</item>
+        <item name="menuIconTint">@color/md_orange_700</item>
+        <item name="switchBarTheme">@style/SwitchBarTheme.Light</item>
+        <item name="appbarPopupTheme">@style/PopupOverlayLight</item>
+        <item name="appbarTheme">@style/AppBarOverlayLight</item>
+        <item name="toolbarTheme">@style/ToolbarThemeCommon</item>
+        <item name="cardsBackgroundColor">@color/md_white</item>
+        <item name="cardsBackgroundSecondaryColor">@color/md_grey_100</item>
+        <item name="android:windowBackground">@color/md_grey_200</item>
+        <item name="colorBackgroundFloating">@color/md_grey_100</item>
+        <item name="android:itemBackground">@color/md_grey_100</item>
+        <item name="switchPreferenceCompatStyle">@style/SwitchPrefTheme</item>
+    </style>
+
+    <style name="AppThemeBlueOrange.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="AppThemeAmber" parent="Theme.MaterialComponents">
         <item name="colorAccent">@color/md_amber_900</item>
         <item name="colorAccentDark">@color/md_amber_900</item>
@@ -196,6 +219,7 @@
         <item>Light green</item>
         <item>Light amber</item>
         <item>Light black</item>
+        <item>Blue orange</item>
         <item>Dark</item>
         <item>DarkRed</item>
         <item>DarkAmber</item>
@@ -207,6 +231,7 @@
         <item>LightGreen</item>
         <item>LightAmber</item>
         <item>LightBlack</item>
+        <item>BlueOrange</item>
         <item>Dark</item>
         <item>DarkRed</item>
         <item>DarkAmber</item>

@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.theme;
 
 import androidx.annotation.StyleRes;
+
 import github.tornaco.android.thanos.module.common.R;
 import lombok.AllArgsConstructor;
 
@@ -11,6 +12,8 @@ public enum Theme {
     LightGreen(R.style.AppThemeLightGreen_NoActionBar),
     LightAmber(R.style.AppThemeLightAmber_NoActionBar),
     LightBlack(R.style.AppThemeLightBlack_NoActionBar),
+
+    BlueOrange(R.style.AppThemeBlueOrange_NoActionBar),
 
     Dark(R.style.AppTheme_NoActionBar),
     DarkAmber(R.style.AppThemeAmber_NoActionBar),

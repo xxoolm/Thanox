@@ -2,18 +2,25 @@ package github.tornaco.android.thanos.common;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import github.tornaco.android.thanos.module.common.databinding.ItemCommonAppBinding;
-import github.tornaco.java.common.util.Consumer;
-import lombok.Getter;
+
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import github.tornaco.android.thanos.module.common.R;
+import github.tornaco.android.thanos.module.common.databinding.ItemCommonAppBinding;
+import github.tornaco.java.common.util.Consumer;
+import lombok.Getter;
+
 public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppListFilterAdapter.VH>
-        implements Consumer<List<AppListModel>> {
+        implements Consumer<List<AppListModel>>,
+        FastScrollRecyclerView.SectionedAdapter,
+        FastScrollRecyclerView.MeasurableAdapter<CommonAppListFilterAdapter.VH> {
 
     private final List<AppListModel> processModels = new ArrayList<>();
 
@@ -52,6 +59,26 @@ public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppLi
         this.processModels.clear();
         this.processModels.addAll(processModels);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getViewTypeHeight(RecyclerView recyclerView, @Nullable VH viewHolder, int viewType) {
+        return recyclerView.getResources().getDimensionPixelSize(R.dimen.common_list_item_height);
+    }
+
+    @NonNull
+    @Override
+    public String getSectionName(int position) {
+        AppListModel model = processModels.get(position);
+        String appName = model.appInfo.getAppLabel();
+        if (appName == null
+                || appName.length() < 1) {
+            appName = model.appInfo.getPkgName();
+        }
+        if (appName == null) {
+            return "*";
+        }
+        return String.valueOf(appName.charAt(0));
     }
 
     @Getter

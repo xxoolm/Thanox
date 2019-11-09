@@ -2,19 +2,26 @@ package github.tornaco.android.thanos.common;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import github.tornaco.android.thanos.core.pm.AppInfo;
-import github.tornaco.android.thanos.module.common.databinding.ItemCommonCheckableAppBinding;
-import github.tornaco.java.common.util.Consumer;
-import lombok.Getter;
+
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import github.tornaco.android.thanos.core.pm.AppInfo;
+import github.tornaco.android.thanos.module.common.R;
+import github.tornaco.android.thanos.module.common.databinding.ItemCommonCheckableAppBinding;
+import github.tornaco.java.common.util.Consumer;
+import lombok.Getter;
+
 class CommonFuncToggleAppListFilterAdapter extends RecyclerView.Adapter<CommonFuncToggleAppListFilterAdapter.VH>
-        implements Consumer<List<AppListModel>> {
+        implements Consumer<List<AppListModel>>,
+        FastScrollRecyclerView.SectionedAdapter,
+        FastScrollRecyclerView.MeasurableAdapter<CommonFuncToggleAppListFilterAdapter.VH> {
 
     private final List<AppListModel> processModels = new ArrayList<>();
 
@@ -77,6 +84,26 @@ class CommonFuncToggleAppListFilterAdapter extends RecyclerView.Adapter<CommonFu
         this.processModels.clear();
         this.processModels.addAll(processModels);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getViewTypeHeight(RecyclerView recyclerView, @Nullable VH viewHolder, int viewType) {
+        return recyclerView.getResources().getDimensionPixelSize(R.dimen.common_list_item_height);
+    }
+
+    @NonNull
+    @Override
+    public String getSectionName(int position) {
+        AppListModel model = processModels.get(position);
+        String appName = model.appInfo.getAppLabel();
+        if (appName == null
+                || appName.length() < 1) {
+            appName = model.appInfo.getPkgName();
+        }
+        if (appName == null) {
+            return "*";
+        }
+        return String.valueOf(appName.charAt(0));
     }
 
     @Getter
