@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.UserHandle;
 import android.text.TextUtils;
@@ -37,12 +38,16 @@ import github.tornaco.android.thanos.core.persist.StringMapRepo;
 import github.tornaco.android.thanos.core.persist.i.SetRepo;
 import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener;
+import github.tornaco.android.thanos.core.util.HandlerUtils;
 import github.tornaco.android.thanos.core.util.Noop;
 import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.S;
 import github.tornaco.android.thanos.services.ThanosSchedulers;
 import github.tornaco.android.thanos.services.ThanoxSystemService;
+import github.tornaco.android.thanos.services.app.view.CurrentComponentView;
+import github.tornaco.android.thanos.services.app.view.CurrentComponentViewCallback;
+import github.tornaco.android.thanos.services.app.view.ShowCurrentComponentViewR;
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService;
 import github.tornaco.java.common.util.ObjectsUtils;
 import io.reactivex.Completable;
@@ -54,6 +59,8 @@ import lombok.ToString;
 public class ActivityStackSupervisorService extends ThanoxSystemService implements IActivityStackSupervisor {
 
     private static final AtomicInteger S_REQ = new AtomicInteger(0);
+
+    private Handler h;
 
     private final Set<String> verifiedPackages = new HashSet<>();
     @SuppressLint("UseSparseArrays")
@@ -70,7 +77,12 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     private boolean activityTrampolineEnabled;
     private StringMapRepo componentReplacementRepo;
 
+    private boolean showCurrentComponentViewEnabled;
+    private CurrentComponentView currentComponentView;
+    private ShowCurrentComponentViewR showCurrentComponentViewR;
+
     private final AtomicReference<String> currentPresentPkgName = new AtomicReference<>(PackageManager.packageNameOfAndroid());
+    private final AtomicReference<ComponentName> currentPresentComponentName = new AtomicReference<>(null);
 
     public ActivityStackSupervisorService(S s) {
         super(s);
@@ -79,14 +91,21 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     @Override
     public void onStart(Context context) {
         super.onStart(context);
+        this.h = HandlerUtils.newHandlerOfNewThread("ASSS");
+
         this.lockingApps = RepoFactory.get().getOrCreateStringSetRepo(T.appLockRepoFile().getPath());
         this.componentReplacementRepo = RepoFactory.get().getOrCreateStringMapRepo(T.componentReplacementRepoFile().getPath());
+
+        this.showCurrentComponentViewR = new ShowCurrentComponentViewR();
     }
 
     @Override
     public void systemReady() {
         super.systemReady();
         initPrefs();
+
+        // View 需要在系统启动完成后初始化
+        this.currentComponentView = new CurrentComponentView(getContext(), new CurrentComponentViewCallback(getContext()));
     }
 
     private void initPrefs() {
@@ -112,6 +131,10 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         this.activityTrampolineEnabled = preferenceManagerService.getBoolean(
                 T.Settings.PREF_ACTIVITY_TRAMPOLINE_ENABLED.getKey(),
                 T.Settings.PREF_ACTIVITY_TRAMPOLINE_ENABLED.getDefaultValue());
+
+        this.showCurrentComponentViewEnabled = preferenceManagerService.getBoolean(
+                T.Settings.PREF_SHOW_CURRENT_ACTIVITY_COMPONENT_ENABLED.getKey(),
+                T.Settings.PREF_SHOW_CURRENT_ACTIVITY_COMPONENT_ENABLED.getDefaultValue());
     }
 
     private void listenToPrefs() {
@@ -123,6 +146,7 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
                         || ObjectsUtils.equals(T.Settings.PREF_APP_LOCK_METHOD.getKey(), key)
                         || ObjectsUtils.equals(T.Settings.PREF_APP_LOCK_FP_ENABLED.getKey(), key)
                         || ObjectsUtils.equals(T.Settings.PREF_APP_LOCK_WORKAROUND_ENABLED.getKey(), key)
+                        || ObjectsUtils.equals(T.Settings.PREF_SHOW_CURRENT_ACTIVITY_COMPONENT_ENABLED.getKey(), key)
                         || ObjectsUtils.equals(T.Settings.PREF_ACTIVITY_TRAMPOLINE_ENABLED.getKey(), key)) {
                     Timber.i("Pref changed, reload.");
                     readPrefs();
@@ -213,14 +237,31 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
 
     private void reportActivityLaunchingInternal(Intent intent, String reason) {
         Timber.d("reportActivityLaunchingInternal: %s %s", intent, reason);
+        if (intent == null) {
+            Timber.w("reportActivityLaunchingInternal, intent is null");
+            return;
+        }
 
         String pkg = PkgUtils.packageNameOf(intent);
+        if (pkg == null) {
+            Timber.w("reportActivityLaunchingInternal, pkg of this intent is null");
+            return;
+        }
+
         String last = currentPresentPkgName.get();
         boolean changed = !ObjectsUtils.equals(last, pkg);
-        currentPresentPkgName.set(pkg);
 
+        currentPresentPkgName.set(pkg);
+        currentPresentComponentName.set(intent.getComponent());
+
+        // Notify pkg changed.
         if (changed) {
             onFrontPackageChangedInternal(last, pkg);
+        }
+
+        // Update current view.
+        if (isShowCurrentComponentViewEnabled()) {
+            showCurrentComponentView();
         }
     }
 
@@ -359,6 +400,30 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     @Override
     public boolean isActivityTrampolineEnabled() {
         return this.activityTrampolineEnabled;
+    }
+
+    @Override
+    public void setShowCurrentComponentViewEnabled(boolean enabled) {
+        enforceCallingPermissions();
+        showCurrentComponentViewEnabled = enabled;
+        PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
+        preferenceManagerService.putBoolean(T.Settings.PREF_SHOW_CURRENT_ACTIVITY_COMPONENT_ENABLED.getKey(), enabled);
+    }
+
+    @Override
+    public boolean isShowCurrentComponentViewEnabled() {
+        return showCurrentComponentViewEnabled;
+    }
+
+    private void showCurrentComponentView() {
+        Timber.v("showCurrentComponentView %s, %s", currentComponentView, currentPresentComponentName);
+        if (!isSystemReady() || !isNotificationPostReady() || currentPresentComponentName.get() == null) {
+            return;
+        }
+        h.removeCallbacks(showCurrentComponentViewR);
+        showCurrentComponentViewR.setName(currentPresentComponentName.get());
+        showCurrentComponentViewR.setView(currentComponentView);
+        h.post(showCurrentComponentViewR);
     }
 
     @Override

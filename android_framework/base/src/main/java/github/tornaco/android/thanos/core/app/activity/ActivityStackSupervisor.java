@@ -135,4 +135,15 @@ public class ActivityStackSupervisor {
     public boolean isActivityTrampolineEnabled() {
         return supervisor.isActivityTrampolineEnabled();
     }
+
+    @SneakyThrows
+    public void setShowCurrentComponentViewEnabled(boolean enabled) {
+        supervisor.setShowCurrentComponentViewEnabled(enabled);
+    }
+
+    @SneakyThrows
+    public boolean isShowCurrentComponentViewEnabled() {
+        return supervisor.isShowCurrentComponentViewEnabled();
+    }
+
 }

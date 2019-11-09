@@ -29,7 +29,7 @@ import github.tornaco.android.thanos.core.annotation.NonNull;
 import github.tornaco.android.thanos.core.util.Timber;
 
 
-class CurrentComponentView extends LinearLayout {
+public class CurrentComponentView extends LinearLayout {
 
     private Rect mRect = new Rect();
     private WindowManager mWm;

@@ -43,4 +43,7 @@ interface IActivityStackSupervisor {
 
     void setActivityTrampolineEnabled(boolean enabled);
     boolean isActivityTrampolineEnabled();
+
+    void setShowCurrentComponentViewEnabled(boolean enabled);
+    boolean isShowCurrentComponentViewEnabled();
 }

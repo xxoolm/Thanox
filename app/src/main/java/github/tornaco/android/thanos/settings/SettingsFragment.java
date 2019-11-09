@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -15,8 +16,15 @@ import androidx.preference.DropDownPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
@@ -39,11 +47,6 @@ import github.tornaco.permission.requester.RequiresPermission;
 import github.tornaco.permission.requester.RuntimePermissions;
 import io.reactivex.Completable;
 import io.reactivex.schedulers.Schedulers;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @RuntimePermissions
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -137,6 +140,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         } else {
             loggingPref.setEnabled(false);
+        }
+
+        SwitchPreferenceCompat showCurrentActivityPref = findPreference(getString(R.string.key_show_current_activity));
+        if (thanos.isServiceInstalled()) {
+            showCurrentActivityPref.setChecked(thanos.getActivityStackSupervisor().isShowCurrentComponentViewEnabled());
+            showCurrentActivityPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean checked = (boolean) newValue;
+                thanos.getActivityStackSupervisor().setShowCurrentComponentViewEnabled(checked);
+                return true;
+            });
+
+        } else {
+            showCurrentActivityPref.setEnabled(false);
         }
 
         // About.

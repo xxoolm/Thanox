@@ -174,6 +174,10 @@ object T {
             ThanosFeature("PREF_ACTIVITY_TRAMPOLINE_ENABLED", false)
 
         @JvmField
+        val PREF_SHOW_CURRENT_ACTIVITY_COMPONENT_ENABLED =
+            ThanosFeature("PREF_SHOW_CURRENT_ACTIVITY_COMPONENT_ENABLED", false)
+
+        @JvmField
         val PREF_APP_LOCK_ENABLED = ThanosFeature("PREF_APP_LOCK_ENABLED", false)
         @JvmField
         val PREF_APP_LOCK_METHOD =
