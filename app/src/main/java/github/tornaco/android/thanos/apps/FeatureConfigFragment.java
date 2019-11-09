@@ -3,17 +3,19 @@ package github.tornaco.android.thanos.apps;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
+
+import java.util.Objects;
+
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.thanos.android.ops.ops.by.app.AppOpsListActivity;
 import lombok.AllArgsConstructor;
-
-import java.util.Objects;
 
 public class FeatureConfigFragment extends PreferenceFragmentCompat {
 
@@ -60,6 +62,7 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
         new RecentTaskBlur(getContext()).bind();
         new ScreenOnNotification(getContext()).bind();
         new OpRemind(getContext()).bind();
+        new SmartStandBy(getContext()).bind();
     }
 
     private void bindAppStatePref() {
@@ -259,6 +262,32 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
             ThanosManager.from(getContext())
                     .getNotificationManager()
                     .setScreenOnNotificationEnabledForPkg(appInfo.getPkgName(), value);
+        }
+
+        @Override
+        boolean visible() {
+            return true;
+        }
+    }
+
+    class SmartStandBy extends FeaturePref {
+
+        SmartStandBy(Context context) {
+            super(context.getString(R.string.key_app_feature_config_smart_standby));
+        }
+
+        @Override
+        boolean current() {
+            return ThanosManager.from(getContext())
+                    .getActivityManager()
+                    .isPkgSmartStandByEnabled(appInfo.getPkgName());
+        }
+
+        @Override
+        void setTo(boolean value) {
+            ThanosManager.from(getContext())
+                    .getActivityManager()
+                    .setPkgSmartStandByEnabled(appInfo.getPkgName(), value);
         }
 
         @Override

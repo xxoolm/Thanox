@@ -87,7 +87,11 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
     private fun listenToPrefs() {
         val listener = object : IPrefChangeListener.Stub() {
             override fun onPrefChanged(key: String) {
-                if (ObjectsUtils.equals(T.Settings.PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED.key, key)) {
+                if (ObjectsUtils.equals(
+                        T.Settings.PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED.key,
+                        key
+                    )
+                ) {
                     Timber.i("Pref changed, reload.")
                     readPrefs()
                 }
@@ -148,6 +152,10 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
         s.notificationManagerService.setScreenOnNotificationEnabledForPkg(
             pkg,
             s.notificationManagerService.isScreenOnNotificationEnabledForPkg(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)
+        )
+        s.activityManagerService.setPkgSmartStandByEnabled(
+            pkg,
+            s.activityManagerService.isPkgSmartStandByEnabled(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)
         )
 
         // Set ops.
