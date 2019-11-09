@@ -27,6 +27,7 @@ import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.T;
 import github.tornaco.android.thanos.core.annotation.GuardedBy;
 import github.tornaco.android.thanos.core.annotation.Logging;
+import github.tornaco.android.thanos.core.annotation.Nullable;
 import github.tornaco.android.thanos.core.app.activity.ActivityStackSupervisor;
 import github.tornaco.android.thanos.core.app.activity.IActivityStackSupervisor;
 import github.tornaco.android.thanos.core.app.activity.IVerifyCallback;
@@ -107,12 +108,6 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     public void systemReady() {
         super.systemReady();
         initPrefs();
-
-        // View 需要在系统启动完成后初始化
-        this.currentComponentView = new CurrentComponentView(
-                getContext(),
-                new CurrentComponentViewCallback(getContext(), h),
-                h);
     }
 
     private void initPrefs() {
@@ -431,10 +426,12 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     private void showCurrentComponentView() {
         Timber.v("showCurrentComponentView, %s", currentPresentComponentName);
         if (!isSystemReady() || !isNotificationPostReady() || currentPresentComponentName.get() == null) {
+            Timber.w("showCurrentComponentView when currentPresentComponentName is not set...");
             return;
         }
         h.removeCallbacks(showCurrentComponentViewR);
         showCurrentComponentViewR.setName(currentPresentComponentName.get());
+        lazyInitCurrentComponentView();
         showCurrentComponentViewR.setView(currentComponentView);
         h.post(showCurrentComponentViewR);
     }
@@ -445,6 +442,19 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         h.removeCallbacks(hideCurrentComponentViewR);
         hideCurrentComponentViewR.setView(currentComponentView);
         h.post(hideCurrentComponentViewR);
+        // Set to null.
+        currentComponentView = null;
+    }
+
+    @Nullable
+    private void lazyInitCurrentComponentView() {
+        if (currentComponentView == null && isSystemReady() && isNotificationPostReady()) {
+            // View 需要在系统启动完成后初始化
+            this.currentComponentView = new CurrentComponentView(
+                    getContext(),
+                    new CurrentComponentViewCallback(getContext(), h),
+                    h);
+        }
     }
 
     @Override

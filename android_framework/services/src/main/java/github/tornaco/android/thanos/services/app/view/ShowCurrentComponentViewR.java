@@ -14,7 +14,7 @@ public class ShowCurrentComponentViewR extends AbstractSafeR {
 
     @Override
     public void runSafety() {
-        if (name != null) {
+        if (name != null && view != null) {
             view.attach();
             view.show();
             view.setText(name.flattenToString());
