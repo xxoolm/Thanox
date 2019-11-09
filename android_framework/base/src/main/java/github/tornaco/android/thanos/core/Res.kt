@@ -34,6 +34,8 @@ abstract class Res {
         const val STRING_SERVICE_OP_LABEL_LOCATION = "service_op_label_location"
 
         const val STRING_BG_TASKS_CLEAN_COMPLETE = "service_notification_bg_tasks_clean_complete"
+
+        const val STRING_SERVICE_TOAST_CURRENT_COMPONENT_COPIED_TO_CLIPBOARD = "service_toast_current_component_copied_to_clipboard"
     }
 
     object Drawables {

@@ -1,8 +1,8 @@
 package github.tornaco.android.thanos.services;
 
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Process;
-import android.os.*;
-import io.reactivex.Completable;
 
 public class BackgroundThread extends HandlerThread {
 
@@ -38,19 +38,4 @@ public class BackgroundThread extends HandlerThread {
         }
     }
 
-    public static class ErrorSafetyHandler extends Handler {
-        ErrorSafetyHandler(Looper looper) {
-            super(looper);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            Completable.fromAction(() -> ErrorSafetyHandler.super.handleMessage(msg)).subscribe();
-        }
-
-        @Override
-        public void dispatchMessage(Message msg) {
-            Completable.fromAction(() -> ErrorSafetyHandler.super.dispatchMessage(msg)).subscribe();
-        }
-    }
 }

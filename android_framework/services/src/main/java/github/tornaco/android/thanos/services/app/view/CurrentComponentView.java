@@ -70,7 +70,7 @@ public class CurrentComponentView extends LinearLayout {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public CurrentComponentView(final Context context, Callback callback) {
+    public CurrentComponentView(final Context context, Callback callback, Handler handler) {
         super(context);
         mCallback = callback;
 
@@ -145,7 +145,7 @@ public class CurrentComponentView extends LinearLayout {
 
                 return true;
             }
-        });
+        }, handler);
 
 
         mContainerView = new RelativeLayout(context);

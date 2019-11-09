@@ -42,11 +42,13 @@ import github.tornaco.android.thanos.core.util.HandlerUtils;
 import github.tornaco.android.thanos.core.util.Noop;
 import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
+import github.tornaco.android.thanos.services.ErrorSafetyHandler;
 import github.tornaco.android.thanos.services.S;
 import github.tornaco.android.thanos.services.ThanosSchedulers;
 import github.tornaco.android.thanos.services.ThanoxSystemService;
 import github.tornaco.android.thanos.services.app.view.CurrentComponentView;
 import github.tornaco.android.thanos.services.app.view.CurrentComponentViewCallback;
+import github.tornaco.android.thanos.services.app.view.HideCurrentComponentViewR;
 import github.tornaco.android.thanos.services.app.view.ShowCurrentComponentViewR;
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService;
 import github.tornaco.java.common.util.ObjectsUtils;
@@ -80,6 +82,7 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     private boolean showCurrentComponentViewEnabled;
     private CurrentComponentView currentComponentView;
     private ShowCurrentComponentViewR showCurrentComponentViewR;
+    private HideCurrentComponentViewR hideCurrentComponentViewR;
 
     private final AtomicReference<String> currentPresentPkgName = new AtomicReference<>(PackageManager.packageNameOfAndroid());
     private final AtomicReference<ComponentName> currentPresentComponentName = new AtomicReference<>(null);
@@ -91,12 +94,13 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     @Override
     public void onStart(Context context) {
         super.onStart(context);
-        this.h = HandlerUtils.newHandlerOfNewThread("ASSS");
+        this.h = new ErrorSafetyHandler(HandlerUtils.newLooperOfNewThread("ASSS"));
 
         this.lockingApps = RepoFactory.get().getOrCreateStringSetRepo(T.appLockRepoFile().getPath());
         this.componentReplacementRepo = RepoFactory.get().getOrCreateStringMapRepo(T.componentReplacementRepoFile().getPath());
 
         this.showCurrentComponentViewR = new ShowCurrentComponentViewR();
+        this.hideCurrentComponentViewR = new HideCurrentComponentViewR();
     }
 
     @Override
@@ -105,7 +109,10 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         initPrefs();
 
         // View 需要在系统启动完成后初始化
-        this.currentComponentView = new CurrentComponentView(getContext(), new CurrentComponentViewCallback(getContext()));
+        this.currentComponentView = new CurrentComponentView(
+                getContext(),
+                new CurrentComponentViewCallback(getContext(), h),
+                h);
     }
 
     private void initPrefs() {
@@ -408,6 +415,12 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         showCurrentComponentViewEnabled = enabled;
         PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
         preferenceManagerService.putBoolean(T.Settings.PREF_SHOW_CURRENT_ACTIVITY_COMPONENT_ENABLED.getKey(), enabled);
+
+        if (enabled) {
+            showCurrentComponentView();
+        } else {
+            hideCurrentComponentView();
+        }
     }
 
     @Override
@@ -416,7 +429,7 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     }
 
     private void showCurrentComponentView() {
-        Timber.v("showCurrentComponentView %s, %s", currentComponentView, currentPresentComponentName);
+        Timber.v("showCurrentComponentView, %s", currentPresentComponentName);
         if (!isSystemReady() || !isNotificationPostReady() || currentPresentComponentName.get() == null) {
             return;
         }
@@ -424,6 +437,14 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         showCurrentComponentViewR.setName(currentPresentComponentName.get());
         showCurrentComponentViewR.setView(currentComponentView);
         h.post(showCurrentComponentViewR);
+    }
+
+    private void hideCurrentComponentView() {
+        Timber.v("hideCurrentComponentView, %s", currentPresentComponentName);
+        h.removeCallbacks(showCurrentComponentViewR);
+        h.removeCallbacks(hideCurrentComponentViewR);
+        hideCurrentComponentViewR.setView(currentComponentView);
+        h.post(hideCurrentComponentViewR);
     }
 
     @Override
