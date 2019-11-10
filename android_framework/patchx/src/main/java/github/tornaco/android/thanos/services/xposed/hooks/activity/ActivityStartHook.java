@@ -5,6 +5,9 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.lang.reflect.Method;
+
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -17,8 +20,6 @@ import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.lang.reflect.Method;
 
 /**
  * Created by guohao4 on 2017/10/31.

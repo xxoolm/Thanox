@@ -15,6 +15,7 @@ interface IActivityStackSupervisor {
                     int uid, int pid, in IVerifyCallback callback);
 
     void reportActivityLaunching(in Intent intent, String reason);
+    void reportActivityLaunched(in Intent intent, String reason);
 
     String getCurrentFrontApp();
 

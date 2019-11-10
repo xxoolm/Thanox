@@ -268,6 +268,11 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     }
 
     @Override
+    public void reportActivityLaunched(Intent intent, String reason) {
+
+    }
+
+    @Override
     public String getCurrentFrontApp() {
         return currentPresentPkgName.get();
     }
@@ -421,6 +426,11 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     @Override
     public boolean isShowCurrentComponentViewEnabled() {
         return showCurrentComponentViewEnabled;
+    }
+
+    // TODO Should check white list for security.
+    public boolean shouldFixAroundStartAnyActivityPermission(Intent intent) {
+        return intent != null && activityTrampolineEnabled;
     }
 
     private void showCurrentComponentView() {
