@@ -4,15 +4,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
+
 import com.google.android.material.tabs.TabLayout;
+
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.app.donate.DonateActivity;
+import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.databinding.ActivityNavBinding;
 import github.tornaco.android.thanos.pref.AppPreference;
 import github.tornaco.android.thanos.settings.SettingsActivity;
@@ -39,6 +43,8 @@ public class NavActivity extends ThemeActivity implements NavFragment.FragmentAt
         super.onResume();
         initFirstRun();
         navViewModel.start();
+
+        Timber.v(new Throwable("onResume"));
     }
 
     @Override

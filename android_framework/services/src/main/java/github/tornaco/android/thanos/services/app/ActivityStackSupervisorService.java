@@ -164,28 +164,33 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
 
     @Override
     public Intent replaceActivityStartingIntent(Intent intent) {
+        return intent;
+    }
+
+    public boolean updateActivityStartingIntentInternal(Intent intent) {
         if (!activityTrampolineEnabled) {
-            return intent;
+            return false;
         }
 
         ComponentName cName = intent.getComponent();
         if (cName == null) {
-            return intent;
+            return false;
         }
 
         String cString = cName.flattenToString();
         boolean hasReplacement = componentReplacementRepo.hasNoneNullValue(cString);
         if (!hasReplacement) {
-            return intent;
+            return false;
         }
         String replacement = componentReplacementRepo.get(cString);
         ComponentName newCName = ComponentName.unflattenFromString(replacement);
         if (newCName == null) {
-            return intent;
+            return false;
         }
         Timber.d("Replace component from: %s; to: %s", cName, newCName);
 
-        return intent.setComponent(newCName);
+        intent.setComponent(newCName);
+        return true;
     }
 
     @Override
@@ -269,7 +274,24 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
 
     @Override
     public void reportActivityLaunched(Intent intent, String reason) {
+        // Noop.
+    }
 
+    public void onActivityResumed(Intent intent) {
+        Timber.v("onActivityResumed: %s", intent);
+        Intent localIntent = new Intent(intent);
+        boolean flowed = updateActivityStartingIntentInternal(localIntent);
+        if (flowed) {
+            Timber.d("Launching new activity.");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                // Not all roms has UserHandle.
+                getContext().startActivityAsUser(localIntent, null, UserHandle.of(UserHandle.getCallingUserId()));
+            } catch (Throwable e) {
+                Timber.w("Fail startActivityAsUser %s", Log.getStackTraceString(e));
+                getContext().startActivity(localIntent, null);
+            }
+        }
     }
 
     @Override

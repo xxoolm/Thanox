@@ -51,7 +51,7 @@ public class CurrentComponentView extends LinearLayout {
     private TextView mTextView;
     private String mText;
 
-    private Handler mHandler = new Handler();
+    private Handler mHandler;
 
     private Runnable mSingleTapNotifier = new Runnable() {
         @Override
@@ -72,6 +72,7 @@ public class CurrentComponentView extends LinearLayout {
     @SuppressLint("ClickableViewAccessibility")
     public CurrentComponentView(final Context context, Callback callback, Handler handler) {
         super(context);
+        mHandler = handler;
         mCallback = callback;
 
         mDetectorCompat = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() {
