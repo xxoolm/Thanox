@@ -43,6 +43,7 @@ versions.junit = "4.12"
 versions.glide_api = "4.9.0"
 versions.glide_compiler = "4.9.0"
 versions.auto_logging_plugin = "1.0.0"
+versions.chart = "v3.1.0"
 ext.versions = versions
 
 def deps = [:]
@@ -124,6 +125,8 @@ glide.compiler = "com.github.bumptech.glide:compiler:$versions.glide_compiler"
 deps.glide = glide
 
 deps.junit = "junit:junit:$versions.junit"
+
+deps.chart = "com.github.PhilJay:MPAndroidChart:$versions.chart"
 
 ext.deps = deps
 

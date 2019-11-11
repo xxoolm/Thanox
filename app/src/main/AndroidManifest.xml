@@ -53,6 +53,8 @@
         <activity android:name=".task.RecentTaskBlurListActivity"/>
         <activity android:name=".power.SmartStandbyActivity"/>
         <activity android:name=".apps.SuggestedAppsActivity" android:label="@string/feature_title_apps_manager"/>
+        <activity android:name=".start.StartChartActivity" />
+
         <service android:name=".testing.FakeService"
                  android:exported="true">
             <intent-filter>

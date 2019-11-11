@@ -37,6 +37,7 @@ class ActivityTrampolineAdapter extends RecyclerView.Adapter<ActivityTrampolineA
         holder.itemBinding.setReplacement(model.getReplacement());
         holder.itemBinding.setApp(model.getApp());
         holder.itemBinding.setListener(listener);
+        holder.itemBinding.setIsLastOne(position == getItemCount() - 1);
         holder.itemBinding.executePendingBindings();
     }
 

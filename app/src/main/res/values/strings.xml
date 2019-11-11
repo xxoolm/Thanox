@@ -42,6 +42,8 @@
     <string name="feature_title_bg_restrict">后台运行</string>
     <string name="feature_desc_bg_restrict">允许应用锁屏后继续运行</string>
 
+    <string name="menu_title_start_restrict_charts">启动记录</string>
+
     <string name="feature_category_app_clean_up">清理</string>
     <string name="feature_title_clean_when_task_removed">任务清理</string>
     <string name="feature_desc_clean_when_task_removed">清除最近任务后同时清理应用后台</string>

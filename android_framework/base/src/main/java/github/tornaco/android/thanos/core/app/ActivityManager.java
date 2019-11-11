@@ -101,6 +101,16 @@ public class ActivityManager {
     }
 
     @SneakyThrows
+    public String[] getStartRecordBlockedPackages() {
+        return server.getStartRecordBlockedPackages();
+    }
+
+    @SneakyThrows
+    public long getStartRecordBlockedCountByPackageName(String pkgName) {
+        return server.getStartRecordBlockedCountByPackageName(pkgName);
+    }
+
+    @SneakyThrows
     public long getStartRecordsBlockedCount() {
         return server.getStartRecordsBlockedCount();
     }

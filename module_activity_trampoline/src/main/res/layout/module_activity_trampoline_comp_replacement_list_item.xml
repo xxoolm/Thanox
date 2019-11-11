@@ -104,6 +104,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_toEndOf="@+id/icon"
                 android:background="?android:attr/dividerVertical"
-                android:visibility="invisible" />
+                android:visibility="@{isLastOne ? View.GONE : View.VISIBLE}" />
     </RelativeLayout>
 </layout>

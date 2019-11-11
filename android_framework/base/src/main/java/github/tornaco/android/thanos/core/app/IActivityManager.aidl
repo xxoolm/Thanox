@@ -32,7 +32,11 @@ interface IActivityManager {
     boolean isPackageRunning(String pkgName);
 
     StartRecord[] getStartRecordsByPackageName(String pkgName);
+    String[] getStartRecordBlockedPackages();
+
     long getStartRecordsBlockedCount();
+    long getStartRecordBlockedCountByPackageName(String pkgName);
+
 
     // 启动管理设置
     boolean isStartBlockEnabled();

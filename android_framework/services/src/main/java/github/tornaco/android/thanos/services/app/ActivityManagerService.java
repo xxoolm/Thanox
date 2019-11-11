@@ -713,6 +713,16 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     }
 
     @Override
+    public long getStartRecordBlockedCountByPackageName(String pkgName) {
+        return startRecorder.getStartRecordBlockedCountByPackageName(pkgName);
+    }
+
+    @Override
+    public String[] getStartRecordBlockedPackages() {
+        return startRecorder.getStartRecordBlockedPackages();
+    }
+
+    @Override
     public long getStartRecordsBlockedCount() {
         return startRecorder.getAllBlockedTimes();
     }
