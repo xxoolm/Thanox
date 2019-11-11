@@ -16,7 +16,7 @@ import github.tornaco.xposed.annotation.XposedHook;
 
 import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 
-@XposedHook(targetSdkVersion = {_29})
+@XposedHook(targetSdkVersion = {_29}, active = false)
 @Beta
 public class AbstractAccessibilityServiceConnectionRegistry implements IXposedHook {
     @Override
