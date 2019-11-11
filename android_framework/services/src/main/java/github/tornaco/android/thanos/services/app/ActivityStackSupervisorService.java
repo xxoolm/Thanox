@@ -164,6 +164,7 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
 
     @Override
     public Intent replaceActivityStartingIntent(Intent intent) {
+        updateActivityStartingIntentInternal(intent);
         return intent;
     }
 
@@ -279,19 +280,6 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
 
     public void onActivityResumed(Intent intent) {
         Timber.v("onActivityResumed: %s", intent);
-        Intent localIntent = new Intent(intent);
-        boolean flowed = updateActivityStartingIntentInternal(localIntent);
-        if (flowed) {
-            Timber.d("Launching new activity.");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            try {
-                // Not all roms has UserHandle.
-                getContext().startActivityAsUser(localIntent, null, UserHandle.of(UserHandle.getCallingUserId()));
-            } catch (Throwable e) {
-                Timber.w("Fail startActivityAsUser %s", Log.getStackTraceString(e));
-                getContext().startActivity(localIntent, null);
-            }
-        }
     }
 
     @Override
