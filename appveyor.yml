@@ -31,11 +31,10 @@ install:
 
 build_script:
   - openssl enc -aes-256-cbc -d -K %K% -iv %IV% -in %APPVEYOR_BUILD_FOLDER%/environment/keys/android-key-enc -out %APPVEYOR_BUILD_FOLDER%/environment/keys/android.jks
-  - gradlew.bat :app:assembleRelease
-  - cp out\app\outputs\apk\prcBeta\release\app-prc-beta-release.apk .
+  - gradlew.bat :app:assemblePrcBetaRelease
 
 artifacts:
-  - path: app-prc-beta-release.apk
+  - path: **/*.apk
     name: Releases
 
 pull_requests:
@@ -45,7 +44,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: "308KDLsJSL92cNktWWDvydxWSG6qTqI3C/f+DElUH3uysKVf3SyKLtYFRe0x86KG"
-  artifact: app-prc-beta-release.apk
+  artifact: **/*.apk
   draft: false
   prerelease: true
   on:

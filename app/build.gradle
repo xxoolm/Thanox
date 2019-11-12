@@ -86,6 +86,14 @@ android {
     dataBinding {
         enabled = true
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def flavor = variant.name
+            def versionName = variant.versionName
+            outputFileName = "thanox_${versionName}.apk"
+        }
+    }
 }
 
 dependencies {
