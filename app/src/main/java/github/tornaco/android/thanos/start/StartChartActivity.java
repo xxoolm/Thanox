@@ -20,11 +20,11 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -73,12 +73,14 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
 
         chart.getDescription().setEnabled(true);
         chart.getDescription().setText("Powered by thanox");
-        chart.getDescription().setTextColor(Color.BLUE);
+        chart.getDescription().setTextColor(textColorPrimary);
         chart.setExtraOffsets(5, 10, 5, 5);
 
         chart.setDragDecelerationFrictionCoef(0.95f);
 
         chart.setCenterText(generateCenterSpannableText());
+        chart.setCenterTextColor(textColorPrimary);
+        chart.setDrawCenterText(true);
 
         chart.setDrawHoleEnabled(true);
         chart.setHoleColor(windowBgColor);
@@ -88,8 +90,6 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
 
         chart.setHoleRadius(58f);
         chart.setTransparentCircleRadius(61f);
-
-        chart.setDrawCenterText(true);
 
         chart.setRotationAngle(0);
         // enable rotation of the chart by touch
@@ -146,13 +146,12 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
         // the chart.
         for (int i = 0; (i < startEntries.size() && i < 24); i++) {
             entries.add(new PieEntry(startEntries.get(i).times,
-                    String.valueOf(PkgUtils.loadNameByPkgName(this, startEntries.get(i).pkg) + " " + startEntries.get(i).times)));
+                    PkgUtils.loadNameByPkgName(this, startEntries.get(i).pkg) + " " + startEntries.get(i).times));
         }
 
-        PieDataSet dataSet = new PieDataSet(entries, "Election Results");
+        PieDataSet dataSet = new PieDataSet(entries, "");
 
         dataSet.setDrawIcons(false);
-
         dataSet.setSliceSpace(3f);
         dataSet.setIconsOffset(new MPPointF(0, 40));
         dataSet.setSelectionShift(5f);
@@ -176,6 +175,9 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
         for (int c : ColorTemplate.PASTEL_COLORS)
             colors.add(c);
 
+        for (int c : ColorTemplate.MATERIAL_COLORS)
+            colors.add(c);
+
         colors.add(ColorTemplate.getHoloBlue());
 
         dataSet.setColors(colors);
@@ -184,7 +186,14 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
         PieChart chart = binding.chart1;
 
         PieData data = new PieData(dataSet);
-        data.setValueFormatter(new PercentFormatter(chart));
+
+        DecimalFormat format = new DecimalFormat("###,###,##0.0");
+        data.setValueFormatter(new PercentFormatter(chart) {
+            @Override
+            public String getFormattedValue(float value) {
+                return value >= 8f ? format.format(value) + " %" : "";
+            }
+        });
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.WHITE);
         chart.setData(data);
