@@ -7,7 +7,7 @@ branches:
     - master
 
 # Start builds on tags only (GitHub, BitBucket, GitLab, Gitea)
-skip_non_tags: true
+skip_non_tags: false
 
 environment:
   ANDROID_HOME: C:\android-sdk-windows
