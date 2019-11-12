@@ -3,12 +3,8 @@ package github.tornaco.android.thanos.start;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
@@ -24,6 +20,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
@@ -64,14 +61,15 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        int[] attrs = {android.R.attr.textColorPrimary};
+        int[] attrs = {android.R.attr.textColorPrimary, android.R.attr.windowBackground};
         TypedArray ta = obtainStyledAttributes(attrs);
         int textColorPrimaryRes = ta.getResourceId(0, R.color.md_red_700);
+        int windowBgColorRes = ta.getResourceId(1, R.color.md_white);
         ta.recycle();
         int textColorPrimary = getColor(textColorPrimaryRes);
+        int windowBgColor = getColor(windowBgColorRes);
 
         PieChart chart = binding.chart1;
-        chart.setUsePercentValues(true);
 
         chart.getDescription().setEnabled(true);
         chart.getDescription().setText("Powered by thanox");
@@ -83,9 +81,9 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
         chart.setCenterText(generateCenterSpannableText());
 
         chart.setDrawHoleEnabled(true);
-        chart.setHoleColor(Color.WHITE);
+        chart.setHoleColor(windowBgColor);
 
-        chart.setTransparentCircleColor(Color.WHITE);
+        chart.setTransparentCircleColor(windowBgColor);
         chart.setTransparentCircleAlpha(110);
 
         chart.setHoleRadius(58f);
@@ -117,20 +115,13 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
 
         // entry label styling
         chart.setDrawEntryLabels(false);
+        chart.setUsePercentValues(true);
     }
 
     private SpannableString generateCenterSpannableText() {
         ThanosManager thanosManager = ThanosManager.from(getApplicationContext());
         long times = thanosManager.getActivityManager().getStartRecordsBlockedCount();
-        SpannableString s = new SpannableString(String.format("%s times\nblocked by thanox", times));
-        int N = String.format("%s times", times).length();
-        s.setSpan(new RelativeSizeSpan(1.7f), 0, N, 0);
-        s.setSpan(new StyleSpan(Typeface.NORMAL), N, s.length() - (N + 1), 0);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), N, s.length() - (N + 1), 0);
-        s.setSpan(new RelativeSizeSpan(.8f), N, s.length() - (N + 1), 0);
-        s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - N, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - N, s.length(), 0);
-        return s;
+        return new SpannableString(String.format("%s times", times));
     }
 
     private void setData() {
@@ -154,7 +145,8 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
         // NOTE: The order of the entries when being added to the entries array determines their position around the center of
         // the chart.
         for (int i = 0; (i < startEntries.size() && i < 24); i++) {
-            entries.add(new PieEntry(startEntries.get(i).times, String.valueOf(PkgUtils.loadNameByPkgName(this, startEntries.get(i).pkg))));
+            entries.add(new PieEntry(startEntries.get(i).times,
+                    String.valueOf(PkgUtils.loadNameByPkgName(this, startEntries.get(i).pkg) + " " + startEntries.get(i).times)));
         }
 
         PieDataSet dataSet = new PieDataSet(entries, "Election Results");
