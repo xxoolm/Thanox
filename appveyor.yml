@@ -34,7 +34,7 @@ build_script:
   - gradlew.bat :app:assemblePrcBetaRelease
 
 artifacts:
-  - path: **/*.apk
+  - path: '**\*.apk'
     name: Releases
 
 pull_requests:
@@ -44,7 +44,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: "308KDLsJSL92cNktWWDvydxWSG6qTqI3C/f+DElUH3uysKVf3SyKLtYFRe0x86KG"
-  artifact: **/*.apk
+  artifact: '**\*.apk'
   draft: false
   prerelease: true
   on:
