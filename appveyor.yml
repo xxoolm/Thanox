@@ -1,4 +1,4 @@
-version: '1.0.0_rc6({build})'
+version: '1.0.0_r1({build})'
 
 # branches to build
 branches:
@@ -31,7 +31,7 @@ install:
 
 build_script:
   - openssl enc -aes-256-cbc -d -K %K% -iv %IV% -in %APPVEYOR_BUILD_FOLDER%/environment/keys/android-key-enc -out %APPVEYOR_BUILD_FOLDER%/environment/keys/android.jks
-  - gradlew.bat :app:assemblePrcBetaRelease
+  - gradlew.bat :app:assemblePrcRelRelease
 
 artifacts:
   - path: '**\*.apk'
