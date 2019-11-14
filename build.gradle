@@ -30,8 +30,11 @@ task clean(type: Delete) {
 androidGitVersion {
     prefix 'v'
     codeFormat = 'MMNNPPRR'
+    baseCode = 191011
     // 1000000
-    // 1000003
+    // 191011
+    // First rel version
+    // 1191011
 }
 
 ext {
