@@ -23,7 +23,7 @@ public class ReflectionUtils {
 
     private static final Method[] NO_METHODS = {};
 
-    private static final HashMap<String, Field> fieldCache = new HashMap<String, Field>();
+    private static final HashMap<String, Field> FIELD_CACHE = new HashMap<String, Field>();
 
     private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_TO_WRAPPER_MAP = new IdentityHashMap<>(8);
     private static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPER_TYPE_MAP = new IdentityHashMap<>(8);
@@ -64,20 +64,21 @@ public class ReflectionUtils {
     public static Field findField(Class<?> clazz, String fieldName) {
         String fullFieldName = clazz.getName() + '#' + fieldName;
 
-        if (fieldCache.containsKey(fullFieldName)) {
-            Field field = fieldCache.get(fullFieldName);
-            if (field == null)
+        if (FIELD_CACHE.containsKey(fullFieldName)) {
+            Field field = FIELD_CACHE.get(fullFieldName);
+            if (field == null) {
                 throw new NoSuchFieldError(fullFieldName);
+            }
             return field;
         }
 
         try {
             Field field = findFieldRecursiveImpl(clazz, fieldName);
             field.setAccessible(true);
-            fieldCache.put(fullFieldName, field);
+            FIELD_CACHE.put(fullFieldName, field);
             return field;
         } catch (NoSuchFieldException e) {
-            fieldCache.put(fullFieldName, null);
+            FIELD_CACHE.put(fullFieldName, null);
             throw new NoSuchFieldError(fullFieldName);
         }
     }
@@ -104,8 +105,9 @@ public class ReflectionUtils {
         } catch (NoSuchFieldException e) {
             while (true) {
                 clazz = clazz.getSuperclass();
-                if (clazz == null || clazz.equals(Object.class))
+                if (clazz == null || clazz.equals(Object.class)) {
                     break;
+                }
 
                 try {
                     return clazz.getDeclaredField(fieldName);
@@ -218,7 +220,7 @@ public class ReflectionUtils {
         PreconditionUtils.checkNotNull(name, "Method name must not be null");
         Class<?> searchType = clazz;
         while (searchType != null) {
-            Method[] methods = (searchType.isInterface() ? searchType.getMethods() : getDeclaredMethods(searchType));
+            Method[] methods = searchType.isInterface() ? searchType.getMethods() : getDeclaredMethods(searchType);
             for (Method method : methods) {
                 if (name.equals(method.getName()) &&
                         (paramTypes == null || Arrays.equals(paramTypes, method.getParameterTypes()))) {
@@ -256,7 +258,7 @@ public class ReflectionUtils {
             } else {
                 result = declaredMethods;
             }
-            DECLARED_METHODS_CACHE.put(clazz, (result.length == 0 ? NO_METHODS : result));
+            DECLARED_METHODS_CACHE.put(clazz, result.length == 0 ? NO_METHODS : result);
         }
         return result;
     }
@@ -396,7 +398,7 @@ public class ReflectionUtils {
      */
     public static boolean isPublicStaticFinal(Field field) {
         int modifiers = field.getModifiers();
-        return (Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers));
+        return Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
     }
 
     /**
@@ -409,7 +411,7 @@ public class ReflectionUtils {
             return false;
         }
         Class<?>[] paramTypes = method.getParameterTypes();
-        return (paramTypes.length == 1 && paramTypes[0] == Object.class);
+        return paramTypes.length == 1 && paramTypes[0] == Object.class;
     }
 
     /**
@@ -418,7 +420,7 @@ public class ReflectionUtils {
      * @see Object#hashCode()
      */
     public static boolean isHashCodeMethod(Method method) {
-        return (method != null && "hashCode".equals(method.getName()) && method.getParameterTypes().length == 0);
+        return method != null && "hashCode".equals(method.getName()) && method.getParameterTypes().length == 0;
     }
 
     /**
@@ -427,7 +429,7 @@ public class ReflectionUtils {
      * @see Object#toString()
      */
     public static boolean isToStringMethod(Method method) {
-        return (method != null && "toString".equals(method.getName()) && method.getParameterTypes().length == 0);
+        return method != null && "toString".equals(method.getName()) && method.getParameterTypes().length == 0;
     }
 
     /**
@@ -556,7 +558,7 @@ public class ReflectionUtils {
      * @return if the type is assignable global the value
      */
     public static boolean isAssignableValue(Class<?> type, Object value) {
-        return (value != null ? isAssignable(type, value.getClass()) : !type.isPrimitive());
+        return value != null ? isAssignable(type, value.getClass()) : !type.isPrimitive();
     }
 
     public static boolean isAssignable(Class<?> lhsType, Class<?> rhsType) {

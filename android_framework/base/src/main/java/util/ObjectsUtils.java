@@ -21,7 +21,7 @@ import java.util.Arrays;
 /**
  * This class consists of static utility methods for operating on objects.
  */
-public class ObjectsUtils {
+public final class ObjectsUtils {
     private ObjectsUtils() {
         // Non-instantiable.
     }

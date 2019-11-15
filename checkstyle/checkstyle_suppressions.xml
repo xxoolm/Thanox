@@ -12,4 +12,5 @@
     <!--Ignore github/tornaco/android/thanos/core/util/-->
     <suppress files=".*[/\\]github[/\\]tornaco[/\\]android[/\\]thanos[/\\]core[/\\]util[/\\].*" checks=".*" />
     <suppress files=".*[/\\]github[/\\]tornaco[/\\]android[/\\]thanos[/\\]core[/\\]compat[/\\].*" checks=".*" />
+    <suppress files=".*[/\\]rx2[/\\].*" checks=".*" />
 </suppressions>
