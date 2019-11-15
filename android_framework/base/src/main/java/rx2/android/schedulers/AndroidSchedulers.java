@@ -11,12 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.reactivex.android.schedulers;
+package rx2.android.schedulers;
 
 import android.os.Handler;
 import android.os.Looper;
 import io.reactivex.Scheduler;
-import io.reactivex.android.plugins.RxAndroidPlugins;
+import rx2.android.plugins.RxAndroidPlugins;
 
 /**
  * Android-specific Schedulers.

@@ -17,9 +17,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import io.reactivex.Scheduler;
-import io.reactivex.android.plugins.RxAndroidPlugins;
-import io.reactivex.android.schedulers.DroppingScheduler;
-import io.reactivex.android.schedulers.HandlerScheduler;
+import rx2.android.plugins.RxAndroidPlugins;
+import rx2.android.schedulers.DroppingScheduler;
+import rx2.android.schedulers.HandlerScheduler;
 
 /**
  * Android-specific Schedulers.

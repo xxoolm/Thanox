@@ -9,7 +9,7 @@ import github.tornaco.android.thanos.core.util.DevNull;
 import github.tornaco.android.thanos.core.util.Rxs;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import rx2.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.Arrays;

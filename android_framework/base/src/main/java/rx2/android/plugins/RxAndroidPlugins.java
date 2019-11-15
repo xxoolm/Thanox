@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.reactivex.android.plugins;
+package rx2.android.plugins;
 
 import io.reactivex.Scheduler;
 import io.reactivex.exceptions.Exceptions;

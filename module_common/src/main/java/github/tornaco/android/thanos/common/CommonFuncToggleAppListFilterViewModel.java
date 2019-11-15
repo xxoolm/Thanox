@@ -4,7 +4,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import github.tornaco.android.thanos.core.util.Rxs;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import rx2.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Setter;
 

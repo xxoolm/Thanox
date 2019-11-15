@@ -11,11 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.reactivex.android;
+package rx2.android;
 
 import android.os.Looper;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+
 import io.reactivex.disposables.Disposable;
+import rx2.android.schedulers.AndroidSchedulers;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

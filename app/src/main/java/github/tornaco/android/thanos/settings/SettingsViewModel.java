@@ -16,7 +16,7 @@ import github.tornaco.android.thanos.core.util.DevNull;
 import github.tornaco.android.thanos.core.util.FileUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import rx2.android.schedulers.AndroidSchedulers;
 
 import java.io.File;
 import java.io.IOException;
