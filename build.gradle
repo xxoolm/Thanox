@@ -9,6 +9,8 @@ buildscript {
         classpath deps.android_gradle_plugin
         classpath deps.kotlin.plugin
         classpath deps.auto_logging.plugin
+        classpath deps.bintray_plugin
+        classpath deps.maven_plugin
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" }
     repositories {
         google()

@@ -12,6 +12,12 @@ buildscript {
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+def siteUrl = 'https://github.com/Tornaco/Thanox'
+def gitUrl = 'https://github.com/Tornaco/Thanox.git'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -36,10 +42,86 @@ dependencies {
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
+group = "github.tornaco.android.thanos"
 version = "1.0.0"
 
 apply from: 'thanos_properties.gradle'
 apply from: 'aidl.gradle'
 apply from: '../../checkstyle.gradle'
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'jar'
+                name 'Thanox framework sdk'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'potestadetornaco'
+                        name 'potestadetornaco'
+                        email 'potestadetornaco@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// javadoc configuration
+javadoc {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        failOnError false
+        links "http://docs.oracle.com/javase/7/docs/api"
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = "android"
+        name = "thanox-framework"
+        // #CONFIG# project name in jcenter
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
 
 buildDir = rootProject.projectDir.path + "/out/framework/base/"
