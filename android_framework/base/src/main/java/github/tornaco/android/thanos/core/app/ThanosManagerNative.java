@@ -1,9 +1,10 @@
 package github.tornaco.android.thanos.core.app;
 
 import android.os.ServiceManager;
+
 import github.tornaco.android.thanos.core.IThanos;
 import github.tornaco.android.thanos.core.T;
-import github.tornaco.java.common.util.Singleton;
+import util.Singleton;
 
 public class ThanosManagerNative {
 

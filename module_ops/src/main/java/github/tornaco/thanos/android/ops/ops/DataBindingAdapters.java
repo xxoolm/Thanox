@@ -2,17 +2,19 @@ package github.tornaco.thanos.android.ops.ops;
 
 import android.widget.Checkable;
 import android.widget.ImageView;
+
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-import github.tornaco.android.thanos.core.pm.AppInfo;
-import github.tornaco.java.common.util.Consumer;
-import github.tornaco.thanos.android.ops.model.Op;
-import github.tornaco.thanos.android.ops.model.OpGroup;
-import github.tornaco.thanos.android.ops.ops.by.app.OpItemSwitchChangeListener;
 
 import java.util.List;
 import java.util.Objects;
+
+import github.tornaco.android.thanos.core.pm.AppInfo;
+import github.tornaco.thanos.android.ops.model.Op;
+import github.tornaco.thanos.android.ops.model.OpGroup;
+import github.tornaco.thanos.android.ops.ops.by.app.OpItemSwitchChangeListener;
+import util.Consumer;
 
 public class DataBindingAdapters {
 
@@ -33,6 +35,6 @@ public class DataBindingAdapters {
                                                Op op,
                                                AppInfo appInfo,
                                                final OpItemSwitchChangeListener listener) {
-        view.setOnClickListener((b) -> listener.onOpItemSwitchChanged(op,appInfo, ((Checkable) b).isChecked()));
+        view.setOnClickListener((b) -> listener.onOpItemSwitchChanged(op, appInfo, ((Checkable) b).isChecked()));
     }
 }

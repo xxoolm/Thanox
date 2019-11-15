@@ -4,21 +4,27 @@ import android.annotation.NonNull;
 import android.os.Handler;
 import android.util.AtomicFile;
 import android.util.Log;
+
 import com.google.common.io.Closer;
 import com.google.common.io.Files;
-import github.tornaco.android.thanos.core.persist.i.MapRepo;
-import github.tornaco.android.thanos.core.util.FileUtils;
-import github.tornaco.android.thanos.core.util.Timber;
-import github.tornaco.android.thanos.core.util.XmlUtils;
-import github.tornaco.java.common.util.IoUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import github.tornaco.android.thanos.core.persist.i.MapRepo;
+import github.tornaco.android.thanos.core.util.FileUtils;
+import github.tornaco.android.thanos.core.util.Timber;
+import github.tornaco.android.thanos.core.util.XmlUtils;
+import util.IoUtils;
 
 /**
  * Created by guohao4 on 2017/12/28.

@@ -2,12 +2,14 @@ package github.tornaco.android.thanos.theme;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
-import github.tornaco.java.common.util.Singleton;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 import java.util.Observable;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import util.Singleton;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AppThemePreferences extends Observable {

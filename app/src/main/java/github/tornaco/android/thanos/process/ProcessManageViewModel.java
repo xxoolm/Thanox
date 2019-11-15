@@ -3,12 +3,20 @@ package github.tornaco.android.thanos.process;
 import android.app.Application;
 import android.os.RemoteException;
 import android.text.format.Formatter;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableList;
 import androidx.lifecycle.AndroidViewModel;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.common.CategoryIndex;
 import github.tornaco.android.thanos.core.app.ThanosManager;
@@ -16,15 +24,13 @@ import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
 import github.tornaco.android.thanos.core.util.Rxs;
 import github.tornaco.android.thanos.core.util.Timber;
-import github.tornaco.java.common.util.CollectionUtils;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
-
-import java.util.*;
+import util.CollectionUtils;
 
 public class ProcessManageViewModel extends AndroidViewModel {
     @Getter

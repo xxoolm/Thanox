@@ -1,4 +1,4 @@
-package github.tornaco.java.common.util;
+package util;
 
 import java.io.Closeable;
 import java.io.IOException;

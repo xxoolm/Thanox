@@ -2,16 +2,21 @@ package github.tornaco.android.thanos.common;
 
 import android.app.Application;
 import android.text.TextUtils;
-import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+
 import github.tornaco.android.thanos.core.util.Rxs;
-import github.tornaco.android.thanos.core.util.Timber;
-import github.tornaco.java.common.util.CollectionUtils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -22,8 +27,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.*;
+import util.CollectionUtils;
 
 public class CommonAppListFilterViewModel extends AndroidViewModel {
 

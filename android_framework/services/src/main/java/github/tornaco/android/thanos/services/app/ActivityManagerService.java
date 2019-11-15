@@ -85,8 +85,6 @@ import github.tornaco.android.thanos.services.n.NotificationHelper;
 import github.tornaco.android.thanos.services.n.NotificationIdFactory;
 import github.tornaco.android.thanos.services.n.SystemUI;
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService;
-import github.tornaco.java.common.util.CollectionUtils;
-import github.tornaco.java.common.util.ObjectsUtils;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -96,6 +94,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
+import util.CollectionUtils;
+import util.ObjectsUtils;
 
 import static github.tornaco.android.thanos.core.T.Actions.ACTION_RUNNING_PROCESS_CLEAR;
 import static github.tornaco.android.thanos.core.T.Actions.ACTION_RUNNING_PROCESS_VIEWER;

@@ -2,8 +2,6 @@ include ':app', ':module_donate', ':module_ops', ':module_easteregg', ':module_a
 include ':module_locker'
 include ':module_common'
 
-include ':library_java_common'
-
 include ':plugins:xposed_hook_annotation'
 include ':plugins:xposed_hook_compiler'
 include ':plugins:auto_logging_gradle_plugin'

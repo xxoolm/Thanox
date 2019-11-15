@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.tornaco.android.thanox.module.activity.trampoline.databinding.ModuleActivityTrampolineCompReplacementListItemBinding;
-import github.tornaco.java.common.util.Consumer;
 import lombok.Getter;
+import util.Consumer;
 
 class ActivityTrampolineAdapter extends RecyclerView.Adapter<ActivityTrampolineAdapter.VH>
         implements Consumer<List<ActivityTrampolineModel>> {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package github.tornaco.java.common.util;
+package util;
 
 /**
  * Singleton helper class for lazily initialization.

@@ -3,6 +3,9 @@ package github.tornaco.android.thanos.services.xposed.hooks;
 import android.content.Context;
 import android.os.ServiceManager;
 import android.util.Log;
+
+import java.util.Set;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -11,12 +14,18 @@ import github.tornaco.android.thanos.core.IThanos;
 import github.tornaco.android.thanos.core.T;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.services.xposed.IXposedHook;
-import github.tornaco.java.common.util.ObjectsUtils;
 import github.tornaco.xposed.annotation.XposedHook;
+import util.ObjectsUtils;
 
-import java.util.Set;
-
-import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._21;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._22;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._23;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._24;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._25;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._26;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._27;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._28;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 
 @XposedHook(targetSdkVersion = {_21, _22, _23, _24, _25, _26, _27, _28, _29})
 public class ContextServiceRegistry implements IXposedHook {

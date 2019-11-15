@@ -3,11 +3,16 @@ package github.tornaco.android.thanos.core.util;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.*;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.pm.ServiceInfo;
 import android.os.Process;
 import android.os.UserHandle;
+
 import github.tornaco.android.thanos.core.annotation.NonNull;
-import github.tornaco.java.common.util.ObjectsUtils;
+import util.ObjectsUtils;
 
 public class PkgUtils {
     private PkgUtils() {

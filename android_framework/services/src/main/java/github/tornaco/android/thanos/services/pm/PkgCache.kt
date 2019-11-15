@@ -15,12 +15,12 @@ import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.app.AppResources
 import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.util.*
-import github.tornaco.java.common.util.CollectionUtils
-import github.tornaco.java.common.util.Consumer
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
+import util.CollectionUtils
+import util.Consumer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors

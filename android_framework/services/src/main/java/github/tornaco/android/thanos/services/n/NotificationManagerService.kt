@@ -20,8 +20,8 @@ import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.SystemService
 import github.tornaco.android.thanos.services.ThanosSchedulers
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
-import github.tornaco.java.common.util.ObjectsUtils
 import io.reactivex.Completable
+import util.ObjectsUtils
 import java.util.concurrent.ConcurrentHashMap
 
 class NotificationManagerService(private val s: S) : SystemService(), INotificationManager {
@@ -35,7 +35,8 @@ class NotificationManagerService(private val s: S) : SystemService(), INotificat
 
     override fun onStart(context: Context) {
         super.onStart(context)
-        screenOnNotificationPkgs = RepoFactory.get().getOrCreateStringSetRepo(T.screenOnNotificationPkgsFile().path)
+        screenOnNotificationPkgs =
+            RepoFactory.get().getOrCreateStringSetRepo(T.screenOnNotificationPkgsFile().path)
     }
 
     override fun systemReady() {
@@ -98,7 +99,8 @@ class NotificationManagerService(private val s: S) : SystemService(), INotificat
     private fun lightOnScreenIfNeed(record: NotificationRecord) {
         if (screenOnNotificationEnabled && screenOnNotificationPkgs.has(record.pkg)) {
             Timber.d("lightOnScreenIfNeed, will light on")
-            val powerManager: PowerManager = context!!.getSystemService(Context.POWER_SERVICE) as PowerManager
+            val powerManager: PowerManager =
+                context!!.getSystemService(Context.POWER_SERVICE) as PowerManager
             powerManager.wakeUp(SystemClock.uptimeMillis())
         }
     }

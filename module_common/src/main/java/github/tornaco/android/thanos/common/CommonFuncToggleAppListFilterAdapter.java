@@ -15,8 +15,8 @@ import java.util.List;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.module.common.R;
 import github.tornaco.android.thanos.module.common.databinding.ItemCommonCheckableAppBinding;
-import github.tornaco.java.common.util.Consumer;
 import lombok.Getter;
+import util.Consumer;
 
 class CommonFuncToggleAppListFilterAdapter extends RecyclerView.Adapter<CommonFuncToggleAppListFilterAdapter.VH>
         implements Consumer<List<AppListModel>>,

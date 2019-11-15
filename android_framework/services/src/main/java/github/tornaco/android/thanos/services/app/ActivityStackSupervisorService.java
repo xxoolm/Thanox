@@ -52,11 +52,11 @@ import github.tornaco.android.thanos.services.app.view.CurrentComponentViewCallb
 import github.tornaco.android.thanos.services.app.view.HideCurrentComponentViewR;
 import github.tornaco.android.thanos.services.app.view.ShowCurrentComponentViewR;
 import github.tornaco.android.thanos.services.perf.PreferenceManagerService;
-import github.tornaco.java.common.util.ObjectsUtils;
 import io.reactivex.Completable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import util.ObjectsUtils;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class ActivityStackSupervisorService extends ThanoxSystemService implements IActivityStackSupervisor {

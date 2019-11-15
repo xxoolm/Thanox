@@ -1,11 +1,11 @@
 package github.tornaco.android.thanos.services.app;
 
-import github.tornaco.android.thanos.core.process.ProcessRecord;
-import github.tornaco.java.common.util.CollectionUtils;
-import lombok.Getter;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import github.tornaco.android.thanos.core.process.ProcessRecord;
+import lombok.Getter;
+import util.CollectionUtils;
 
 @Getter
 class ProcessRecordList implements Comparable<ProcessRecordList> {

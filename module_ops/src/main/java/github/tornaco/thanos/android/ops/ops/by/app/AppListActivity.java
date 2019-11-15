@@ -1,8 +1,14 @@
 package github.tornaco.thanos.android.ops.ops.by.app;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
+
 import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import github.tornaco.android.thanos.common.AppItemViewClickListener;
 import github.tornaco.android.thanos.common.AppListModel;
 import github.tornaco.android.thanos.common.CommonAppListFilterActivity;
@@ -11,11 +17,8 @@ import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.widget.SwitchBar;
-import github.tornaco.java.common.util.CollectionUtils;
 import github.tornaco.thanos.android.ops.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import util.CollectionUtils;
 
 public class AppListActivity extends CommonAppListFilterActivity {
 

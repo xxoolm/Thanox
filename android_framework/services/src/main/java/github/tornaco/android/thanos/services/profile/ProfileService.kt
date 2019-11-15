@@ -27,9 +27,9 @@ import github.tornaco.android.thanos.services.n.NotificationHelper
 import github.tornaco.android.thanos.services.n.NotificationIdFactory
 import github.tornaco.android.thanos.services.n.SystemUI
 import github.tornaco.android.thanos.services.pm.PackageMonitor
-import github.tornaco.java.common.util.ObjectsUtils
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import util.ObjectsUtils
 import java.util.*
 import java.util.concurrent.TimeUnit
 

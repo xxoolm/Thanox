@@ -1,7 +1,8 @@
 package github.tornaco.android.thanos.services.xposed.hooks.task;
 
 import android.util.LruCache;
-import github.tornaco.java.common.util.Singleton;
+
+import util.Singleton;
 
 /**
  * Created by Tornaco on 2018/5/9 16:30.

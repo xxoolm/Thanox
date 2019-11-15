@@ -32,10 +32,10 @@ import github.tornaco.android.thanos.services.app.EventBus
 import github.tornaco.android.thanos.services.n.NotificationHelper
 import github.tornaco.android.thanos.services.n.NotificationIdFactory
 import github.tornaco.android.thanos.services.n.SystemUI
-import github.tornaco.java.common.util.ObjectsUtils
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.SingleOnSubscribe
+import util.ObjectsUtils
 import java.util.concurrent.TimeUnit
 
 class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {

@@ -2,8 +2,14 @@ package github.tornaco.android.thanos.task;
 
 import android.content.Context;
 import android.widget.Switch;
+
 import androidx.annotation.NonNull;
+
 import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.common.AppListModel;
 import github.tornaco.android.thanos.common.CommonFuncToggleAppListFilterActivity;
@@ -13,10 +19,7 @@ import github.tornaco.android.thanos.core.app.ActivityManager;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.util.ActivityUtils;
-import github.tornaco.java.common.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.List;
+import util.CollectionUtils;
 
 public class RecentTaskBlurListActivity extends CommonFuncToggleAppListFilterActivity {
 

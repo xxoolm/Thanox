@@ -1,4 +1,4 @@
-package github.tornaco.java.common.util;
+package util;
 
 import java.text.Collator;
 import java.util.Comparator;

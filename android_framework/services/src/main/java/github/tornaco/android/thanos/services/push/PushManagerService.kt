@@ -16,12 +16,16 @@ import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.SystemService
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
 import github.tornaco.android.thanos.services.app.EventBus
-import github.tornaco.java.common.util.CollectionUtils
+import util.CollectionUtils
 import java.util.*
 
 class PushManagerService(s: S) : SystemService(), IPushManager {
     private val dummyChannel =
-        PushChannel(arrayOf("android.intent.action.TIME_TICK"), "android:dummy", "D78A8F3D-0FC2-4A45-A913-280DC73598E0")
+        PushChannel(
+            arrayOf("android.intent.action.TIME_TICK"),
+            "android:dummy",
+            "D78A8F3D-0FC2-4A45-A913-280DC73598E0"
+        )
 
     private lateinit var channelRepo: JsonObjectSetRepo<PushChannel>
 
@@ -34,7 +38,10 @@ class PushManagerService(s: S) : SystemService(), IPushManager {
     override fun onStart(context: Context) {
         super.onStart(context)
         channelRepo =
-            RepoFactory.get().getOrCreateJsonObjectSetRepo(T.pushChannelsFile().path, PushChannelRepo::class.java)
+            RepoFactory.get().getOrCreateJsonObjectSetRepo(
+                T.pushChannelsFile().path,
+                PushChannelRepo::class.java
+            )
         Timber.v("channelRepo: %s", channelRepo)
         registerReceivers()
         registerPrebuiltChannels()

@@ -1,10 +1,11 @@
 package github.tornaco.android.thanos.services.app;
 
 import android.content.IntentFilter;
+
 import github.tornaco.android.thanos.core.app.event.IEventSubscriber;
-import github.tornaco.java.common.util.ObjectsUtils;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Delegate;
+import util.ObjectsUtils;
 
 @AllArgsConstructor
 class EventSubscriberClient extends IEventSubscriber.Stub {

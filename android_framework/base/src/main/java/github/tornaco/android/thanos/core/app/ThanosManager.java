@@ -2,6 +2,7 @@ package github.tornaco.android.thanos.core.app;
 
 import android.content.Context;
 import android.content.IntentFilter;
+
 import github.tornaco.android.thanos.core.IThanos;
 import github.tornaco.android.thanos.core.app.activity.ActivityStackSupervisor;
 import github.tornaco.android.thanos.core.app.event.IEventSubscriber;
@@ -16,9 +17,9 @@ import github.tornaco.android.thanos.core.push.PushManager;
 import github.tornaco.android.thanos.core.secure.PrivacyManager;
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager;
 import github.tornaco.android.thanos.core.util.Timber;
-import github.tornaco.java.common.util.Consumer;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import util.Consumer;
 
 public class ThanosManager {
     private IThanos service;

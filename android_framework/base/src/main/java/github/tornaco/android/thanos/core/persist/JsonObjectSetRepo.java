@@ -3,15 +3,10 @@ package github.tornaco.android.thanos.core.persist;
 import android.os.Handler;
 import android.util.AtomicFile;
 import android.util.Log;
+
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import github.tornaco.android.thanos.core.persist.i.SetRepo;
-import github.tornaco.android.thanos.core.util.FileUtils;
-import github.tornaco.android.thanos.core.util.Timber;
-import github.tornaco.android.thanos.core.util.XmlUtils;
-import github.tornaco.java.common.util.CollectionUtils;
-import lombok.Cleanup;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,6 +17,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import github.tornaco.android.thanos.core.persist.i.SetRepo;
+import github.tornaco.android.thanos.core.util.FileUtils;
+import github.tornaco.android.thanos.core.util.Timber;
+import github.tornaco.android.thanos.core.util.XmlUtils;
+import lombok.Cleanup;
+import util.CollectionUtils;
 
 /**
  * Created by guohao4 on 2017/12/11.

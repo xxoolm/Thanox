@@ -1,4 +1,4 @@
-package github.tornaco.java.common.util.q;
+package util.q;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;

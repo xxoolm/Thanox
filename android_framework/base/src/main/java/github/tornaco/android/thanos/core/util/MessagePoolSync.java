@@ -2,9 +2,10 @@ package github.tornaco.android.thanos.core.util;
 
 import android.os.Message;
 import android.util.Log;
-import github.tornaco.java.common.util.ReflectionUtils;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import util.ReflectionUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MessagePoolSync {

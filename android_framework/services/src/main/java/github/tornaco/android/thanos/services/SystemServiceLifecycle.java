@@ -1,10 +1,11 @@
 package github.tornaco.android.thanos.services;
 
 import android.content.Context;
-import github.tornaco.java.common.util.CollectionUtils;
-import io.reactivex.Completable;
 
 import java.util.Collection;
+
+import io.reactivex.Completable;
+import util.CollectionUtils;
 
 public class SystemServiceLifecycle {
 

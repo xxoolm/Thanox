@@ -1,8 +1,14 @@
 package github.tornaco.android.thanos.start;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
+
 import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.common.AppListModel;
 import github.tornaco.android.thanos.common.CategoryIndex;
@@ -10,11 +16,8 @@ import github.tornaco.android.thanos.common.CommonFuncToggleAppListFilterViewMod
 import github.tornaco.android.thanos.core.app.ActivityManager;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
-import github.tornaco.java.common.util.CollectionUtils;
 import lombok.AllArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
+import util.CollectionUtils;
 
 @AllArgsConstructor
 public class StartAppsLoader implements CommonFuncToggleAppListFilterViewModel.ListModelLoader {

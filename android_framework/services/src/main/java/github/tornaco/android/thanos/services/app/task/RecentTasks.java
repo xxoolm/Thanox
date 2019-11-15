@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.tornaco.android.thanos.core.util.Timber;
-import github.tornaco.java.common.util.ObjectsUtils;
+import util.ObjectsUtils;
 
 public class RecentTasks {
 

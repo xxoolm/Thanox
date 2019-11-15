@@ -10,13 +10,13 @@ import java.util.List;
 
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.widget.section.SectioningAdapter;
-import github.tornaco.java.common.util.Consumer;
 import github.tornaco.thanos.android.ops.databinding.ModuleOpsItemFooterBinding;
 import github.tornaco.thanos.android.ops.databinding.ModuleOpsItemHeaderBinding;
 import github.tornaco.thanos.android.ops.databinding.ModuleOpsItemOpsCheckableBinding;
 import github.tornaco.thanos.android.ops.model.Op;
 import github.tornaco.thanos.android.ops.model.OpGroup;
 import lombok.Getter;
+import util.Consumer;
 
 public class AppOpsListAdapter extends SectioningAdapter implements Consumer<List<OpGroup>> {
 

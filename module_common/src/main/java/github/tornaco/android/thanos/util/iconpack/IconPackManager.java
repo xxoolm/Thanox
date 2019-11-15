@@ -20,13 +20,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+
 import androidx.annotation.NonNull;
-import github.tornaco.android.thanos.core.util.Timber;
-import github.tornaco.java.common.util.Singleton;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import github.tornaco.android.thanos.core.util.Timber;
+import lombok.Getter;
+import util.Singleton;
 
 public class IconPackManager {
 

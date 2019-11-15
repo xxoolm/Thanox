@@ -1,4 +1,4 @@
-package github.tornaco.java.common.util;
+package util;
 
 public class PinyinComparatorUtils {
     private static final PinyinComparator c = new PinyinComparator();

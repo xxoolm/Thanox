@@ -2,7 +2,6 @@ package github.tornaco.android.thanos.core.persist;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-import github.tornaco.java.common.util.Singleton;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -10,6 +9,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import util.Singleton;
 
 public final class RepoFactory {
 

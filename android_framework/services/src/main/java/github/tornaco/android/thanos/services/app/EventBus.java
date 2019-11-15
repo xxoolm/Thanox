@@ -2,19 +2,18 @@ package github.tornaco.android.thanos.services.app;
 
 import android.content.IntentFilter;
 import android.os.RemoteCallbackList;
-import github.tornaco.android.thanos.core.app.event.IEventSubscriber;
-import github.tornaco.android.thanos.core.app.event.ThanosEvent;
-import github.tornaco.android.thanos.core.util.Timber;
-import github.tornaco.java.common.util.PreconditionUtils;
-import github.tornaco.java.common.util.Singleton;
-import io.reactivex.Completable;
-import io.reactivex.schedulers.Schedulers;
-import lombok.Synchronized;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+
+import github.tornaco.android.thanos.core.app.event.IEventSubscriber;
+import github.tornaco.android.thanos.core.app.event.ThanosEvent;
+import github.tornaco.android.thanos.core.util.Timber;
+import io.reactivex.Completable;
+import io.reactivex.schedulers.Schedulers;
+import lombok.Synchronized;
+import util.PreconditionUtils;
+import util.Singleton;
 
 
 @SuppressWarnings({"WeakerAccess"})

@@ -2,15 +2,17 @@ package github.tornaco.android.thanos.process;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import github.tornaco.android.thanos.common.AppItemViewClickListener;
-import github.tornaco.android.thanos.databinding.ItemProcessManageBinding;
-import github.tornaco.java.common.util.Consumer;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import github.tornaco.android.thanos.common.AppItemViewClickListener;
+import github.tornaco.android.thanos.databinding.ItemProcessManageBinding;
+import lombok.Getter;
+import util.Consumer;
 
 public class ProcessManageAdapter extends RecyclerView.Adapter<ProcessManageAdapter.VH>
         implements Consumer<List<ProcessModel>> {

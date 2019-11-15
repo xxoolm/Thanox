@@ -3,11 +3,16 @@ package github.tornaco.android.thanos.core.pm;
 import android.content.pm.PackageManager;
 import android.os.Parcel;
 import android.os.Parcelable;
-import github.tornaco.android.thanos.BuildProp;
-import github.tornaco.java.common.util.PinyinComparatorUtils;
-import lombok.*;
 
 import java.util.Objects;
+
+import github.tornaco.android.thanos.BuildProp;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import util.PinyinComparatorUtils;
 
 @AllArgsConstructor
 @NoArgsConstructor

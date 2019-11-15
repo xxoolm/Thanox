@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import github.tornaco.java.common.util.Consumer;
+import util.Consumer;
 
 public class DataBindingAdapters {
 

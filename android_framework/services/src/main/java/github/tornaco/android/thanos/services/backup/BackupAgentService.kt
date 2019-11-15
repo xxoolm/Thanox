@@ -12,7 +12,7 @@ import github.tornaco.android.thanos.core.backup.IFileDescriptorInitializer
 import github.tornaco.android.thanos.core.util.*
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.SystemService
-import github.tornaco.java.common.util.IoUtils
+import util.IoUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -55,31 +55,42 @@ class BackupAgentService(s: S) : SystemService(), IBackupAgent {
             val relativePath = toRelativePath(zipFile)
             Timber.d("relativePath: $relativePath")
 
-            init!!.initParcelFileDescriptor(relativePath, relativePath, object : IFileDescriptorConsumer.Stub() {
-                override fun acceptAppParcelFileDescriptor(pfd: ParcelFileDescriptor?) {
-                    try {
-                        if (pfd == null) {
-                            callback!!.onFail("ParcelFileDescriptor is null")
-                            return
+            init!!.initParcelFileDescriptor(
+                relativePath,
+                relativePath,
+                object : IFileDescriptorConsumer.Stub() {
+                    override fun acceptAppParcelFileDescriptor(pfd: ParcelFileDescriptor?) {
+                        try {
+                            if (pfd == null) {
+                                callback!!.onFail("ParcelFileDescriptor is null")
+                                return
+                            }
+                            @Suppress("UnstableApiUsage")
+                            Files.asByteSource(zipFile)
+                                .copyTo(FileOutputStream(pfd.fileDescriptor))
+                            Timber.e("performBackup subFile complete: $zipFile")
+                            callback!!.onProgress(zipFile.name)
+                            callback.onBackupFinished(domain, relativePath)
+                        } catch (e: IOException) {
+                            Timber.e(
+                                "IOException performBackup subFile: " + Log.getStackTraceString(
+                                    e
+                                )
+                            )
+                            callback!!.onFail(e.localizedMessage)
+                            Timber.e(
+                                "acceptAppParcelFileDescriptor fail : " + Log.getStackTraceString(
+                                    e
+                                )
+                            )
+                        } finally {
+                            FileUtils.deleteDirQuiet(tmpDir)
+                            IoUtils.closeQuietly(pfd)
+                            Timber.e("IBackupAgent, deleteDirQuiet : $tmpDir")
                         }
-                        @Suppress("UnstableApiUsage")
-                        Files.asByteSource(zipFile)
-                            .copyTo(FileOutputStream(pfd.fileDescriptor))
-                        Timber.e("performBackup subFile complete: $zipFile")
-                        callback!!.onProgress(zipFile.name)
-                        callback.onBackupFinished(domain, relativePath)
-                    } catch (e: IOException) {
-                        Timber.e("IOException performBackup subFile: " + Log.getStackTraceString(e))
-                        callback!!.onFail(e.localizedMessage)
-                        Timber.e("acceptAppParcelFileDescriptor fail : " + Log.getStackTraceString(e))
-                    } finally {
-                        FileUtils.deleteDirQuiet(tmpDir)
-                        IoUtils.closeQuietly(pfd)
-                        Timber.e("IBackupAgent, deleteDirQuiet : $tmpDir")
                     }
-                }
 
-            })
+                })
         } catch (e: Throwable) {
             callback!!.onFail(e.localizedMessage)
             FileUtils.deleteDirQuiet(tmpDir)

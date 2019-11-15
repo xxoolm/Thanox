@@ -1,4 +1,4 @@
-package github.tornaco.java.common.util;
+package util;
 
 /**
  * Created by Nick@NewStand.org on 2017/3/7 12:25

@@ -32,8 +32,8 @@ dependencies {
 
     // Gson
     api deps.gson
-
-    api project(':library_java_common')
+    // Core
+    api deps.guava
 
     // Kt
     implementation deps.kotlin.stdlib

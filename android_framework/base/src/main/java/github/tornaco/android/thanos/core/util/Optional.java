@@ -24,13 +24,13 @@
  */
 package github.tornaco.android.thanos.core.util;
 
+import java.util.NoSuchElementException;
+import java.util.Objects;
+
 import github.tornaco.android.thanos.core.util.function.Function;
 import github.tornaco.android.thanos.core.util.function.Predicate;
 import github.tornaco.android.thanos.core.util.function.Supplier;
-import github.tornaco.java.common.util.Consumer;
-
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import util.Consumer;
 
 /**
  * A container object which may or may not contain a non-null value.

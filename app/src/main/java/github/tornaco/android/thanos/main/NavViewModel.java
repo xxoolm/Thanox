@@ -34,8 +34,6 @@ import github.tornaco.android.thanos.start.StartRestrictActivity;
 import github.tornaco.android.thanos.task.CleanUpOnTaskRemovedActivity;
 import github.tornaco.android.thanos.task.RecentTaskBlurListActivity;
 import github.tornaco.android.thanox.module.activity.trampoline.ActivityTrampolineActivity;
-import github.tornaco.java.common.util.CollectionUtils;
-import github.tornaco.java.common.util.ObjectsUtils;
 import github.tornaco.thanos.android.ops.ops.by.app.AppListActivity;
 import github.tornaco.thanos.android.ops.ops.by.ops.AllOpsListActivity;
 import github.tornaco.thanos.android.ops.ops.remind.RemindOpsActivity;
@@ -46,6 +44,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
+import util.CollectionUtils;
+import util.ObjectsUtils;
 
 public class NavViewModel extends AndroidViewModel {
     @Getter

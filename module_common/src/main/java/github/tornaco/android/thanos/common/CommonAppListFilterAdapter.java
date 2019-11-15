@@ -14,8 +14,8 @@ import java.util.List;
 
 import github.tornaco.android.thanos.module.common.R;
 import github.tornaco.android.thanos.module.common.databinding.ItemCommonAppBinding;
-import github.tornaco.java.common.util.Consumer;
 import lombok.Getter;
+import util.Consumer;
 
 public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppListFilterAdapter.VH>
         implements Consumer<List<AppListModel>>,

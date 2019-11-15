@@ -5,10 +5,10 @@ import android.os.Parcelable;
 
 import java.util.Objects;
 
-import github.tornaco.java.common.util.ObjectsUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import util.ObjectsUtils;
 
 @AllArgsConstructor
 @Getter

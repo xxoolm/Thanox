@@ -2,8 +2,11 @@ package github.tornaco.thanos.android.ops.ops.by.ops;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import github.tornaco.android.thanos.widget.section.SectioningAdapter;
-import github.tornaco.java.common.util.Consumer;
 import github.tornaco.thanos.android.ops.databinding.ModuleOpsItemFooterBinding;
 import github.tornaco.thanos.android.ops.databinding.ModuleOpsItemHeaderBinding;
 import github.tornaco.thanos.android.ops.databinding.ModuleOpsItemOpsBinding;
@@ -11,9 +14,7 @@ import github.tornaco.thanos.android.ops.model.Op;
 import github.tornaco.thanos.android.ops.model.OpGroup;
 import github.tornaco.thanos.android.ops.ops.OpItemClickListener;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
+import util.Consumer;
 
 public class AllOpsListAdapter extends SectioningAdapter implements Consumer<List<OpGroup>> {
 

@@ -5,15 +5,22 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+
 import com.google.common.io.Files;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 import github.tornaco.android.thanos.core.annotation.NonNull;
 import github.tornaco.android.thanos.core.annotation.Nullable;
-import github.tornaco.java.common.util.CollectionUtils;
-import github.tornaco.java.common.util.Consumer;
-import github.tornaco.java.common.util.IoUtils;
-
-import java.io.*;
-import java.nio.charset.Charset;
+import util.CollectionUtils;
+import util.Consumer;
+import util.IoUtils;
 
 
 /**

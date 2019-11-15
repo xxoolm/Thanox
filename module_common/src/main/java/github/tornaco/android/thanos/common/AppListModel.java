@@ -2,9 +2,10 @@ package github.tornaco.android.thanos.common;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import github.tornaco.android.thanos.core.pm.AppInfo;
-import github.tornaco.java.common.util.PinyinComparatorUtils;
 import lombok.ToString;
+import util.PinyinComparatorUtils;
 
 @ToString
 public class AppListModel extends ListModel<AppListModel> {

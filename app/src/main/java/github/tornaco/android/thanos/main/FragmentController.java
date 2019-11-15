@@ -19,11 +19,12 @@ package github.tornaco.android.thanos.main;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import github.tornaco.android.thanos.R;
-import github.tornaco.android.thanos.core.util.Timber;
-import github.tornaco.java.common.util.CollectionUtils;
 
 import java.util.List;
+
+import github.tornaco.android.thanos.R;
+import github.tornaco.android.thanos.core.util.Timber;
+import util.CollectionUtils;
 
 @SuppressWarnings("WeakerAccess")
 public class FragmentController<T extends Fragment> {

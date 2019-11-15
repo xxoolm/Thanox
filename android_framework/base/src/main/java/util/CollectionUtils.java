@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package github.tornaco.java.common.util;
+package util;
 
 import com.google.common.base.Preconditions;
 

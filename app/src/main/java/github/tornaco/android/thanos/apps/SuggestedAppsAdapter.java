@@ -2,17 +2,19 @@ package github.tornaco.android.thanos.apps;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import github.tornaco.android.thanos.common.AppItemViewClickListener;
-import github.tornaco.android.thanos.common.AppListModel;
-import github.tornaco.android.thanos.databinding.ItemSuggestedAppBinding;
-import github.tornaco.java.common.util.Consumer;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import github.tornaco.android.thanos.common.AppItemViewClickListener;
+import github.tornaco.android.thanos.common.AppListModel;
+import github.tornaco.android.thanos.databinding.ItemSuggestedAppBinding;
+import lombok.Getter;
+import util.Consumer;
 
 public class SuggestedAppsAdapter extends RecyclerView.Adapter<SuggestedAppsAdapter.VH>
         implements Consumer<List<AppListModel>> {

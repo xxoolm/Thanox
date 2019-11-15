@@ -1,12 +1,16 @@
 package github.tornaco.thanos.android.ops.ops.by.ops;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.AndroidViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import github.tornaco.android.thanos.core.util.Rxs;
-import github.tornaco.java.common.util.CollectionUtils;
 import github.tornaco.thanos.android.ops.model.OpGroup;
 import github.tornaco.thanos.android.ops.ops.repo.AllOpsLoader;
 import io.reactivex.Observable;
@@ -18,9 +22,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
+import util.CollectionUtils;
 
 public class AllOpsListViewModel extends AndroidViewModel {
 

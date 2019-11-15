@@ -1,13 +1,13 @@
 package github.tornaco.android.thanos.process;
 
+import java.util.List;
+
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
-import github.tornaco.java.common.util.PinyinComparatorUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.List;
+import util.PinyinComparatorUtils;
 
 @AllArgsConstructor
 @Getter

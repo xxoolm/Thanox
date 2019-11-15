@@ -1,19 +1,22 @@
 package github.tornaco.android.thanos.privacy;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
+
 import com.google.common.collect.Lists;
-import github.tornaco.android.thanos.common.CategoryIndex;
-import github.tornaco.android.thanos.common.CommonFuncToggleAppListFilterViewModel;
-import github.tornaco.android.thanos.common.AppListModel;
-import github.tornaco.android.thanos.core.app.ThanosManager;
-import github.tornaco.android.thanos.core.pm.AppInfo;
-import github.tornaco.android.thanos.core.secure.PrivacyManager;
-import github.tornaco.java.common.util.CollectionUtils;
-import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import github.tornaco.android.thanos.common.AppListModel;
+import github.tornaco.android.thanos.common.CategoryIndex;
+import github.tornaco.android.thanos.common.CommonFuncToggleAppListFilterViewModel;
+import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.pm.AppInfo;
+import github.tornaco.android.thanos.core.secure.PrivacyManager;
+import lombok.AllArgsConstructor;
+import util.CollectionUtils;
 
 @AllArgsConstructor
 public class DataCheatAppsLoader implements CommonFuncToggleAppListFilterViewModel.ListModelLoader {

@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.util.Pair;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -14,18 +15,20 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.databinding.ObservableList;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.matrixxun.starry.badgetextview.MaterialBadgeTextView;
+
+import java.util.List;
+import java.util.Objects;
+
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.dashboard.DashboardAdapter;
 import github.tornaco.android.thanos.dashboard.Tile;
 import github.tornaco.android.thanos.main.State;
 import github.tornaco.android.thanos.process.ProcessModel;
-import github.tornaco.java.common.util.Consumer;
-
-import java.util.List;
-import java.util.Objects;
+import util.Consumer;
 
 public class DataBindingAdapters {
 
