@@ -74,7 +74,6 @@ interface IActivityManager {
     void setBgTaskCleanUpDelayTimeMills(long delayMills);
     long getBgTaskCleanUpDelayTimeMills();
 
-    void onTaskRemoving(int callingUid, int taskId);
     void notifyTaskCreated(int taskId, in ComponentName componentName);
 
     MemoryInfo getMemoryInfo();

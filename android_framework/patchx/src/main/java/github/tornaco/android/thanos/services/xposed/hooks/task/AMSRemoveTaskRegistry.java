@@ -51,9 +51,7 @@ public class AMSRemoveTaskRegistry implements IXposedHook {
                             Object taskRecordObject = param.args[0];
                             Timber.d("cleanUpRemovedTaskLocked taskRecordObject: %s", taskRecordObject);
                             Intent intent = (Intent) XposedHelpers.getObjectField(taskRecordObject, "intent");
-                            Timber.d("cleanUpRemovedTaskLocked intent: %s", intent);
-                            String pkgName = PkgUtils.packageNameOf(intent);
-                            BootStrap.THANOS_X.getActivityManagerService().onTaskRemoving(pkgName);
+                            BootStrap.THANOS_X.getActivityManagerService().onTaskRemoving(intent);
                         }
                     });
             Timber.v("hookSuperVisorCleanUpTask OK:" + unHooks);

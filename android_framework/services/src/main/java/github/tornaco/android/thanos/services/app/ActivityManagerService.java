@@ -79,6 +79,7 @@ import github.tornaco.android.thanos.services.ThreadPriorityBooster;
 import github.tornaco.android.thanos.services.apihint.Beta;
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler;
 import github.tornaco.android.thanos.services.app.start.StartRecorder;
+import github.tornaco.android.thanos.services.app.task.RecentTasks;
 import github.tornaco.android.thanos.services.app.task.TaskMapping;
 import github.tornaco.android.thanos.services.n.NotificationHelper;
 import github.tornaco.android.thanos.services.n.NotificationIdFactory;
@@ -112,6 +113,8 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @Getter
     private final TaskMapping taskMapping;
+    @Getter
+    private final RecentTasks recentTasks;
     @Getter
     private final NotificationHelper notificationHelper;
 
@@ -180,6 +183,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     public ActivityManagerService(S s) {
         super(s);
         this.taskMapping = new TaskMapping();
+        this.recentTasks = new RecentTasks();
         this.notificationHelper = new NotificationHelper();
     }
 
@@ -1005,28 +1009,15 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         }
     }
 
-    @Override
-    @Deprecated
-    public void onTaskRemoving(int callingUid, int taskId) {
-        Timber.d("onTaskRemoving: taskId: %s, callingUid: %s", taskId, callingUid);
-        Completable
-                .fromRunnable(() -> onTaskRemovingInternal(callingUid, taskId))
-                .subscribeOn(ThanosSchedulers.serverThread())
-                .subscribe();
-    }
-
-    @Deprecated
-    @ExecuteBySystemHandler
-    private void onTaskRemovingInternal(int callingUid, int taskId) {
-        String pkgName = taskMapping.getPackageNameForTaskId(getContext(), taskId);
-        Timber.v("onTaskRemovingInternal: task pkg is: %s", pkgName);
-        if (!TextUtils.isEmpty(pkgName) && cleanUpOnTaskRemovalEnabled && isPkgCleanUpOnTaskRemovalEnabled(pkgName)) {
-            Timber.v("onTaskRemovingInternal: will force stop it");
-            forceStopPackage(pkgName);
+    public void onTaskRemoving(Intent intent) {
+        Timber.d("onTaskRemoving: intent: %s", intent);
+        if (intent != null) {
+            recentTasks.remove(intent.getComponent());
+            onTaskRemoving(PkgUtils.packageNameOf(intent));
         }
     }
 
-    public void onTaskRemoving(String taskPkgName) {
+    private void onTaskRemoving(String taskPkgName) {
         Timber.d("onTaskRemoving: taskPkgName: %s", taskPkgName);
         Completable
                 .fromRunnable(() -> onTaskRemovingInternal(taskPkgName))
@@ -1036,8 +1027,14 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @ExecuteBySystemHandler
     private void onTaskRemovingInternal(String taskPkgName) {
-        Timber.v("onTaskRemovingInternal: task pkg is: %s", taskPkgName);
-        if (!TextUtils.isEmpty(taskPkgName) && cleanUpOnTaskRemovalEnabled && isPkgCleanUpOnTaskRemovalEnabled(taskPkgName)) {
+        if (taskPkgName == null) return;
+        boolean hasAnyOtherTask = recentTasks.hasRecentTaskForPkg(taskPkgName);
+        Timber.v("onTaskRemovingInternal: task pkg is: %s, has other task? %s",
+                taskPkgName,
+                hasAnyOtherTask);
+        if (!hasAnyOtherTask
+                && cleanUpOnTaskRemovalEnabled
+                && isPkgCleanUpOnTaskRemovalEnabled(taskPkgName)) {
             Timber.v("onTaskRemovingInternal: will force stop it");
             forceStopPackage(taskPkgName);
         }
@@ -1047,6 +1044,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     public void notifyTaskCreated(int taskId, ComponentName componentName) {
         Timber.v("notifyTaskCreated: taskId: %s, componentName: %s", taskId, componentName);
         DevNull.accept(taskMapping.put(taskId, componentName));
+        recentTasks.add(componentName);
     }
 
     @Override

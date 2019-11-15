@@ -7,12 +7,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
-import github.tornaco.android.thanos.core.util.PkgUtils;
-import github.tornaco.android.thanos.core.util.Timber;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import github.tornaco.android.thanos.core.util.PkgUtils;
+import github.tornaco.android.thanos.core.util.Timber;
 
 public class TaskMapping {
 

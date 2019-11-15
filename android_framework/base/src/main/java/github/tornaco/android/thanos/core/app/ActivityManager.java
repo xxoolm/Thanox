@@ -146,11 +146,6 @@ public class ActivityManager {
     }
 
     @SneakyThrows
-    public void onTaskRemoving(int callingUid, int taskId) {
-        server.onTaskRemoving(callingUid, taskId);
-    }
-
-    @SneakyThrows
     public void notifyTaskCreated(int taskId, ComponentName componentName) {
         server.notifyTaskCreated(taskId, componentName);
     }

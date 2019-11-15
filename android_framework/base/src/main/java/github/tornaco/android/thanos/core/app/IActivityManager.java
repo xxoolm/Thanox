@@ -179,9 +179,6 @@ public interface IActivityManager extends android.os.IInterface
     {
       return 0L;
     }
-    @Override public void onTaskRemoving(int callingUid, int taskId) throws android.os.RemoteException
-    {
-    }
     @Override public void notifyTaskCreated(int taskId, android.content.ComponentName componentName) throws android.os.RemoteException
     {
     }
@@ -708,17 +705,6 @@ public interface IActivityManager extends android.os.IInterface
           long _result = this.getBgTaskCleanUpDelayTimeMills();
           reply.writeNoException();
           reply.writeLong(_result);
-          return true;
-        }
-        case TRANSACTION_onTaskRemoving:
-        {
-          data.enforceInterface(descriptor);
-          int _arg0;
-          _arg0 = data.readInt();
-          int _arg1;
-          _arg1 = data.readInt();
-          this.onTaskRemoving(_arg0, _arg1);
-          reply.writeNoException();
           return true;
         }
         case TRANSACTION_notifyTaskCreated:
@@ -1796,26 +1782,6 @@ public interface IActivityManager extends android.os.IInterface
         }
         return _result;
       }
-      @Override public void onTaskRemoving(int callingUid, int taskId) throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeInt(callingUid);
-          _data.writeInt(taskId);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_onTaskRemoving, _data, _reply, 0);
-          if (!_status && getDefaultImpl() != null) {
-            getDefaultImpl().onTaskRemoving(callingUid, taskId);
-            return;
-          }
-          _reply.readException();
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-      }
       @Override public void notifyTaskCreated(int taskId, android.content.ComponentName componentName) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
@@ -2103,18 +2069,17 @@ public interface IActivityManager extends android.os.IInterface
     static final int TRANSACTION_setBgTaskCleanUpSkipWhichHasNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 40);
     static final int TRANSACTION_setBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 41);
     static final int TRANSACTION_getBgTaskCleanUpDelayTimeMills = (android.os.IBinder.FIRST_CALL_TRANSACTION + 42);
-    static final int TRANSACTION_onTaskRemoving = (android.os.IBinder.FIRST_CALL_TRANSACTION + 43);
-    static final int TRANSACTION_notifyTaskCreated = (android.os.IBinder.FIRST_CALL_TRANSACTION + 44);
-    static final int TRANSACTION_getMemoryInfo = (android.os.IBinder.FIRST_CALL_TRANSACTION + 45);
-    static final int TRANSACTION_getProcessPss = (android.os.IBinder.FIRST_CALL_TRANSACTION + 46);
-    static final int TRANSACTION_onApplicationCrashing = (android.os.IBinder.FIRST_CALL_TRANSACTION + 47);
-    static final int TRANSACTION_getPackageNameForTaskId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 48);
-    static final int TRANSACTION_isPlatformAppIdleEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 49);
-    static final int TRANSACTION_isSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 50);
-    static final int TRANSACTION_setSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 51);
-    static final int TRANSACTION_setPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 52);
-    static final int TRANSACTION_isPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 53);
-    static final int TRANSACTION_getLastRecentUsedPackages = (android.os.IBinder.FIRST_CALL_TRANSACTION + 54);
+    static final int TRANSACTION_notifyTaskCreated = (android.os.IBinder.FIRST_CALL_TRANSACTION + 43);
+    static final int TRANSACTION_getMemoryInfo = (android.os.IBinder.FIRST_CALL_TRANSACTION + 44);
+    static final int TRANSACTION_getProcessPss = (android.os.IBinder.FIRST_CALL_TRANSACTION + 45);
+    static final int TRANSACTION_onApplicationCrashing = (android.os.IBinder.FIRST_CALL_TRANSACTION + 46);
+    static final int TRANSACTION_getPackageNameForTaskId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 47);
+    static final int TRANSACTION_isPlatformAppIdleEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 48);
+    static final int TRANSACTION_isSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 49);
+    static final int TRANSACTION_setSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 50);
+    static final int TRANSACTION_setPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 51);
+    static final int TRANSACTION_isPkgSmartStandByEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 52);
+    static final int TRANSACTION_getLastRecentUsedPackages = (android.os.IBinder.FIRST_CALL_TRANSACTION + 53);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.IActivityManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -2183,7 +2148,6 @@ public interface IActivityManager extends android.os.IInterface
 
   public void setBgTaskCleanUpDelayTimeMills(long delayMills) throws android.os.RemoteException;
   public long getBgTaskCleanUpDelayTimeMills() throws android.os.RemoteException;
-  public void onTaskRemoving(int callingUid, int taskId) throws android.os.RemoteException;
   public void notifyTaskCreated(int taskId, android.content.ComponentName componentName) throws android.os.RemoteException;
   public android.app.ActivityManager.MemoryInfo getMemoryInfo() throws android.os.RemoteException;
   public long[] getProcessPss(int[] pids) throws android.os.RemoteException;
