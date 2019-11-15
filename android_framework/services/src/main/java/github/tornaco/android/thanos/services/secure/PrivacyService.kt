@@ -143,7 +143,11 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
 
     override fun isUidPrivacyDataCheat(uid: Int): Boolean {
         val pkgArr = s.pkgManagerService.getPkgNameForUid(uid)
-        for (pkg in pkgArr!!) {
+        if (pkgArr == null) {
+            Timber.e("Can not find pkg for uid: $uid")
+            return false
+        }
+        for (pkg in pkgArr) {
             if (isPkgPrivacyDataCheat(pkg)) return true
         }
         return false
