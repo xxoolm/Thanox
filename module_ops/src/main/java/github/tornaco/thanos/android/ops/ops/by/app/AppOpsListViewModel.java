@@ -21,11 +21,11 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
-import rx2.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
+import rx2.android.schedulers.AndroidSchedulers;
 import util.CollectionUtils;
 
 public class AppOpsListViewModel extends AndroidViewModel {
@@ -74,8 +74,13 @@ public class AppOpsListViewModel extends AndroidViewModel {
     void switchOp(@NonNull Op op, AppInfo appInfo, boolean checked) {
         ThanosManager thanos = ThanosManager.from(getApplication());
         if (thanos.isServiceInstalled()) {
-            thanos.getAppOpsManager().setMode(op.getCode(), appInfo.getUid(), appInfo.getPkgName(),
-                    checked ? AppOpsManager.MODE_ALLOWED : AppOpsManager.MODE_IGNORED);
+            int newMode = checked ? AppOpsManager.MODE_ALLOWED : AppOpsManager.MODE_IGNORED;
+            thanos.getAppOpsManager().setMode(
+                    op.getCode(),
+                    appInfo.getUid(),
+                    appInfo.getPkgName(),
+                    newMode);
+            op.setMode(newMode);
         }
     }
 }

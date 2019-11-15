@@ -17,6 +17,7 @@ public class Op implements Parcelable {
     private int iconRes;
 
     private int code;
+    @Setter
     private int mode;
 
     private boolean remind;
