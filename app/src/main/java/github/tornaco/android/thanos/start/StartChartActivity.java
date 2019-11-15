@@ -1,5 +1,6 @@
 package github.tornaco.android.thanos.start;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -24,18 +25,19 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import github.tornaco.android.thanos.R;
+import github.tornaco.android.thanos.apps.AppDetailsActivity;
 import github.tornaco.android.thanos.core.app.ActivityManager;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.databinding.ActivityStartChartBinding;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
+import github.tornaco.android.thanos.util.TypefaceHelper;
 import lombok.AllArgsConstructor;
 
 public class StartChartActivity extends ThemeActivity implements OnChartValueSelectedListener {
@@ -61,31 +63,38 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        int[] attrs = {android.R.attr.textColorPrimary, android.R.attr.windowBackground};
+        int[] attrs = {
+                android.R.attr.textColorPrimary,
+                android.R.attr.windowBackground,
+                R.attr.cardsBackgroundColor};
         TypedArray ta = obtainStyledAttributes(attrs);
-        int textColorPrimaryRes = ta.getResourceId(0, R.color.md_red_700);
-        int windowBgColorRes = ta.getResourceId(1, R.color.md_white);
+        @SuppressLint("ResourceType") int textColorPrimaryRes = ta.getResourceId(0, R.color.md_red_700);
+        @SuppressLint("ResourceType") int windowBgColorRes = ta.getResourceId(1, R.color.md_white);
+        @SuppressLint("ResourceType") int cardBgColorRes = ta.getResourceId(2, R.color.md_white);
         ta.recycle();
         int textColorPrimary = getColor(textColorPrimaryRes);
         int windowBgColor = getColor(windowBgColorRes);
+        int cardBgColor = getColor(cardBgColorRes);
 
         PieChart chart = binding.chart1;
 
         chart.getDescription().setEnabled(true);
         chart.getDescription().setText("Powered by thanox");
         chart.getDescription().setTextColor(textColorPrimary);
+        chart.getDescription().setTypeface(TypefaceHelper.googleSans(this));
         chart.setExtraOffsets(5, 10, 5, 5);
 
         chart.setDragDecelerationFrictionCoef(0.95f);
 
         chart.setCenterText(generateCenterSpannableText());
         chart.setCenterTextColor(textColorPrimary);
+        chart.setCenterTextTypeface(TypefaceHelper.googleSansBold(this));
         chart.setDrawCenterText(true);
 
         chart.setDrawHoleEnabled(true);
-        chart.setHoleColor(windowBgColor);
+        chart.setHoleColor(cardBgColor);
 
-        chart.setTransparentCircleColor(windowBgColor);
+        chart.setTransparentCircleColor(cardBgColor);
         chart.setTransparentCircleAlpha(110);
 
         chart.setHoleRadius(58f);
@@ -110,12 +119,14 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
         l.setXEntrySpace(7f);
         l.setYEntrySpace(0f);
         l.setYOffset(0f);
+        l.setTypeface(TypefaceHelper.googleSans(this));
 
         l.setTextColor(textColorPrimary);
 
         // entry label styling
         chart.setDrawEntryLabels(false);
-        chart.setUsePercentValues(true);
+        chart.setUsePercentValues(false);
+        chart.setEntryLabelTypeface(TypefaceHelper.googleSansBold(this));
     }
 
     private SpannableString generateCenterSpannableText() {
@@ -146,7 +157,8 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
         // the chart.
         for (int i = 0; (i < startEntries.size() && i < 24); i++) {
             entries.add(new PieEntry(startEntries.get(i).times,
-                    PkgUtils.loadNameByPkgName(this, startEntries.get(i).pkg) + " " + startEntries.get(i).times));
+                    String.valueOf(PkgUtils.loadNameByPkgName(this, startEntries.get(i).pkg)),
+                    startEntries.get(i)));
         }
 
         PieDataSet dataSet = new PieDataSet(entries, "");
@@ -178,7 +190,6 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
         for (int c : ColorTemplate.MATERIAL_COLORS)
             colors.add(c);
 
-        colors.add(ColorTemplate.getHoloBlue());
 
         dataSet.setColors(colors);
         //dataSet.setSelectionShift(0f);
@@ -187,14 +198,14 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
 
         PieData data = new PieData(dataSet);
 
-        DecimalFormat format = new DecimalFormat("###,###,##0.0");
         data.setValueFormatter(new PercentFormatter(chart) {
             @Override
-            public String getFormattedValue(float value) {
-                return value >= 8f ? format.format(value) + " %" : "";
+            public String getPieLabel(float value, PieEntry pieEntry) {
+                return value >= 8f ? String.valueOf((int) value) : "";
             }
         });
-        data.setValueTextSize(11f);
+        data.setValueTypeface(TypefaceHelper.googleSans(this));
+        data.setValueTextSize(9f);
         data.setValueTextColor(Color.WHITE);
         chart.setData(data);
 
@@ -206,7 +217,8 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
 
     @Override
     public void onValueSelected(Entry e, Highlight h) {
-
+        StartEntry entry = (StartEntry) e.getData();
+        AppDetailsActivity.start(this, ThanosManager.from(this).getPkgManager().getAppInfo(entry.pkg));
     }
 
     @Override

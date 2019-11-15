@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 
 /**
  * Created by Tornaco on 2018/6/13 14:07.
- * This file is writen for project X-APM at host guohao4.
+ * This file is written for project X-APM at host guohao4.
  */
 public class TypefaceHelper {
 
