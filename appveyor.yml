@@ -1,4 +1,4 @@
-version: '1.0.0_r1({build})'
+version: '1.0.1({build})'
 
 # branches to build
 branches:
