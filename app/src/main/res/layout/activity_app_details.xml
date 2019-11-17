@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/appbar"
                 app:cardBackgroundColor="?cardsBackgroundColor"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:contentPadding="@dimen/common_view_margin_default"
                 app:cardElevation="@dimen/common_view_elevation"
                 android:layout_marginBottom="@dimen/common_view_margin_small"
