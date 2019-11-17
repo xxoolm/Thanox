@@ -24,6 +24,7 @@ import github.tornaco.android.thanos.services.audio.AudioService
 import github.tornaco.android.thanos.services.audio.AudioServiceStub
 import github.tornaco.android.thanos.services.backup.BackupAgentService
 import github.tornaco.android.thanos.services.backup.BackupAgentServiceStub
+import github.tornaco.android.thanos.services.cmd.shell.ThanosShellCommand
 import github.tornaco.android.thanos.services.n.NotificationManagerService
 import github.tornaco.android.thanos.services.n.NotificationManagerServiceStub
 import github.tornaco.android.thanos.services.os.ServiceManagerService
@@ -44,6 +45,8 @@ import github.tornaco.android.thanos.services.secure.ops.AppOpsService
 import github.tornaco.android.thanos.services.secure.ops.AppOpsServiceStub
 import github.tornaco.android.thanos.services.wm.WindowManagerService
 import github.tornaco.android.thanos.services.wm.WindowManagerServiceStub
+import java.io.FileDescriptor
+import java.io.PrintWriter
 
 internal class ThanosServiceStub(
     private val ams: ActivityManagerService,
@@ -136,6 +139,11 @@ internal class ThanosServiceStub(
 
     override fun whoAreYou(): String {
         return "I am Thanox!!!"
+    }
+
+    override fun dump(fd: FileDescriptor?, fout: PrintWriter?, args: Array<out String>?) {
+        super.dump(fd, fout, args)
+        ThanosShellCommand(this).dump(fd, fout, args)
     }
 
     override fun setLoggingEnabled(enable: Boolean) {
