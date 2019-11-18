@@ -26,10 +26,10 @@ import github.tornaco.android.thanos.core.util.Rxs;
 import github.tornaco.android.thanos.core.util.Timber;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
-import rx2.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
+import rx2.android.schedulers.AndroidSchedulers;
 import util.CollectionUtils;
 
 public class ProcessManageViewModel extends AndroidViewModel {
@@ -58,7 +58,9 @@ public class ProcessManageViewModel extends AndroidViewModel {
             return;
         }
 
+        if (isDataLoading.get()) return;
         isDataLoading.set(true);
+
         String idleBadge = getApplication().getString(R.string.badge_app_idle);
 
         disposables.add(Single.create(
@@ -128,7 +130,8 @@ public class ProcessManageViewModel extends AndroidViewModel {
                 }, Rxs.ON_ERROR_LOGGING));
     }
 
-    private long getMemSize(List<ProcessRecord> processRecords) throws RemoteException {
+    private long getMemSize(List<ProcessRecord> processRecords)
+            throws RemoteException {
         int[] pids = new int[processRecords.size()];
         for (int i = 0; i < processRecords.size(); i++) {
             pids[i] = (int) processRecords.get(i).getPid();

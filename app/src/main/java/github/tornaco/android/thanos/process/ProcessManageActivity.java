@@ -1,24 +1,24 @@
 package github.tornaco.android.thanos.process;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.databinding.ActivityProcessManageBinding;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
-import github.tornaco.practice.honeycomb.locker.ui.start.StartActivity;
 
 
 public class ProcessManageActivity extends ThemeActivity {
@@ -75,6 +75,10 @@ public class ProcessManageActivity extends ThemeActivity {
     private void setupViewModel() {
         startManageViewModel = obtainViewModel(this);
         startManageViewModel.start();
+
+        binding.setViewModel(startManageViewModel);
+        binding.setLifecycleOwner(this);
+        binding.executePendingBindings();
     }
 
     @Override
