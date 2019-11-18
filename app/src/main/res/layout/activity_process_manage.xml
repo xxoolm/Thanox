@@ -2,6 +2,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+                name="viewModel"
+                type="github.tornaco.android.thanos.process.ProcessManageViewModel" />
+
+    </data>
+
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -27,6 +37,7 @@
                 <androidx.appcompat.widget.AppCompatSpinner
                         android:layout_width="?actionBarSize"
                         android:layout_height="wrap_content"
+                        android:enabled="@{!viewModel.isDataLoading}"
                         android:id="@+id/spinner"/>
 
             </androidx.appcompat.widget.Toolbar>
