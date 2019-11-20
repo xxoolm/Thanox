@@ -72,7 +72,11 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pre_category_about">
-
+        <Preference
+                app:key="@string/key_rss_e"
+                app:persistent="false"
+                app:summary="@string/pref_summary_rss_e"
+                app:title="@string/pref_title_rss_e" />
         <Preference
                 app:key="@string/key_donate"
                 app:persistent="false"

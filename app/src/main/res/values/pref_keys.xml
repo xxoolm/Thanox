@@ -9,6 +9,7 @@
     <string name="key_ignore_system_app" translatable="false">key_ignore_system_app</string>
     <string name="key_donate" translatable="false">key_donate</string>
     <string name="key_icon_maker" translatable="false">key_icon_maker</string>
+    <string name="key_rss_e" translatable="false">key_rss_e</string>
 
     <string name="key_cheat_field_line1_num" translatable="false">key_cheat_field_line1_num</string>
     <string name="key_cheat_field_device_id" translatable="false">key_cheat_field_device_id</string>

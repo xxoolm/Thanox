@@ -128,6 +128,9 @@
     <string name="pref_title_icon_maker_remix_icon">图标提供者</string>
     <string name="pref_summary_icon_maker_remix_icon">Remix Design © 2018 https://remixicon.com/</string>
 
+    <string name="pref_title_rss_e">群组</string>
+    <string name="pref_summary_rss_e">TG@THANOX</string>
+
     <string name="pref_title_app_state_enabled">应用已启用</string>
     <string name="pref_title_app_to_disable">冻结</string>
     <string name="pref_title_app_state_disabled">应用已被冻结</string>
