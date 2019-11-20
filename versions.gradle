@@ -140,7 +140,7 @@ def addRepos(RepositoryHandler handler) {
     handler.jcenter()
     handler.maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     handler.maven { url 'https://jitpack.io' }
-    handler.maven { url "$rootProject.projectDir/plugins/auto_logging_gradle_plugin/prebuilt_repo" }
+    handler.maven { url "$rootProject.projectDir/gradle_plugins/auto_logging_gradle_plugin/prebuilt_repo" }
 
 }
 

@@ -22,8 +22,8 @@ dependencies {
     compileOnly deps.lombok.core
     annotationProcessor deps.lombok.core
 
-    compileOnly project(":plugins:xposed_hook_annotation")
-    annotationProcessor project(":plugins:xposed_hook_compiler")
+    compileOnly project(":gradle_plugins:xposed_hook_annotation")
+    annotationProcessor project(":gradle_plugins:xposed_hook_compiler")
 
     // Sdk
     implementation project(':android_framework:base')

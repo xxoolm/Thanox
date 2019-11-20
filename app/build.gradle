@@ -113,8 +113,8 @@ dependencies {
     compileOnly deps.lombok.core
     annotationProcessor deps.lombok.core
 
-    compileOnly project(':plugins:permission-requester-annotation')
-    annotationProcessor project(':plugins:permission-requester-compiler')
+    compileOnly project(':gradle_plugins:permission-requester-annotation')
+    annotationProcessor project(':gradle_plugins:permission-requester-compiler')
 
     // Modules
     implementation project(':module_common')

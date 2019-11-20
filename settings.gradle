@@ -2,11 +2,11 @@ include ':app', ':module_donate', ':module_ops', ':module_easteregg', ':module_a
 include ':module_locker'
 include ':module_common'
 
-include ':plugins:xposed_hook_annotation'
-include ':plugins:xposed_hook_compiler'
-include ':plugins:auto_logging_gradle_plugin'
-include ':plugins:permission-requester-annotation'
-include ':plugins:permission-requester-compiler'
+include ':gradle_plugins:xposed_hook_annotation'
+include ':gradle_plugins:xposed_hook_compiler'
+include ':gradle_plugins:auto_logging_gradle_plugin'
+include ':gradle_plugins:permission-requester-annotation'
+include ':gradle_plugins:permission-requester-compiler'
 
 include ':third_party:colorpicker'
 include ':third_party:dateformatter'
