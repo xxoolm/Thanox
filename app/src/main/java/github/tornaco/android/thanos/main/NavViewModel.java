@@ -350,7 +350,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .iconRes(R.drawable.ic_notification_badge_fill)
                                 .title(resources.getString(R.string.feature_title_light_on_notifiation))
                                 .category(resources.getString(R.string.feature_category_notifiation))
-                                .themeColor(R.color.md_blue_grey_500)
+                                .themeColor(R.color.md_red_500)
                                 .onClickListener(view -> ScreenOnNotificationActivity.start(getApplication()))
                                 .atEndOfThisCategory(true)
                                 .build(),
