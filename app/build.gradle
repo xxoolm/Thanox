@@ -50,31 +50,16 @@ android {
         }
     }
 
-    // Specifies one flavor dimension.
-    flavorDimensions "target", "channel"
+    flavorDimensions "market"
     productFlavors {
         row {
-            // Assigns this product flavor to the "version" flavor dimension.
-            // If you are using only one dimension, this property is optional,
-            // and the plugin automatically assigns all the module's flavors to
-            // that dimension.
-            dimension "target"
+            dimension "market"
             versionNameSuffix "-row"
         }
 
         prc {
-            dimension "target"
+            dimension "market"
             versionNameSuffix "-prc"
-        }
-
-        beta {
-            dimension "channel"
-            versionNameSuffix "-beta"
-        }
-
-        rel {
-            dimension "channel"
-            versionNameSuffix "-rel"
         }
     }
 

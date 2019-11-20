@@ -13,7 +13,6 @@ buildConfig {
     packageName = "github.tornaco.android.thanos"
     charset = 'UTF-8'
 
-    buildConfigField 'Boolean', 'DOG_FOOD', String.valueOf(rootProject.ext.dogFood)
     buildConfigField 'String', 'THANOS_APP_PKG_NAME', rootProject.ext.thanosApplicationId
     // UUID from current time.
     buildConfigField 'String', 'FINGERPRINT', 'thanos@tornaco:' + UUID.nameUUIDFromBytes(

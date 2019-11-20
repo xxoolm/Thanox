@@ -2,7 +2,6 @@ package github.tornaco.android.thanos.app.donate;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-import github.tornaco.android.thanos.BuildProp;
 
 import java.util.Observable;
 
@@ -25,7 +24,7 @@ public class DonateSettings extends Observable {
 
     public static boolean isDonated(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(DONATED, BuildProp.DOG_FOOD);
+                .getBoolean(DONATED, false);
     }
 
     static void setDonated(Context context, boolean donated) {

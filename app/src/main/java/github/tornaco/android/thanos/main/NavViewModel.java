@@ -20,6 +20,7 @@ import java.util.List;
 import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
+import github.tornaco.android.thanos.ThanosApp;
 import github.tornaco.android.thanos.app.donate.DonateSettings;
 import github.tornaco.android.thanos.apps.SuggestedAppsActivity;
 import github.tornaco.android.thanos.core.T;
@@ -40,10 +41,10 @@ import github.tornaco.thanos.android.ops.ops.remind.RemindOpsActivity;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
-import rx2.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Getter;
+import rx2.android.schedulers.AndroidSchedulers;
 import util.CollectionUtils;
 import util.ObjectsUtils;
 
@@ -117,7 +118,7 @@ public class NavViewModel extends AndroidViewModel {
 
         // Init app info.
         channel.set(getChannelString());
-        isPaid.set(DonateSettings.isDonated(getApplication().getApplicationContext()));
+        isPaid.set(!ThanosApp.isPrc() || DonateSettings.isDonated(getApplication().getApplicationContext()));
         Timber.v("isPaid? %s", isPaid.get());
     }
 
@@ -410,8 +411,7 @@ public class NavViewModel extends AndroidViewModel {
     }
 
     private String getChannelString() {
-        //noinspection ConstantConditions
-        return BuildConfig.FLAVOR_channel.equals("beta") ? "BETA" : (BuildConfig.DEBUG ? "DEBUG" : null);
+        return BuildConfig.DEBUG ? "DEBUG" : null;
     }
 
     void cleanUpBackgroundTasks() {

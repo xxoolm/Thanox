@@ -24,4 +24,16 @@ public class ThanosApp extends MultipleModulesApp {
             DeveloperDiag.diag(this);
         }
     }
+
+    public static boolean isPrc() {
+        return getMarket() == Market.PRC;
+    }
+
+    public static Market getMarket() {
+        return Market.valueOf(BuildConfig.FLAVOR.toUpperCase());
+    }
+
+    public enum Market {
+        PRC, ROW
+    }
 }

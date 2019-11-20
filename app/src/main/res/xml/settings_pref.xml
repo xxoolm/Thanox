@@ -2,7 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/pre_category_ui">
+    <PreferenceCategory
+            android:key="@string/key_app_ui"
+            app:title="@string/pre_category_ui">
 
         <DropDownPreference
                 android:entries="@array/themes_entry"

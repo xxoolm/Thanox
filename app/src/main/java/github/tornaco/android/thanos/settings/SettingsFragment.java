@@ -28,6 +28,7 @@ import java.util.Objects;
 import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
+import github.tornaco.android.thanos.ThanosApp;
 import github.tornaco.android.thanos.app.donate.DonateActivity;
 import github.tornaco.android.thanos.app.donate.DonateSettings;
 import github.tornaco.android.thanos.apps.AppDetailsActivity;
@@ -156,16 +157,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
 
         // About.
-        findPreference(getString(R.string.key_donate))
-                .setOnPreferenceClickListener(preference -> {
-                    DonateActivity.start(getActivity());
-                    return true;
-                });
+        Preference donatePref = findPreference(getString(R.string.key_donate));
+        donatePref.setOnPreferenceClickListener(preference -> {
+            DonateActivity.start(getActivity());
+            return true;
+        });
         if (DonateSettings.isDonated(getContext())) {
-            findPreference(getString(R.string.key_donate))
-                    .setSummary(R.string.module_donate_donated);
+            donatePref.setSummary(R.string.module_donate_donated);
         }
-        findPreference(getString(R.string.key_donate)).setVisible(!BuildProp.DOG_FOOD);
 
         // Backup
         findPreference(getString(R.string.key_data_backup)).setOnPreferenceClickListener(preference -> {
@@ -201,6 +200,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             AppDetailsActivity.start(getActivity(), appInfo);
             return true;
         });
+
+        // Market feature control.
+        // Wish more row users.
+        themePref.setVisible(!ThanosApp.isPrc() || DonateSettings.isDonated(getContext()));
+        iconPref.setVisible(!ThanosApp.isPrc() || DonateSettings.isDonated(getContext()));
+        themePref.getParent().setVisible(!ThanosApp.isPrc() || DonateSettings.isDonated(getContext()));
+        donatePref.setVisible(ThanosApp.isPrc());
     }
 
     @Override
