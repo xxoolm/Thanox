@@ -10,7 +10,7 @@ include ':gradle_plugins:permission-requester-compiler'
 
 include ':third_party:colorpicker'
 include ':third_party:dateformatter'
-include ':third_party:imagepicker'
+include ':third_party:filepicker'
 include ':third_party:patternlockview'
 include ':third_party:pinlockview'
 include ':third_party:zip4j'
