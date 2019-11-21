@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -18,7 +19,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -235,9 +235,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity).performRestore(new SettingsViewModel.RestoreListener() {
                         @Override
                         public void onSuccess() {
-                            Snackbar.make(getListView(),
-                                    getString(R.string.pre_message_restore_success),
-                                    Snackbar.LENGTH_LONG).show();
+                            if (getActivity() == null) return;
+                            new AlertDialog.Builder(getActivity())
+                                    .setMessage(getString(R.string.pre_message_restore_success))
+                                    .setCancelable(false)
+                                    .setPositiveButton(android.R.string.ok, null)
+                                    .show();
                         }
 
                         @Override
@@ -254,9 +257,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity).performBackup(new SettingsViewModel.BackupListener() {
                     @Override
                     public void onSuccess(File dest) {
-                        Snackbar.make(getListView(),
-                                getString(R.string.pre_message_backup_success) + "\n" + dest.getAbsolutePath(),
-                                Snackbar.LENGTH_INDEFINITE).show();
+                        if (getActivity() == null) return;
+                        new AlertDialog.Builder(getActivity())
+                                .setMessage(getString(R.string.pre_message_backup_success) + "\n" + dest.getAbsolutePath())
+                                .setCancelable(true)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show();
                     }
 
                     @Override
