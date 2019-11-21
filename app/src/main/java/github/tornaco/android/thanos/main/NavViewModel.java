@@ -309,7 +309,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .iconRes(R.drawable.ic_paint_brush_fill)
                                 .title(resources.getString(R.string.feature_title_recent_task_blur))
                                 .summary(resources.getString(R.string.feature_summary_recent_task_blur))
-                                .themeColor(R.color.md_brown_500)
+                                .themeColor(R.color.md_cyan_300)
                                 .onClickListener(view -> RecentTaskBlurListActivity.start(getApplication()))
                                 .atEndOfThisCategory(true)
                                 .build(),
