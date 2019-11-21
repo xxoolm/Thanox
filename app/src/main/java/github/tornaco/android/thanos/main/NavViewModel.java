@@ -294,6 +294,8 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.module_ops_feature_title_app_ops_list))
                                 .summary(resources.getString(R.string.module_ops_feature_summary_app_ops_list))
                                 .themeColor(R.color.md_lime_600)
+                                // Dup with apps manager.
+                                .disabled(true)
                                 .onClickListener(view -> AppListActivity.start(getApplication()))
                                 .build(),
                         Tile.builder()
