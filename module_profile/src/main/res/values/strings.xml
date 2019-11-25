@@ -1,0 +1,4 @@
+<resources>
+    <string name="module_profile_feature_name">情景模式</string>
+    <string name="module_profile_feature_summary">根据场景出发自定义操作</string>
+</resources>
