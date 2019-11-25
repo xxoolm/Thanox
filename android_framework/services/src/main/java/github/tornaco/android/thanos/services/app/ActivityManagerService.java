@@ -1009,9 +1009,14 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         }
     }
 
-    public void onTaskRemoving(Intent intent) {
-        Timber.d("onTaskRemoving: intent: %s", intent);
-        if (intent != null) {
+    public void onTaskRemoving(Intent intent, int userId) {
+        if (!isSystemReady()) return;
+        int currentUserId = UserHandle.myUserId();
+        Timber.d("onTaskRemoving: intent: %s, userId: %s, currentUserId: %s",
+                intent,
+                userId,
+                currentUserId);
+        if (intent != null && userId == currentUserId) {
             recentTasks.remove(intent.getComponent());
             onTaskRemoving(PkgUtils.packageNameOf(intent));
         }

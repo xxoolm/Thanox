@@ -2,22 +2,30 @@ package github.tornaco.android.thanos.services.xposed.hooks.task;
 
 import android.content.Intent;
 import android.util.Log;
+
+import java.util.Set;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.util.OsUtils;
-import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BootStrap;
 import github.tornaco.android.thanos.services.apihint.Beta;
 import github.tornaco.android.thanos.services.xposed.IXposedHook;
 import github.tornaco.xposed.annotation.XposedHook;
 
-import java.util.Set;
-
-import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._21;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._22;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._23;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._24;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._25;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._26;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._27;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._28;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 
 /**
  * Created by guohao4 on 2017/10/31.
@@ -51,7 +59,8 @@ public class AMSRemoveTaskRegistry implements IXposedHook {
                             Object taskRecordObject = param.args[0];
                             Timber.d("cleanUpRemovedTaskLocked taskRecordObject: %s", taskRecordObject);
                             Intent intent = (Intent) XposedHelpers.getObjectField(taskRecordObject, "intent");
-                            BootStrap.THANOS_X.getActivityManagerService().onTaskRemoving(intent);
+                            int userId = XposedHelpers.getIntField(taskRecordObject, "userId");
+                            BootStrap.THANOS_X.getActivityManagerService().onTaskRemoving(intent, userId);
                         }
                     });
             Timber.v("hookSuperVisorCleanUpTask OK:" + unHooks);
