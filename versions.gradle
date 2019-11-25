@@ -44,6 +44,7 @@ versions.glide_api = "4.9.0"
 versions.glide_compiler = "4.9.0"
 versions.auto_logging_plugin = "1.0.0"
 versions.chart = "v3.1.0"
+versions.rules = "3.3.0"
 ext.versions = versions
 
 def deps = [:]
@@ -100,6 +101,8 @@ ext.build_versions = build_versions
 
 deps.guava = "com.google.guava:guava:$versions.guava@jar"
 deps.gson = "com.google.code.gson:gson:$versions.gson@jar"
+
+deps.rules = "org.jeasy:easy-rules-core:$versions.rules"
 
 def lifecycle = [:]
 lifecycle.runtime = "androidx.lifecycle:lifecycle-runtime:$versions.lifecycle"

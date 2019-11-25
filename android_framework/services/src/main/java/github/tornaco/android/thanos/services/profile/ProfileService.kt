@@ -29,6 +29,8 @@ import github.tornaco.android.thanos.services.n.SystemUI
 import github.tornaco.android.thanos.services.pm.PackageMonitor
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import org.jeasy.rules.api.RulesEngine
+import org.jeasy.rules.core.DefaultRulesEngine
 import util.ObjectsUtils
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -39,6 +41,8 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
     private var autoApplyForNewInstalledAppsEnabled = false
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
+    private val rulesEngine: RulesEngine = DefaultRulesEngine()
 
     private val monitor = object : PackageMonitor() {
         override fun onPackageAdded(packageName: String, uid: Int) {
