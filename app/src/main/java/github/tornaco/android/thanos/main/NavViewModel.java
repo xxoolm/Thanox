@@ -369,7 +369,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .iconRes(R.drawable.ic_thunderstorms_fill)
                                 .category(resources.getString(R.string.feature_category_ext))
                                 .title(resources.getString(R.string.module_profile_feature_name))
-                                .title(resources.getString(R.string.module_profile_feature_summary))
+                                .summary(resources.getString(R.string.module_profile_feature_summary))
                                 .themeColor(R.color.md_indigo_300)
                                 .atEndOfThisCategory(true)
                                 .onClickListener(view -> {
