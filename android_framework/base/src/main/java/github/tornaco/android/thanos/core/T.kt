@@ -30,6 +30,11 @@ object T {
     }
 
     @JvmStatic
+    fun profileRulesDir(): File {
+        return File(baseServerDataDir(), "rules")
+    }
+
+    @JvmStatic
     fun startBlockerRepoFile(): File {
         return File(baseServerDataDir(), "start_blocking_pkgs.xml")
     }

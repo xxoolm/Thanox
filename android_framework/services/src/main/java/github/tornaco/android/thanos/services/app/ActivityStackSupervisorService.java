@@ -287,6 +287,10 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         return currentPresentPkgName.get();
     }
 
+    public ComponentName getCurrentFrontComponentName() {
+        return currentPresentComponentName.get();
+    }
+
     @Override
     public void setAppLockEnabled(boolean enabled) {
         lockerEnabled = enabled;

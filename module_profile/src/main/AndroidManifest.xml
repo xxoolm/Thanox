@@ -1,1 +1,7 @@
-<manifest package="github.tornaco.thanos.android.module.profile" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="github.tornaco.thanos.android.module.profile">
+
+    <application>
+        <activity android:name=".RuleEditorActivity" />
+    </application>
+</manifest>

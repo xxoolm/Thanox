@@ -24,4 +24,24 @@ public class ProfileManager {
     public boolean isAutoApplyForNewInstalledAppsEnabled() {
         return server.isAutoApplyForNewInstalledAppsEnabled();
     }
+
+    @SneakyThrows
+    public boolean addRule(String ruleString, String ruleId) {
+        return server.addRule(ruleString, ruleId);
+    }
+
+    @SneakyThrows
+    public void deleteRule(String ruleId) {
+        server.deleteRule(ruleId);
+    }
+
+    @SneakyThrows
+    public void setRuleEnabled(String ruleId, boolean enable) {
+        server.setRuleEnabled(ruleId, enable);
+    }
+
+    @SneakyThrows
+    public void isRuleEnabled(String ruleId) {
+        server.isRuleEnabled(ruleId);
+    }
 }

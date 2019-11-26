@@ -19,10 +19,8 @@ import github.tornaco.android.thanos.core.pref.IPrefChangeListener
 import github.tornaco.android.thanos.core.profile.IProfileManager
 import github.tornaco.android.thanos.core.profile.ProfileManager
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
-import github.tornaco.android.thanos.core.util.Noop
-import github.tornaco.android.thanos.core.util.OsUtils
-import github.tornaco.android.thanos.core.util.PkgUtils
-import github.tornaco.android.thanos.core.util.Timber
+import github.tornaco.android.thanos.core.util.*
+import github.tornaco.android.thanos.core.util.collection.ArrayMap
 import github.tornaco.android.thanos.services.BackgroundThread
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.SystemService
@@ -35,21 +33,27 @@ import github.tornaco.android.thanos.services.pm.PackageMonitor
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import org.jeasy.rules.api.Facts
+import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.api.RulesEngine
 import org.jeasy.rules.core.DefaultRulesEngine
-import org.jeasy.rules.core.RuleBuilder
+import org.jeasy.rules.mvel.MVELRuleFactory
+import org.jeasy.rules.support.YamlRuleDefinitionReader
 import util.ObjectsUtils
+import java.io.File
+import java.io.FileReader
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class ProfileService(private val s: S) : SystemService(), IProfileManager {
+
     private val notificationHelper: NotificationHelper = NotificationHelper()
 
     private var autoApplyForNewInstalledAppsEnabled = false
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
+    private val rulesMapping: ArrayMap<String, Rule> = ArrayMap()
     private val rules: Rules = Rules(Sets.newHashSet())
     private val rulesEngine: RulesEngine = DefaultRulesEngine()
 
@@ -78,7 +82,8 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
             val to = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO)
 
             val pkgFacts = Facts()
-            pkgFacts.put("frontPkgChanged", to)
+            pkgFacts.put("frontPkg", to)
+            pkgFacts.put("frontPkgChanged", true)
             publishFacts(pkgFacts)
         }
     }
@@ -110,20 +115,13 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
     }
 
     private fun registerRules() {
-        val rule = RuleBuilder()
-            .name("myRule")
-            .description("myRuleDescription")
-            .`when` { facts ->
-                val pkg: String? = facts?.get("frontPkgChanged")
-                pkg != null
-            }
-            .then { facts ->
-                val pkg: String? = facts?.get("frontPkgChanged")
-                Timber.e("frontPkgChanged: $pkg")
-            }
-            .build()
-
-        rules.register(rule)
+        rules.clear()
+        rulesMapping.clear()
+        rulesMapping.putAll(YmlRuleScanner().getRulesUnder(T.profileRulesDir()))
+        rulesMapping.forEach {
+            Timber.v("Register rule: ${it.key}")
+            rules.register(it.value)
+        }
     }
 
     private fun readPrefs() {
@@ -291,12 +289,50 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
             .notify(NotificationIdFactory.getIdByTag(UUID.randomUUID().toString()), n)
     }
 
+    override fun addRule(ruleString: String?, ruleId: String?): Boolean {
+        Timber.v("addRule: $ruleId, $ruleString")
+        Objects.requireNonNull(ruleString, "Rule is null")
+        Objects.requireNonNull(ruleId, "Rule id is null")
+        val ruleFactory = MVELRuleFactory(YamlRuleDefinitionReader())
+        try {
+            val tmpPath = File(T.baseServerTmpDir(), "$ruleId.r").absolutePath
+            FileUtils.writeString(ruleString, tmpPath)
+            val rule = ruleFactory.createRule(FileReader(tmpPath))
+            if (rule != null) {
+                rulesMapping[ruleString] = rule
+                return FileUtils.writeString(
+                    ruleString,
+                    File(T.profileRulesDir(), "$ruleId.r").absolutePath
+                )
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "createRule: $rulesEngine")
+        }
+        return false
+    }
+
+    override fun deleteRule(ruleId: String?) {
+
+    }
+
+    override fun setRuleEnabled(ruleId: String?, enable: Boolean) {
+        val rule = rulesMapping[ruleId]
+        if (rule != null) rules.register(rule)
+    }
+
+    override fun isRuleEnabled(ruleId: String?) {
+    }
+
     fun publishFacts(facts: Facts) {
-        rulesEngine.fire(rules, facts)
+        rulesEngine.fire(rules, injectThanoxServiceToFacts(facts))
+    }
+
+    private fun injectThanoxServiceToFacts(facts: Facts): Facts {
+        facts.put("thanox", ThanoxImpl(s, context))
+        return facts
     }
 
     override fun asBinder(): IBinder {
         return Noop.notSupported()
     }
-
 }

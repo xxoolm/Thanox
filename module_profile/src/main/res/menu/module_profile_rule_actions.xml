@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+            android:id="@+id/action_save_apply"
+            android:icon="@drawable/ic_settings_fill"
+            android:title="@string/module_profile_rule_edit_action_save"
+            app:showAsAction="always"
+            tools:ignore="AlwaysShowAction" />
+
+</menu>
