@@ -2,12 +2,16 @@ package github.tornaco.android.thanos.services.profile
 
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.IBinder
 import android.os.UserHandle
+import com.google.common.collect.Sets
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.T
 import github.tornaco.android.thanos.core.app.AppResources
+import github.tornaco.android.thanos.core.app.event.IEventSubscriber
+import github.tornaco.android.thanos.core.app.event.ThanosEvent
 import github.tornaco.android.thanos.core.compat.NotificationCompat
 import github.tornaco.android.thanos.core.compat.NotificationManagerCompat
 import github.tornaco.android.thanos.core.pm.AppInfo
@@ -23,14 +27,18 @@ import github.tornaco.android.thanos.services.BackgroundThread
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.SystemService
 import github.tornaco.android.thanos.services.ThanosSchedulers
+import github.tornaco.android.thanos.services.app.EventBus
 import github.tornaco.android.thanos.services.n.NotificationHelper
 import github.tornaco.android.thanos.services.n.NotificationIdFactory
 import github.tornaco.android.thanos.services.n.SystemUI
 import github.tornaco.android.thanos.services.pm.PackageMonitor
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import org.jeasy.rules.api.Facts
+import org.jeasy.rules.api.Rules
 import org.jeasy.rules.api.RulesEngine
 import org.jeasy.rules.core.DefaultRulesEngine
+import org.jeasy.rules.core.RuleBuilder
 import util.ObjectsUtils
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -42,6 +50,7 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
+    private val rules: Rules = Rules(Sets.newHashSet())
     private val rulesEngine: RulesEngine = DefaultRulesEngine()
 
     private val monitor = object : PackageMonitor() {
@@ -54,8 +63,23 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
                 .observeOn(ThanosSchedulers.serverThread())
                 .subscribe {
                     setupAutoConfigForNewInstalledAppsIfNeed(packageName)
+
+                    val pkgFacts = Facts()
+                    pkgFacts.put("pkgAdd", packageName)
+                    publishFacts(pkgFacts)
                 }
             compositeDisposable.add(disposable)
+        }
+    }
+
+    private val frontEventSubscriber = object : IEventSubscriber.Stub() {
+        override fun onEvent(e: ThanosEvent) {
+            val intent = e.intent
+            val to = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO)
+
+            val pkgFacts = Facts()
+            pkgFacts.put("frontPkgChanged", to)
+            publishFacts(pkgFacts)
         }
     }
 
@@ -63,6 +87,7 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
         super.systemReady()
         registerReceivers()
         initPrefs()
+        registerRules()
     }
 
     override fun shutdown() {
@@ -78,6 +103,27 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
 
     private fun registerReceivers() {
         monitor.register(context, UserHandle.CURRENT, true, BackgroundThread.getHandler())
+        EventBus.getInstance().registerEventSubscriber(
+            IntentFilter(T.Actions.ACTION_FRONT_PKG_CHANGED),
+            frontEventSubscriber
+        )
+    }
+
+    private fun registerRules() {
+        val rule = RuleBuilder()
+            .name("myRule")
+            .description("myRuleDescription")
+            .`when` { facts ->
+                val pkg: String? = facts?.get("frontPkgChanged")
+                pkg != null
+            }
+            .then { facts ->
+                val pkg: String? = facts?.get("frontPkgChanged")
+                Timber.e("frontPkgChanged: $pkg")
+            }
+            .build()
+
+        rules.register(rule)
     }
 
     private fun readPrefs() {
@@ -243,6 +289,10 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
 
         NotificationManagerCompat.from(context)
             .notify(NotificationIdFactory.getIdByTag(UUID.randomUUID().toString()), n)
+    }
+
+    fun publishFacts(facts: Facts) {
+        rulesEngine.fire(rules, facts)
     }
 
     override fun asBinder(): IBinder {
