@@ -27,7 +27,9 @@ dependencies {
     implementation project(':android_framework:base')
 
     // Rules.
-    implementation deps.rules
+    implementation deps.rules.core
+    implementation deps.rules.mvel
+    implementation deps.rules.support
 
     // Xposed
     compileOnly deps.xposed.api

@@ -102,7 +102,11 @@ ext.build_versions = build_versions
 deps.guava = "com.google.guava:guava:$versions.guava@jar"
 deps.gson = "com.google.code.gson:gson:$versions.gson@jar"
 
-deps.rules = "org.jeasy:easy-rules-core:$versions.rules"
+def rules = [:]
+rules.core = "org.jeasy:easy-rules-core:$versions.rules"
+rules.mvel = "org.jeasy:easy-rules-mvel:$versions.rules"
+rules.support = "org.jeasy:easy-rules-support:$versions.rules"
+deps.rules = rules
 
 def lifecycle = [:]
 lifecycle.runtime = "androidx.lifecycle:lifecycle-runtime:$versions.lifecycle"
