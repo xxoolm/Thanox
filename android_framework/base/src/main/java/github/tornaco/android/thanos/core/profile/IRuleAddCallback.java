@@ -60,7 +60,6 @@ public interface IRuleAddCallback extends android.os.IInterface
         {
           data.enforceInterface(descriptor);
           this.onRuleAddSuccess();
-          reply.writeNoException();
           return true;
         }
         case TRANSACTION_onRuleAddFail:
@@ -71,7 +70,6 @@ public interface IRuleAddCallback extends android.os.IInterface
           java.lang.String _arg1;
           _arg1 = data.readString();
           this.onRuleAddFail(_arg0, _arg1);
-          reply.writeNoException();
           return true;
         }
         default:
@@ -98,38 +96,32 @@ public interface IRuleAddCallback extends android.os.IInterface
       @Override public void onRuleAddSuccess() throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_onRuleAddSuccess, _data, _reply, 0);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_onRuleAddSuccess, _data, null, android.os.IBinder.FLAG_ONEWAY);
           if (!_status && getDefaultImpl() != null) {
             getDefaultImpl().onRuleAddSuccess();
             return;
           }
-          _reply.readException();
         }
         finally {
-          _reply.recycle();
           _data.recycle();
         }
       }
       @Override public void onRuleAddFail(int errorCode, java.lang.String errorMessage) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
           _data.writeInt(errorCode);
           _data.writeString(errorMessage);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_onRuleAddFail, _data, _reply, 0);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_onRuleAddFail, _data, null, android.os.IBinder.FLAG_ONEWAY);
           if (!_status && getDefaultImpl() != null) {
             getDefaultImpl().onRuleAddFail(errorCode, errorMessage);
             return;
           }
-          _reply.readException();
         }
         finally {
-          _reply.recycle();
           _data.recycle();
         }
       }

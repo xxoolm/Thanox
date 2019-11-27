@@ -7,6 +7,7 @@ import android.os.IBinder
 import android.os.UserHandle
 import android.util.Log
 import com.google.common.collect.Sets
+import com.google.common.io.Files
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.T
@@ -21,7 +22,10 @@ import github.tornaco.android.thanos.core.profile.IProfileManager
 import github.tornaco.android.thanos.core.profile.IRuleAddCallback
 import github.tornaco.android.thanos.core.profile.ProfileManager
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
-import github.tornaco.android.thanos.core.util.*
+import github.tornaco.android.thanos.core.util.Noop
+import github.tornaco.android.thanos.core.util.OsUtils
+import github.tornaco.android.thanos.core.util.PkgUtils
+import github.tornaco.android.thanos.core.util.Timber
 import github.tornaco.android.thanos.core.util.collection.ArrayMap
 import github.tornaco.android.thanos.services.BackgroundThread
 import github.tornaco.android.thanos.services.S
@@ -44,6 +48,7 @@ import org.jeasy.rules.support.JsonRuleDefinitionReader
 import util.ObjectsUtils
 import java.io.File
 import java.io.StringReader
+import java.nio.charset.Charset
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -291,21 +296,24 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             .notify(NotificationIdFactory.getIdByTag(UUID.randomUUID().toString()), n)
     }
 
+    @Suppress("UnstableApiUsage")
     override fun addRule(id: String?, ruleJson: String?, callback: IRuleAddCallback?) {
         enforceCallingPermissions()
         Timber.v("addRule: $id, $ruleJson")
         Objects.requireNonNull(id, "Rule is null")
         Objects.requireNonNull(ruleJson, "Rule id is null")
-        val ruleFactory = MVELRuleFactory(JsonRuleDefinitionReader())
         executeInternal(Runnable {
             try {
+                val ruleFactory = MVELRuleFactory(JsonRuleDefinitionReader())
                 val rule = ruleFactory.createRule(StringReader(ruleJson!!))
                 if (rule != null) {
                     rulesMapping[id] = rule
-                    FileUtils.writeString(
-                        ruleJson,
-                        File(T.profileRulesDir(), "$id.r").absolutePath
-                    )
+                    // Persist.
+                    val f = File(T.profileRulesDir(), "$id.r")
+                    Files.createParentDirs(f)
+                    Files.asByteSink(f)
+                        .asCharSink(Charset.defaultCharset())
+                        .write(ruleJson)
                     callback?.onRuleAddSuccess()
                 } else {
                     callback?.onRuleAddFail(0, "Create rule fail with unknown error.")
