@@ -6,9 +6,9 @@ interface IProfileManager {
     void setAutoApplyForNewInstalledAppsEnabled(boolean enable);
     boolean isAutoApplyForNewInstalledAppsEnabled();
 
-    void addRule(String id, String ruleJson, in IRuleAddCallback callback);
+    void addRule(String ruleJson, in IRuleAddCallback callback);
     void deleteRule(String ruleId);
 
-    void setRuleEnabled(String ruleId, boolean enable);
-    void isRuleEnabled(String ruleId);
+    boolean setRuleEnabled(String ruleId, boolean enable);
+    boolean isRuleEnabled(String ruleId);
 }

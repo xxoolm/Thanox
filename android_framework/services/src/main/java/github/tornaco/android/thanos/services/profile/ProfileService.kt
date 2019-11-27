@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.services.profile
 
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
@@ -16,6 +17,8 @@ import github.tornaco.android.thanos.core.app.event.IEventSubscriber
 import github.tornaco.android.thanos.core.app.event.ThanosEvent
 import github.tornaco.android.thanos.core.compat.NotificationCompat
 import github.tornaco.android.thanos.core.compat.NotificationManagerCompat
+import github.tornaco.android.thanos.core.persist.RepoFactory
+import github.tornaco.android.thanos.core.persist.StringSetRepo
 import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener
 import github.tornaco.android.thanos.core.profile.IProfileManager
@@ -64,6 +67,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     private val rules: Rules = Rules(Sets.newHashSet())
     private val rulesEngine: RulesEngine = DefaultRulesEngine()
 
+    private lateinit var enabledRuleNameRepo: StringSetRepo
+
     private val monitor = object : PackageMonitor() {
         override fun onPackageAdded(packageName: String, uid: Int) {
             super.onPackageAdded(packageName, uid)
@@ -93,6 +98,12 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             pkgFacts.put("frontPkgChanged", true)
             publishFacts(pkgFacts)
         }
+    }
+
+    override fun onStart(context: Context) {
+        super.onStart(context)
+        enabledRuleNameRepo =
+            RepoFactory.get().getOrCreateStringSetRepo(T.profileEnabledRulesRepoFile().path)
     }
 
     override fun systemReady() {
@@ -126,8 +137,11 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         rulesMapping.clear()
         rulesMapping.putAll(LocalRuleScanner().getRulesUnder(T.profileRulesDir()))
         rulesMapping.forEach {
-            Timber.v("Register rule: ${it.key}")
-            rules.register(it.value)
+            if (enabledRuleNameRepo.has(it.value.name)) {
+                Timber.v("Register rule: ${it.key}")
+            } else {
+                Timber.v("Not enabled rule: ${it.key}")
+            }
         }
     }
 
@@ -297,19 +311,20 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     @Suppress("UnstableApiUsage")
-    override fun addRule(id: String?, ruleJson: String?, callback: IRuleAddCallback?) {
+    override fun addRule(ruleJson: String?, callback: IRuleAddCallback?) {
         enforceCallingPermissions()
-        Timber.v("addRule: $id, $ruleJson")
-        Objects.requireNonNull(id, "Rule is null")
-        Objects.requireNonNull(ruleJson, "Rule id is null")
+        Timber.v("addRule: $ruleJson")
+        Objects.requireNonNull(ruleJson, "Rule content is null")
         executeInternal(Runnable {
             try {
                 val ruleFactory = MVELRuleFactory(JsonRuleDefinitionReader())
                 val rule = ruleFactory.createRule(StringReader(ruleJson!!))
                 if (rule != null) {
-                    rulesMapping[id] = rule
+                    // Using name as id.
+                    val ruleName = rule.name
+                    rulesMapping[ruleName] = rule
                     // Persist.
-                    val f = File(T.profileRulesDir(), "$id.r")
+                    val f = File(T.profileRulesDir(), "$ruleName.rj")
                     Files.createParentDirs(f)
                     Files.asByteSink(f)
                         .asCharSink(Charset.defaultCharset())
@@ -326,15 +341,24 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun deleteRule(ruleId: String?) {
-
+        rulesMapping.remove(ruleId!!)
+        enabledRuleNameRepo.remove(ruleId)
     }
 
-    override fun setRuleEnabled(ruleId: String?, enable: Boolean) {
+    override fun setRuleEnabled(ruleId: String?, enable: Boolean): Boolean {
         val rule = rulesMapping[ruleId]
-        if (rule != null) rules.register(rule)
+        return if (rule != null) {
+            rules.register(rule)
+            enabledRuleNameRepo.add(ruleId)
+            true
+        } else {
+            Timber.e("Rule with name $ruleId not found..")
+            false
+        }
     }
 
-    override fun isRuleEnabled(ruleId: String?) {
+    override fun isRuleEnabled(ruleId: String?): Boolean {
+        return enabledRuleNameRepo.has(ruleId!!)
     }
 
     fun publishFacts(facts: Facts) {

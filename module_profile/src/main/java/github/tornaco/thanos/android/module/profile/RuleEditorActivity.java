@@ -57,8 +57,7 @@ public class RuleEditorActivity extends ThemeActivity {
             if (item.getItemId() == R.id.action_save_apply) {
                 ThanosManager.from(getApplicationContext())
                         .getProfileManager()
-                        .addRule(id,
-                                mContentEditable.getEditableText().toString(),
+                        .addRule(mContentEditable.getEditableText().toString(),
                                 new RuleAddCallback() {
                                     @Override
                                     protected void onRuleAddSuccess() {

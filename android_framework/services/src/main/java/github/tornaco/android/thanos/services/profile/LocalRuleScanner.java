@@ -15,6 +15,7 @@ import github.tornaco.android.thanos.core.util.Timber;
 
 class LocalRuleScanner {
 
+    // name-rule
     @SuppressWarnings("UnstableApiUsage")
     Map<String, Rule> getRulesUnder(File dir) {
         Map<String, Rule> res = new HashMap<>();
@@ -28,7 +29,7 @@ class LocalRuleScanner {
             try {
                 Rule rule = ruleFactory.createRule(new FileReader(f));
                 Timber.v("Found rule: %s", rule);
-                res.put(Files.getNameWithoutExtension(f.getAbsolutePath()), rule);
+                res.put(rule.getName(), rule);
             } catch (Exception e) {
                 Timber.e(e, "Error parse file to rule: " + f);
             }

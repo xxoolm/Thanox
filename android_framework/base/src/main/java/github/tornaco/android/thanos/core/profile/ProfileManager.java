@@ -26,8 +26,8 @@ public class ProfileManager {
     }
 
     @SneakyThrows
-    public void addRule(String id, String ruleString, RuleAddCallback callback) {
-        server.addRule(id, ruleString, callback.getStub());
+    public void addRule(String ruleString, RuleAddCallback callback) {
+        server.addRule(ruleString, callback.getStub());
     }
 
     @SneakyThrows

@@ -35,6 +35,11 @@ object T {
     }
 
     @JvmStatic
+    fun profileEnabledRulesRepoFile(): File {
+        return File(profileRulesDir(), "enabled_rules.xml")
+    }
+
+    @JvmStatic
     fun startBlockerRepoFile(): File {
         return File(baseServerDataDir(), "start_blocking_pkgs.xml")
     }
