@@ -124,7 +124,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     private fun registerRules() {
         rules.clear()
         rulesMapping.clear()
-        rulesMapping.putAll(YmlRuleScanner().getRulesUnder(T.profileRulesDir()))
+        rulesMapping.putAll(LocalRuleScanner().getRulesUnder(T.profileRulesDir()))
         rulesMapping.forEach {
             Timber.v("Register rule: ${it.key}")
             rules.register(it.value)
