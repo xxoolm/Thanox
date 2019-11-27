@@ -280,6 +280,9 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
 
     public void onActivityResumed(Intent intent) {
         Timber.v("onActivityResumed: %s", intent);
+        Completable.fromRunnable(() -> reportActivityLaunchingInternal(intent, "onActivityResumed"))
+                .subscribeOn(ThanosSchedulers.serverThread())
+                .subscribe();
     }
 
     @Override
