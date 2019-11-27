@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.os.UserHandle
+import android.util.Log
 import com.google.common.collect.Sets
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.Res
@@ -17,14 +18,15 @@ import github.tornaco.android.thanos.core.compat.NotificationManagerCompat
 import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener
 import github.tornaco.android.thanos.core.profile.IProfileManager
+import github.tornaco.android.thanos.core.profile.IRuleAddCallback
 import github.tornaco.android.thanos.core.profile.ProfileManager
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
 import github.tornaco.android.thanos.core.util.*
 import github.tornaco.android.thanos.core.util.collection.ArrayMap
 import github.tornaco.android.thanos.services.BackgroundThread
 import github.tornaco.android.thanos.services.S
-import github.tornaco.android.thanos.services.SystemService
 import github.tornaco.android.thanos.services.ThanosSchedulers
+import github.tornaco.android.thanos.services.ThanoxSystemService
 import github.tornaco.android.thanos.services.app.EventBus
 import github.tornaco.android.thanos.services.n.NotificationHelper
 import github.tornaco.android.thanos.services.n.NotificationIdFactory
@@ -38,14 +40,14 @@ import org.jeasy.rules.api.Rules
 import org.jeasy.rules.api.RulesEngine
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.mvel.MVELRuleFactory
-import org.jeasy.rules.support.YamlRuleDefinitionReader
+import org.jeasy.rules.support.JsonRuleDefinitionReader
 import util.ObjectsUtils
 import java.io.File
-import java.io.FileReader
+import java.io.StringReader
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class ProfileService(private val s: S) : SystemService(), IProfileManager {
+class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
     private val notificationHelper: NotificationHelper = NotificationHelper()
 
@@ -289,26 +291,30 @@ class ProfileService(private val s: S) : SystemService(), IProfileManager {
             .notify(NotificationIdFactory.getIdByTag(UUID.randomUUID().toString()), n)
     }
 
-    override fun addRule(ruleString: String?, ruleId: String?): Boolean {
-        Timber.v("addRule: $ruleId, $ruleString")
-        Objects.requireNonNull(ruleString, "Rule is null")
-        Objects.requireNonNull(ruleId, "Rule id is null")
-        val ruleFactory = MVELRuleFactory(YamlRuleDefinitionReader())
-        try {
-            val tmpPath = File(T.baseServerTmpDir(), "$ruleId.r").absolutePath
-            FileUtils.writeString(ruleString, tmpPath)
-            val rule = ruleFactory.createRule(FileReader(tmpPath))
-            if (rule != null) {
-                rulesMapping[ruleString] = rule
-                return FileUtils.writeString(
-                    ruleString,
-                    File(T.profileRulesDir(), "$ruleId.r").absolutePath
-                )
+    override fun addRule(id: String?, ruleJson: String?, callback: IRuleAddCallback?) {
+        enforceCallingPermissions()
+        Timber.v("addRule: $id, $ruleJson")
+        Objects.requireNonNull(id, "Rule is null")
+        Objects.requireNonNull(ruleJson, "Rule id is null")
+        val ruleFactory = MVELRuleFactory(JsonRuleDefinitionReader())
+        executeInternal(Runnable {
+            try {
+                val rule = ruleFactory.createRule(StringReader(ruleJson!!))
+                if (rule != null) {
+                    rulesMapping[id] = rule
+                    FileUtils.writeString(
+                        ruleJson,
+                        File(T.profileRulesDir(), "$id.r").absolutePath
+                    )
+                    callback?.onRuleAddSuccess()
+                } else {
+                    callback?.onRuleAddFail(0, "Create rule fail with unknown error.")
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "createRule: $rulesEngine")
+                callback?.onRuleAddFail(0, Log.getStackTraceString(e))
             }
-        } catch (e: Exception) {
-            Timber.e(e, "createRule: $rulesEngine")
-        }
-        return false
+        })
     }
 
     override fun deleteRule(ruleId: String?) {

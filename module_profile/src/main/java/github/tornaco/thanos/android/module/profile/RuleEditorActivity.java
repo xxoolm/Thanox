@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -13,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.UUID;
 
 import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.profile.RuleAddCallback;
 import github.tornaco.android.thanos.core.util.TextWatcherAdapter;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
@@ -48,15 +50,32 @@ public class RuleEditorActivity extends ThemeActivity {
             }
         });
 
-
         Toolbar editorActionToolbar = findViewById(R.id.editor_actions_toolbar);
         editorActionToolbar.inflateMenu(R.menu.module_profile_rule_actions);
+        String id = UUID.randomUUID().toString();
         editorActionToolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_save_apply) {
                 ThanosManager.from(getApplicationContext())
                         .getProfileManager()
-                        .addRule(UUID.randomUUID().toString(),
-                                mContentEditable.getEditableText().toString());
+                        .addRule(id,
+                                mContentEditable.getEditableText().toString(),
+                                new RuleAddCallback() {
+                                    @Override
+                                    protected void onRuleAddSuccess() {
+                                        super.onRuleAddSuccess();
+                                        Toast.makeText(getApplicationContext(), "Add success.", Toast.LENGTH_LONG).show();
+
+                                        ThanosManager.from(getApplicationContext())
+                                                .getProfileManager()
+                                                .setRuleEnabled(id, true);
+                                    }
+
+                                    @Override
+                                    protected void onRuleAddFail(int errorCode, String errorMessage) {
+                                        super.onRuleAddFail(errorCode, errorMessage);
+                                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                    }
+                                });
                 return true;
             }
             return false;

@@ -422,7 +422,7 @@ public class NavViewModel extends AndroidViewModel {
     }
 
     private String getChannelString() {
-        return BuildConfig.DEBUG ? "DEBUG" : null;
+        return BuildConfig.DEBUG ? "D" : null;
     }
 
     void cleanUpBackgroundTasks() {

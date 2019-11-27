@@ -29,6 +29,7 @@ import util.IoUtils;
  * All right reserved.
  */
 
+@SuppressWarnings("UnstableApiUsage")
 public class FileUtils {
 
     /**
