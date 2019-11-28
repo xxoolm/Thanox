@@ -23,17 +23,16 @@ import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener
 import github.tornaco.android.thanos.core.profile.IProfileManager
 import github.tornaco.android.thanos.core.profile.IRuleAddCallback
+import github.tornaco.android.thanos.core.profile.IRuleCheckCallback
 import github.tornaco.android.thanos.core.profile.ProfileManager
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
-import github.tornaco.android.thanos.core.util.Noop
-import github.tornaco.android.thanos.core.util.OsUtils
-import github.tornaco.android.thanos.core.util.PkgUtils
-import github.tornaco.android.thanos.core.util.Timber
+import github.tornaco.android.thanos.core.util.*
 import github.tornaco.android.thanos.core.util.collection.ArrayMap
 import github.tornaco.android.thanos.services.BackgroundThread
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.ThanosSchedulers
 import github.tornaco.android.thanos.services.ThanoxSystemService
+import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
 import github.tornaco.android.thanos.services.app.EventBus
 import github.tornaco.android.thanos.services.n.NotificationHelper
 import github.tornaco.android.thanos.services.n.NotificationIdFactory
@@ -48,6 +47,7 @@ import org.jeasy.rules.api.RulesEngine
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.mvel.MVELRuleFactory
 import org.jeasy.rules.support.JsonRuleDefinitionReader
+import org.jeasy.rules.support.YamlRuleDefinitionReader
 import util.ObjectsUtils
 import java.io.File
 import java.io.StringReader
@@ -66,6 +66,9 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     private val rulesMapping: ArrayMap<String, Rule> = ArrayMap()
     private val rules: Rules = Rules(Sets.newHashSet())
     private val rulesEngine: RulesEngine = DefaultRulesEngine()
+
+    private val ruleFactoryJson = MVELRuleFactory(JsonRuleDefinitionReader())
+    private val ruleFactoryYaml = MVELRuleFactory(YamlRuleDefinitionReader())
 
     private lateinit var enabledRuleNameRepo: StringSetRepo
 
@@ -310,42 +313,61 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             .notify(NotificationIdFactory.getIdByTag(UUID.randomUUID().toString()), n)
     }
 
-    @Suppress("UnstableApiUsage")
-    override fun addRule(ruleJson: String?, callback: IRuleAddCallback?) {
+    override fun addRule(ruleJson: String?, callback: IRuleAddCallback?, format: Int) {
         enforceCallingPermissions()
-        Timber.v("addRule: $ruleJson")
+        Timber.v("addRule: $ruleJson, format is: $format")
         Objects.requireNonNull(ruleJson, "Rule content is null")
+        when (format) {
+            ProfileManager.RULE_FORMAT_JSON -> addRule(ruleJson, callback, ruleFactoryJson, ".json")
+            ProfileManager.RULE_FORMAT_YAML -> addRule(ruleJson, callback, ruleFactoryYaml, ".yml")
+            else -> throw IllegalArgumentException("Bad format: $format")
+        }
+    }
+
+    @Suppress("UnstableApiUsage")
+    @ExecuteBySystemHandler
+    private fun addRule(
+        ruleJson: String?,
+        callback: IRuleAddCallback?,
+        factory: MVELRuleFactory,
+        suffix: String
+    ) {
         executeInternal(Runnable {
             try {
-                val ruleFactory = MVELRuleFactory(JsonRuleDefinitionReader())
-                val rule = ruleFactory.createRule(StringReader(ruleJson!!))
+                val rule = factory.createRule(StringReader(ruleJson!!))
                 if (rule != null) {
                     // Using name as id.
                     val ruleName = rule.name
                     rulesMapping[ruleName] = rule
                     // Persist.
-                    val f = File(T.profileRulesDir(), "$ruleName.rj")
+                    val f = File(T.profileRulesDir(), "$ruleName$suffix")
                     Files.createParentDirs(f)
                     Files.asByteSink(f)
                         .asCharSink(Charset.defaultCharset())
                         .write(ruleJson)
                     callback?.onRuleAddSuccess()
                 } else {
-                    callback?.onRuleAddFail(0, "Create rule fail with unknown error.")
+                    callback?.onRuleAddFail(0, "Create json rule fail with unknown error.")
                 }
             } catch (e: Exception) {
-                Timber.e(e, "createRule: $rulesEngine")
+                Timber.e(e, "addJsonRule: $rulesEngine")
                 callback?.onRuleAddFail(0, Log.getStackTraceString(e))
             }
         })
     }
 
     override fun deleteRule(ruleId: String?) {
-        rulesMapping.remove(ruleId!!)
-        enabledRuleNameRepo.remove(ruleId)
+        disableRule(ruleId)
+        val r = rulesMapping.remove(ruleId!!)
+        // Delete file.
+        if (r != null) {
+            val f = File(T.profileRulesDir(), "${r.name}.rj")
+            DevNull.accept(f.delete())
+        }
+        Timber.v("deleteRule: $r")
     }
 
-    override fun setRuleEnabled(ruleId: String?, enable: Boolean): Boolean {
+    override fun enableRule(ruleId: String?): Boolean {
         val rule = rulesMapping[ruleId]
         return if (rule != null) {
             rules.register(rule)
@@ -354,6 +376,29 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         } else {
             Timber.e("Rule with name $ruleId not found..")
             false
+        }
+    }
+
+    override fun disableRule(ruleId: String?): Boolean {
+        return enabledRuleNameRepo.remove(ruleId)
+    }
+
+    override fun checkRule(ruleJson: String?, callback: IRuleCheckCallback?, format: Int) {
+        checkJsonRule(ruleJson, callback)
+    }
+
+    private fun checkJsonRule(ruleJson: String?, callback: IRuleCheckCallback?) {
+        try {
+            val ruleFactory = MVELRuleFactory(JsonRuleDefinitionReader())
+            val rule = ruleFactory.createRule(StringReader(ruleJson!!))
+            if (rule != null) {
+                callback?.onValid()
+            } else {
+                callback?.onInvalid(0, "Check rule fail with unknown error.")
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "checkJsonRule: $rulesEngine")
+            callback?.onInvalid(0, Log.getStackTraceString(e))
         }
     }
 

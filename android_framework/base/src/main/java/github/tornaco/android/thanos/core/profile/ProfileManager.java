@@ -3,6 +3,9 @@ package github.tornaco.android.thanos.core.profile;
 import lombok.SneakyThrows;
 
 public class ProfileManager {
+    public static final int RULE_FORMAT_JSON = 0;
+    public static final int RULE_FORMAT_YAML = 1;
+
     /**
      * Dummy package name for new installed apps config.
      */
@@ -26,8 +29,8 @@ public class ProfileManager {
     }
 
     @SneakyThrows
-    public void addRule(String ruleString, RuleAddCallback callback) {
-        server.addRule(ruleString, callback.getStub());
+    public void addRule(String ruleString, RuleAddCallback callback, int format) {
+        server.addRule(ruleString, callback.getStub(), format);
     }
 
     @SneakyThrows
@@ -36,8 +39,18 @@ public class ProfileManager {
     }
 
     @SneakyThrows
-    public void setRuleEnabled(String ruleId, boolean enable) {
-        server.setRuleEnabled(ruleId, enable);
+    public boolean enableRule(String ruleId) {
+        return server.enableRule(ruleId);
+    }
+
+    @SneakyThrows
+    public boolean disableRule(String ruleId) {
+        return server.disableRule(ruleId);
+    }
+
+    @SneakyThrows
+    public void checkRule(String ruleJson, IRuleCheckCallback callback, int format) {
+        server.checkRule(ruleJson, callback, format);
     }
 
     @SneakyThrows

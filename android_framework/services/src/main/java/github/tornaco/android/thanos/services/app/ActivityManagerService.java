@@ -325,7 +325,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
             return new StartResultExt(StartResult.BY_PASS_START_BLOCKED_DISABLED, servicePkg);
         }
 
-        // UI present?
+        // IUI present?
         if (ObjectsUtils.equals(s.getActivityStackSupervisor().getCurrentFrontApp(), servicePkg)) {
             return new StartResultExt(StartResult.BY_PASS_UI_PRESENT, servicePkg);
         }
@@ -422,7 +422,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
             return new StartResultExt(StartResult.BY_PASS_START_BLOCKED_DISABLED, receiverPkgName);
         }
 
-        // UI present?
+        // IUI present?
         if (ObjectsUtils.equals(s.getActivityStackSupervisor().getCurrentFrontApp(), receiverPkgName)) {
             return new StartResultExt(StartResult.BY_PASS_UI_PRESENT, receiverPkgName);
         }
@@ -492,7 +492,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
             return new StartResultExt(StartResult.BY_PASS_START_BLOCKED_DISABLED, processPackage);
         }
 
-        // UI present?
+        // IUI present?
         if (ObjectsUtils.equals(s.getActivityStackSupervisor().getCurrentFrontApp(), processPackage)) {
             return new StartResultExt(StartResult.BY_PASS_UI_PRESENT, processPackage);
         }

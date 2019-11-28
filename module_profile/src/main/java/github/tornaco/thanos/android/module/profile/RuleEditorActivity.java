@@ -67,7 +67,8 @@ public class RuleEditorActivity extends ThemeActivity {
                                         super.onRuleAddFail(errorCode, errorMessage);
                                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                                     }
-                                });
+                                },
+                                0);
                 return true;
             }
             if (item.getItemId() == R.id.action_text_size_inc) {

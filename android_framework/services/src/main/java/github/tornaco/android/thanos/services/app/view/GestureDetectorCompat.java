@@ -141,7 +141,7 @@ public final class GestureDetectorCompat {
 
         /**
          * Creates a GestureDetector with the supplied listener.
-         * You may only use this constructor from a UI thread (this is the usual situation).
+         * You may only use this constructor from a IUI thread (this is the usual situation).
          *
          * @param context  the application's context
          * @param listener the listener invoked for all the callbacks, this must
@@ -497,7 +497,7 @@ public final class GestureDetectorCompat {
 
     /**
      * Creates a GestureDetectorCompat with the supplied listener.
-     * As usual, you may only use this constructor from a UI thread.
+     * As usual, you may only use this constructor from a IUI thread.
      *
      * @param context  the application's context
      * @param listener the listener invoked for all the callbacks, this must
@@ -510,7 +510,7 @@ public final class GestureDetectorCompat {
 
     /**
      * Creates a GestureDetectorCompat with the supplied listener.
-     * As usual, you may only use this constructor from a UI thread.
+     * As usual, you may only use this constructor from a IUI thread.
      *
      * @param context  the application's context
      * @param listener the listener invoked for all the callbacks, this must
