@@ -378,9 +378,8 @@ public class NavViewModel extends AndroidViewModel {
                                 .category(resources.getString(R.string.feature_category_ext))
                                 .title(resources.getString(R.string.module_activity_trampoline_app_name))
                                 .themeColor(R.color.md_green_a700)
-                                .onClickListener(view -> {
-                                    ActivityTrampolineActivity.start(getApplication());
-                                })
+                                .onClickListener(view -> ActivityTrampolineActivity.start(getApplication()))
+                                .atEndOfThisCategory(true)
                                 .build(),
                         Tile.builder()
                                 .iconRes(R.drawable.ic_thunderstorms_fill)

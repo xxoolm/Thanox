@@ -32,7 +32,7 @@ class PrefManagerStub(private val provider: PreferenceManagerService) : IPrefMan
         return provider.putString(name, value)
     }
 
-    override fun getString(name: String, def: String): String {
+    override fun getString(name: String, def: String): String? {
         return provider.getString(name, def)
     }
 }

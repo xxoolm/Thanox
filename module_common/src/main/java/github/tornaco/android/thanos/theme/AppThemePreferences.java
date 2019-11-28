@@ -1,12 +1,12 @@
 package github.tornaco.android.thanos.theme;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 
 import java.util.Observable;
 
+import github.tornaco.android.thanos.core.app.ThanosManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import util.Singleton;
@@ -29,28 +29,30 @@ public class AppThemePreferences extends Observable {
     }
 
     public Theme getTheme(@NonNull Context context) {
-        return Theme.valueOf(PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PREF_KEY_APP_THEME, Theme.Light.name()));
+        ThanosManager thanos = ThanosManager.from(context);
+        if (!thanos.isServiceInstalled()) return Theme.Light;
+        return Theme.valueOf(
+                thanos.getPrefManager().getString(PREF_KEY_APP_THEME,
+                        Theme.Light.name()));
     }
 
     public void setTheme(@NonNull Context context, @NonNull Theme theme) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putString(PREF_KEY_APP_THEME, theme.name())
-                .apply();
-        setChanged();
+        ThanosManager thanos = ThanosManager.from(context);
+        if (!thanos.isServiceInstalled()) return;
+        thanos.getPrefManager().putString(PREF_KEY_APP_THEME, theme.name());
         notifyObservers();
     }
 
     public String getIconPack(@NonNull Context context, String defaultValue) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
+        ThanosManager thanos = ThanosManager.from(context);
+        if (!thanos.isServiceInstalled()) return defaultValue;
+        return thanos.getPrefManager()
                 .getString(PREF_KEY_APP_ICON_PACK, defaultValue);
     }
 
     public void setIconPack(@NonNull Context context, @NonNull String iconPkg) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putString(PREF_KEY_APP_ICON_PACK, iconPkg)
-                .apply();
+        ThanosManager thanos = ThanosManager.from(context);
+        if (!thanos.isServiceInstalled()) return;
+        thanos.getPrefManager().putString(PREF_KEY_APP_ICON_PACK, iconPkg);
     }
 }
