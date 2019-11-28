@@ -40,6 +40,7 @@ public class AppThemePreferences extends Observable {
         ThanosManager thanos = ThanosManager.from(context);
         if (!thanos.isServiceInstalled()) return;
         thanos.getPrefManager().putString(PREF_KEY_APP_THEME, theme.name());
+        setChanged();
         notifyObservers();
     }
 

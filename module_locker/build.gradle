@@ -1,3 +1,5 @@
+import com.google.common.io.Files
+
 apply plugin: 'com.android.application'
 
 android {
@@ -5,17 +7,59 @@ android {
     buildToolsVersion build_versions.build_tools
 
     defaultConfig {
+        applicationId rootProject.ext.lockerApplicationId
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
-        versionCode 1
-        versionName "1.0"
+        versionCode rootProject.ext.versionCode as int
+        versionName rootProject.ext.versionName
+        println(versionCode)
+        println(versionName)
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            Properties localProp = new Properties()
+            File propFile = new File("${project.rootProject.rootDir.path}/local.properties")
+            if (propFile.exists()) {
+                //noinspection UnstableApiUsage
+                localProp.load(Files.asByteSource(propFile).openStream())
+            }
+
+            storeFile file("${project.rootProject.rootDir.path}/environment/keys/android.jks")
+
+            storePassword localProp.containsKey("KEYSTORE_PASS") ? localProp.getProperty("KEYSTORE_PASS") : project.hasProperty("KEYSTORE_PASS") ? KEYSTORE_PASS : System.getenv("KEYSTORE_PASS")
+            keyAlias localProp.containsKey("ALIAS_NAME") ? localProp.getProperty("ALIAS_NAME") : (project.hasProperty("ALIAS_NAME") ? ALIAS_NAME : System.getenv("ALIAS_NAME"))
+            keyPassword localProp.containsKey("ALIAS_PASS") ? localProp.getProperty("ALIAS_PASS") : project.hasProperty("ALIAS_PASS") ? ALIAS_PASS : System.getenv("ALIAS_PASS")
+
+            println("keyAlias: ${keyAlias}")
+        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    flavorDimensions "market"
+    productFlavors {
+        row {
+            dimension "market"
+            versionNameSuffix "-row"
+        }
+
+        prc {
+            dimension "market"
+            versionNameSuffix "-prc"
         }
     }
 
@@ -26,6 +70,14 @@ android {
 
     dataBinding {
         enabled = true
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def flavor = variant.name
+            def versionName = variant.versionName
+            outputFileName = "locker_${versionName}.apk"
+        }
     }
 
     resourcePrefix 'module_locker_'

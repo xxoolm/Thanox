@@ -32,6 +32,7 @@ install:
 build_script:
   - openssl enc -aes-256-cbc -d -K %K% -iv %IV% -in %APPVEYOR_BUILD_FOLDER%/environment/keys/android-key-enc -out %APPVEYOR_BUILD_FOLDER%/environment/keys/android.jks
   - gradlew.bat :app:assemblePrcRelease
+  - gradlew.bat :module_locker:assemblePrcRelease
 
 artifacts:
   - path: '**\*.apk'
@@ -46,6 +47,6 @@ deploy:
     secure: "308KDLsJSL92cNktWWDvydxWSG6qTqI3C/f+DElUH3uysKVf3SyKLtYFRe0x86KG"
   artifact: '**\*.apk'
   draft: false
-  prerelease: true
+  prerelease: false
   on:
     appveyor_repo_tag: true

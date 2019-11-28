@@ -42,6 +42,7 @@ androidGitVersion {
 
 ext {
     thanosApplicationId = "github.tornaco.android.thanos"
+    lockerApplicationId = "github.tornaco.practice.honeycomb.locker"
     versionCode = androidGitVersion.code() as int
     versionName = androidGitVersion.name()
 }
