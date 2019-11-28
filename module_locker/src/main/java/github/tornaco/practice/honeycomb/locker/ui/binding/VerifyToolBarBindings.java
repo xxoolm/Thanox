@@ -18,8 +18,10 @@ package github.tornaco.practice.honeycomb.locker.ui.binding;
 
 
 import android.view.View;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.BindingAdapter;
+
 import github.tornaco.android.common.util.ApkUtil;
 import github.tornaco.practice.honeycomb.locker.ui.verify.VerifyViewModel;
 

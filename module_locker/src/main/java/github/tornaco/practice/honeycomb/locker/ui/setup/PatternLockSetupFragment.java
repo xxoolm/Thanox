@@ -5,14 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.Observable;
 import androidx.fragment.app.Fragment;
-import github.tornaco.practice.honeycomb.locker.R;
-import github.tornaco.practice.honeycomb.locker.databinding.ModuleLockerPatternLockSetupFragmentBinding;
 
 import java.util.Objects;
+
+import github.tornaco.practice.honeycomb.locker.R;
+import github.tornaco.practice.honeycomb.locker.databinding.ModuleLockerPatternLockSetupFragmentBinding;
 
 public class PatternLockSetupFragment extends Fragment {
 

@@ -1,8 +1,9 @@
 package github.tornaco.practice.honeycomb.locker.ui.setup;
 
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
-import github.tornaco.android.thanos.BaseDefaultMenuItemHandlingAppCompatActivity;
+
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.practice.honeycomb.locker.R;
 

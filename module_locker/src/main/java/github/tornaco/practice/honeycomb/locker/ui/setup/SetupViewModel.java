@@ -1,16 +1,18 @@
 package github.tornaco.practice.honeycomb.locker.ui.setup;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.AndroidViewModel;
-import github.tornaco.android.thanos.core.app.ThanosManager;
-import github.tornaco.android.thanos.core.app.activity.ActivityStackSupervisor;
-import org.newstand.logger.Logger;
 
 import java.util.Objects;
+
+import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.app.activity.ActivityStackSupervisor;
+import github.tornaco.android.thanos.core.util.Timber;
 
 public class SetupViewModel extends AndroidViewModel {
 
@@ -62,7 +64,7 @@ public class SetupViewModel extends AndroidViewModel {
     }
 
     public void onInputComplete(String input) {
-        Logger.d("onInputComplete %s %s", input, stage.get());
+        Timber.d("onInputComplete %s %s", input, stage.get());
         switch (Objects.requireNonNull(stage.get())) {
             case First:
                 firstKey.set(input);
@@ -78,7 +80,7 @@ public class SetupViewModel extends AndroidViewModel {
     }
 
     public void onInputConfirm() {
-        Logger.d("onInputConfirm %s %s %s", firstKey.get(), secondKey.get(), stage.get());
+        Timber.d("onInputConfirm %s %s %s", firstKey.get(), secondKey.get(), stage.get());
         switch (Objects.requireNonNull(stage.get())) {
             case First:
                 stage.set(SetupStage.Confirm);
@@ -102,7 +104,7 @@ public class SetupViewModel extends AndroidViewModel {
     }
 
     private void onSetupComplete() {
-        Logger.d("onSetupComplete %s %s %s", firstKey.get(), secondKey.get(), stage.get());
+        Timber.d("onSetupComplete %s %s %s", firstKey.get(), secondKey.get(), stage.get());
         Objects.requireNonNull(lazyGetLockerManager()).setLockerKey(getLockMethod(), firstKey.get());
         setupComplete.set(true);
     }

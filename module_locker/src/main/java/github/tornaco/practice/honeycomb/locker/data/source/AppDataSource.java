@@ -1,9 +1,10 @@
 package github.tornaco.practice.honeycomb.locker.data.source;
 
 import android.content.Context;
-import github.tornaco.android.thanos.core.pm.AppInfo;
 
 import java.util.List;
+
+import github.tornaco.android.thanos.core.pm.AppInfo;
 
 public interface AppDataSource {
 

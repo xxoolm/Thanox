@@ -1,6 +1,10 @@
 package github.tornaco.practice.honeycomb.locker.data.source;
 
 import android.content.Context;
+
+import java.util.Arrays;
+import java.util.List;
+
 import github.tornaco.android.common.Collections;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.app.activity.ActivityStackSupervisor;
@@ -9,11 +13,8 @@ import github.tornaco.android.thanos.core.util.DevNull;
 import github.tornaco.android.thanos.core.util.Rxs;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
-import rx2.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-
-import java.util.Arrays;
-import java.util.List;
+import rx2.android.schedulers.AndroidSchedulers;
 
 public class AppsRepo implements AppDataSource {
 

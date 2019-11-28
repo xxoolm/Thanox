@@ -1,8 +1,10 @@
 package github.tornaco.practice.honeycomb.locker.ui.binding;
 
 import android.widget.TextView;
+
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.Observable;
+
 import github.tornaco.practice.honeycomb.locker.R;
 import github.tornaco.practice.honeycomb.locker.ui.setup.SetupViewModel;
 import github.tornaco.practice.honeycomb.locker.ui.verify.VerifyViewModel;

@@ -101,9 +101,6 @@ dependencies {
     implementation deps.lifecycle.extensions
     annotationProcessor deps.lifecycle.compiler
 
-    // Tor
-    implementation deps.tornaco.logger
-
     implementation deps.guava
 
     // Lombok
