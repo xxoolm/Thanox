@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="github.tornaco.practice.honeycomb.locker">
+        xmlns:tools="http://schemas.android.com/tools"
+        package="github.tornaco.practice.honeycomb.locker">
 
-    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
-    <application>
+    <application
+            android:icon="@mipmap/ic_fallback_app_icon"
+            tools:ignore="GoogleAppIndexingWarning">
 
         <activity
                 android:name=".ui.start.StartActivity"
                 android:exported="true"
                 android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="github.tornaco.practice.honeycomb.bee.action.START"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="github.tornaco.practice.honeycomb.bee.action.START" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -22,18 +24,18 @@
                 android:exported="true"
                 android:theme="@style/ModuleLockerAppThemeVerify">
             <intent-filter>
-                <action android:name="github.tornaco.practice.honeycomb.locker.action.VERIFY"/>
+                <action android:name="github.tornaco.practice.honeycomb.locker.action.VERIFY" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
                 android:name=".ui.setup.SetupActivity"
                 android:exported="false"
-                android:theme="@style/ModuleLockerAppThemeVerify"/>
+                android:theme="@style/ModuleLockerAppThemeVerify" />
         <activity
                 android:name=".ui.setup.SettingsActivity"
-                android:label="@string/module_locker_title_settings"/>
+                android:label="@string/module_locker_title_settings" />
     </application>
 
 </manifest>

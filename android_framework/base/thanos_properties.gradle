@@ -21,6 +21,8 @@ buildConfig {
 
     // Read props.
     buildConfigField 'String', 'ACTIVITY_APP_LOCK_VERIFIER', serviceProps.getProperty("locker.verify.activity")
+    buildConfigField 'String', 'ACTION_APP_LOCK', serviceProps.getProperty("locker.intent.action")
+    buildConfigField 'String', 'APP_LOCK_PKG_NAME', serviceProps.getProperty("locker.app.pkg")
     buildConfigField 'String', 'ACTIVITY_APP_DETAILS', serviceProps.getProperty("thanox.app.details.activity")
 
 
