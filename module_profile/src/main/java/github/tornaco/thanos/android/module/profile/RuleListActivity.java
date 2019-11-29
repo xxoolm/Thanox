@@ -57,7 +57,7 @@ public class RuleListActivity extends ThemeActivity implements RuleItemClickList
         onSetupSwitchBar(binding.switchBar);
 
         binding.fab.setOnClickListener(v -> ThanosManager.from(getApplicationContext())
-                .ifServiceInstalled(thanosManager -> RuleEditorActivity.start(thisActivity())));
+                .ifServiceInstalled(thanosManager -> RuleEditorActivity.start(thisActivity(), null)));
     }
 
     private void onSetupSwitchBar(SwitchBar switchBar) {
@@ -88,7 +88,7 @@ public class RuleListActivity extends ThemeActivity implements RuleItemClickList
 
     @Override
     public void onItemClick(@NonNull RuleInfo ruleInfo) {
-
+        RuleEditorActivity.start(thisActivity(), ruleInfo);
     }
 
     @Override

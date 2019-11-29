@@ -4,6 +4,14 @@
 
     <data>
 
+        <variable
+                name="ruleInfo"
+                type="github.tornaco.android.thanos.core.profile.RuleInfo" />
+
+        <variable
+                name="placeholder"
+                type="String" />
+
         <import type="android.view.View" />
     </data>
 
@@ -27,8 +35,19 @@
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:popupTheme="?appbarPopupTheme"
                     app:theme="?toolbarTheme"
+                    app:title="@string/module_profile_rule_edit"
                     app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:titleTextColor="?menuIconTint">
+
+                <View
+                        android:layout_width="@dimen/common_view_margin_default"
+                        android:layout_height="wrap_content" />
+
+                <ImageView
+                        android:id="@+id/ruleCheckIndicator"
+                        android:layout_width="@dimen/module_profile_editor_rule_checker_indicator_size"
+                        android:layout_height="@dimen/module_profile_editor_rule_checker_indicator_size"
+                        android:src="@drawable/module_profile_ic_rule_valid_green_fill" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -43,6 +62,7 @@
                 android:layout_margin="@dimen/common_view_margin_tiny"
                 android:gravity="top"
                 android:scrollbars="vertical"
+                android:text="@{ruleInfo== null? placeholder : ruleInfo.ruleString}"
                 android:textSize="@dimen/module_profile_editor_text_size" />
 
         <androidx.appcompat.widget.Toolbar

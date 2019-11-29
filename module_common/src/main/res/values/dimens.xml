@@ -27,7 +27,6 @@
 
     <dimen name="list_item_footer_height">8dp</dimen>
 
-
     <dimen name="tab_indicator_height">2dp</dimen>
 
 </resources>
