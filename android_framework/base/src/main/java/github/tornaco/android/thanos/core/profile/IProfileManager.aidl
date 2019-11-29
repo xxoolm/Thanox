@@ -17,6 +17,6 @@ interface IProfileManager {
 
     void checkRule(String ruleJson, in IRuleCheckCallback callback, int format);
 
-    Rule[] getAllRules();
-    Rule[] getEnabledRules();
+    RuleInfo[] getAllRules();
+    RuleInfo[] getEnabledRules();
 }

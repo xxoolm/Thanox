@@ -404,14 +404,11 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun getAllRules(): Array<RuleInfo> {
-        val res = emptyArray<>()
-        rulesMapping.values.forEach {
-
-        }
+        return emptyArray()
     }
 
     override fun getEnabledRules(): Array<RuleInfo> {
-
+        return emptyArray()
     }
 
     fun publishFacts(facts: Facts) {

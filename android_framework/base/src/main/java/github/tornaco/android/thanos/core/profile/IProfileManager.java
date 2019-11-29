@@ -35,11 +35,11 @@ public interface IProfileManager extends android.os.IInterface
     @Override public void checkRule(java.lang.String ruleJson, github.tornaco.android.thanos.core.profile.IRuleCheckCallback callback, int format) throws android.os.RemoteException
     {
     }
-    @Override public RuleInfo[] getAllRules() throws android.os.RemoteException
+    @Override public github.tornaco.android.thanos.core.profile.RuleInfo[] getAllRules() throws android.os.RemoteException
     {
       return null;
     }
-    @Override public RuleInfo[] getEnabledRules() throws android.os.RemoteException
+    @Override public github.tornaco.android.thanos.core.profile.RuleInfo[] getEnabledRules() throws android.os.RemoteException
     {
       return null;
     }
@@ -171,7 +171,7 @@ public interface IProfileManager extends android.os.IInterface
         case TRANSACTION_getAllRules:
         {
           data.enforceInterface(descriptor);
-          RuleInfo[] _result = this.getAllRules();
+          github.tornaco.android.thanos.core.profile.RuleInfo[] _result = this.getAllRules();
           reply.writeNoException();
           reply.writeTypedArray(_result, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
           return true;
@@ -179,7 +179,7 @@ public interface IProfileManager extends android.os.IInterface
         case TRANSACTION_getEnabledRules:
         {
           data.enforceInterface(descriptor);
-          RuleInfo[] _result = this.getEnabledRules();
+          github.tornaco.android.thanos.core.profile.RuleInfo[] _result = this.getEnabledRules();
           reply.writeNoException();
           reply.writeTypedArray(_result, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
           return true;
@@ -368,11 +368,11 @@ public interface IProfileManager extends android.os.IInterface
           _data.recycle();
         }
       }
-      @Override public RuleInfo[] getAllRules() throws android.os.RemoteException
+      @Override public github.tornaco.android.thanos.core.profile.RuleInfo[] getAllRules() throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
-        RuleInfo[] _result;
+        github.tornaco.android.thanos.core.profile.RuleInfo[] _result;
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
           boolean _status = mRemote.transact(Stub.TRANSACTION_getAllRules, _data, _reply, 0);
@@ -380,7 +380,7 @@ public interface IProfileManager extends android.os.IInterface
             return getDefaultImpl().getAllRules();
           }
           _reply.readException();
-          _result = _reply.createTypedArray(RuleInfo.CREATOR);
+          _result = _reply.createTypedArray(github.tornaco.android.thanos.core.profile.RuleInfo.CREATOR);
         }
         finally {
           _reply.recycle();
@@ -388,11 +388,11 @@ public interface IProfileManager extends android.os.IInterface
         }
         return _result;
       }
-      @Override public RuleInfo[] getEnabledRules() throws android.os.RemoteException
+      @Override public github.tornaco.android.thanos.core.profile.RuleInfo[] getEnabledRules() throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
-        RuleInfo[] _result;
+        github.tornaco.android.thanos.core.profile.RuleInfo[] _result;
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
           boolean _status = mRemote.transact(Stub.TRANSACTION_getEnabledRules, _data, _reply, 0);
@@ -400,7 +400,7 @@ public interface IProfileManager extends android.os.IInterface
             return getDefaultImpl().getEnabledRules();
           }
           _reply.readException();
-          _result = _reply.createTypedArray(RuleInfo.CREATOR);
+          _result = _reply.createTypedArray(github.tornaco.android.thanos.core.profile.RuleInfo.CREATOR);
         }
         finally {
           _reply.recycle();
@@ -439,6 +439,6 @@ public interface IProfileManager extends android.os.IInterface
   public boolean disableRule(java.lang.String ruleId) throws android.os.RemoteException;
   public boolean isRuleEnabled(java.lang.String ruleId) throws android.os.RemoteException;
   public void checkRule(java.lang.String ruleJson, github.tornaco.android.thanos.core.profile.IRuleCheckCallback callback, int format) throws android.os.RemoteException;
-  public RuleInfo[] getAllRules() throws android.os.RemoteException;
-  public RuleInfo[] getEnabledRules() throws android.os.RemoteException;
+  public github.tornaco.android.thanos.core.profile.RuleInfo[] getAllRules() throws android.os.RemoteException;
+  public github.tornaco.android.thanos.core.profile.RuleInfo[] getEnabledRules() throws android.os.RemoteException;
 }
