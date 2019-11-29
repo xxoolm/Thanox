@@ -3,6 +3,7 @@
 package github.tornaco.android.thanos.services.profile
 
 import com.google.common.io.Files
+import github.tornaco.android.thanos.core.profile.ProfileManager
 import github.tornaco.android.thanos.core.profile.RuleInfo
 import github.tornaco.android.thanos.core.util.FileUtils
 import github.tornaco.android.thanos.core.util.Timber
@@ -25,20 +26,20 @@ internal class LocalRuleScanner {
         val subFiles = Files.fileTreeTraverser().postOrderTraversal(dir)
         for (f in subFiles) {
             if (f.isDirectory) continue
-            val factory = detectFactory(f) ?: continue
+            val format = detectFormat(f) ?: continue
             Timber.v("Parse file to rule: %s", f)
             try {
-                val rule = factory.createRule(FileReader(f))
+                val rule = detectFactory(format).createRule(FileReader(f))
                 Timber.v("Found rule: %s", rule)
                 val infoExt = RuleInfoExt(
                     RuleInfo(
                         rule.name,
                         rule.description,
                         FileUtils.readString(f.absolutePath),
-                        null,
-                        null,
+                        "tornaco",
+                        f.lastModified(),
                         false,
-                        0
+                        format
                     ),
                     rule
                 )
@@ -51,10 +52,18 @@ internal class LocalRuleScanner {
         return res
     }
 
-    private fun detectFactory(f: File): MVELRuleFactory? {
+    private fun detectFormat(f: File): Int? {
         val ext = Files.getFileExtension(f.absolutePath)
-        if (ext.contains("json")) return ruleFactoryJson
-        if (ext.contains("yml")) return ruleFactoryYaml
+        if (ext.contains("json")) return ProfileManager.RULE_FORMAT_JSON
+        if (ext.contains("yml")) return ProfileManager.RULE_FORMAT_YAML
         return null
+    }
+
+    private fun detectFactory(format: Int): MVELRuleFactory {
+        when (format) {
+            ProfileManager.RULE_FORMAT_JSON -> return ruleFactoryJson
+            ProfileManager.RULE_FORMAT_YAML -> return ruleFactoryYaml
+        }
+        throw IllegalArgumentException("Bad format: $format")
     }
 }

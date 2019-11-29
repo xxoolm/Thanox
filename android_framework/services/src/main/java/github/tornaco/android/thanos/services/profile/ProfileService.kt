@@ -339,8 +339,20 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         Timber.v("addRule: $ruleJson, format is: $format")
         Objects.requireNonNull(ruleJson, "RuleInfo content is null")
         when (format) {
-            ProfileManager.RULE_FORMAT_JSON -> addRule(ruleJson, callback, ruleFactoryJson, ".json")
-            ProfileManager.RULE_FORMAT_YAML -> addRule(ruleJson, callback, ruleFactoryYaml, ".yml")
+            ProfileManager.RULE_FORMAT_JSON -> addRule(
+                ruleJson,
+                callback,
+                ruleFactoryJson,
+                ".json",
+                ProfileManager.RULE_FORMAT_JSON
+            )
+            ProfileManager.RULE_FORMAT_YAML -> addRule(
+                ruleJson,
+                callback,
+                ruleFactoryYaml,
+                ".yml",
+                ProfileManager.RULE_FORMAT_YAML
+            )
             else -> throw IllegalArgumentException("Bad format: $format")
         }
     }
@@ -351,7 +363,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         ruleJson: String?,
         callback: IRuleAddCallback?,
         factory: MVELRuleFactory,
-        suffix: String
+        suffix: String,
+        format: Int
     ) {
         executeInternal(Runnable {
             try {
@@ -364,10 +377,10 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                             rule.name,
                             rule.description,
                             ruleJson,
-                            null,
-                            null,
+                            "tornaco",
+                            System.currentTimeMillis(),
                             false,
-                            0
+                            format
                         ),
                         rule
                     )
@@ -389,9 +402,9 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         })
     }
 
-    override fun deleteRule(ruleId: String?) {
-        disableRule(ruleId)
-        val r = rulesMapping.remove(ruleId!!)
+    override fun deleteRule(ruleName: String?) {
+        disableRule(ruleName)
+        val r = rulesMapping.remove(ruleName!!)
         // Delete file.
         if (r != null) {
             val f = File(T.profileRulesDir(), "${r.rule.name}.rj")
@@ -400,20 +413,20 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         Timber.v("deleteRule: $r")
     }
 
-    override fun enableRule(ruleId: String?): Boolean {
-        val rule = rulesMapping[ruleId]
+    override fun enableRule(ruleName: String?): Boolean {
+        val rule = rulesMapping[ruleName]
         return if (rule != null) {
             rules.register(rule)
-            enabledRuleNameRepo.add(ruleId)
+            enabledRuleNameRepo.add(ruleName)
             true
         } else {
-            Timber.e("RuleInfo with name $ruleId not found..")
+            Timber.e("RuleInfo with name $ruleName not found..")
             false
         }
     }
 
-    override fun disableRule(ruleId: String?): Boolean {
-        return enabledRuleNameRepo.remove(ruleId)
+    override fun disableRule(ruleName: String?): Boolean {
+        return enabledRuleNameRepo.remove(ruleName)
     }
 
     override fun checkRule(ruleJson: String?, callback: IRuleCheckCallback?, format: Int) {
@@ -435,8 +448,12 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         }
     }
 
-    override fun isRuleEnabled(ruleId: String?): Boolean {
-        return enabledRuleNameRepo.has(ruleId!!)
+    override fun isRuleEnabled(ruleName: String?): Boolean {
+        return enabledRuleNameRepo.has(ruleName!!)
+    }
+
+    override fun isRuleExists(ruleName: String?): Boolean {
+        return ruleName != null && rulesMapping.containsKey(ruleName)
     }
 
     override fun getAllRules(): Array<RuleInfo?> {

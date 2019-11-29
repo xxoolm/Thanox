@@ -49,12 +49,27 @@ public class ProfileManager {
     }
 
     @SneakyThrows
-    public void checkRule(String ruleJson, IRuleCheckCallback callback, int format) {
-        server.checkRule(ruleJson, callback, format);
+    public void checkRule(String ruleJson, RuleCheckCallback callback, int format) {
+        server.checkRule(ruleJson, callback.getStub(), format);
     }
 
     @SneakyThrows
     public void isRuleEnabled(String ruleId) {
         server.isRuleEnabled(ruleId);
+    }
+
+    @SneakyThrows
+    public boolean isRuleExists(String ruleName) {
+        return server.isRuleExists(ruleName);
+    }
+
+    @SneakyThrows
+    public RuleInfo[] getAllRules() {
+        return server.getAllRules();
+    }
+
+    @SneakyThrows
+    public RuleInfo[] getEnabledRules() {
+        return server.getEnabledRules();
     }
 }

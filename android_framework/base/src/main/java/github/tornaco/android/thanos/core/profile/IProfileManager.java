@@ -17,18 +17,22 @@ public interface IProfileManager extends android.os.IInterface
     @Override public void addRule(java.lang.String ruleJson, github.tornaco.android.thanos.core.profile.IRuleAddCallback callback, int format) throws android.os.RemoteException
     {
     }
-    @Override public void deleteRule(java.lang.String ruleId) throws android.os.RemoteException
+    @Override public void deleteRule(java.lang.String ruleName) throws android.os.RemoteException
     {
     }
-    @Override public boolean enableRule(java.lang.String ruleId) throws android.os.RemoteException
-    {
-      return false;
-    }
-    @Override public boolean disableRule(java.lang.String ruleId) throws android.os.RemoteException
+    @Override public boolean enableRule(java.lang.String ruleName) throws android.os.RemoteException
     {
       return false;
     }
-    @Override public boolean isRuleEnabled(java.lang.String ruleId) throws android.os.RemoteException
+    @Override public boolean disableRule(java.lang.String ruleName) throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public boolean isRuleEnabled(java.lang.String ruleName) throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public boolean isRuleExists(java.lang.String ruleName) throws android.os.RemoteException
     {
       return false;
     }
@@ -155,6 +159,16 @@ public interface IProfileManager extends android.os.IInterface
           reply.writeInt(((_result)?(1):(0)));
           return true;
         }
+        case TRANSACTION_isRuleExists:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _result = this.isRuleExists(_arg0);
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
         case TRANSACTION_checkRule:
         {
           data.enforceInterface(descriptor);
@@ -265,16 +279,16 @@ public interface IProfileManager extends android.os.IInterface
           _data.recycle();
         }
       }
-      @Override public void deleteRule(java.lang.String ruleId) throws android.os.RemoteException
+      @Override public void deleteRule(java.lang.String ruleName) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeString(ruleId);
+          _data.writeString(ruleName);
           boolean _status = mRemote.transact(Stub.TRANSACTION_deleteRule, _data, _reply, 0);
           if (!_status && getDefaultImpl() != null) {
-            getDefaultImpl().deleteRule(ruleId);
+            getDefaultImpl().deleteRule(ruleName);
             return;
           }
           _reply.readException();
@@ -284,17 +298,17 @@ public interface IProfileManager extends android.os.IInterface
           _data.recycle();
         }
       }
-      @Override public boolean enableRule(java.lang.String ruleId) throws android.os.RemoteException
+      @Override public boolean enableRule(java.lang.String ruleName) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
         boolean _result;
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeString(ruleId);
+          _data.writeString(ruleName);
           boolean _status = mRemote.transact(Stub.TRANSACTION_enableRule, _data, _reply, 0);
           if (!_status && getDefaultImpl() != null) {
-            return getDefaultImpl().enableRule(ruleId);
+            return getDefaultImpl().enableRule(ruleName);
           }
           _reply.readException();
           _result = (0!=_reply.readInt());
@@ -305,17 +319,17 @@ public interface IProfileManager extends android.os.IInterface
         }
         return _result;
       }
-      @Override public boolean disableRule(java.lang.String ruleId) throws android.os.RemoteException
+      @Override public boolean disableRule(java.lang.String ruleName) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
         boolean _result;
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeString(ruleId);
+          _data.writeString(ruleName);
           boolean _status = mRemote.transact(Stub.TRANSACTION_disableRule, _data, _reply, 0);
           if (!_status && getDefaultImpl() != null) {
-            return getDefaultImpl().disableRule(ruleId);
+            return getDefaultImpl().disableRule(ruleName);
           }
           _reply.readException();
           _result = (0!=_reply.readInt());
@@ -326,17 +340,38 @@ public interface IProfileManager extends android.os.IInterface
         }
         return _result;
       }
-      @Override public boolean isRuleEnabled(java.lang.String ruleId) throws android.os.RemoteException
+      @Override public boolean isRuleEnabled(java.lang.String ruleName) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
         boolean _result;
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeString(ruleId);
+          _data.writeString(ruleName);
           boolean _status = mRemote.transact(Stub.TRANSACTION_isRuleEnabled, _data, _reply, 0);
           if (!_status && getDefaultImpl() != null) {
-            return getDefaultImpl().isRuleEnabled(ruleId);
+            return getDefaultImpl().isRuleEnabled(ruleName);
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public boolean isRuleExists(java.lang.String ruleName) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(ruleName);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isRuleExists, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isRuleExists(ruleName);
           }
           _reply.readException();
           _result = (0!=_reply.readInt());
@@ -417,9 +452,10 @@ public interface IProfileManager extends android.os.IInterface
     static final int TRANSACTION_enableRule = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
     static final int TRANSACTION_disableRule = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
     static final int TRANSACTION_isRuleEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
-    static final int TRANSACTION_checkRule = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
-    static final int TRANSACTION_getAllRules = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
-    static final int TRANSACTION_getEnabledRules = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
+    static final int TRANSACTION_isRuleExists = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
+    static final int TRANSACTION_checkRule = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
+    static final int TRANSACTION_getAllRules = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
+    static final int TRANSACTION_getEnabledRules = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.profile.IProfileManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -434,10 +470,11 @@ public interface IProfileManager extends android.os.IInterface
   public void setAutoApplyForNewInstalledAppsEnabled(boolean enable) throws android.os.RemoteException;
   public boolean isAutoApplyForNewInstalledAppsEnabled() throws android.os.RemoteException;
   public void addRule(java.lang.String ruleJson, github.tornaco.android.thanos.core.profile.IRuleAddCallback callback, int format) throws android.os.RemoteException;
-  public void deleteRule(java.lang.String ruleId) throws android.os.RemoteException;
-  public boolean enableRule(java.lang.String ruleId) throws android.os.RemoteException;
-  public boolean disableRule(java.lang.String ruleId) throws android.os.RemoteException;
-  public boolean isRuleEnabled(java.lang.String ruleId) throws android.os.RemoteException;
+  public void deleteRule(java.lang.String ruleName) throws android.os.RemoteException;
+  public boolean enableRule(java.lang.String ruleName) throws android.os.RemoteException;
+  public boolean disableRule(java.lang.String ruleName) throws android.os.RemoteException;
+  public boolean isRuleEnabled(java.lang.String ruleName) throws android.os.RemoteException;
+  public boolean isRuleExists(java.lang.String ruleName) throws android.os.RemoteException;
   public void checkRule(java.lang.String ruleJson, github.tornaco.android.thanos.core.profile.IRuleCheckCallback callback, int format) throws android.os.RemoteException;
   public github.tornaco.android.thanos.core.profile.RuleInfo[] getAllRules() throws android.os.RemoteException;
   public github.tornaco.android.thanos.core.profile.RuleInfo[] getEnabledRules() throws android.os.RemoteException;

@@ -9,14 +9,15 @@ interface IProfileManager {
     boolean isAutoApplyForNewInstalledAppsEnabled();
 
     void addRule(String ruleJson, in IRuleAddCallback callback, int format);
-    void deleteRule(String ruleId);
+    void deleteRule(String ruleName);
 
-    boolean enableRule(String ruleId);
-    boolean disableRule(String ruleId);
-    boolean isRuleEnabled(String ruleId);
+    boolean enableRule(String ruleName);
+    boolean disableRule(String ruleName);
+    boolean isRuleEnabled(String ruleName);
+    boolean isRuleExists(String ruleName);
 
     void checkRule(String ruleJson, in IRuleCheckCallback callback, int format);
 
     RuleInfo[] getAllRules();
-    RuleInfo[] getEnabledRules();
+    RuleInfo[] getEnabledRules();    
 }
