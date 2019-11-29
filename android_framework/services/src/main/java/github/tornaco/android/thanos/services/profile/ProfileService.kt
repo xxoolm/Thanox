@@ -39,7 +39,6 @@ import github.tornaco.android.thanos.services.profile.handle.Handle
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import org.jeasy.rules.api.Facts
-import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.api.RulesEngine
 import org.jeasy.rules.core.DefaultRulesEngine
@@ -61,7 +60,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    private val rulesMapping: ArrayMap<String, Rule> = ArrayMap()
+    private val rulesMapping: ArrayMap<String, RuleInfoExt> = ArrayMap()
     private val rules: Rules = Rules(Sets.newHashSet())
     private val rulesEngine: RulesEngine = DefaultRulesEngine()
 
@@ -162,7 +161,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         rulesMapping.clear()
         rulesMapping.putAll(LocalRuleScanner().getRulesUnder(T.profileRulesDir()))
         rulesMapping.forEach {
-            if (enabledRuleNameRepo.has(it.value.name)) {
+            if (enabledRuleNameRepo.has(it.value.rule.name)) {
                 Timber.v("Register rule: ${it.key}")
             } else {
                 Timber.v("Not enabled rule: ${it.key}")
@@ -360,7 +359,19 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                 if (rule != null) {
                     // Using name as id.
                     val ruleName = rule.name
-                    rulesMapping[ruleName] = rule
+                    val infoExt = RuleInfoExt(
+                        RuleInfo(
+                            rule.name,
+                            rule.description,
+                            ruleJson,
+                            null,
+                            null,
+                            false,
+                            0
+                        ),
+                        rule
+                    )
+                    rulesMapping[ruleName] = infoExt
                     // Persist.
                     val f = File(T.profileRulesDir(), "$ruleName$suffix")
                     Files.createParentDirs(f)
@@ -383,7 +394,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         val r = rulesMapping.remove(ruleId!!)
         // Delete file.
         if (r != null) {
-            val f = File(T.profileRulesDir(), "${r.name}.rj")
+            val f = File(T.profileRulesDir(), "${r.rule.name}.rj")
             DevNull.accept(f.delete())
         }
         Timber.v("deleteRule: $r")
@@ -428,12 +439,20 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         return enabledRuleNameRepo.has(ruleId!!)
     }
 
-    override fun getAllRules(): Array<RuleInfo> {
-        return emptyArray()
+    override fun getAllRules(): Array<RuleInfo?> {
+        val res = arrayListOf<RuleInfo>()
+        rulesMapping.values.forEach {
+            res.add(it.ruleInfo)
+        }
+        return res.toArray(emptyArray())
     }
 
     override fun getEnabledRules(): Array<RuleInfo> {
-        return emptyArray()
+        val res = arrayListOf<RuleInfo>()
+        rulesMapping.values.forEach {
+            if (isRuleEnabled(it.rule.name)) res.add(it.ruleInfo)
+        }
+        return res.toArray(emptyArray())
     }
 
     fun publishFacts(facts: Facts) {

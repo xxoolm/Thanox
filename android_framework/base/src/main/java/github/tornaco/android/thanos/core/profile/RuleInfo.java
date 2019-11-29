@@ -3,9 +3,6 @@ package github.tornaco.android.thanos.core.profile;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import lombok.Data;
-
-@Data
 public final class RuleInfo implements Parcelable {
     private String name;
     private String description;
@@ -15,7 +12,6 @@ public final class RuleInfo implements Parcelable {
     private boolean enabled;
     private int format;
 
-
     private RuleInfo(Parcel in) {
         name = in.readString();
         description = in.readString();
@@ -24,6 +20,22 @@ public final class RuleInfo implements Parcelable {
         updateTimeMills = in.readString();
         enabled = in.readByte() != 0;
         format = in.readInt();
+    }
+
+    public RuleInfo(String name,
+                    String description,
+                    String ruleString,
+                    String author,
+                    String updateTimeMills,
+                    boolean enabled,
+                    int format) {
+        this.name = name;
+        this.description = description;
+        this.ruleString = ruleString;
+        this.author = author;
+        this.updateTimeMills = updateTimeMills;
+        this.enabled = enabled;
+        this.format = format;
     }
 
     public static final Creator<RuleInfo> CREATOR = new Creator<RuleInfo>() {
