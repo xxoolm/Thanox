@@ -274,7 +274,9 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @Override
     public boolean checkBroadcastingIntent(Intent intent) {
-        Completable.fromRunnable(() -> publishEventToSubscribersAsync(new ThanosEvent(intent))).subscribeOn(ThanosSchedulers.serverThread()).subscribe();
+        Completable.fromRunnable(() -> publishEventToSubscribersAsync(new ThanosEvent(intent)))
+                .subscribeOn(ThanosSchedulers.serverThread())
+                .subscribe();
         return true;
     }
 
@@ -1016,23 +1018,36 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
                 intent,
                 userId,
                 currentUserId);
-        if (intent != null && userId == currentUserId) {
+        if (intent != null) {
             recentTasks.remove(intent.getComponent());
-            onTaskRemoving(PkgUtils.packageNameOf(intent));
+            onTaskRemoving(PkgUtils.packageNameOf(intent), userId, currentUserId);
         }
     }
 
-    private void onTaskRemoving(String taskPkgName) {
-        Timber.d("onTaskRemoving: taskPkgName: %s", taskPkgName);
+    private void onTaskRemoving(String taskPkgName, int userId, int currentUserId) {
         Completable
-                .fromRunnable(() -> onTaskRemovingInternal(taskPkgName))
+                .fromRunnable(() -> onTaskRemovingInternal(taskPkgName, userId, currentUserId))
                 .subscribeOn(ThanosSchedulers.serverThread())
                 .subscribe();
     }
 
     @ExecuteBySystemHandler
-    private void onTaskRemovingInternal(String taskPkgName) {
+    private void onTaskRemovingInternal(String taskPkgName, int userId, int currentUserId) {
+        cleanUpOnTaskRemovalIfNeed(taskPkgName, userId, currentUserId);
+        // Broadcast.
+        Intent changedIntent = new Intent(T.Actions.ACTION_TASK_REMOVED);
+        changedIntent.putExtra(T.Actions.ACTION_TASK_REMOVED_EXTRA_PACKAGE_NAME, taskPkgName);
+        changedIntent.putExtra(T.Actions.ACTION_TASK_REMOVED_EXTRA_USER_ID, userId);
+        ThanosEvent event = new ThanosEvent(changedIntent);
+        EventBus.getInstance().publishEventToSubscribersAsync(event);
+    }
+
+    private void cleanUpOnTaskRemovalIfNeed(String taskPkgName, int userId, int currentUserId) {
         if (taskPkgName == null) return;
+        if (userId != currentUserId) {
+            Timber.w("onTaskRemovingInternal, user is not current, will not clear tasks.");
+            return;
+        }
         boolean hasAnyOtherTask = recentTasks.hasRecentTaskForPkg(taskPkgName);
         Timber.v("onTaskRemovingInternal: task pkg is: %s, has other task? %s",
                 taskPkgName,

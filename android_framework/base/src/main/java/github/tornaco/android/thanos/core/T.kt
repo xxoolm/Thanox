@@ -228,6 +228,10 @@ object T {
         const val ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO =
             "thanox.a.extra.front_activity.changed.pkg.to"
 
+        const val ACTION_TASK_REMOVED = "thanox.a.task.removed"
+        const val ACTION_TASK_REMOVED_EXTRA_PACKAGE_NAME = "thanox.a.task.removed.pkg"
+        const val ACTION_TASK_REMOVED_EXTRA_USER_ID = "thanox.a.task.removed.pkg.user.id"
+
         const val ACTION_RUNNING_PROCESS_VIEWER = "thanox.a.running_process.viewer"
         const val ACTION_RUNNING_PROCESS_CLEAR = "thanox.a.running_process.clear"
 

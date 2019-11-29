@@ -104,6 +104,23 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         }
     }
 
+    private val taskEventSubscriber = object : IEventSubscriber.Stub() {
+        override fun onEvent(e: ThanosEvent) {
+            val intent = e.intent
+            val userId = intent.getIntExtra(
+                T.Actions.ACTION_TASK_REMOVED_EXTRA_USER_ID,
+                UserHandle.getCallingUserId()
+            )
+            val pkgName = intent.getStringExtra(T.Actions.ACTION_TASK_REMOVED_EXTRA_PACKAGE_NAME)
+
+            val pkgFacts = Facts()
+            pkgFacts.put("userId", userId)
+            pkgFacts.put("pkgName", pkgName)
+            pkgFacts.put("taskRemoved", true)
+            publishFacts(pkgFacts)
+        }
+    }
+
     override fun onStart(context: Context) {
         super.onStart(context)
         enabledRuleNameRepo =
@@ -133,6 +150,10 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         EventBus.getInstance().registerEventSubscriber(
             IntentFilter(T.Actions.ACTION_FRONT_PKG_CHANGED),
             frontEventSubscriber
+        )
+        EventBus.getInstance().registerEventSubscriber(
+            IntentFilter(T.Actions.ACTION_TASK_REMOVED),
+            taskEventSubscriber
         )
     }
 

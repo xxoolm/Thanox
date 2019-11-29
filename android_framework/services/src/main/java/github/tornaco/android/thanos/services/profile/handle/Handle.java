@@ -43,7 +43,10 @@ public enum Handle {
 
     public static Facts inject(Context context, S s, Facts facts) {
         for (Handle handle : values()) {
-            facts.put(handle.name().toLowerCase(), handle.getHandle(context, s));
+            String name = handle.name().toLowerCase();
+            if (facts.get(name) != null)
+                throw new IllegalStateException("Dup handle name: " + name);
+            facts.put(name, handle.getHandle(context, s));
         }
         return facts;
     }
