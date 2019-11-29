@@ -17,7 +17,9 @@
 package github.tornaco.practice.honeycomb.locker.ui.binding;
 
 import android.widget.ImageView;
+
 import androidx.databinding.BindingAdapter;
+
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.util.GlideApp;
 

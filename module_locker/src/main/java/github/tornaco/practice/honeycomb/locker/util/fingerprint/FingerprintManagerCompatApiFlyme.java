@@ -2,9 +2,9 @@ package github.tornaco.practice.honeycomb.locker.util.fingerprint;
 
 import android.content.Context;
 
-import com.fingerprints.service.FingerprintManager;
-
 import androidx.core.os.CancellationSignal;
+
+import com.fingerprints.service.FingerprintManager;
 
 /**
  * Created by guohao4 on 2017/10/24.

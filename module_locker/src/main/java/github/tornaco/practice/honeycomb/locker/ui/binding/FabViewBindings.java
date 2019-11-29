@@ -1,8 +1,9 @@
 package github.tornaco.practice.honeycomb.locker.ui.binding;
 
+import androidx.databinding.BindingAdapter;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.databinding.BindingAdapter;
 import github.tornaco.practice.honeycomb.locker.R;
 import github.tornaco.practice.honeycomb.locker.ui.setup.SetupViewModel;
 

@@ -45,4 +45,5 @@ interface IThanos {
 
     boolean isLoggingEnabled();
     void setLoggingEnabled(boolean enable);
+
 }

@@ -1,8 +1,10 @@
 package github.tornaco.practice.honeycomb.locker.ui.setup;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
+
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.practice.honeycomb.locker.R;
 import github.tornaco.practice.honeycomb.locker.ViewModelFactory;

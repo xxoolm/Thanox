@@ -2,9 +2,11 @@ package github.tornaco.practice.honeycomb.locker;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
 import github.tornaco.practice.honeycomb.locker.data.source.AppsRepo;
 import github.tornaco.practice.honeycomb.locker.ui.setup.SetupViewModel;
 import github.tornaco.practice.honeycomb.locker.ui.verify.VerifyViewModel;

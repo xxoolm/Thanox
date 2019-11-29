@@ -118,7 +118,6 @@ dependencies {
 
     // Modules
     implementation project(':module_common')
-    implementation project(':module_locker')
     implementation project(':module_donate')
     implementation project(':module_ops')
     implementation project(':module_easteregg')

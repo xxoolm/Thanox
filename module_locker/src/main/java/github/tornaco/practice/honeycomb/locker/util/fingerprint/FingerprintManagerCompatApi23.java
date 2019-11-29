@@ -21,13 +21,13 @@ import android.content.Context;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Handler;
 
+import androidx.annotation.RequiresApi;
+import androidx.annotation.RestrictTo;
+
 import java.security.Signature;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
-
-import androidx.annotation.RequiresApi;
-import androidx.annotation.RestrictTo;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 

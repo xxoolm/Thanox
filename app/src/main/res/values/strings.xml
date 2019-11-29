@@ -72,6 +72,9 @@
     <string name="feature_title_recent_task_blur">卡片模糊</string>
     <string name="feature_summary_recent_task_blur">给最近任务卡片加上模糊效果</string>
 
+    <string name="feature_title_app_lock">应用锁</string>
+    <string name="feature_summary_app_lock">使用密码锁定应用界面</string>
+
     <string name="feature_category_notifiation">通知</string>
     <string name="feature_title_light_on_notifiation">通知亮屏</string>
     <string name="feature_title_push_delegate">消息代收</string>

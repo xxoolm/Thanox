@@ -18,6 +18,7 @@ package github.tornaco.practice.honeycomb.locker.ui.binding;
 
 import androidx.databinding.BindingAdapter;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import github.tornaco.practice.honeycomb.locker.R;
 
 public class SwipeRefreshLayoutColorBindings {

@@ -20,15 +20,18 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.CancellationSignal;
-import github.tornaco.android.thanos.core.util.OsUtils;
-import org.newstand.logger.Logger;
+
+import java.security.Signature;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
-import java.security.Signature;
+
+import github.tornaco.android.thanos.core.util.OsUtils;
+import github.tornaco.android.thanos.core.util.Timber;
 
 
 /**
@@ -65,7 +68,7 @@ public final class FingerprintManagerCompat {
                 IMPL = new LegacyFingerprintManagerCompatImpl();
             }
         }
-        Logger.w("Using FPIMPL:" + IMPL);
+        Timber.w("Using FPIMPL:" + IMPL);
     }
 
     /**
@@ -271,8 +274,8 @@ public final class FingerprintManagerCompat {
             } catch (Throwable ignored) {
 
             }
-            Logger.d("FUCKING FLYME!!!");
-            Logger.d("USE_FLYME_SDK:" + USE_FLYME_SDK);
+            Timber.d("FUCKING FLYME!!!");
+            Timber.d("USE_FLYME_SDK:" + USE_FLYME_SDK);
         }
 
         @TargetApi(Build.VERSION_CODES.M)

@@ -2,9 +2,11 @@ package github.tornaco.practice.honeycomb.locker.ui.verify;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
+
 import github.tornaco.android.common.util.ApkUtil;
 import github.tornaco.android.thanos.core.T;
 import github.tornaco.android.thanos.core.util.Preconditions;

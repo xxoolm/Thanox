@@ -1,7 +1,9 @@
 package github.tornaco.practice.honeycomb.locker.ui.setup;
 
 import android.os.Bundle;
+
 import androidx.preference.PreferenceFragmentCompat;
+
 import github.tornaco.practice.honeycomb.locker.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {

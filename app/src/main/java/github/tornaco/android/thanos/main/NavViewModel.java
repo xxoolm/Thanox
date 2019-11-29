@@ -25,6 +25,7 @@ import github.tornaco.android.thanos.app.donate.DonateSettings;
 import github.tornaco.android.thanos.apps.SuggestedAppsActivity;
 import github.tornaco.android.thanos.core.T;
 import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.dashboard.Tile;
 import github.tornaco.android.thanos.notification.ScreenOnNotificationActivity;
@@ -299,6 +300,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .disabled(true)
                                 .onClickListener(view -> AppListActivity.start(getApplication()))
                                 .build(),
+
                         Tile.builder()
                                 .iconRes(R.drawable.ic_shield_star_fill)
                                 .title(resources.getString(R.string.module_ops_feature_title_ops_app_list))
@@ -306,6 +308,20 @@ public class NavViewModel extends AndroidViewModel {
                                 .themeColor(R.color.md_teal_500)
                                 .onClickListener(view -> AllOpsListActivity.start(getApplication()))
                                 .build(),
+
+                        Tile.builder()
+                                .iconRes(R.drawable.ic_lock_fill)
+                                .title(resources.getString(R.string.feature_title_app_lock))
+                                .summary(resources.getString(R.string.feature_summary_app_lock))
+                                .themeColor(R.color.md_deep_orange_500)
+                                .onClickListener(view -> {
+                                    Intent intent = new Intent(BuildProp.ACTION_APP_LOCK);
+                                    intent.setPackage(BuildProp.APP_LOCK_PKG_NAME);
+                                    getApplication().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                })
+                                .disabled(!PkgUtils.isPkgInstalled(getApplication(), BuildProp.APP_LOCK_PKG_NAME))
+                                .build(),
+
                         Tile.builder()
                                 .iconRes(R.drawable.ic_paint_brush_fill)
                                 .title(resources.getString(R.string.feature_title_recent_task_blur))
@@ -362,9 +378,8 @@ public class NavViewModel extends AndroidViewModel {
                                 .category(resources.getString(R.string.feature_category_ext))
                                 .title(resources.getString(R.string.module_activity_trampoline_app_name))
                                 .themeColor(R.color.md_green_a700)
-                                .onClickListener(view -> {
-                                    ActivityTrampolineActivity.start(getApplication());
-                                })
+                                .onClickListener(view -> ActivityTrampolineActivity.start(getApplication()))
+                                .atEndOfThisCategory(true)
                                 .build(),
                         Tile.builder()
                                 .iconRes(R.drawable.ic_thunderstorms_fill)

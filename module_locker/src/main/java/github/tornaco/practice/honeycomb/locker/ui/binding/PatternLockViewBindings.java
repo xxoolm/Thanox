@@ -19,14 +19,15 @@ package github.tornaco.practice.honeycomb.locker.ui.binding;
 
 import android.view.animation.AnimationUtils;
 
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.Observable;
+
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 
 import java.util.List;
 
-import androidx.databinding.BindingAdapter;
-import androidx.databinding.Observable;
 import github.tornaco.practice.honeycomb.locker.R;
 import github.tornaco.practice.honeycomb.locker.ui.setup.SetupViewModel;
 import github.tornaco.practice.honeycomb.locker.ui.verify.VerifyViewModel;

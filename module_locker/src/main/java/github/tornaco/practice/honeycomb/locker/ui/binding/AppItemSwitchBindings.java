@@ -18,6 +18,7 @@ package github.tornaco.practice.honeycomb.locker.ui.binding;
 
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.databinding.BindingAdapter;
+
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.practice.honeycomb.locker.ui.start.AppItemViewActionListener;
 

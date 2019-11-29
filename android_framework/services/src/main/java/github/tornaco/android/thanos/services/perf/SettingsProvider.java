@@ -4,14 +4,15 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.RemoteCallbackList;
 import android.util.Log;
+
+import java.io.File;
+import java.util.List;
+
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener;
 import github.tornaco.android.thanos.services.ThanosSchedulers;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import lombok.Synchronized;
-
-import java.io.File;
-import java.util.List;
 
 
 /**
@@ -87,7 +88,9 @@ public class SettingsProvider {
 
     public String getString(String name, String def) {
         try {
-            return getSettingLocked(name);
+            String res = getSettingLocked(name);
+            if (res == null) return def;
+            return res;
         } catch (Throwable e) {
             Log.e(TAG, "getString" + Log.getStackTraceString(e));
             return def;
@@ -100,7 +103,7 @@ public class SettingsProvider {
 
     public int getInt(String name, int def) {
         try {
-            String s = getString(name, String.valueOf(def));
+            String s = getString(name, null);
             if (s == null) {
                 return def;
             }

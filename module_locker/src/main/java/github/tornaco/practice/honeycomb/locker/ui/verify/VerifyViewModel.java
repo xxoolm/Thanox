@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Application;
 import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.os.CancellationSignal;
@@ -11,16 +12,19 @@ import androidx.databinding.Observable;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.AndroidViewModel;
-import github.tornaco.android.thanos.core.app.ThanosManager;
-import github.tornaco.android.thanos.core.app.activity.ActivityStackSupervisor;
-import github.tornaco.android.thanos.core.app.activity.VerifyResult;
-import github.tornaco.practice.honeycomb.locker.util.fingerprint.FingerprintManagerCompat;
-import lombok.Setter;
-import org.newstand.logger.Logger;
 
 import java.util.Objects;
 
-import static github.tornaco.android.thanos.core.app.activity.VerifyResult.*;
+import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.app.activity.ActivityStackSupervisor;
+import github.tornaco.android.thanos.core.app.activity.VerifyResult;
+import github.tornaco.android.thanos.core.util.Timber;
+import github.tornaco.practice.honeycomb.locker.util.fingerprint.FingerprintManagerCompat;
+import lombok.Setter;
+
+import static github.tornaco.android.thanos.core.app.activity.VerifyResult.REASON_USER_CANCEL;
+import static github.tornaco.android.thanos.core.app.activity.VerifyResult.REASON_USER_FP_INCORRECT;
+import static github.tornaco.android.thanos.core.app.activity.VerifyResult.REASON_USER_KEY_NOT_SET;
 
 public class VerifyViewModel extends AndroidViewModel {
     private static final long PROGRESS_MAX = ActivityStackSupervisor.LOCKER_VERIFY_TIMEOUT_MILLS;
@@ -102,26 +106,26 @@ public class VerifyViewModel extends AndroidViewModel {
                     public void onAuthenticationSucceeded(
                             FingerprintManagerCompat.AuthenticationResult result) {
                         super.onAuthenticationSucceeded(result);
-                        Logger.d("onAuthenticationSucceeded:" + result);
+                        Timber.d("onAuthenticationSucceeded:" + result);
                         pass(REASON_USER_FP_INCORRECT);
                     }
 
                     @Override
                     public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
                         super.onAuthenticationHelp(helpMsgId, helpString);
-                        Logger.i("onAuthenticationHelp:" + helpString);
+                        Timber.i("onAuthenticationHelp:" + helpString);
                     }
 
                     @Override
                     public void onAuthenticationFailed() {
                         super.onAuthenticationFailed();
-                        Logger.d("onAuthenticationFailed");
+                        Timber.d("onAuthenticationFailed");
                     }
 
                     @Override
                     public void onAuthenticationError(int errMsgId, CharSequence errString) {
                         super.onAuthenticationError(errMsgId, errString);
-                        Logger.d("onAuthenticationError:" + errString);
+                        Timber.d("onAuthenticationError:" + errString);
                     }
                 });
     }
@@ -135,17 +139,17 @@ public class VerifyViewModel extends AndroidViewModel {
     private CancellationSignal authenticateFingerPrint(FingerprintManagerCompat.AuthenticationCallback callback) {
         if (ActivityCompat.checkSelfPermission(getApplication(), Manifest.permission.USE_FINGERPRINT)
                 != PackageManager.PERMISSION_GRANTED) {
-            Logger.w("FP Permission is missing...");
+            Timber.w("FP Permission is missing...");
             return null;
         }
         if (!FingerprintManagerCompat.from(getApplication()).isHardwareDetected()) {
-            Logger.w("FP HW is missing...");
+            Timber.w("FP HW is missing...");
             return null;
         }
         CancellationSignal cancellationSignal = new CancellationSignal();
         FingerprintManagerCompat.from(getApplication())
                 .authenticate(null, 0, cancellationSignal, callback, null);
-        Logger.i("FP authenticate...");
+        Timber.i("FP authenticate...");
         return cancellationSignal;
     }
 
