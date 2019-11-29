@@ -2,6 +2,7 @@
         package="github.tornaco.thanos.android.module.profile">
 
     <application>
+        <activity android:name=".RuleListActivity" />
         <activity android:name=".RuleEditorActivity" />
     </application>
 </manifest>

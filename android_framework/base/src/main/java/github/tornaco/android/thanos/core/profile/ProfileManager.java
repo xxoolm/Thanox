@@ -72,4 +72,14 @@ public class ProfileManager {
     public RuleInfo[] getEnabledRules() {
         return server.getEnabledRules();
     }
+
+    @SneakyThrows
+    public void setProfileEnabled(boolean enable) {
+        server.setProfileEnabled(enable);
+    }
+
+    @SneakyThrows
+    public boolean isProfileEnabled() {
+        return server.isProfileEnabled();
+    }
 }

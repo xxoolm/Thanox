@@ -1,6 +1,8 @@
 package github.tornaco.android.thanos;
 
+import android.app.Activity;
 import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,5 +26,9 @@ public class BaseDefaultMenuItemHandlingAppCompatActivity extends AppCompatActiv
             return onHomeMenuSelected();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected Activity thisActivity() {
+        return this;
     }
 }

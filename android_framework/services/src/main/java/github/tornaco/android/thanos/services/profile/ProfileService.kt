@@ -57,6 +57,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     private val notificationHelper: NotificationHelper = NotificationHelper()
 
     private var autoApplyForNewInstalledAppsEnabled = false
+    private var profileEnabled = false
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -68,6 +69,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     private val ruleFactoryYaml = MVELRuleFactory(YamlRuleDefinitionReader())
 
     private lateinit var enabledRuleNameRepo: StringSetRepo
+
 
     private val monitor = object : PackageMonitor() {
         override fun onPackageAdded(packageName: String, uid: Int) {
@@ -175,6 +177,10 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             T.Settings.PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED.key,
             T.Settings.PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED.defaultValue
         )
+        this.profileEnabled = preferenceManagerService.getBoolean(
+            T.Settings.PREF_PROFILE_ENABLED.key,
+            T.Settings.PREF_PROFILE_ENABLED.defaultValue
+        )
     }
 
     private fun listenToPrefs() {
@@ -184,8 +190,12 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                         T.Settings.PREF_AUTO_CONFIG_NEW_INSTALLED_APPS_ENABLED.key,
                         key
                     )
+                    || ObjectsUtils.equals(
+                        T.Settings.PREF_PROFILE_ENABLED.key,
+                        key
+                    )
                 ) {
-                    Timber.i("Pref changed, reload.")
+                    Timber.i("Pref changed: $key, reload.")
                     readPrefs()
                 }
             }
@@ -470,6 +480,21 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             if (isRuleEnabled(it.rule.name)) res.add(it.ruleInfo)
         }
         return res.toArray(emptyArray())
+    }
+
+    override fun isProfileEnabled(): Boolean {
+        return profileEnabled
+    }
+
+    override fun setProfileEnabled(enable: Boolean) {
+        enforceCallingPermissions()
+        profileEnabled = enable
+
+        val preferenceManagerService = s.preferenceManagerService
+        preferenceManagerService.putBoolean(
+            T.Settings.PREF_PROFILE_ENABLED.key,
+            enable
+        )
     }
 
     fun publishFacts(facts: Facts) {

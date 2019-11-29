@@ -36,7 +36,7 @@ import github.tornaco.android.thanos.start.StartRestrictActivity;
 import github.tornaco.android.thanos.task.CleanUpOnTaskRemovedActivity;
 import github.tornaco.android.thanos.task.RecentTaskBlurListActivity;
 import github.tornaco.android.thanox.module.activity.trampoline.ActivityTrampolineActivity;
-import github.tornaco.thanos.android.module.profile.RuleEditorActivity;
+import github.tornaco.thanos.android.module.profile.RuleListActivity;
 import github.tornaco.thanos.android.ops.ops.by.app.AppListActivity;
 import github.tornaco.thanos.android.ops.ops.by.ops.AllOpsListActivity;
 import github.tornaco.thanos.android.ops.ops.remind.RemindOpsActivity;
@@ -388,7 +388,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .summary(resources.getString(R.string.module_profile_feature_summary))
                                 .themeColor(R.color.md_indigo_300)
                                 .atEndOfThisCategory(true)
-                                .onClickListener(view -> RuleEditorActivity.start(getApplication()))
+                                .onClickListener(view -> RuleListActivity.start(getApplication()))
                                 .build(),
                         Tile.builder()
                                 .iconRes(R.drawable.ic_loader_2_fill)
