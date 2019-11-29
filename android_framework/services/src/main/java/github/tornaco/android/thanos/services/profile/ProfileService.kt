@@ -21,10 +21,7 @@ import github.tornaco.android.thanos.core.persist.RepoFactory
 import github.tornaco.android.thanos.core.persist.StringSetRepo
 import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener
-import github.tornaco.android.thanos.core.profile.IProfileManager
-import github.tornaco.android.thanos.core.profile.IRuleAddCallback
-import github.tornaco.android.thanos.core.profile.IRuleCheckCallback
-import github.tornaco.android.thanos.core.profile.ProfileManager
+import github.tornaco.android.thanos.core.profile.*
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
 import github.tornaco.android.thanos.core.util.*
 import github.tornaco.android.thanos.core.util.collection.ArrayMap
@@ -316,7 +313,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     override fun addRule(ruleJson: String?, callback: IRuleAddCallback?, format: Int) {
         enforceCallingPermissions()
         Timber.v("addRule: $ruleJson, format is: $format")
-        Objects.requireNonNull(ruleJson, "Rule content is null")
+        Objects.requireNonNull(ruleJson, "RuleInfo content is null")
         when (format) {
             ProfileManager.RULE_FORMAT_JSON -> addRule(ruleJson, callback, ruleFactoryJson, ".json")
             ProfileManager.RULE_FORMAT_YAML -> addRule(ruleJson, callback, ruleFactoryYaml, ".yml")
@@ -374,7 +371,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             enabledRuleNameRepo.add(ruleId)
             true
         } else {
-            Timber.e("Rule with name $ruleId not found..")
+            Timber.e("RuleInfo with name $ruleId not found..")
             false
         }
     }
@@ -404,6 +401,17 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
     override fun isRuleEnabled(ruleId: String?): Boolean {
         return enabledRuleNameRepo.has(ruleId!!)
+    }
+
+    override fun getAllRules(): Array<RuleInfo> {
+        val res = emptyArray<>()
+        rulesMapping.values.forEach {
+
+        }
+    }
+
+    override fun getEnabledRules(): Array<RuleInfo> {
+
     }
 
     fun publishFacts(facts: Facts) {

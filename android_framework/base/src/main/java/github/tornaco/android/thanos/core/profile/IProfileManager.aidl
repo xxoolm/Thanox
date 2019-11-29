@@ -4,6 +4,7 @@ import github.tornaco.android.thanos.core.profile.IRuleAddCallback;
 import github.tornaco.android.thanos.core.profile.IRuleCheckCallback;
 
 interface IProfileManager {
+
     void setAutoApplyForNewInstalledAppsEnabled(boolean enable);
     boolean isAutoApplyForNewInstalledAppsEnabled();
 
@@ -15,4 +16,7 @@ interface IProfileManager {
     boolean isRuleEnabled(String ruleId);
 
     void checkRule(String ruleJson, in IRuleCheckCallback callback, int format);
+
+    Rule[] getAllRules();
+    Rule[] getEnabledRules();
 }
