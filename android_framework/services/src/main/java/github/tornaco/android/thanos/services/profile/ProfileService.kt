@@ -35,6 +35,7 @@ import github.tornaco.android.thanos.services.n.NotificationHelper
 import github.tornaco.android.thanos.services.n.NotificationIdFactory
 import github.tornaco.android.thanos.services.n.SystemUI
 import github.tornaco.android.thanos.services.pm.PackageMonitor
+import github.tornaco.android.thanos.services.profile.handle.Handle
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import org.jeasy.rules.api.Facts
@@ -81,7 +82,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                     setupAutoConfigForNewInstalledAppsIfNeed(packageName)
 
                     val pkgFacts = Facts()
-                    pkgFacts.put("pkgAdd", packageName)
+                    pkgFacts.put("pkgAdded", true)
+                    pkgFacts.put("pkgName", packageName)
                     publishFacts(pkgFacts)
                 }
             compositeDisposable.add(disposable)
@@ -91,10 +93,12 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     private val frontEventSubscriber = object : IEventSubscriber.Stub() {
         override fun onEvent(e: ThanosEvent) {
             val intent = e.intent
+            val from = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_FROM)
             val to = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO)
 
             val pkgFacts = Facts()
-            pkgFacts.put("frontPkg", to)
+            pkgFacts.put("from", from)
+            pkgFacts.put("to", to)
             pkgFacts.put("frontPkgChanged", true)
             publishFacts(pkgFacts)
         }
@@ -412,12 +416,11 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     fun publishFacts(facts: Facts) {
-        rulesEngine.fire(rules, injectThanoxServiceToFacts(facts))
+        rulesEngine.fire(rules, injectHandles(facts))
     }
 
-    private fun injectThanoxServiceToFacts(facts: Facts): Facts {
-        facts.put("thanox", ThanoxImpl(s, context))
-        return facts
+    private fun injectHandles(facts: Facts): Facts {
+        return Handle.inject(context, s, facts)
     }
 
     override fun asBinder(): IBinder {
