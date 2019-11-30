@@ -1,5 +1,7 @@
 package github.tornaco.thanos.android.module.profile;
 
+import android.widget.Switch;
+
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,5 +17,10 @@ public class DataBindingAdapters {
     public static void setRuleInfoList(RecyclerView view, List<RuleInfo> models) {
         Consumer<List<RuleInfo>> consumer = (Consumer<List<RuleInfo>>) view.getAdapter();
         consumer.accept(models);
+    }
+
+    @BindingAdapter({"android:ruleInfo", "android:ruleSwitchListener"})
+    public static void setRuleSwitchListener(Switch component, RuleInfo ruleInfo, RuleItemSwitchChangeListener listener) {
+        component.setOnClickListener(v -> listener.onItemSwitchChange(ruleInfo, component.isChecked()));
     }
 }

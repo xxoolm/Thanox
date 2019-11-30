@@ -1,6 +1,7 @@
 package github.tornaco.thanos.android.module.profile;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -19,10 +20,13 @@ class RuleListAdapter extends RecyclerView.Adapter<RuleListAdapter.VH>
 
     private final List<RuleInfo> ruleInfoList = new ArrayList<>();
 
-    private RuleItemClickListener listener;
+    private RuleItemClickListener ruleItemClickListener;
+    private RuleItemSwitchChangeListener ruleItemSwitchChangeListener;
 
-    RuleListAdapter(RuleItemClickListener listener) {
-        this.listener = listener;
+    RuleListAdapter(RuleItemClickListener ruleItemClickListener,
+                    RuleItemSwitchChangeListener ruleItemSwitchChangeListener) {
+        this.ruleItemClickListener = ruleItemClickListener;
+        this.ruleItemSwitchChangeListener = ruleItemSwitchChangeListener;
     }
 
     @NonNull
@@ -36,7 +40,8 @@ class RuleListAdapter extends RecyclerView.Adapter<RuleListAdapter.VH>
     public void onBindViewHolder(@NonNull VH holder, int position) {
         RuleInfo model = ruleInfoList.get(position);
         holder.itemBinding.setRule(model);
-        holder.itemBinding.setListener(listener);
+        holder.itemBinding.setRuleItemClickListener(ruleItemClickListener);
+        holder.itemBinding.setSwitchListener(ruleItemSwitchChangeListener);
         holder.itemBinding.setIsLastOne(position == getItemCount() - 1);
         holder.itemBinding.executePendingBindings();
     }

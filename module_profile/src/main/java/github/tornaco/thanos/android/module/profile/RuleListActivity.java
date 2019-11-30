@@ -48,7 +48,12 @@ public class RuleListActivity extends ThemeActivity implements RuleItemClickList
 
         // List.
         binding.replacements.setLayoutManager(new LinearLayoutManager(this));
-        binding.replacements.setAdapter(new RuleListAdapter(this));
+        binding.replacements.setAdapter(new RuleListAdapter(this, new RuleItemSwitchChangeListener() {
+            @Override
+            public void onItemSwitchChange(@NonNull RuleInfo ruleInfo, boolean checked) {
+
+            }
+        }));
         binding.swipe.setOnRefreshListener(() -> viewModel.start());
         binding.swipe.setColorSchemeColors(getResources().getIntArray(
                 github.tornaco.android.thanos.module.common.R.array.common_swipe_refresh_colors));
