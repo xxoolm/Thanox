@@ -104,6 +104,7 @@ public class NavActivity extends ThemeActivity implements NavFragment.FragmentAt
         ViewPager viewPager = binding.viewPager;
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = binding.tabs;
+        viewPager.setOffscreenPageLimit(tabs.getTabCount());
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs) {
             @Override
             public void onPageSelected(int position) {

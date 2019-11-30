@@ -32,7 +32,6 @@ class NavFragment extends Fragment {
         Timber.d("onDestroy");
     }
 
-
     String getNavTitle() {
         return null;
     }
