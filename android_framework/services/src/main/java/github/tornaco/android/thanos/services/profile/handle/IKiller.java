@@ -13,7 +13,7 @@ interface IKiller {
         private Context context;
         private S s;
 
-        public Impl(Context context, S s) {
+        Impl(Context context, S s) {
             this.context = context;
             this.s = s;
         }

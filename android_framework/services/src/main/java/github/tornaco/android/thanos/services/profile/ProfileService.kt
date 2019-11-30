@@ -70,7 +70,6 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
     private lateinit var enabledRuleNameRepo: StringSetRepo
 
-
     private val monitor = object : PackageMonitor() {
         override fun onPackageAdded(packageName: String, uid: Int) {
             super.onPackageAdded(packageName, uid)
@@ -426,7 +425,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     override fun enableRule(ruleName: String?): Boolean {
         val rule = rulesMapping[ruleName]
         return if (rule != null) {
-            rules.register(rule)
+            rules.register(rule.rule)
             enabledRuleNameRepo.add(ruleName)
             true
         } else {
@@ -469,6 +468,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     override fun getAllRules(): Array<RuleInfo?> {
         val res = arrayListOf<RuleInfo>()
         rulesMapping.values.forEach {
+            it.ruleInfo.enabled = isRuleEnabled(it.ruleInfo.name)
             res.add(it.ruleInfo)
         }
         return res.toArray(emptyArray())
@@ -477,7 +477,10 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     override fun getEnabledRules(): Array<RuleInfo> {
         val res = arrayListOf<RuleInfo>()
         rulesMapping.values.forEach {
-            if (isRuleEnabled(it.rule.name)) res.add(it.ruleInfo)
+            if (isRuleEnabled(it.rule.name)) {
+                it.ruleInfo.enabled = true
+                res.add(it.ruleInfo)
+            }
         }
         return res.toArray(emptyArray())
     }
@@ -498,6 +501,13 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     fun publishFacts(facts: Facts) {
+        executeInternal(Runnable {
+            publishFactsInternal(facts)
+        })
+    }
+
+    @ExecuteBySystemHandler
+    fun publishFactsInternal(facts: Facts) {
         if (!isProfileEnabled) {
             Timber.v("Profile not enabled, won't fire any fact.")
             return

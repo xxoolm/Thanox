@@ -14,16 +14,16 @@ public enum Handle {
             return new IKiller.Impl(context, s);
         }
     },
-    Launcher {
+    Activity {
         @Override
         public Object getHandle(Context context, S s) {
-            return new ILauncher.Impl(context, s);
+            return new IActivity.Impl(context, s);
         }
     },
-    Screen {
+    Power {
         @Override
         public Object getHandle(Context context, S s) {
-            return new IScreen.Impl(context, s);
+            return new IPower.Impl(context, s);
         }
     },
     Task {
