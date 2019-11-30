@@ -9,18 +9,18 @@
 
     <string name="module_profile_rule_edit">编辑</string>
     <string name="module_profile_rule_new">新建</string>
-    <string name="module_profile_rule_example">[
-  {
-    "name": "Current component",
-    "description": "应用切换时，使用Toast显示当前应用的当前组件",
-    "priority": 2,
-    "condition": "frontPkgChanged == true",
-    "actions": [
-      "ui.showShortToast(activity.getFrontComponentName());"
-    ]
-  }
-]</string>
+    <string name="module_profile_rule_example">"[\n" +
+                "  {\n" +
+                "    \"name\": \"Current component\",\n" +
+                "    \"description\": \"应用切换时，使用Toast显示当前应用的当前组件\",\n" +
+                "    \"priority\": 2,\n" +
+                "    \"condition\": \"frontPkgChanged == true\",\n" +
+                "    \"actions\": [\n" +
+                "      \"ui.showShortToast(activity.getFrontComponentName());\"\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]"</string>
 
-    <string name="module_profile_rule_editor_discard_dialog_title">确定吗？</string>
-    <string name="module_profile_rule_editor_discard_dialog_message">你输入的内容将被丢弃！</string>
+    <string name="module_profile_rule_editor_discard_dialog_title">取消编辑</string>
+    <string name="module_profile_rule_editor_discard_dialog_message">确定退出吗？你输入的内容将被丢弃！</string>
 </resources>

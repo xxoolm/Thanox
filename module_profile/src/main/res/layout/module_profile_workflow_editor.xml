@@ -35,7 +35,6 @@
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:popupTheme="?appbarPopupTheme"
                     app:theme="?toolbarTheme"
-                    app:title="@string/module_profile_rule_edit"
                     app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:titleTextColor="?menuIconTint">
 

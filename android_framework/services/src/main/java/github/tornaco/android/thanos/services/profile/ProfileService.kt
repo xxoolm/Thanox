@@ -498,6 +498,10 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     fun publishFacts(facts: Facts) {
+        if (!isProfileEnabled) {
+            Timber.v("Profile not enabled, won't fire any fact.")
+            return
+        }
         rulesEngine.fire(rules, injectHandles(facts))
     }
 

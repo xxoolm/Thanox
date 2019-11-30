@@ -4,13 +4,6 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <item
-            android:id="@+id/action_discard"
-            android:icon="@drawable/ic_close_fill"
-            android:title="@string/module_profile_rule_edit_action_discard"
-            app:showAsAction="always"
-            tools:ignore="AlwaysShowAction" />
-
-    <item
             android:id="@+id/action_text_size_inc"
             android:icon="@drawable/ic_font_size_2"
             android:title="@string/module_profile_rule_edit_action_text_size_inc"

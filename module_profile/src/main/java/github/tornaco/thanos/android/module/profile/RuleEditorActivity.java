@@ -24,12 +24,14 @@ import github.tornaco.android.thanos.core.util.TextWatcherAdapter;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.thanos.android.module.profile.databinding.ModuleProfileWorkflowEditorBinding;
+import util.ObjectsUtils;
 
 public class RuleEditorActivity extends ThemeActivity {
 
     private ModuleProfileWorkflowEditorBinding binding;
     @Nullable
     private RuleInfo ruleInfo;
+    private String originalContent = "";
 
     public static void start(Context context, RuleInfo ruleInfo) {
         Bundle data = new Bundle();
@@ -41,6 +43,9 @@ public class RuleEditorActivity extends ThemeActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ruleInfo = getIntent().getParcelableExtra("rule");
+        if (ruleInfo != null) {
+            originalContent = ruleInfo.getRuleString();
+        }
         binding = ModuleProfileWorkflowEditorBinding.inflate(LayoutInflater.from(this));
         setContentView(binding.getRoot());
         initView();
@@ -72,6 +77,9 @@ public class RuleEditorActivity extends ThemeActivity {
         binding.editorActionsToolbar.inflateMenu(R.menu.module_profile_rule_actions);
         binding.editorActionsToolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_save_apply) {
+                if (TextUtils.isEmpty(getCurrentEditingContent())) {
+                    return false;
+                }
                 ThanosManager.from(getApplicationContext())
                         .getProfileManager()
                         .addRule(getCurrentEditingContent(),
@@ -103,7 +111,7 @@ public class RuleEditorActivity extends ThemeActivity {
         });
 
         binding.setRuleInfo(ruleInfo);
-        binding.setPlaceholder(getString(R.string.module_profile_rule_example));
+        binding.setPlaceholder(null);
         binding.setLifecycleOwner(this);
         binding.executePendingBindings();
     }
@@ -135,7 +143,7 @@ public class RuleEditorActivity extends ThemeActivity {
     }
 
     private void onRequestAbort() {
-        if (TextUtils.isEmpty(getCurrentEditingContent())) {
+        if (ObjectsUtils.equals(getCurrentEditingContent(), originalContent)) {
             finish();
             return;
         }
