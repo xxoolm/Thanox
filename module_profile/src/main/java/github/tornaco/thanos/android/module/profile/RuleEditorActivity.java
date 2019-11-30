@@ -129,7 +129,7 @@ public class RuleEditorActivity extends ThemeActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.module_profile_rule_actions, menu);
+        getMenuInflater().inflate(R.menu.module_profile_rule_editor, menu);
         return true;
     }
 
@@ -167,10 +167,6 @@ public class RuleEditorActivity extends ThemeActivity {
     }
 
     private void onRequestDelete() {
-        if (ObjectsUtils.equals(getCurrentEditingContent(), originalContent)) {
-            finish();
-            return;
-        }
         new AlertDialog.Builder(thisActivity())
                 .setTitle(R.string.module_profile_rule_editor_delete_dialog_title)
                 .setMessage(R.string.module_profile_rule_editor_delete_dialog_message)
