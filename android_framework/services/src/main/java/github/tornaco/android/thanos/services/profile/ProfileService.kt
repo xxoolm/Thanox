@@ -416,8 +416,23 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         val r = rulesMapping.remove(ruleName!!)
         // Delete file.
         if (r != null) {
-            val f = File(T.profileRulesDir(), "${r.rule.name}.rj")
-            DevNull.accept(f.delete())
+            val f = when {
+                r.ruleInfo.format == ProfileManager.RULE_FORMAT_JSON -> File(
+                    T.profileRulesDir(),
+                    "${r.rule.name}.json"
+                )
+                r.ruleInfo.format == ProfileManager.RULE_FORMAT_YAML -> File(
+                    T.profileRulesDir(),
+                    "${r.rule.name}.yml"
+                )
+                else -> null
+            }
+            if (f != null) {
+                Timber.d("Delete rule file: $f, exists? ${f.exists()}")
+                DevNull.accept(f.delete())
+            } else {
+                Timber.e("Rule not exists: ${r.rule}")
+            }
         }
         Timber.v("deleteRule: $r")
     }
