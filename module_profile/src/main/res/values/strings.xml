@@ -13,4 +13,9 @@
 
     <string name="module_profile_rule_editor_discard_dialog_title">取消编辑</string>
     <string name="module_profile_rule_editor_discard_dialog_message">确定退出吗？你输入的内容将被丢弃！</string>
+
+    <string name="module_profile_rule_editor_delete_dialog_title">删除</string>
+    <string name="module_profile_rule_editor_delete_dialog_message">确定删除吗，删除后内容无法找回！</string>
+
+    <string name="module_profile_rule_edit_delete">删除</string>
 </resources>

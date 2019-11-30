@@ -122,12 +122,22 @@ public class RuleEditorActivity extends ThemeActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_delete).setVisible(ruleInfo != null);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.module_profile_rule_actions, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (R.id.action_delete == item.getItemId()) {
+            onRequestDelete();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -152,6 +162,27 @@ public class RuleEditorActivity extends ThemeActivity {
                 .setMessage(R.string.module_profile_rule_editor_discard_dialog_message)
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> finish())
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void onRequestDelete() {
+        if (ObjectsUtils.equals(getCurrentEditingContent(), originalContent)) {
+            finish();
+            return;
+        }
+        new AlertDialog.Builder(thisActivity())
+                .setTitle(R.string.module_profile_rule_editor_delete_dialog_title)
+                .setMessage(R.string.module_profile_rule_editor_delete_dialog_message)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    if (ruleInfo != null) {
+                        ThanosManager.from(getApplicationContext())
+                                .getProfileManager()
+                                .deleteRule(ruleInfo.getName());
+                        finish();
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
