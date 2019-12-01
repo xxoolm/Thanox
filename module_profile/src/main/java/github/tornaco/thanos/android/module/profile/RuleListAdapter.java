@@ -1,7 +1,6 @@
 package github.tornaco.thanos.android.module.profile;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;

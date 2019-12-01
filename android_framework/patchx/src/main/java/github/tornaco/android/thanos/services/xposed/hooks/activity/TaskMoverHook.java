@@ -97,7 +97,7 @@ class TaskMoverHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     @SuppressLint("PrivateApi")
     Method methodForTaskMover(XC_LoadPackage.LoadPackageParam lpparam) throws ClassNotFoundException, NoSuchMethodException {
-        throw new IllegalStateException("Need impl here");
+        throw new IllegalStateException("Need org.slf4j.impl here");
     }
 
     @Override

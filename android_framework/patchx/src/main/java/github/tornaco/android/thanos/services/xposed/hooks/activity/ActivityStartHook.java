@@ -183,7 +183,7 @@ class ActivityStartHook implements IXposedHookLoadPackage {
     }
 
     Class clzForStartActivityMayWait(XC_LoadPackage.LoadPackageParam lpparam) throws ClassNotFoundException {
-        throw new IllegalStateException("Need impl here");
+        throw new IllegalStateException("Need org.slf4j.impl here");
     }
 
     @Override

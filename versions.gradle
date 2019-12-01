@@ -45,6 +45,7 @@ versions.glide_compiler = "4.9.0"
 versions.auto_logging_plugin = "1.0.0"
 versions.chart = "v3.1.0"
 versions.rules = "3.3.0"
+versions.slf4j_android = "1.7.29"
 ext.versions = versions
 
 def deps = [:]
@@ -85,6 +86,7 @@ deps.xposed = xposed
 def logging = [:]
 logging.timber = "com.jakewharton.timber:timber:$versions.timber"
 logging.firecrasher = "com.github.osama-raddad:FireCrasher:$versions.firecrasher"
+logging.slf4j_android = "org.slf4j:slf4j-android:$versions.slf4j_android"
 deps.logging = logging
 
 def rx = [:]

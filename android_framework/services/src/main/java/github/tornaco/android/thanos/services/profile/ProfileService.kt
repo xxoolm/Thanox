@@ -164,6 +164,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         rulesMapping.forEach {
             if (enabledRuleNameRepo.has(it.value.rule.name)) {
                 Timber.v("Register rule: ${it.key}")
+                enableRule(it.value.rule.name)
             } else {
                 Timber.v("Not enabled rule: ${it.key}")
             }
