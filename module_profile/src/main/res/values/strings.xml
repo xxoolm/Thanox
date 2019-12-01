@@ -12,7 +12,7 @@
     <string name="module_profile_rule_example"></string>
 
     <string name="module_profile_rule_editor_select_format">选择文件格式</string>
-    <string name="module_profile_rule_editor_save_success">已经保存</string>
+    <string name="module_profile_rule_editor_save_success">保存成功，请点击开关以启用</string>
     <string name="module_profile_rule_editor_save_check_error">语法错误</string>
 
     <string name="module_profile_rule_editor_discard_dialog_title">取消编辑</string>

@@ -393,6 +393,13 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                         ),
                         rule
                     )
+
+                    val exists = isRuleExists(ruleName)
+                    if (exists) {
+                        Timber.w("Disable rule $ruleName since it has changed.")
+                        disableRule(ruleName)
+                    }
+
                     rulesMapping[ruleName] = infoExt
                     // Persist.
                     val f = File(T.profileRulesDir(), "$ruleName$suffix")

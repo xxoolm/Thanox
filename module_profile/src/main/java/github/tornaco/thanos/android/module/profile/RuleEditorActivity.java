@@ -103,6 +103,12 @@ public class RuleEditorActivity extends ThemeActivity {
                                                 R.string.module_profile_rule_editor_save_success,
                                                 Toast.LENGTH_LONG)
                                                 .show();
+                                        // Disable rule since it has been changed.
+                                        if (ruleInfo != null) {
+                                            ThanosManager.from(getApplicationContext())
+                                                    .getProfileManager()
+                                                    .disableRule(ruleInfo.getName());
+                                        }
                                         finish();
                                     }
 
