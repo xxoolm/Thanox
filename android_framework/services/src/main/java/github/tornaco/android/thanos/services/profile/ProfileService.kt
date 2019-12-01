@@ -443,6 +443,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         return if (rule != null) {
             rules.register(rule.rule)
             enabledRuleNameRepo.add(ruleName)
+            Timber.d("Enabled rule: $ruleName")
             true
         } else {
             Timber.e("RuleInfo with name $ruleName not found..")
@@ -451,6 +452,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun disableRule(ruleName: String?): Boolean {
+        Timber.d("Disable rule: $ruleName")
+        rules.unregister(ruleName)
         return enabledRuleNameRepo.remove(ruleName)
     }
 

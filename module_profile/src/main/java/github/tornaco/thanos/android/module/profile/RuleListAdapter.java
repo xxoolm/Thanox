@@ -51,9 +51,9 @@ class RuleListAdapter extends RecyclerView.Adapter<RuleListAdapter.VH>
     }
 
     @Override
-    public void accept(List<RuleInfo> componentReplacements) {
+    public void accept(List<RuleInfo> ruleInfoList) {
         this.ruleInfoList.clear();
-        this.ruleInfoList.addAll(componentReplacements);
+        this.ruleInfoList.addAll(ruleInfoList);
         notifyDataSetChanged();
     }
 
