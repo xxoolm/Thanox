@@ -47,6 +47,7 @@ import github.tornaco.android.thanos.services.ErrorSafetyHandler;
 import github.tornaco.android.thanos.services.S;
 import github.tornaco.android.thanos.services.ThanosSchedulers;
 import github.tornaco.android.thanos.services.ThanoxSystemService;
+import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler;
 import github.tornaco.android.thanos.services.app.view.CurrentComponentView;
 import github.tornaco.android.thanos.services.app.view.CurrentComponentViewCallback;
 import github.tornaco.android.thanos.services.app.view.HideCurrentComponentViewR;
@@ -243,6 +244,7 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
                 .subscribe();
     }
 
+    @ExecuteBySystemHandler
     private void reportActivityLaunchingInternal(Intent intent, String reason) {
         Timber.d("reportActivityLaunchingInternal: %s %s", intent, reason);
         if (intent == null) {
@@ -270,6 +272,7 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         // Update current view.
         if (isShowCurrentComponentViewEnabled()) {
             showCurrentComponentView();
+            s.getWindowManagerService().dumpActiveWindow();
         }
     }
 

@@ -6,13 +6,47 @@ import android.util.DisplayMetrics
 import android.util.Pair
 import android.view.WindowManager
 import github.tornaco.android.thanos.core.util.Noop
+import github.tornaco.android.thanos.core.util.Timber
 import github.tornaco.android.thanos.core.wm.IWindowManager
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.SystemService
+import github.tornaco.android.thanos.services.accessibility.AccessibilityManagerServiceProxy
+import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
+import java.util.concurrent.atomic.AtomicReference
 
 class WindowManagerService(private val s: S) : SystemService(), IWindowManager {
 
     private var screenSize: Pair<Int, Int>? = null
+
+    private var accessServiceProxy: AtomicReference<AccessibilityManagerServiceProxy> =
+        AtomicReference()
+    private val automation = UiAutomationManager()
+
+    fun onAccessibilityServiceAttach(server: AccessibilityManagerServiceProxy) {
+        accessServiceProxy.set(server)
+        Timber.w("onAccessibilityServiceAttach: $server")
+    }
+
+    override fun systemReady() {
+        super.systemReady()
+        automation.connect()
+    }
+
+    override fun shutdown() {
+        super.shutdown()
+        automation.disconnect()
+    }
+
+    fun dumpActiveWindow() {
+        executeInternal(Runnable { dumpActiveWindowInternal() })
+    }
+
+    @ExecuteBySystemHandler
+    private fun dumpActiveWindowInternal() {
+        if (!isSystemReady) return
+        val info = automation.rootInActiveWindow
+        Timber.d("rootInActiveWindow: $info")
+    }
 
     override fun getScreenSize(): IntArray {
         if (screenSize == null) {

@@ -149,21 +149,21 @@ public final class Timber {
      * Log an assert message with optional format args.
      */
     public static void wtf(String message, Object... args) {
-        TREE_OF_SOULS.wtf(message, args);
+        TREE_OF_SOULS.e(message, args);
     }
 
     /**
      * Log an assert exception and a message with optional format args.
      */
     public static void wtf(Throwable t, String message, Object... args) {
-        TREE_OF_SOULS.wtf(t, message, args);
+        TREE_OF_SOULS.e(t, message, args);
     }
 
     /**
      * Log an assert exception.
      */
     public static void wtf(Throwable t) {
-        TREE_OF_SOULS.wtf(t);
+        TREE_OF_SOULS.e(t);
     }
 
     /**

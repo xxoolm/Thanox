@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.services.proxy;
 
 import android.os.Handler;
+
 import de.robv.android.xposed.XposedHelpers;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.util.obs.InvokeTargetProxy;
@@ -33,6 +34,6 @@ public class UsageStatsServiceProxy extends InvokeTargetProxy<Object> {
     }
 
     public void setAppIdle(String packageName, boolean idle, int userId) {
-        invokeMethod("setAppIdle", packageName, idle, userId);
+        invokeMethod(getHost(), "setAppIdle", packageName, idle, userId);
     }
 }

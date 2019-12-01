@@ -22,18 +22,23 @@ public class InvokeTargetProxy<T> {
     private T host;
 
     @SuppressWarnings({"unchecked", "SameParameterValue", "UnusedReturnValue"})
-    protected <X> X invokeMethod(String methodName, Object... args) {
+    protected <X> X invokeMethod(Object obj, String methodName, Object... args) {
         if (host == null) {
             Timber.wtf("InvokeTargetProxy invokeMethod while host is null- " + getClass());
             return null;
         }
         try {
-            Object res = XposedHelpers.callMethod(host, methodName, args);
+            Object res = XposedHelpers.callMethod(obj, methodName, args);
             return (X) res;
         } catch (Throwable e) {
             Timber.wtf("InvokeTargetProxy invokeMethod fail: " + "method: " + methodName + " class: " + getClass() + "\n" + e);
             return null;
         }
+    }
+
+    @SuppressWarnings({"SameParameterValue", "UnusedReturnValue"})
+    protected <X> X invokeMethod(String methodName, Object... args) {
+        return invokeMethod(host, methodName, args);
     }
 
     protected boolean setObjectField(String name, Object value) {
