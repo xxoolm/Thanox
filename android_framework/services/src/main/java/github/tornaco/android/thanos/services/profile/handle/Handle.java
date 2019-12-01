@@ -37,6 +37,12 @@ public enum Handle {
         public Object getHandle(Context context, S s) {
             return new IUI.Impl(context, s);
         }
+    },
+    Hw {
+        @Override
+        Object getHandle(Context context, S s) {
+            return new IHW.Impl(context, s);
+        }
     };
 
     abstract Object getHandle(Context context, S s);
