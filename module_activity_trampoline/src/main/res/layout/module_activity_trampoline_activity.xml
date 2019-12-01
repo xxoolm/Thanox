@@ -77,6 +77,6 @@
                 android:layout_margin="@dimen/common_view_margin_default"
                 android:src="@drawable/module_activity_trampoline_ic_add_fill"
                 android:tint="@color/md_white"
-                app:backgroundTint="@color/md_red_300" />
+                app:backgroundTint="@color/md_green_a700" />
     </RelativeLayout>
 </layout>

@@ -457,12 +457,15 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun checkRule(ruleString: String?, callback: IRuleCheckCallback?, format: Int) {
-        if (format == ProfileManager.RULE_FORMAT_JSON) checkJsonRule(ruleString, callback)
-        if (format == ProfileManager.RULE_FORMAT_YAML) checkYamlRule(ruleString, callback)
-        else callback?.onInvalid(0, "Invalid format.")
+        when (format) {
+            ProfileManager.RULE_FORMAT_JSON -> checkJsonRule(ruleString, callback)
+            ProfileManager.RULE_FORMAT_YAML -> checkYamlRule(ruleString, callback)
+            else -> callback?.onInvalid(0, "Invalid format.")
+        }
     }
 
     private fun checkJsonRule(ruleJson: String?, callback: IRuleCheckCallback?) {
+        Timber.v("checkJsonRule: $ruleJson")
         try {
             val rule = ruleFactoryJson.createRule(StringReader(ruleJson!!))
             if (rule != null) {
@@ -477,6 +480,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     private fun checkYamlRule(ruleYaml: String?, callback: IRuleCheckCallback?) {
+        Timber.v("checkYamlRule: $ruleYaml")
         try {
             val rule = ruleFactoryYaml.createRule(StringReader(ruleYaml!!))
             if (rule != null) {
@@ -485,7 +489,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                 callback?.onInvalid(0, "Check rule fail with unknown error.")
             }
         } catch (e: Exception) {
-            Timber.e(e, "checkJsonRule: $rulesEngine")
+            Timber.e(e, "checkYamlRule: $rulesEngine")
             callback?.onInvalid(0, Log.getStackTraceString(e))
         }
     }

@@ -21,6 +21,7 @@ import github.tornaco.android.thanos.core.profile.RuleAddCallback;
 import github.tornaco.android.thanos.core.profile.RuleCheckCallback;
 import github.tornaco.android.thanos.core.profile.RuleInfo;
 import github.tornaco.android.thanos.core.util.TextWatcherAdapter;
+import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.thanos.android.module.profile.databinding.ModuleProfileWorkflowEditorBinding;
@@ -218,12 +219,14 @@ public class RuleEditorActivity extends ThemeActivity {
                             @Override
                             protected void onInvalid(int errorCode, String errorMessage) {
                                 super.onInvalid(errorCode, errorMessage);
+                                Timber.w("onInvalid: %s", errorMessage);
                                 binding.ruleCheckIndicator.setImageResource(R.drawable.module_profile_ic_rule_invalid_red_fill);
                             }
 
                             @Override
                             protected void onValid() {
                                 super.onValid();
+                                Timber.w("onValid: %s", format);
                                 binding.ruleCheckIndicator.setImageResource(R.drawable.module_profile_ic_rule_valid_green_fill);
                             }
                         },

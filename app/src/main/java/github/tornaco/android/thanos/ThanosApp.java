@@ -4,7 +4,6 @@ import github.tornaco.android.thanos.core.util.Timber;
 import io.reactivex.plugins.RxJavaPlugins;
 
 public class ThanosApp extends MultipleModulesApp {
-    @SuppressWarnings("UnstableApiUsage")
     @Override
     public void onCreate() {
         super.onCreate();
@@ -18,7 +17,7 @@ public class ThanosApp extends MultipleModulesApp {
             Timber.e("\n");
         });
 
-        CrashHandler.install(this);
+        // CrashHandler.install(this);
 
         if (BuildConfig.DEBUG) {
             DeveloperDiag.diag(this);
