@@ -17,7 +17,6 @@
 
     <item
             android:id="@+id/action_save_apply"
-            android:icon="@drawable/ic_save_fill"
             android:title="@string/module_profile_rule_edit_action_save"
             app:showAsAction="always"
             tools:ignore="AlwaysShowAction" />
