@@ -5,14 +5,12 @@
 
     <item
             android:id="@+id/action_text_size_inc"
-            android:icon="@drawable/ic_font_size_2"
             android:title="@string/module_profile_rule_edit_action_text_size_inc"
             app:showAsAction="always"
             tools:ignore="AlwaysShowAction" />
 
     <item
             android:id="@+id/action_text_size_dec"
-            android:icon="@drawable/ic_font_size_2"
             android:title="@string/module_profile_rule_edit_action_text_size_dec"
             app:showAsAction="always"
             tools:ignore="AlwaysShowAction" />

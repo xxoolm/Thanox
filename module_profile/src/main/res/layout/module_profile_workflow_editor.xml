@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,6 +11,10 @@
 
         <variable
                 name="placeholder"
+                type="String" />
+
+        <variable
+                name="format"
                 type="String" />
 
         <import type="android.view.View" />
@@ -38,16 +43,6 @@
                     app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:titleTextColor="?menuIconTint">
 
-                <View
-                        android:layout_width="@dimen/common_view_margin_default"
-                        android:layout_height="wrap_content" />
-
-                <ImageView
-                        android:id="@+id/ruleCheckIndicator"
-                        android:layout_width="@dimen/module_profile_editor_rule_checker_indicator_size"
-                        android:layout_height="@dimen/module_profile_editor_rule_checker_indicator_size"
-                        android:src="@drawable/module_profile_ic_rule_valid_green_fill" />
-
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -73,7 +68,29 @@
                 android:gravity="center"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="?appbarPopupTheme"
-                app:theme="?toolbarTheme" />
+                app:theme="?toolbarTheme">
+
+            <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                    android:id="@+id/badge1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/icon"
+                    android:background="@color/md_blue_a700"
+                    android:text="@{format}"
+                    android:textColor="@color/md_white"
+                    android:textSize="@dimen/list_item_main_text_size_ext_small"
+                    tools:text="JSON" />
+
+            <View
+                    android:layout_width="@dimen/common_view_margin_default"
+                    android:layout_height="wrap_content" />
+
+            <ImageView
+                    android:id="@+id/ruleCheckIndicator"
+                    android:layout_width="@dimen/module_profile_editor_rule_checker_indicator_size"
+                    android:layout_height="@dimen/module_profile_editor_rule_checker_indicator_size"
+                    android:src="@drawable/module_profile_ic_rule_valid_green_fill" />
+        </androidx.appcompat.widget.Toolbar>
 
     </RelativeLayout>
 </layout>

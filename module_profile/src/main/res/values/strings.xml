@@ -4,12 +4,16 @@
 
     <string name="module_profile_rule_edit_action_save">保存</string>
     <string name="module_profile_rule_edit_action_discard">取消</string>
-    <string name="module_profile_rule_edit_action_text_size_inc">字体放大</string>
-    <string name="module_profile_rule_edit_action_text_size_dec">字体缩小</string>
+    <string name="module_profile_rule_edit_action_text_size_inc">放大</string>
+    <string name="module_profile_rule_edit_action_text_size_dec">缩小</string>
 
     <string name="module_profile_rule_edit">编辑</string>
     <string name="module_profile_rule_new">新建</string>
     <string name="module_profile_rule_example"></string>
+
+    <string name="module_profile_rule_editor_select_format">选择文件格式</string>
+    <string name="module_profile_rule_editor_save_success">已经保存</string>
+    <string name="module_profile_rule_editor_save_check_error">语法错误</string>
 
     <string name="module_profile_rule_editor_discard_dialog_title">取消编辑</string>
     <string name="module_profile_rule_editor_discard_dialog_message">确定退出吗？你输入的内容将被丢弃！</string>

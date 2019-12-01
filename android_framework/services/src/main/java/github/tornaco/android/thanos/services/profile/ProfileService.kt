@@ -456,14 +456,29 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         return enabledRuleNameRepo.remove(ruleName)
     }
 
-    override fun checkRule(ruleJson: String?, callback: IRuleCheckCallback?, format: Int) {
-        checkJsonRule(ruleJson, callback)
+    override fun checkRule(ruleString: String?, callback: IRuleCheckCallback?, format: Int) {
+        if (format == ProfileManager.RULE_FORMAT_JSON) checkJsonRule(ruleString, callback)
+        if (format == ProfileManager.RULE_FORMAT_YAML) checkYamlRule(ruleString, callback)
+        else callback?.onInvalid(0, "Invalid format.")
     }
 
     private fun checkJsonRule(ruleJson: String?, callback: IRuleCheckCallback?) {
         try {
-            val ruleFactory = MVELRuleFactory(JsonRuleDefinitionReader())
-            val rule = ruleFactory.createRule(StringReader(ruleJson!!))
+            val rule = ruleFactoryJson.createRule(StringReader(ruleJson!!))
+            if (rule != null) {
+                callback?.onValid()
+            } else {
+                callback?.onInvalid(0, "Check rule fail with unknown error.")
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "checkJsonRule: $rulesEngine")
+            callback?.onInvalid(0, Log.getStackTraceString(e))
+        }
+    }
+
+    private fun checkYamlRule(ruleYaml: String?, callback: IRuleCheckCallback?) {
+        try {
+            val rule = ruleFactoryYaml.createRule(StringReader(ruleYaml!!))
             if (rule != null) {
                 callback?.onValid()
             } else {

@@ -1,0 +1,11 @@
+[
+  {
+    "name": "BT op",
+    "description": "打开微信时，打开蓝牙",
+    "priority": 2,
+    "condition": "frontPkgChanged == true && to == \"com.tencent.mm\"",
+    "actions": [
+      "ui.showShortToast(\"微信\");"
+    ]
+  }
+]

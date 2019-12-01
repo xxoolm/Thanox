@@ -32,23 +32,34 @@ public class RuleEditorActivity extends ThemeActivity {
     @Nullable
     private RuleInfo ruleInfo;
     private String originalContent = "";
+    private int format;
 
-    public static void start(Context context, RuleInfo ruleInfo) {
+    public static void start(Context context, RuleInfo ruleInfo, int format) {
         Bundle data = new Bundle();
         data.putParcelable("rule", ruleInfo);
+        data.putInt("format", format);
         ActivityUtils.startActivity(context, RuleEditorActivity.class, data);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (resolveIntent()) {
+            binding = ModuleProfileWorkflowEditorBinding.inflate(LayoutInflater.from(this));
+            setContentView(binding.getRoot());
+            initView();
+        }
+    }
+
+    private boolean resolveIntent() {
         ruleInfo = getIntent().getParcelableExtra("rule");
         if (ruleInfo != null) {
             originalContent = ruleInfo.getRuleString();
+            format = ruleInfo.getFormat();
+        } else {
+            format = getIntent().getIntExtra("format", ProfileManager.RULE_FORMAT_JSON);
         }
-        binding = ModuleProfileWorkflowEditorBinding.inflate(LayoutInflater.from(this));
-        setContentView(binding.getRoot());
-        initView();
+        return format == ProfileManager.RULE_FORMAT_YAML || format == ProfileManager.RULE_FORMAT_JSON;
     }
 
     private void initView() {
@@ -87,16 +98,25 @@ public class RuleEditorActivity extends ThemeActivity {
                                     @Override
                                     protected void onRuleAddSuccess() {
                                         super.onRuleAddSuccess();
-                                        Toast.makeText(getApplicationContext(), "Add success.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(),
+                                                R.string.module_profile_rule_editor_save_success,
+                                                Toast.LENGTH_LONG)
+                                                .show();
+                                        finish();
                                     }
 
                                     @Override
                                     protected void onRuleAddFail(int errorCode, String errorMessage) {
                                         super.onRuleAddFail(errorCode, errorMessage);
-                                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                        new AlertDialog.Builder(thisActivity())
+                                                .setTitle(R.string.module_profile_rule_editor_save_check_error)
+                                                .setMessage(errorMessage)
+                                                .setCancelable(true)
+                                                .setPositiveButton(android.R.string.ok, null)
+                                                .show();
                                     }
                                 },
-                                0);
+                                format);
                 return true;
             }
             if (item.getItemId() == R.id.action_text_size_inc) {
@@ -109,6 +129,14 @@ public class RuleEditorActivity extends ThemeActivity {
             }
             return false;
         });
+
+        // Format.
+        if (format == ProfileManager.RULE_FORMAT_JSON) {
+            binding.setFormat("JSON");
+        }
+        if (format == ProfileManager.RULE_FORMAT_YAML) {
+            binding.setFormat("YAML");
+        }
 
         binding.setRuleInfo(ruleInfo);
         binding.setPlaceholder(null);
@@ -199,6 +227,6 @@ public class RuleEditorActivity extends ThemeActivity {
                                 binding.ruleCheckIndicator.setImageResource(R.drawable.module_profile_ic_rule_valid_green_fill);
                             }
                         },
-                        ProfileManager.RULE_FORMAT_JSON);
+                        format);
     }
 }
