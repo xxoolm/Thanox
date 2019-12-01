@@ -13,6 +13,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import de.robv.android.xposed.XposedHelpers;
 import github.tornaco.android.thanos.core.util.Timber;
 
 class UiAutomationManager extends IAccessibilityServiceClient.Stub {
@@ -42,8 +43,19 @@ class UiAutomationManager extends IAccessibilityServiceClient.Stub {
     @Override
     public void init(IAccessibilityServiceConnection connection, int id, IBinder iBinder) {
         if (connection != null) {
-            connectionId.set(id);
-            AccessibilityInteractionClient.getInstance().addConnection(id, connection);
+            try {
+                connectionId.set(id);
+                XposedHelpers.callStaticMethod(AccessibilityInteractionClient.class,
+                        "addConnection",
+                        id, connection);
+            } catch (Throwable e) {
+                Timber.e(e);
+                try {
+                    AccessibilityInteractionClient.getInstance().addConnection(id, connection);
+                } catch (Throwable e2) {
+                    Timber.e(e2);
+                }
+            }
         }
     }
 
