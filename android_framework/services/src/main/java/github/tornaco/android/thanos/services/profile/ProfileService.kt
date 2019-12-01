@@ -48,7 +48,6 @@ import org.jeasy.rules.support.YamlRuleDefinitionReader
 import util.ObjectsUtils
 import java.io.File
 import java.io.StringReader
-import java.nio.charset.Charset
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -399,7 +398,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                     val f = File(T.profileRulesDir(), "$ruleName$suffix")
                     Files.createParentDirs(f)
                     Files.asByteSink(f)
-                        .asCharSink(Charset.defaultCharset())
+                        .asCharSink(Charsets.UTF_8)
                         .write(ruleJson)
                     callback?.onRuleAddSuccess()
                 } else {

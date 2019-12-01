@@ -5,7 +5,6 @@ package github.tornaco.android.thanos.services.profile
 import com.google.common.io.Files
 import github.tornaco.android.thanos.core.profile.ProfileManager
 import github.tornaco.android.thanos.core.profile.RuleInfo
-import github.tornaco.android.thanos.core.util.FileUtils
 import github.tornaco.android.thanos.core.util.Timber
 import org.jeasy.rules.mvel.MVELRuleFactory
 import org.jeasy.rules.support.JsonRuleDefinitionReader
@@ -35,7 +34,7 @@ internal class LocalRuleScanner {
                     RuleInfo(
                         rule.name,
                         rule.description,
-                        FileUtils.readString(f.absolutePath),
+                        Files.asCharSource(f, Charsets.UTF_8).read(),
                         "tornaco",
                         f.lastModified(),
                         false,
