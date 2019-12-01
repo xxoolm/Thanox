@@ -185,3 +185,6 @@
 # XposedEntry
 -keep class github.tornaco.android.thanos.services.xposed.XposedHookEntry
 -keep class github.tornaco.** {*;}
+
+# Slf
+-keep class org.slf4j.** {*;}
