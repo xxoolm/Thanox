@@ -25,5 +25,5 @@ jobs:
         export KEYSTORE_PASS=${{ secrets.KEYSTORE_PASS }};
         export ALIAS_NAME=${{ secrets.ALIAS_NAME }};
         export ALIAS_PASS=${{ secrets.ALIAS_PASS }};
-        ./build_debug.sh
+        ./build_release.sh
         "'
