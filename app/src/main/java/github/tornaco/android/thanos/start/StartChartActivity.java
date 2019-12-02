@@ -153,11 +153,9 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
 
         ArrayList<PieEntry> entries = new ArrayList<>();
 
-        // NOTE: The order of the entries when being added to the entries array determines their position around the center of
-        // the chart.
         for (int i = 0; (i < startEntries.size() && i < 24); i++) {
             entries.add(new PieEntry(startEntries.get(i).times,
-                    String.valueOf(PkgUtils.loadNameByPkgName(this, startEntries.get(i).pkg)),
+                    PkgUtils.loadNameByPkgName(this, startEntries.get(i).pkg) + " " + startEntries.get(i).times,
                     startEntries.get(i)));
         }
 
@@ -201,7 +199,7 @@ public class StartChartActivity extends ThemeActivity implements OnChartValueSel
         data.setValueFormatter(new PercentFormatter(chart) {
             @Override
             public String getPieLabel(float value, PieEntry pieEntry) {
-                return value >= 8f ? String.valueOf((int) value) : "";
+                return "";
             }
         });
         data.setValueTypeface(TypefaceHelper.googleSans(this));
