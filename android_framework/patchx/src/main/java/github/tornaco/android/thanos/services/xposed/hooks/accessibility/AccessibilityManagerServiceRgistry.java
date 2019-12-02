@@ -72,8 +72,8 @@ public class AccessibilityManagerServiceRgistry implements IXposedHook {
                     BootStrap.THANOS_X
                             .getWindowManagerService()
                             .onIAccessibilityInteractionConnectionAttach(
-                                    (IAccessibilityInteractionConnection) param.args[0],
-                                    (IWindow) param.args[1],
+                                    (IAccessibilityInteractionConnection) param.args[1],
+                                    (IWindow) param.args[0],
                                     (int) param.args[2]);
                 }
             });
