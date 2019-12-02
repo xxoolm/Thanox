@@ -33,6 +33,9 @@ buildConfig {
     // Permissions
     buildConfigField 'String', 'ACTION_PERMISSION_REQUEST', serviceProps.getProperty("action.permissions.request")
     buildConfigField 'String', 'EXTRA_PERMISSION_REQUEST', serviceProps.getProperty("extra.permissions.request")
+
+    // Url
+    buildConfigField 'String', 'THANOX_URL_DOCS_PROFILE', serviceProps.getProperty("thanox.url.docs.profile")
 }
 
 

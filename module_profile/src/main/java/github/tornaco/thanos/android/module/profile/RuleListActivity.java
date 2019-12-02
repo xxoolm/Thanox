@@ -1,8 +1,12 @@
 package github.tornaco.thanos.android.module.profile;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
 
@@ -17,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.profile.ProfileManager;
 import github.tornaco.android.thanos.core.profile.RuleInfo;
@@ -126,6 +131,26 @@ public class RuleListActivity extends ThemeActivity implements RuleItemClickList
     protected void onResume() {
         super.onResume();
         viewModel.resume();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.module_profile_rule_wiki, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (R.id.action_view_wiki == item.getItemId()) {
+            final Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(BuildProp.THANOX_URL_DOCS_PROFILE));
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(Intent.createChooser(intent, ""));
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public static RuleListViewModel obtainViewModel(FragmentActivity activity) {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <item
+            android:id="@+id/action_view_wiki"
+            android:icon="@drawable/ic_book_open_fill"
+            android:title="@string/module_profile_rule_wiki"
+            app:showAsAction="ifRoom"
+            tools:ignore="AlwaysShowAction" />
+</menu>

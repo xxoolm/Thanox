@@ -7,6 +7,8 @@
     <string name="module_profile_rule_edit_action_text_size_inc">放大</string>
     <string name="module_profile_rule_edit_action_text_size_dec">缩小</string>
 
+    <string name="module_profile_rule_wiki">指南</string>
+
     <string name="module_profile_rule_edit">编辑</string>
     <string name="module_profile_rule_new">新建</string>
     <string name="module_profile_rule_example"></string>
