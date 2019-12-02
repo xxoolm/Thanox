@@ -272,7 +272,6 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         // Update current view.
         if (isShowCurrentComponentViewEnabled()) {
             showCurrentComponentView();
-            s.getWindowManagerService().dumpActiveWindow();
         }
     }
 
@@ -283,9 +282,14 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
 
     public void onActivityResumed(Intent intent) {
         Timber.v("onActivityResumed: %s", intent);
-        Completable.fromRunnable(() -> reportActivityLaunchingInternal(intent, "onActivityResumed"))
+        Completable.fromRunnable(() -> onActivityResumedInternal(intent))
                 .subscribeOn(ThanosSchedulers.serverThread())
                 .subscribe();
+    }
+
+    private void onActivityResumedInternal(Intent intent) {
+        reportActivityLaunchingInternal(intent, "onActivityResumed");
+        s.getWindowManagerService().dumpActiveWindow();
     }
 
     @Override

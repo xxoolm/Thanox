@@ -5,6 +5,7 @@ import android.os.IBinder
 import android.util.DisplayMetrics
 import android.util.Pair
 import android.view.WindowManager
+import android.view.accessibility.AccessibilityNodeInfo
 import github.tornaco.android.thanos.core.util.Noop
 import github.tornaco.android.thanos.core.util.Timber
 import github.tornaco.android.thanos.core.wm.IWindowManager
@@ -46,6 +47,13 @@ class WindowManagerService(private val s: S) : SystemService(), IWindowManager {
         if (!isSystemReady) return
         val info = automation.rootInActiveWindow
         Timber.d("rootInActiveWindow: $info")
+        if (info != null) {
+            val list = info.findAccessibilityNodeInfosByText("跳过")
+            Timber.v("findAccessibilityNodeInfosByText: $list")
+            list?.forEach {
+                it.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+            }
+        }
     }
 
     override fun getScreenSize(): IntArray {
