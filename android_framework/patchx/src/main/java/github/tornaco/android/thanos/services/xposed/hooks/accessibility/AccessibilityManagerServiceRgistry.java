@@ -1,5 +1,9 @@
 package github.tornaco.android.thanos.services.xposed.hooks.accessibility;
 
+import android.view.IWindow;
+import android.view.accessibility.IAccessibilityInteractionConnection;
+
+import java.util.Arrays;
 import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -29,6 +33,7 @@ public class AccessibilityManagerServiceRgistry implements IXposedHook {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
         if (PackageManager.packageNameOfAndroid().equals(lpparam.packageName)) {
             hookAccessibilityManagerServiceInit(lpparam);
+            hookAddAccessibilityInteractionConnection(lpparam);
         }
     }
 
@@ -50,6 +55,53 @@ public class AccessibilityManagerServiceRgistry implements IXposedHook {
             Timber.d("hookAccessibilityManagerServiceInit OK: " + unHooks);
         } catch (Exception e) {
             Timber.e(e, "Fail hookAccessibilityManagerServiceInit");
+        }
+    }
+
+    private void hookAddAccessibilityInteractionConnection(XC_LoadPackage.LoadPackageParam lpparam) {
+        Timber.d("hookAddAccessibilityInteractionConnection...");
+        try {
+            // com/android/server/accessibility/AbstractAccessibilityServiceConnection.java
+            Class clz = XposedHelpers.findClass("com.android.server.accessibility.AccessibilityManagerService",
+                    lpparam.classLoader);
+            Set unHooks = XposedBridge.hookAllMethods(clz, "addAccessibilityInteractionConnection", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+                    Timber.w("addAccessibilityInteractionConnection: %s", Arrays.toString(param.args));
+                    BootStrap.THANOS_X
+                            .getWindowManagerService()
+                            .onIAccessibilityInteractionConnectionAttach(
+                                    (IAccessibilityInteractionConnection) param.args[0],
+                                    (IWindow) param.args[1],
+                                    (int) param.args[2]);
+                }
+            });
+            Timber.d("hookAddAccessibilityInteractionConnection OK: " + unHooks);
+        } catch (Exception e) {
+            Timber.e(e, "Fail hookAddAccessibilityInteractionConnection");
+        }
+    }
+
+    private void hookRemoveAccessibilityInteractionConnection(XC_LoadPackage.LoadPackageParam lpparam) {
+        Timber.d("hookRemoveAccessibilityInteractionConnection...");
+        try {
+            // com/android/server/accessibility/AbstractAccessibilityServiceConnection.java
+            Class clz = XposedHelpers.findClass("com.android.server.accessibility.AccessibilityManagerService",
+                    lpparam.classLoader);
+            Set unHooks = XposedBridge.hookAllMethods(clz, "removeAccessibilityInteractionConnection", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+                    Timber.w("removeAccessibilityInteractionConnection: %s", Arrays.toString(param.args));
+                    BootStrap.THANOS_X
+                            .getWindowManagerService()
+                            .onIAccessibilityInteractionConnectionRemoved((IWindow) param.args[0]);
+                }
+            });
+            Timber.d("hookRemoveAccessibilityInteractionConnection OK: " + unHooks);
+        } catch (Exception e) {
+            Timber.e(e, "Fail hookRemoveAccessibilityInteractionConnection");
         }
     }
 
