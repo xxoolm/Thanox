@@ -132,7 +132,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
             val pkgFacts = Facts()
             pkgFacts.put("componentName", name)
-            pkgFacts.put("componentNameAsString", name.flattenToShortString())
+            pkgFacts.put("componentNameAsString", name.flattenToString())
+            pkgFacts.put("componentNameAsShortString", name.flattenToShortString())
             pkgFacts.put("pkgName", pkgName)
             pkgFacts.put("activityResumed", true)
             publishFacts(pkgFacts)
