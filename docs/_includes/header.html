@@ -1,46 +1,76 @@
-<div class="header-panel shadow-z-2">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3 col-sm-4 col-xs-12">
-            <div class="row-picture">
-              <img id="about" class="logo-img" src="{{ site.logo }}" height="75px" width="75px">
-            </div>
-            <div class="row-details">
-              <h4 class="list-group-item-heading">{{ site.title }}</h4>
-              <p class="list-group-item-text">{{ site.about }}</p>
-            </div>
-            <div class="navbar-header pull-right">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <i class="fa fa-2x fa-bars"></i>
-              </button>
-            </div>
-          </div>
-          <div class="col-md-9 col-sm-8 col-xs-12">
-          <div class="row">
-            <h2 class="blog-title-pro {% if site.allowsearch ==  true %}col-md-6 col-sm-12 col-xs-12 {% endif %}">{{ page.title }}</h2>
-            {% if site.allowsearch ==  true %}
-            <div class="col-md-6 col-sm-12 col-xs-12 searchcontrol" id="js-search">
-              <input class="form-control" type="text" id="js-search__input" placeholder="Search">
-              <ul class="search__results" id="js-search__results"></ul>
-            </div>
-            {% endif %}
-            </div>
-            <p class="info">
-              {% if page.date %}
-                <span class="time">{{ page.date | date_to_string }}</span>
-              {% endif %}
-              {% if page.categories.size > 0 %}
-                <span class="categories">
-                  &raquo; 
-                  {% for category in page.categories %}
-                    <a href="{{ site.baseurl }}/category/{{ category }}">{{ category }}</a>
-                    {% if forloop.last == false %}, {% endif %}
-                  {% endfor %}
-                </span>
-              {% endif %}
-            </p>
-          </div>
+<!-- TODO this file has become a mess, refactor it -->
+
+{% if page.bigimg or page.title %}
+
+{% if page.bigimg %}
+  <div id="header-big-imgs" data-num-img={% if page.bigimg.first %}{{ page.bigimg.size }}{% else %}1{% endif %}
+    {% for bigimg in page.bigimg %}
+	  {% assign imgnum = forloop.index %}
+	  {% for imginfo in bigimg %}
+	    {% if imginfo[0] %}
+		  data-img-src-{{ imgnum }}="{{ imginfo[0] | relative_url }}"
+		  data-img-desc-{{ imgnum }}="{{ imginfo[1] }}"
+		{% else %}
+		  data-img-src-{{ imgnum }}="{{ imginfo | relative_url }}"
+		{% endif %}
+	  {% endfor %}
+    {% endfor %}
+  ></div>
+{% endif %}
+
+<header class="header-section {% if page.bigimg %}has-img{% endif %}">
+{% if page.bigimg %}
+<div class="big-img intro-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="{{ include.type }}-heading">
+          <h1>{% if page.title %}{{ page.title }}{% else %}<br/>{% endif %}</h1>
+		  {% if page.subtitle %}
+		    {% if include.type == "page" %}
+            <hr class="small">
+            <span class="{{ include.type }}-subheading">{{ page.subtitle }}</span>
+			{% else %}
+			<h2 class="{{ include.type }}-subheading">{{ page.subtitle }}</h2>
+			{% endif %}
+		  {% endif %}
+		  
+		  {% if include.type == "post" %}
+		  <span class="post-meta">Posted on {{ page.date | date: site.date_format }}</span>
+		  {% endif %}
         </div>
       </div>
     </div>
+  </div>
+  <span class='img-desc'></span>
+</div>
+{% endif %}
+<div class="intro-header no-img">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="{{ include.type }}-heading">
+          <h1>{% if page.title %}{{ page.title }}{% else %}<br/>{% endif %}</h1>
+		  {% if page.subtitle %}
+		    {% if include.type == "page" %}
+            <hr class="small">
+            <span class="{{ include.type }}-subheading">{{ page.subtitle }}</span>
+			{% else %}
+			<h2 class="{{ include.type }}-subheading">{{ page.subtitle }}</h2>
+			{% endif %}
+		  {% endif %}
+		  
+		  {% if include.type == "post" %}
+		  <span class="post-meta">Posted on {{ page.date | date: site.date_format }}</span>
+		  {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+
+
+{% else %}
+<div class="intro-header"></div>
+{% endif %}
