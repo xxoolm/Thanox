@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.services.profile
 
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -120,6 +121,24 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         }
     }
 
+    private val activityResumedEventSubscriber = object : IEventSubscriber.Stub() {
+        override fun onEvent(e: ThanosEvent) {
+            val intent = e.intent
+            val name = intent.getParcelableExtra<ComponentName>(
+                T.Actions.ACTION_ACTIVITY_RESUMED_EXTRA_COMPONENT_NAME
+            )
+            val pkgName =
+                intent.getStringExtra(T.Actions.ACTION_ACTIVITY_RESUMED_EXTRA_PACKAGE_NAME)
+
+            val pkgFacts = Facts()
+            pkgFacts.put("componentName", name)
+            pkgFacts.put("componentNameAsString", name.flattenToShortString())
+            pkgFacts.put("pkgName", pkgName)
+            pkgFacts.put("activityResumed", true)
+            publishFacts(pkgFacts)
+        }
+    }
+
     override fun onStart(context: Context) {
         super.onStart(context)
         enabledRuleNameRepo =
@@ -153,6 +172,10 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         EventBus.getInstance().registerEventSubscriber(
             IntentFilter(T.Actions.ACTION_TASK_REMOVED),
             taskEventSubscriber
+        )
+        EventBus.getInstance().registerEventSubscriber(
+            IntentFilter(T.Actions.ACTION_ACTIVITY_RESUMED),
+            activityResumedEventSubscriber
         )
     }
 

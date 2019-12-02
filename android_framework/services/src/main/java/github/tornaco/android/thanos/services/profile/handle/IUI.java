@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.services.profile.handle;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -15,6 +16,10 @@ interface IUI {
     void showDialog(String title, String msg, String yes);
 
     void showNotification(String title, String msg, boolean headsUp);
+
+    void findAndClickViewByText(String text);
+
+    void findAndClickViewByText(String text, String componentNameShortString);
 
     class Impl implements IUI {
         private Context context;
@@ -49,6 +54,28 @@ interface IUI {
         @Override
         public void showNotification(String title, String msg, boolean headsUp) {
 
+        }
+
+        @Override
+        public void findAndClickViewByText(String text) {
+            s.getWindowManagerService()
+                    .findAndClickViewByText(text,
+                            s.getActivityStackSupervisor().getCurrentFrontComponentName(),
+                            // Interval.
+                            500,
+                            // Retry.
+                            6);
+        }
+
+        @Override
+        public void findAndClickViewByText(String text, String componentNameShortString) {
+            s.getWindowManagerService()
+                    .findAndClickViewByText(text,
+                            ComponentName.unflattenFromString(componentNameShortString),
+                            // Interval.
+                            500,
+                            // Retry.
+                            6);
         }
     }
 }

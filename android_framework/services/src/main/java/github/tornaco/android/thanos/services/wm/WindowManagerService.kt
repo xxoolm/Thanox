@@ -1,5 +1,6 @@
 package github.tornaco.android.thanos.services.wm
 
+import android.content.ComponentName
 import android.content.Context.WINDOW_SERVICE
 import android.os.IBinder
 import android.util.DisplayMetrics
@@ -38,22 +39,32 @@ class WindowManagerService(private val s: S) : SystemService(), IWindowManager {
         automation.disconnect()
     }
 
-    fun dumpActiveWindow() {
-        executeInternal(Runnable { dumpActiveWindowInternal() })
+    fun findAndClickViewByText(
+        text: String,
+        targetComponent: ComponentName,
+        interval: Long,
+        maxRetryTimes: Int
+    ) {
+        executeInternal(ViewClickWorker(text, targetComponent, interval, maxRetryTimes, s))
     }
 
     @ExecuteBySystemHandler
-    private fun dumpActiveWindowInternal() {
-        if (!isSystemReady) return
+    fun findAndClickViewByTextInternal(text: String, targetComponent: ComponentName): Boolean {
+        if (!isSystemReady) return false
+        if (s.activityStackSupervisor.currentFrontComponentName != targetComponent) return false
         val info = automation.rootInActiveWindow
-        Timber.d("rootInActiveWindow: $info")
-        if (info != null) {
-            val list = info.findAccessibilityNodeInfosByText("跳过")
-            Timber.v("findAccessibilityNodeInfosByText: $list")
-            list?.forEach {
-                it.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+        Timber.v("findAndClickViewByText: $info")
+        if (info == null) return false
+        val list = info.findAccessibilityNodeInfosByText(text)
+        Timber.v("findAndClickViewByText.findAccessibilityNodeInfosByText: $list")
+        var res = false
+        list?.forEach {
+            Timber.d("Hit! findAndClickViewByText.performAction: $it")
+            if (it.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
+                res = true
             }
         }
+        return res
     }
 
     override fun getScreenSize(): IntArray {

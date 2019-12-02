@@ -245,6 +245,28 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
     }
 
     @ExecuteBySystemHandler
+    private void broadcastActivityResumedInternal(Intent intent) {
+        Timber.d("broadcastActivityResumedInternal: %s", intent);
+        if (intent == null) {
+            Timber.w("broadcastActivityResumedInternal, intent is null");
+            return;
+        }
+
+        String pkg = PkgUtils.packageNameOf(intent);
+        if (pkg == null) {
+            Timber.w("broadcastActivityResumedInternal, pkg of this intent is null");
+            return;
+        }
+
+        // Broadcast.
+        Intent changedIntent = new Intent(T.Actions.ACTION_ACTIVITY_RESUMED);
+        changedIntent.putExtra(T.Actions.ACTION_ACTIVITY_RESUMED_EXTRA_COMPONENT_NAME, intent.getComponent());
+        changedIntent.putExtra(T.Actions.ACTION_ACTIVITY_RESUMED_EXTRA_PACKAGE_NAME, pkg);
+        ThanosEvent event = new ThanosEvent(changedIntent);
+        EventBus.getInstance().publishEventToSubscribersAsync(event);
+    }
+
+    @ExecuteBySystemHandler
     private void reportActivityLaunchingInternal(Intent intent, String reason) {
         Timber.d("reportActivityLaunchingInternal: %s %s", intent, reason);
         if (intent == null) {
@@ -289,7 +311,7 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
 
     private void onActivityResumedInternal(Intent intent) {
         reportActivityLaunchingInternal(intent, "onActivityResumed");
-        s.getWindowManagerService().dumpActiveWindow();
+        broadcastActivityResumedInternal(intent);
     }
 
     @Override
