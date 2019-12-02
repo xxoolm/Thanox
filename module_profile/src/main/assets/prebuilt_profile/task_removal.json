@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Task removal",
+    "description": "应用被杀死时，移除任务",
+    "priority": 1,
+    "condition": "pkgKilled == true",
+    "actions": [
+      "ui.showShortToast(\"移除任务...\");",
+      "task.removeTasksForPackage(pkgName);"
+    ]
+  }
+]

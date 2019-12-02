@@ -8,12 +8,15 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
+import util.CollectionUtils;
+import util.ObjectsUtils;
 
 public class TaskMapping {
 
@@ -56,5 +59,38 @@ public class TaskMapping {
         }
         Timber.v("getPackageNameForTaskId returning: " + pkgOfThisTask);
         return pkgOfThisTask;
+    }
+
+    public List<Integer> getTasksIdForPackage(Context context, String packageName) {
+        List<Integer> res = new ArrayList<>();
+        Integer[] tasksId = taskIdCompMap.keySet().toArray(new Integer[0]);
+        for (int id : tasksId) {
+            ComponentName componentName = taskIdCompMap.get(id);
+            if (ObjectsUtils.equals(componentName.getPackageName(), packageName)) {
+                res.add(id);
+            }
+        }
+        if (CollectionUtils.isNullOrEmpty(res)) {
+            Timber.w("taskIdCompMap has no task for package: %s, pull from legacy.", packageName);
+            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            // Assume calling pkg has this permission.
+            if (am != null) {
+                List<ActivityManager.RecentTaskInfo> tasks = am.getRecentTasks(99, ActivityManager.RECENT_WITH_EXCLUDED);
+                Timber.v("RecentTaskInfo tasks: %s", tasks);
+                if (tasks != null) {
+                    for (ActivityManager.RecentTaskInfo rc : tasks) {
+                        Timber.v("RecentTaskInfo rc: %s, persistentId: %s", rc, (rc == null ? "" : rc.persistentId));
+                        if (rc != null && rc.baseIntent != null) {
+                            String pkgOfThisTask = PkgUtils.packageNameOf(rc.baseIntent);
+                            Timber.v("RecentTaskInfo pkgOfThisTask: %s", pkgOfThisTask);
+                            if (ObjectsUtils.equals(pkgOfThisTask, packageName)) {
+                                res.add(rc.persistentId);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res;
     }
 }

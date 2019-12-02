@@ -902,7 +902,18 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
             ActivityManager am = (ActivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.ACTIVITY_SERVICE);
             am.forceStopPackage(packageName);
             Timber.d("forceStopped Package: %s", packageName);
+            // broadcast.
+            broadcastPackageStoppedInternal(packageName);
         }).subscribeOn(ThanosSchedulers.serverThread()).subscribe();
+    }
+
+    @ExecuteBySystemHandler
+    private void broadcastPackageStoppedInternal(String packageName) {
+        // Broadcast.
+        Intent intent = new Intent(T.Actions.ACTION_PACKAGE_STOPPED);
+        intent.putExtra(T.Actions.ACTION_PACKAGE_STOPPED_EXTRA_PACKAGE_NAME, packageName);
+        ThanosEvent event = new ThanosEvent(intent);
+        EventBus.getInstance().publishEventToSubscribersAsync(event);
     }
 
     @ExecuteBySystemHandler
@@ -1011,6 +1022,36 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         }
     }
 
+    public void removeTaskForPackage(String pkgName) {
+        enforceCallingPermissions();
+        if (!getRecentTasks().hasRecentTaskForPkg(pkgName)) {
+            Timber.v("removeTaskForPackage: %s, has no task, skip.", pkgName);
+            return;
+        }
+        List<Integer> taskIds = getTaskMapping().getTasksIdForPackage(getContext(), pkgName);
+        Timber.v("removeTaskForPackage: %s", taskIds.toArray());
+        if (!CollectionUtils.isNullOrEmpty(taskIds)) {
+            for (int id : taskIds) {
+                removeTask(id);
+            }
+        }
+    }
+
+    public void removeTask(int taskId) {
+        enforceCallingPermissions();
+        executeInternal(() -> removeTaskInternal(taskId));
+    }
+
+    @ExecuteBySystemHandler
+    private void removeTaskInternal(int taskId) {
+        Timber.v("Remove task: %s", taskId);
+        try {
+            ActivityManagerNative.getDefault().removeTask(taskId);
+        } catch (RemoteException e) {
+            Timber.e(e, "ActivityManagerNative.getDefault().removeTask(taskId)");
+        }
+    }
+
     public void onTaskRemoving(Intent intent, int userId) {
         if (!isSystemReady()) return;
         int currentUserId = UserHandle.myUserId();
@@ -1055,8 +1096,13 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         if (!hasAnyOtherTask
                 && cleanUpOnTaskRemovalEnabled
                 && isPkgCleanUpOnTaskRemovalEnabled(taskPkgName)) {
-            Timber.v("onTaskRemovingInternal: will force stop it");
-            forceStopPackage(taskPkgName);
+
+            if (isPackageRunning(taskPkgName)) {
+                Timber.v("onTaskRemovingInternal: will force stop it");
+                forceStopPackage(taskPkgName);
+            } else {
+                Timber.d("onTaskRemovingInternal: pkg is not running.");
+            }
         }
     }
 

@@ -140,6 +140,17 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         }
     }
 
+    private val packageStoppedEventSubscriber = object : IEventSubscriber.Stub() {
+        override fun onEvent(e: ThanosEvent) {
+            val intent = e.intent
+            val pkg = intent.getStringExtra(T.Actions.ACTION_PACKAGE_STOPPED_EXTRA_PACKAGE_NAME)
+            val pkgFacts = Facts()
+            pkgFacts.put("pkgKilled", true)
+            pkgFacts.put("pkgName", pkg)
+            publishFacts(pkgFacts)
+        }
+    }
+
     override fun onStart(context: Context) {
         super.onStart(context)
         enabledRuleNameRepo =
@@ -177,6 +188,10 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         EventBus.getInstance().registerEventSubscriber(
             IntentFilter(T.Actions.ACTION_ACTIVITY_RESUMED),
             activityResumedEventSubscriber
+        )
+        EventBus.getInstance().registerEventSubscriber(
+            IntentFilter(T.Actions.ACTION_PACKAGE_STOPPED),
+            packageStoppedEventSubscriber
         )
     }
 
