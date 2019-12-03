@@ -219,6 +219,22 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             T.Settings.PREF_PROFILE_ENABLED.key,
             T.Settings.PREF_PROFILE_ENABLED.defaultValue
         )
+
+        ensureAutomationState()
+    }
+
+    private fun ensureAutomationState() {
+        executeInternal(Runnable { ensureAutomationStateInternal() })
+    }
+
+    @ExecuteBySystemHandler
+    private fun ensureAutomationStateInternal() {
+        Timber.v("ensureAutomationStateInternal")
+        if (profileEnabled) {
+            s.windowManagerService.ensureAutomationConnected()
+        } else {
+            s.windowManagerService.ensureAutomationDisConnected()
+        }
     }
 
     private fun listenToPrefs() {
@@ -581,6 +597,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             T.Settings.PREF_PROFILE_ENABLED.key,
             enable
         )
+
+        ensureAutomationState()
     }
 
     fun publishFacts(facts: Facts) {

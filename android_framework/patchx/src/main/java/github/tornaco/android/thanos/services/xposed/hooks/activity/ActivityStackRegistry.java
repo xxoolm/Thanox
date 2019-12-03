@@ -51,13 +51,21 @@ public class ActivityStackRegistry implements IXposedHookLoadPackage, IXposedHoo
                     boolean res = (boolean) param.getResult();
                     if (res) {
                         // ActivityRecord next = topRunningActivityLocked(true /* focusableOnly */);
-                        Object nextObj = XposedHelpers.callMethod(param.thisObject, "topRunningActivityLocked", true);
+                        // final ActivityRecord topRunningActivityLocked(): N
+                        Object nextObj;
+                        try {
+                            nextObj = XposedHelpers.callMethod(param.thisObject, "topRunningActivityLocked", true);
+                        } catch (NoSuchMethodError e) {
+                            nextObj = XposedHelpers.callMethod(param.thisObject, "topRunningActivityLocked");
+                        }
                         if (nextObj != null) {
                             Intent intent = (Intent) XposedHelpers.getObjectField(nextObj, "intent");
                             Timber.v("resumeTopActivityInnerLocked, next: %s, args: %s", intent, Arrays.toString(param.args));
                             if (intent != null) {
                                 BootStrap.THANOS_X.getActivityStackSupervisor().onActivityResumed(intent);
                             }
+                        } else {
+                            Timber.e("Call topRunningActivityLocked failed...Please file a bug.");
                         }
                     }
                 }

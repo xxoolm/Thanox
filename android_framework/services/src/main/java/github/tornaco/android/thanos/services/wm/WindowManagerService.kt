@@ -29,13 +29,13 @@ class WindowManagerService(private val s: S) : SystemService(), IWindowManager {
         Timber.w("onAccessibilityServiceAttach: $server")
     }
 
-    override fun systemReady() {
-        super.systemReady()
+    fun ensureAutomationConnected() {
+        Timber.v("ensureAutomationConnected")
         automation.connect()
     }
 
-    override fun shutdown() {
-        super.shutdown()
+    fun ensureAutomationDisConnected() {
+        Timber.v("ensureAutomationDisConnected")
         automation.disconnect()
     }
 

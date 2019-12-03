@@ -21,18 +21,29 @@ import github.tornaco.android.thanos.core.util.Timber;
 class UiAutomationManager extends IAccessibilityServiceClient.Stub {
 
     private final AtomicInteger connectionId = new AtomicInteger(AccessibilityInteractionClient.NO_ID);
+    private UiAutomationConnection connection;
 
     @SuppressLint("InlinedApi")
     void connect() {
+        Timber.v("connect");
         if (connectionId.get() != AccessibilityInteractionClient.NO_ID) {
             // Already has a connection.
             return;
         }
-        new UiAutomationConnection().connect(this, UiAutomation.FLAG_DONT_SUPPRESS_ACCESSIBILITY_SERVICES);
+        connection = new UiAutomationConnection();
+        connection.connect(this, UiAutomation.FLAG_DONT_SUPPRESS_ACCESSIBILITY_SERVICES);
     }
 
     void disconnect() {
-
+        Timber.v("disconnect");
+        if (connectionId.get() != AccessibilityInteractionClient.NO_ID) {
+            // Already has a connection.
+            return;
+        }
+        if (connection == null) {
+            return;
+        }
+        connection.disconnect();
     }
 
     public AccessibilityNodeInfo getRootInActiveWindow() {
