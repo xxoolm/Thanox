@@ -1,9 +1,9 @@
 package github.tornaco.android.thanos.services.xposed.hooks.accessibility;
 
+import android.os.UserHandle;
 import android.view.IWindow;
 import android.view.accessibility.IAccessibilityInteractionConnection;
 
-import java.util.Arrays;
 import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -69,13 +69,23 @@ public class AccessibilityManagerServiceRgistry implements IXposedHook {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     super.afterHookedMethod(param);
-                    Timber.w("addAccessibilityInteractionConnection: %s", Arrays.toString(param.args));
+                    IAccessibilityInteractionConnection connection = null;
+                    IWindow window = null;
+                    int userId = UserHandle.USER_SYSTEM;
+                    for (Object arg : param.args) {
+                        if (arg instanceof IAccessibilityInteractionConnection) {
+                            connection = (IAccessibilityInteractionConnection) arg;
+                        }
+                        if (arg instanceof IWindow) {
+                            window = (IWindow) arg;
+                        }
+                        if (arg instanceof Integer) {
+                            userId = (int) arg;
+                        }
+                    }
                     BootStrap.THANOS_X
                             .getWindowManagerService()
-                            .onIAccessibilityInteractionConnectionAttach(
-                                    (IAccessibilityInteractionConnection) param.args[1],
-                                    (IWindow) param.args[0],
-                                    (int) param.args[2]);
+                            .onIAccessibilityInteractionConnectionAttach(window, connection, userId);
                 }
             });
             Timber.d("hookAddAccessibilityInteractionConnection OK: " + unHooks);
@@ -94,7 +104,6 @@ public class AccessibilityManagerServiceRgistry implements IXposedHook {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     super.afterHookedMethod(param);
-                    Timber.w("removeAccessibilityInteractionConnection: %s", Arrays.toString(param.args));
                     BootStrap.THANOS_X
                             .getWindowManagerService()
                             .onIAccessibilityInteractionConnectionRemoved((IWindow) param.args[0]);
