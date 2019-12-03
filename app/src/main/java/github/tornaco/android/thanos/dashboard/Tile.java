@@ -19,6 +19,7 @@ public class Tile {
     private View.OnClickListener onClickListener;
     @ColorRes
     private int themeColor;
+    @Deprecated
     private boolean atEndOfThisCategory;
     private boolean disabled;
 }

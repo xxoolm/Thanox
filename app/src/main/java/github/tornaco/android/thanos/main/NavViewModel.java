@@ -239,7 +239,6 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_bg_restrict))
                                 .summary(resources.getString(R.string.feature_desc_bg_restrict))
                                 .themeColor(R.color.md_green_500)
-                                .atEndOfThisCategory(true)
                                 .onClickListener(view -> BackgroundRestrictActivity.start(getApplication()))
                                 .build(),
 
@@ -249,7 +248,6 @@ public class NavViewModel extends AndroidViewModel {
                                 .summary(resources.getString(R.string.feature_desc_clean_when_task_removed))
                                 .category(resources.getString(R.string.feature_category_app_clean_up))
                                 .themeColor(R.color.md_grey_700)
-                                .atEndOfThisCategory(true)
                                 .onClickListener(view -> CleanUpOnTaskRemovedActivity.start(getApplication()))
                                 .build(),
 
@@ -328,7 +326,6 @@ public class NavViewModel extends AndroidViewModel {
                                 .summary(resources.getString(R.string.feature_summary_recent_task_blur))
                                 .themeColor(R.color.md_cyan_300)
                                 .onClickListener(view -> RecentTaskBlurListActivity.start(getApplication()))
-                                .atEndOfThisCategory(true)
                                 .build(),
 
                         Tile.builder()
@@ -361,7 +358,7 @@ public class NavViewModel extends AndroidViewModel {
                                 .iconRes(R.drawable.ic_cloud_fill)
                                 .title(resources.getString(R.string.feature_title_push_delegate))
                                 .category(resources.getString(R.string.feature_category_notifiation))
-                                .themeColor(R.color.md_purple_400)
+                                .themeColor(R.color.md_grey_400)
                                 .disabled(!thanosManager.isServiceInstalled()
                                         || !thanosManager.hasFeature(BuildProp.THANOX_FEATURE_PUSH_DELEGATE))
                                 .onClickListener(view -> {
@@ -370,10 +367,8 @@ public class NavViewModel extends AndroidViewModel {
                         Tile.builder()
                                 .iconRes(R.drawable.ic_notification_badge_fill)
                                 .title(resources.getString(R.string.feature_title_light_on_notifiation))
-                                .category(resources.getString(R.string.feature_category_notifiation))
                                 .themeColor(R.color.md_red_500)
                                 .onClickListener(view -> ScreenOnNotificationActivity.start(getApplication()))
-                                .atEndOfThisCategory(true)
                                 .build(),
                         Tile.builder()
                                 .iconRes(R.drawable.ic_guide_fill)
@@ -392,7 +387,6 @@ public class NavViewModel extends AndroidViewModel {
                                 .themeColor(R.color.md_indigo_300)
                                 .disabled(!thanosManager.isServiceInstalled()
                                         || !thanosManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE))
-                                .atEndOfThisCategory(true)
                                 .onClickListener(view -> RuleListActivity.start(getApplication()))
                                 .build(),
                         Tile.builder()
