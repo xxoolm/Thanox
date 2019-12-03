@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import de.robv.android.xposed.XposedHelpers;
 import github.tornaco.android.thanos.core.util.Timber;
+import lombok.Synchronized;
 
 class UiAutomationManager extends IAccessibilityServiceClient.Stub {
 
@@ -24,6 +25,7 @@ class UiAutomationManager extends IAccessibilityServiceClient.Stub {
     private UiAutomationConnection connection;
 
     @SuppressLint("InlinedApi")
+    @Synchronized
     void connect() {
         Timber.v("connect");
         if (connectionId.get() != AccessibilityInteractionClient.NO_ID) {
@@ -34,6 +36,7 @@ class UiAutomationManager extends IAccessibilityServiceClient.Stub {
         connection.connect(this, UiAutomation.FLAG_DONT_SUPPRESS_ACCESSIBILITY_SERVICES);
     }
 
+    @Synchronized
     void disconnect() {
         Timber.v("disconnect");
         if (connectionId.get() != AccessibilityInteractionClient.NO_ID) {
@@ -45,6 +48,7 @@ class UiAutomationManager extends IAccessibilityServiceClient.Stub {
         }
         connection.disconnect();
         connectionId.set(AccessibilityInteractionClient.NO_ID);
+        connection = null;
     }
 
     public AccessibilityNodeInfo getRootInActiveWindow() {
