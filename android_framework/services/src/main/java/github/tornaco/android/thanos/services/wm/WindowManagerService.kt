@@ -5,10 +5,8 @@ import android.content.Context.WINDOW_SERVICE
 import android.os.IBinder
 import android.util.DisplayMetrics
 import android.util.Pair
-import android.view.IWindow
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityNodeInfo
-import android.view.accessibility.IAccessibilityInteractionConnection
 import github.tornaco.android.thanos.core.util.Noop
 import github.tornaco.android.thanos.core.util.Timber
 import github.tornaco.android.thanos.core.wm.IWindowManager
@@ -29,21 +27,6 @@ class WindowManagerService(private val s: S) : SystemService(), IWindowManager {
     fun onAccessibilityServiceAttach(server: AccessibilityManagerServiceProxy) {
         accessServiceProxy.set(server)
         Timber.w("onAccessibilityServiceAttach: $server")
-    }
-
-
-    fun onIAccessibilityInteractionConnectionAttach(
-        connection: IAccessibilityInteractionConnection,
-        token: IWindow,
-        userId: Int
-    ) {
-        Timber.d("onIAccessibilityInteractionConnectionAttach: $connection, $token, $userId")
-    }
-
-    fun onIAccessibilityInteractionConnectionRemoved(
-        token: IWindow
-    ) {
-        Timber.d("onIAccessibilityInteractionConnectionRemoved: $token")
     }
 
     override fun systemReady() {
