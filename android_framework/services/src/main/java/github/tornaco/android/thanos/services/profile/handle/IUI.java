@@ -64,7 +64,7 @@ interface IUI {
                             // Interval.
                             500,
                             // Retry.
-                            6);
+                            20);
         }
 
         @Override
@@ -75,7 +75,7 @@ interface IUI {
                             // Interval.
                             500,
                             // Retry.
-                            6);
+                            20);
         }
     }
 }

@@ -30,6 +30,7 @@ class UiAutomationManager extends IAccessibilityServiceClient.Stub {
         Timber.v("connect");
         if (connectionId.get() != AccessibilityInteractionClient.NO_ID) {
             // Already has a connection.
+            Timber.v("connect Already has a connection.");
             return;
         }
         connection = new UiAutomationConnection();
@@ -39,13 +40,16 @@ class UiAutomationManager extends IAccessibilityServiceClient.Stub {
     @Synchronized
     void disconnect() {
         Timber.v("disconnect");
-        if (connectionId.get() != AccessibilityInteractionClient.NO_ID) {
-            // Already has a connection.
+        if (connectionId.get() == AccessibilityInteractionClient.NO_ID) {
+            // no connection.
+            Timber.v("disconnect no connection");
             return;
         }
         if (connection == null) {
+            Timber.v("disconnect connection == null.");
             return;
         }
+        Timber.v("disconnect now.");
         connection.disconnect();
         connectionId.set(AccessibilityInteractionClient.NO_ID);
         connection = null;
@@ -61,6 +65,7 @@ class UiAutomationManager extends IAccessibilityServiceClient.Stub {
 
     @Override
     public void init(IAccessibilityServiceConnection connection, int id, IBinder iBinder) {
+        Timber.w("IAccessibilityServiceConnection init. %s %s %s", connection, id, iBinder);
         if (connection != null) {
             try {
                 connectionId.set(id);

@@ -624,8 +624,6 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             T.Settings.PREF_PROFILE_ENABLED.key,
             enable
         )
-
-        ensureAutomationState()
     }
 
     fun publishFacts(facts: Facts) {
