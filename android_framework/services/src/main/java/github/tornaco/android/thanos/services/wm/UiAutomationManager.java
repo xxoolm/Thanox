@@ -44,6 +44,7 @@ class UiAutomationManager extends IAccessibilityServiceClient.Stub {
             return;
         }
         connection.disconnect();
+        connectionId.set(AccessibilityInteractionClient.NO_ID);
     }
 
     public AccessibilityNodeInfo getRootInActiveWindow() {
