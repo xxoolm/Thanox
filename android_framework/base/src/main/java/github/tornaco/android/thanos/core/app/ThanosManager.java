@@ -142,6 +142,11 @@ public class ThanosManager {
         service.setLoggingEnabled(enable);
     }
 
+    @SneakyThrows
+    public boolean hasFeature(String feature) {
+        return service.hasFeature(feature);
+    }
+
     public static ThanosManager from(Context context) {
         return new ThanosManager(context, ThanosManagerNative.getDefault());
     }

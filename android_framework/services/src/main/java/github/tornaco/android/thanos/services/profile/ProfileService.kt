@@ -26,10 +26,7 @@ import github.tornaco.android.thanos.core.profile.*
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
 import github.tornaco.android.thanos.core.util.*
 import github.tornaco.android.thanos.core.util.collection.ArrayMap
-import github.tornaco.android.thanos.services.BackgroundThread
-import github.tornaco.android.thanos.services.S
-import github.tornaco.android.thanos.services.ThanosSchedulers
-import github.tornaco.android.thanos.services.ThanoxSystemService
+import github.tornaco.android.thanos.services.*
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
 import github.tornaco.android.thanos.services.app.EventBus
 import github.tornaco.android.thanos.services.n.NotificationHelper
@@ -81,10 +78,12 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                 .subscribe {
                     setupAutoConfigForNewInstalledAppsIfNeed(packageName)
 
-                    val pkgFacts = Facts()
-                    pkgFacts.put("pkgAdded", true)
-                    pkgFacts.put("pkgName", packageName)
-                    publishFacts(pkgFacts)
+                    if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
+                        val pkgFacts = Facts()
+                        pkgFacts.put("pkgAdded", true)
+                        pkgFacts.put("pkgName", packageName)
+                        publishFacts(pkgFacts)
+                    }
                 }
             compositeDisposable.add(disposable)
         }
@@ -96,11 +95,13 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             val from = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_FROM)
             val to = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO)
 
-            val pkgFacts = Facts()
-            pkgFacts.put("from", from)
-            pkgFacts.put("to", to)
-            pkgFacts.put("frontPkgChanged", true)
-            publishFacts(pkgFacts)
+            if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
+                val pkgFacts = Facts()
+                pkgFacts.put("from", from)
+                pkgFacts.put("to", to)
+                pkgFacts.put("frontPkgChanged", true)
+                publishFacts(pkgFacts)
+            }
         }
     }
 
@@ -113,11 +114,13 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             )
             val pkgName = intent.getStringExtra(T.Actions.ACTION_TASK_REMOVED_EXTRA_PACKAGE_NAME)
 
-            val pkgFacts = Facts()
-            pkgFacts.put("userId", userId)
-            pkgFacts.put("pkgName", pkgName)
-            pkgFacts.put("taskRemoved", true)
-            publishFacts(pkgFacts)
+            if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
+                val pkgFacts = Facts()
+                pkgFacts.put("userId", userId)
+                pkgFacts.put("pkgName", pkgName)
+                pkgFacts.put("taskRemoved", true)
+                publishFacts(pkgFacts)
+            }
         }
     }
 
@@ -130,24 +133,28 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             val pkgName =
                 intent.getStringExtra(T.Actions.ACTION_ACTIVITY_RESUMED_EXTRA_PACKAGE_NAME)
 
-            val pkgFacts = Facts()
-            pkgFacts.put("componentName", name)
-            pkgFacts.put("componentNameAsString", name.flattenToString())
-            pkgFacts.put("componentNameAsShortString", name.flattenToShortString())
-            pkgFacts.put("pkgName", pkgName)
-            pkgFacts.put("activityResumed", true)
-            publishFacts(pkgFacts)
+            if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
+                val pkgFacts = Facts()
+                pkgFacts.put("componentName", name)
+                pkgFacts.put("componentNameAsString", name.flattenToString())
+                pkgFacts.put("componentNameAsShortString", name.flattenToShortString())
+                pkgFacts.put("pkgName", pkgName)
+                pkgFacts.put("activityResumed", true)
+                publishFacts(pkgFacts)
+            }
         }
     }
 
     private val packageStoppedEventSubscriber = object : IEventSubscriber.Stub() {
         override fun onEvent(e: ThanosEvent) {
-            val intent = e.intent
-            val pkg = intent.getStringExtra(T.Actions.ACTION_PACKAGE_STOPPED_EXTRA_PACKAGE_NAME)
-            val pkgFacts = Facts()
-            pkgFacts.put("pkgKilled", true)
-            pkgFacts.put("pkgName", pkg)
-            publishFacts(pkgFacts)
+            if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
+                val intent = e.intent
+                val pkg = intent.getStringExtra(T.Actions.ACTION_PACKAGE_STOPPED_EXTRA_PACKAGE_NAME)
+                val pkgFacts = Facts()
+                pkgFacts.put("pkgKilled", true)
+                pkgFacts.put("pkgName", pkg)
+                publishFacts(pkgFacts)
+            }
         }
     }
 
@@ -177,6 +184,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
     private fun registerReceivers() {
         monitor.register(context, UserHandle.CURRENT, true, BackgroundThread.getHandler())
+
         EventBus.getInstance().registerEventSubscriber(
             IntentFilter(T.Actions.ACTION_FRONT_PKG_CHANGED),
             frontEventSubscriber
@@ -196,15 +204,17 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     private fun registerRules() {
-        rules.clear()
-        rulesMapping.clear()
-        rulesMapping.putAll(LocalRuleScanner().getRulesUnder(T.profileRulesDir()))
-        rulesMapping.forEach {
-            if (enabledRuleNameRepo.has(it.value.rule.name)) {
-                Timber.v("Register rule: ${it.key}")
-                enableRule(it.value.rule.name)
-            } else {
-                Timber.v("Not enabled rule: ${it.key}")
+        if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
+            rules.clear()
+            rulesMapping.clear()
+            rulesMapping.putAll(LocalRuleScanner().getRulesUnder(T.profileRulesDir()))
+            rulesMapping.forEach {
+                if (enabledRuleNameRepo.has(it.value.rule.name)) {
+                    Timber.v("Register rule: ${it.key}")
+                    enableRule(it.value.rule.name)
+                } else {
+                    Timber.v("Not enabled rule: ${it.key}")
+                }
             }
         }
     }
@@ -229,6 +239,9 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
     @ExecuteBySystemHandler
     private fun ensureAutomationStateInternal() {
+        if (!FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE_A11Y)) {
+            return
+        }
         Timber.v("ensureAutomationStateInternal")
         if (profileEnabled) {
             s.windowManagerService.ensureAutomationConnected()
@@ -399,6 +412,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun addRule(ruleJson: String?, callback: IRuleAddCallback?, format: Int) {
+        ensureProfileFeature()
         enforceCallingPermissions()
         Timber.v("addRule: $ruleJson, format is: $format")
         Objects.requireNonNull(ruleJson, "RuleInfo content is null")
@@ -474,6 +488,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun deleteRule(ruleName: String?) {
+        ensureProfileFeature()
+        enforceCallingPermissions()
         disableRule(ruleName)
         val r = rulesMapping.remove(ruleName!!)
         // Delete file.
@@ -500,6 +516,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun enableRule(ruleName: String?): Boolean {
+        ensureProfileFeature()
+        enforceCallingPermissions()
         val rule = rulesMapping[ruleName]
         return if (rule != null) {
             rules.register(rule.rule)
@@ -513,12 +531,16 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun disableRule(ruleName: String?): Boolean {
+        ensureProfileFeature()
+        enforceCallingPermissions()
         Timber.d("Disable rule: $ruleName")
         rules.unregister(ruleName)
         return enabledRuleNameRepo.remove(ruleName)
     }
 
     override fun checkRule(ruleString: String?, callback: IRuleCheckCallback?, format: Int) {
+        ensureProfileFeature()
+        enforceCallingPermissions()
         when (format) {
             ProfileManager.RULE_FORMAT_JSON -> checkJsonRule(ruleString, callback)
             ProfileManager.RULE_FORMAT_YAML -> checkYamlRule(ruleString, callback)
@@ -557,14 +579,17 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun isRuleEnabled(ruleName: String?): Boolean {
+        ensureProfileFeature()
         return enabledRuleNameRepo.has(ruleName!!)
     }
 
     override fun isRuleExists(ruleName: String?): Boolean {
+        ensureProfileFeature()
         return ruleName != null && rulesMapping.containsKey(ruleName)
     }
 
     override fun getAllRules(): Array<RuleInfo?> {
+        ensureProfileFeature()
         val res = arrayListOf<RuleInfo>()
         rulesMapping.values.forEach {
             it.ruleInfo.enabled = isRuleEnabled(it.ruleInfo.name)
@@ -574,6 +599,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun getEnabledRules(): Array<RuleInfo> {
+        ensureProfileFeature()
         val res = arrayListOf<RuleInfo>()
         rulesMapping.values.forEach {
             if (isRuleEnabled(it.rule.name)) {
@@ -589,6 +615,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     }
 
     override fun setProfileEnabled(enable: Boolean) {
+        ensureProfileFeature()
         enforceCallingPermissions()
         profileEnabled = enable
 
@@ -609,6 +636,9 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
     @ExecuteBySystemHandler
     fun publishFactsInternal(facts: Facts) {
+        if (!FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
+            return
+        }
         if (!isProfileEnabled) {
             Timber.v("Profile not enabled, won't fire any fact.")
             return
@@ -622,5 +652,11 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
     override fun asBinder(): IBinder {
         return Noop.notSupported()
+    }
+
+    private fun ensureProfileFeature() {
+        if (!FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
+            throw UnsupportedOperationException("No feature: ${BuildProp.THANOX_FEATURE_PROFILE}")
+        }
     }
 }

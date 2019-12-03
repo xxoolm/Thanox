@@ -46,4 +46,5 @@ interface IThanos {
     boolean isLoggingEnabled();
     void setLoggingEnabled(boolean enable);
 
+    boolean hasFeature(String feature);
 }

@@ -353,6 +353,7 @@ public class NavViewModel extends AndroidViewModel {
     }
 
     private void loadExpFeatures() {
+        ThanosManager thanosManager = ThanosManager.from(getApplication());
         Resources resources = getApplication().getResources();
         disposables.add(Observable
                 .just(
@@ -361,7 +362,8 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.feature_title_push_delegate))
                                 .category(resources.getString(R.string.feature_category_notifiation))
                                 .themeColor(R.color.md_purple_400)
-                                .disabled(true)
+                                .disabled(!thanosManager.isServiceInstalled()
+                                        || !thanosManager.hasFeature(BuildProp.THANOX_FEATURE_PUSH_DELEGATE))
                                 .onClickListener(view -> {
                                 })
                                 .build(),
@@ -377,6 +379,8 @@ public class NavViewModel extends AndroidViewModel {
                                 .iconRes(R.drawable.ic_guide_fill)
                                 .category(resources.getString(R.string.feature_category_ext))
                                 .title(resources.getString(R.string.module_activity_trampoline_app_name))
+                                .disabled(!thanosManager.isServiceInstalled()
+                                        || !thanosManager.hasFeature(BuildProp.THANOX_FEATURE_APP_TRAMPOLINE))
                                 .summary("\uD83C\uDF6D \uD83C\uDF6D \uD83C\uDF6D")
                                 .themeColor(R.color.md_green_a700)
                                 .onClickListener(view -> ActivityTrampolineActivity.start(getApplication()))
@@ -386,6 +390,8 @@ public class NavViewModel extends AndroidViewModel {
                                 .title(resources.getString(R.string.module_profile_feature_name))
                                 .summary(resources.getString(R.string.module_profile_feature_summary))
                                 .themeColor(R.color.md_indigo_300)
+                                .disabled(!thanosManager.isServiceInstalled()
+                                        || !thanosManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE))
                                 .atEndOfThisCategory(true)
                                 .onClickListener(view -> RuleListActivity.start(getApplication()))
                                 .build(),
@@ -393,6 +399,8 @@ public class NavViewModel extends AndroidViewModel {
                                 .iconRes(R.drawable.ic_loader_2_fill)
                                 .category(resources.getString(R.string.feature_category_power_save))
                                 .title(resources.getString(R.string.feature_title_smart_app_standby))
+                                .disabled(!thanosManager.isServiceInstalled()
+                                        || !thanosManager.hasFeature(BuildProp.THANOX_FEATURE_APP_SMART_STAND_BY))
                                 .summary(resources.getString(R.string.feature_summary_smart_app_standby))
                                 .themeColor(R.color.md_amber_500)
                                 .onClickListener(view -> SmartStandbyActivity.start(getApplication()))

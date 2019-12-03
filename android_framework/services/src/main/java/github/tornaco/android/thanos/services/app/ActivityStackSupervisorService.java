@@ -44,6 +44,7 @@ import github.tornaco.android.thanos.core.util.Noop;
 import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.ErrorSafetyHandler;
+import github.tornaco.android.thanos.services.FeatureManager;
 import github.tornaco.android.thanos.services.S;
 import github.tornaco.android.thanos.services.ThanosSchedulers;
 import github.tornaco.android.thanos.services.ThanoxSystemService;
@@ -169,7 +170,10 @@ public class ActivityStackSupervisorService extends ThanoxSystemService implemen
         return intent;
     }
 
-    public boolean updateActivityStartingIntentInternal(Intent intent) {
+    private boolean updateActivityStartingIntentInternal(Intent intent) {
+        if (!FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_APP_TRAMPOLINE)) {
+            return false;
+        }
         if (!activityTrampolineEnabled) {
             return false;
         }

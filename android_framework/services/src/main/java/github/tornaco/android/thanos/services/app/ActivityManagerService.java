@@ -72,6 +72,7 @@ import github.tornaco.android.thanos.core.util.Rxs;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.core.util.YesNoDontKnow;
 import github.tornaco.android.thanos.services.BootStrap;
+import github.tornaco.android.thanos.services.FeatureManager;
 import github.tornaco.android.thanos.services.S;
 import github.tornaco.android.thanos.services.ThanosSchedulers;
 import github.tornaco.android.thanos.services.ThanoxSystemService;
@@ -1353,6 +1354,9 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @ExecuteBySystemHandler
     private void doSmartStandByForEnabledPkgsIfNeed(String reason) {
+        if (!FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_APP_SMART_STAND_BY)) {
+            return;
+        }
         Timber.d("doSmartStandByForEnabledPkgsIfNeed, reason: %s", reason);
         if (!smartStandByEnabled) {
             Timber.v("doSmartStandByForEnabledPkgsIfNeed, smartStandByEnabled is false");

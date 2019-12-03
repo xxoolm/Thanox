@@ -88,6 +88,10 @@ public interface IThanos extends android.os.IInterface
     @Override public void setLoggingEnabled(boolean enable) throws android.os.RemoteException
     {
     }
+    @Override public boolean hasFeature(java.lang.String feature) throws android.os.RemoteException
+    {
+      return false;
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -307,6 +311,16 @@ public interface IThanos extends android.os.IInterface
           _arg0 = (0!=data.readInt());
           this.setLoggingEnabled(_arg0);
           reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_hasFeature:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _result = this.hasFeature(_arg0);
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
           return true;
         }
         default:
@@ -754,6 +768,27 @@ public interface IThanos extends android.os.IInterface
           _data.recycle();
         }
       }
+      @Override public boolean hasFeature(java.lang.String feature) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(feature);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_hasFeature, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().hasFeature(feature);
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       public static github.tornaco.android.thanos.core.IThanos sDefaultImpl;
     }
     static final int TRANSACTION_getServiceManager = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -777,6 +812,7 @@ public interface IThanos extends android.os.IInterface
     static final int TRANSACTION_whoAreYou = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
     static final int TRANSACTION_isLoggingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
     static final int TRANSACTION_setLoggingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
+    static final int TRANSACTION_hasFeature = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.IThanos impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -809,4 +845,5 @@ public interface IThanos extends android.os.IInterface
   public java.lang.String whoAreYou() throws android.os.RemoteException;
   public boolean isLoggingEnabled() throws android.os.RemoteException;
   public void setLoggingEnabled(boolean enable) throws android.os.RemoteException;
+  public boolean hasFeature(java.lang.String feature) throws android.os.RemoteException;
 }

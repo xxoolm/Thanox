@@ -36,6 +36,14 @@ buildConfig {
 
     // Url
     buildConfigField 'String', 'THANOX_URL_DOCS_PROFILE', serviceProps.getProperty("thanox.url.docs.profile")
+
+    // Features
+    buildConfigField 'String', 'THANOX_FEATURE_PROFILE_A11Y', serviceProps.getProperty("thanox.feature.profile.accessibility")
+    buildConfigField 'String', 'THANOX_FEATURE_PROFILE', serviceProps.getProperty("thanox.feature.profile")
+    buildConfigField 'String', 'THANOX_FEATURE_APP_SMART_STAND_BY', serviceProps.getProperty("thanox.feature.app.smart_standby")
+    buildConfigField 'String', 'THANOX_FEATURE_APP_TRAMPOLINE', serviceProps.getProperty("thanox.feature.app.trampoline")
+    buildConfigField 'String', 'THANOX_FEATURE_APP_SMART_SERVICE_STOPPER', serviceProps.getProperty("thanox.feature.app.smart_service_stopper")
+    buildConfigField 'String', 'THANOX_FEATURE_PUSH_DELEGATE', serviceProps.getProperty("thanox.feature.push.delegate")
 }
 
 

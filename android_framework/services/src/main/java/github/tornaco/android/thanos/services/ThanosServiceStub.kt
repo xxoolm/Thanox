@@ -154,4 +154,8 @@ internal class ThanosServiceStub(
     override fun isLoggingEnabled(): Boolean {
         return BootStrap.isLoggingEnabled()
     }
+
+    override fun hasFeature(feature: String?): Boolean {
+        return FeatureManager.hasFeature(feature)
+    }
 }

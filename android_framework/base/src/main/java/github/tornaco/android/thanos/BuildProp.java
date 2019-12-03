@@ -11,9 +11,9 @@ public final class BuildProp
 
    public static final String THANOS_APP_PKG_NAME = "github.tornaco.android.thanos";
 
-   public static final String FINGERPRINT = "thanos@tornaco:68d7e9b1-e98e-3129-938c-2f9b902adadb";
+   public static final String FINGERPRINT = "thanos@tornaco:5d5a86b9-e7cb-3267-b307-818c4e19d81d";
 
-   public static final java.util.Date BUILD_DATE = new java.util.Date(1575350025363L);
+   public static final java.util.Date BUILD_DATE = new java.util.Date(1575352805587L);
 
    public static final String ACTIVITY_APP_LOCK_VERIFIER = "github.tornaco.practice.honeycomb.locker.ui.verify.VerifyActivity";
 
@@ -34,5 +34,17 @@ public final class BuildProp
    public static final String EXTRA_PERMISSION_REQUEST = "github.tornaco.thanos.pm.extra.REQUEST_PERMISSIONS";
 
    public static final String THANOX_URL_DOCS_PROFILE = "https://tornaco.github.io/Thanox/2019-12-02-Profile/";
+
+   public static final String THANOX_FEATURE_PROFILE_A11Y = "thanox.feature.profile.accessibility";
+
+   public static final String THANOX_FEATURE_PROFILE = "thanox.feature.profile";
+
+   public static final String THANOX_FEATURE_APP_SMART_STAND_BY = "thanox.feature.app.smart_standby";
+
+   public static final String THANOX_FEATURE_APP_TRAMPOLINE = "thanox.feature.app.trampoline";
+
+   public static final String THANOX_FEATURE_APP_SMART_SERVICE_STOPPER = "thanox.feature.app.smart_service_stopper";
+
+   public static final String THANOX_FEATURE_PUSH_DELEGATE = "thanox.feature.push.delegate";
 
 }
