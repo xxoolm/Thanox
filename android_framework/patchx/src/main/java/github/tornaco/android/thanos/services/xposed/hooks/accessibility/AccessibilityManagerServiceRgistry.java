@@ -34,7 +34,6 @@ public class AccessibilityManagerServiceRgistry implements IXposedHook {
         if (PackageManager.packageNameOfAndroid().equals(lpparam.packageName)) {
             hookAccessibilityManagerServiceInit(lpparam);
             hookAddAccessibilityInteractionConnection(lpparam);
-            hookRemoveAccessibilityInteractionConnection(lpparam);
         }
     }
 
