@@ -11,7 +11,6 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.IAccessibilityInteractionConnection
 import github.tornaco.android.thanos.core.util.Noop
 import github.tornaco.android.thanos.core.util.Timber
-import github.tornaco.android.thanos.core.util.collection.ArrayMap
 import github.tornaco.android.thanos.core.wm.IWindowManager
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.SystemService
@@ -25,40 +24,36 @@ class WindowManagerService(private val s: S) : SystemService(), IWindowManager {
 
     private var accessServiceProxy: AtomicReference<AccessibilityManagerServiceProxy> =
         AtomicReference()
-
-    private val connectionMap = ArrayMap<IBinder, IAccessibilityInteractionConnection>()
+    private val automation = UiAutomationManager()
 
     fun onAccessibilityServiceAttach(server: AccessibilityManagerServiceProxy) {
         accessServiceProxy.set(server)
         Timber.w("onAccessibilityServiceAttach: $server")
     }
 
+
     fun onIAccessibilityInteractionConnectionAttach(
-        token: IWindow?,
-        connection: IAccessibilityInteractionConnection?,
+        connection: IAccessibilityInteractionConnection,
+        token: IWindow,
         userId: Int
     ) {
         Timber.d("onIAccessibilityInteractionConnectionAttach: $connection, $token, $userId")
-        if (connection == null || token == null) return
-        Timber.d("Add windowToken-as-binder: ${token.asBinder()}")
-        connectionMap[token.asBinder()] = connection
     }
 
     fun onIAccessibilityInteractionConnectionRemoved(
-        token: IWindow?
+        token: IWindow
     ) {
         Timber.d("onIAccessibilityInteractionConnectionRemoved: $token")
-        if (token == null) return
-        Timber.d("Remove windowToken-as-binder: ${token.asBinder()}")
-        connectionMap.remove(token.asBinder())
     }
 
     override fun systemReady() {
         super.systemReady()
+        automation.connect()
     }
 
     override fun shutdown() {
         super.shutdown()
+        automation.disconnect()
     }
 
     fun findAndClickViewByText(
@@ -74,9 +69,19 @@ class WindowManagerService(private val s: S) : SystemService(), IWindowManager {
     fun findAndClickViewByTextInternal(text: String, targetComponent: ComponentName): Boolean {
         if (!isSystemReady) return false
         if (s.activityStackSupervisor.currentFrontComponentName != targetComponent) return false
-        if (connectionMap.isEmpty)return false
-        val connection = connectionMap.valueAt(0)
-        return false
+        val info = automation.rootInActiveWindow
+        Timber.v("findAndClickViewByText: $info")
+        if (info == null) return false
+        val list = info.findAccessibilityNodeInfosByText(text)
+        Timber.v("findAndClickViewByText.findAccessibilityNodeInfosByText: $list")
+        var res = false
+        list?.forEach {
+            Timber.d("Hit! findAndClickViewByText.performAction: $it")
+            if (it.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
+                res = true
+            }
+        }
+        return res
     }
 
     override fun getScreenSize(): IntArray {

@@ -16,8 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import de.robv.android.xposed.XposedHelpers;
 import github.tornaco.android.thanos.core.util.Timber;
 
-// This will cause a11y apps not available.
-@Deprecated
 class UiAutomationManager extends IAccessibilityServiceClient.Stub {
 
     private final AtomicInteger connectionId = new AtomicInteger(AccessibilityInteractionClient.NO_ID);
