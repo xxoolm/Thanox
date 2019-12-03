@@ -31,10 +31,15 @@ public class AppThemePreferences extends Observable {
     public Theme getTheme(@NonNull Context context) {
         ThanosManager thanos = ThanosManager.from(context);
         if (!thanos.isServiceInstalled()) return Theme.Light;
-        return Theme.valueOf(
-                thanos.getPrefManager().getString(PREF_KEY_APP_THEME,
-                        Theme.Light.name()));
+        try {
+            return Theme.valueOf(
+                    thanos.getPrefManager().getString(PREF_KEY_APP_THEME,
+                            Theme.Light.name()));
+        } catch (Throwable e) {
+            return Theme.Light;
+        }
     }
+
 
     public void setTheme(@NonNull Context context, @NonNull Theme theme) {
         ThanosManager thanos = ThanosManager.from(context);
@@ -47,8 +52,12 @@ public class AppThemePreferences extends Observable {
     public String getIconPack(@NonNull Context context, String defaultValue) {
         ThanosManager thanos = ThanosManager.from(context);
         if (!thanos.isServiceInstalled()) return defaultValue;
-        return thanos.getPrefManager()
-                .getString(PREF_KEY_APP_ICON_PACK, defaultValue);
+        try {
+            return thanos.getPrefManager()
+                    .getString(PREF_KEY_APP_ICON_PACK, defaultValue);
+        } catch (Throwable e) {
+            return defaultValue;
+        }
     }
 
     public void setIconPack(@NonNull Context context, @NonNull String iconPkg) {

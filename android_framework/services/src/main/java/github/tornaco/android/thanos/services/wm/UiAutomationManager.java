@@ -2,6 +2,8 @@ package github.tornaco.android.thanos.services.wm;
 
 import android.accessibilityservice.IAccessibilityServiceClient;
 import android.accessibilityservice.IAccessibilityServiceConnection;
+import android.annotation.SuppressLint;
+import android.app.UiAutomation;
 import android.app.UiAutomationConnection;
 import android.graphics.Region;
 import android.os.IBinder;
@@ -20,12 +22,13 @@ class UiAutomationManager extends IAccessibilityServiceClient.Stub {
 
     private final AtomicInteger connectionId = new AtomicInteger(AccessibilityInteractionClient.NO_ID);
 
+    @SuppressLint("InlinedApi")
     void connect() {
         if (connectionId.get() != AccessibilityInteractionClient.NO_ID) {
             // Already has a connection.
             return;
         }
-        new UiAutomationConnection().connect(this, 0);
+        new UiAutomationConnection().connect(this, UiAutomation.FLAG_DONT_SUPPRESS_ACCESSIBILITY_SERVICES);
     }
 
     void disconnect() {
