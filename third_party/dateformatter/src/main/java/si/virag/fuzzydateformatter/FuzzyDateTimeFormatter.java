@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import java.util.Calendar;
 import java.util.Date;
 
+// https://github.com/izacus/FuzzyDateFormatter
 public class FuzzyDateTimeFormatter {
 
     private final static int SECONDS = 1;

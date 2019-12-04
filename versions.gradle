@@ -77,15 +77,19 @@ auto_logging.plugin = "github.tornaco.gradle.plugin.auto.logging:auto_logging_gr
 deps.auto_logging = auto_logging
 
 def lombok = [:]
+// https://github.com/rzwitserloot/lombok
 lombok.core = "org.projectlombok:lombok:$versions.lombok"
 deps.lombok = lombok
 
 def xposed = [:]
+// https://github.com/rovo89/Xposed
 xposed.api = "de.robv.android.xposed:api:$versions.xposed"
 deps.xposed = xposed
 
 def logging = [:]
+// https://github.com/JakeWharton/timber
 logging.timber = "com.jakewharton.timber:timber:$versions.timber"
+// https://github.com/osama-raddad/FireCrasher
 logging.firecrasher = "com.github.osama-raddad:FireCrasher:$versions.firecrasher"
 logging.slf4j_android = "org.slf4j:slf4j-android:$versions.slf4j_android"
 deps.logging = logging
@@ -105,6 +109,7 @@ ext.build_versions = build_versions
 deps.guava = "com.google.guava:guava:$versions.guava@jar"
 deps.gson = "com.google.code.gson:gson:$versions.gson@jar"
 
+// https://github.com/j-easy/easy-rules
 def rules = [:]
 rules.core = "org.jeasy:easy-rules-core:$versions.rules"
 rules.mvel = "org.jeasy:easy-rules-mvel:$versions.rules"
@@ -141,6 +146,7 @@ deps.glide = glide
 
 deps.junit = "junit:junit:$versions.junit"
 
+// https://github.com/PhilJay/MPAndroidChart
 deps.chart = "com.github.PhilJay:MPAndroidChart:$versions.chart"
 
 // https://github.com/PSDev/LicensesDialog

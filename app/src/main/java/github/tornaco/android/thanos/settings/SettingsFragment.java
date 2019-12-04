@@ -383,6 +383,76 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         null,
                         new ApacheSoftwareLicense20()));
 
+        notices.addNotice(
+                new Notice(
+                        "MPAndroidChart",
+                        "https://github.com/PhilJay/MPAndroidChart",
+                        "Copyright 2019 Philipp Jahoda",
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "easy-rules",
+                        "https://github.com/j-easy/easy-rules",
+                        "Copyright (c) 2019 Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)",
+                        new MITLicense()));
+
+        notices.addNotice(
+                new Notice(
+                        "easy-rules",
+                        "https://github.com/JakeWharton/timber",
+                        "Copyright 2013 Jake Wharton",
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "FireCrasher",
+                        "https://github.com/osama-raddad/FireCrasher",
+                        "Copyright 2019, Osama Raddad",
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "Xposed",
+                        "https://github.com/rovo89/Xposed",
+                        null,
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "lombok",
+                        "https://github.com/rzwitserloot/lombok",
+                        null,
+                        new MITLicense()));
+
+        notices.addNotice(
+                new Notice(
+                        "MaterialBadgeTextView",
+                        "https://github.com/matrixxun/MaterialBadgeTextView",
+                        null,
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "FuzzyDateFormatter",
+                        "https://github.com/izacus/FuzzyDateFormatter",
+                        "Copyright 2015 Jernej Virag",
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "MaterialSearchView",
+                        "https://github.com/MiguelCatalan/MaterialSearchView",
+                        "Copyright 2015 Miguel Catalan Bañuls",
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "zip4j",
+                        "https://github.com/srikanth-lingala/zip4j",
+                        null,
+                        new ApacheSoftwareLicense20()));
+
         new LicensesDialog.Builder(Objects.requireNonNull(getActivity()))
                 .setNotices(notices)
                 .setIncludeOwnLicense(true)
