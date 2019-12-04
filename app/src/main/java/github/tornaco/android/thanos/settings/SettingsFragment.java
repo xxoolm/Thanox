@@ -47,6 +47,7 @@ import github.tornaco.permission.requester.RequiresPermission;
 import github.tornaco.permission.requester.RuntimePermissions;
 import io.reactivex.Completable;
 import io.reactivex.schedulers.Schedulers;
+import rx2.android.schedulers.AndroidSchedulers;
 
 @RuntimePermissions
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -233,16 +234,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 @Override
                                 public void onSuccess() {
                                     if (getActivity() == null) return;
-                                    new AlertDialog.Builder(getActivity())
-                                            .setMessage(getString(R.string.pre_message_restore_success))
-                                            .setCancelable(false)
-                                            .setPositiveButton(android.R.string.ok, null)
-                                            .show();
+                                    Completable.fromAction(() ->
+                                            new AlertDialog.Builder(getActivity())
+                                                    .setMessage(getString(R.string.pre_message_restore_success))
+                                                    .setCancelable(false)
+                                                    .setPositiveButton(android.R.string.ok, null)
+                                                    .show())
+                                            .subscribeOn(AndroidSchedulers.mainThread())
+                                            .subscribe();
                                 }
 
                                 @Override
                                 public void onFail(String errMsg) {
-                                    Toast.makeText(fragmentActivity.getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
+                                    Completable.fromAction(() ->
+                                            Toast.makeText(
+                                                    fragmentActivity.getApplicationContext(),
+                                                    errMsg, Toast.LENGTH_LONG).show())
+                                            .subscribeOn(AndroidSchedulers.mainThread())
+                                            .subscribe();
                                 }
                             }, uri));
         }
