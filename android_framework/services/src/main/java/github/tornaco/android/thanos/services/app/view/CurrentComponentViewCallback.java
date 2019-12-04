@@ -8,6 +8,7 @@ import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.Res;
 import github.tornaco.android.thanos.core.annotation.NonNull;
 import github.tornaco.android.thanos.core.app.AppResources;
+import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.util.ClipboardUtils;
 import lombok.Getter;
 
@@ -37,7 +38,9 @@ public class CurrentComponentViewCallback implements CurrentComponentView.Callba
 
     @Override
     public void onSwipeDirection(@NonNull CurrentComponentView.SwipeDirection direction) {
-
+        ThanosManager.from(context)
+                .getActivityStackSupervisor()
+                .setShowCurrentComponentViewEnabled(false);
     }
 
     @Override
