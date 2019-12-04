@@ -1,21 +1,21 @@
 <resources>
-    <string name="service_default_notification_channel">默认频道</string>
-    <string name="service_silence_notification_channel">安静频道</string>
+    <string name="service_default_notification_channel">Default</string>
+    <string name="service_silence_notification_channel">Quiet</string>
 
     <string name="service_notification_override_thanos">Thanox</string>
 
-    <string name="service_notification_title_bg_restrict_process_changed">可清理应用</string>
-    <string name="service_notification_content_bg_restrict_process_changed">%1$s等%2$s个应用待清理</string>
-    <string name="service_notification_bg_tasks_clean_complete">已经清理部分后台任务</string>
-    <string name="service_notification_action_bg_restrict_process_changed_clear">清理</string>
-    <string name="service_notification_action_bg_restrict_process_changed_view">详情</string>
+    <string name="service_notification_title_bg_restrict_process_changed">Process to clear</string>
+    <string name="service_notification_content_bg_restrict_process_changed">%1$s and %2$s background apps can be clean up</string>
+    <string name="service_notification_bg_tasks_clean_complete">Some app background process has been cleaned</string>
+    <string name="service_notification_action_bg_restrict_process_changed_clear">Clean up</string>
+    <string name="service_notification_action_bg_restrict_process_changed_view">Details</string>
 
-    <string name="service_notification_title_op_start_remind">%1$s正在使用%2$s</string>
+    <string name="service_notification_title_op_start_remind">%1$s is using op %2$s</string>
 
-    <string name="service_op_label_camera">相机</string>
-    <string name="service_op_label_record_audio">录音</string>
-    <string name="service_op_label_play_audio">播放音频</string>
-    <string name="service_op_label_location">GPS获取位置信息</string>
+    <string name="service_op_label_camera">Camera</string>
+    <string name="service_op_label_record_audio">Record audio</string>
+    <string name="service_op_label_play_audio">Play audio</string>
+    <string name="service_op_label_location">Location</string>
 
-    <string name="service_toast_current_component_copied_to_clipboard">内容已复制到剪贴板</string>
+    <string name="service_toast_current_component_copied_to_clipboard">Content has been copied to clipboard</string>
 </resources>
