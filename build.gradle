@@ -1,3 +1,6 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -50,8 +53,55 @@ androidGitVersion {
 }
 
 ext {
-    thanosApplicationId = "github.tornaco.android.thanos"
+    thanosApplicationId = getCurrentFlavor() == "row" ? "github.tornaco.android.thanos.pro" : "github.tornaco.android.thanos"
+    println "### CurrentVariant: ${getCurrentVariant()} ###"
+    println "### CurrentFlavor: ${getCurrentFlavor()} ###"
+    println "### thanosApplicationId: $thanosApplicationId ###"
     lockerApplicationId = "github.tornaco.practice.honeycomb.locker"
     versionCode = androidGitVersion.code() as int
     versionName = androidGitVersion.name()
+}
+
+def getCurrentVariant() {
+    Gradle gradle = getGradle()
+    String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+    println "tskReqStr: ${tskReqStr}"
+
+    Pattern pattern
+
+    if (tskReqStr.contains("assemble"))
+        pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
+    else
+        pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
+
+    Matcher matcher = pattern.matcher(tskReqStr)
+
+    if (matcher.find()) {
+        return matcher.group(2).toLowerCase()
+    } else {
+        println "NO MATCH FOUND"
+        return ""
+    }
+}
+
+def getCurrentFlavor() {
+    Gradle gradle = getGradle()
+    String  tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+
+    Pattern pattern;
+
+    if( tskReqStr.contains( "assemble" ) )
+        pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
+    else
+        pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
+
+    Matcher matcher = pattern.matcher( tskReqStr )
+
+    if( matcher.find() )
+        return matcher.group(1).toLowerCase()
+    else
+    {
+        println "NO MATCH FOUND"
+        return "";
+    }
 }
