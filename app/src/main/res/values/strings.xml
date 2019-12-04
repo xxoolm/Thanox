@@ -27,7 +27,7 @@
     <string name="badge_app_running">Running</string>
     <string name="badge_app_idle">Idle</string>
 
-    <string name="boost_status_running_apps"> apps is running</string>
+    <string name="boost_status_running_apps">&#160;apps is running</string>
     <string name="boost_status_blocked_start_count">Blocked %s app start requests</string>
 
     <string name="secure_privacy_enabled_apps">apps has been restricted</string>
