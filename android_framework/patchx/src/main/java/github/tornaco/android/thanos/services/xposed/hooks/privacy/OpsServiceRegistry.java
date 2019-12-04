@@ -14,6 +14,7 @@ import github.tornaco.android.thanos.core.annotation.Keep;
 import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService;
 import github.tornaco.android.thanos.core.util.OsUtils;
+import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BootStrap;
 import github.tornaco.android.thanos.services.apihint.Beta;
@@ -31,7 +32,7 @@ import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._28;
 import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 
 @Beta
-@XposedHook(targetSdkVersion = {_21, _22, _23, _24, _25, _26, _27, _28, _29}, active = true)
+@XposedHook(targetSdkVersion = {_21, _22, _23, _24, _25, _26, _27, _28, _29})
 @Keep
 public class OpsServiceRegistry implements IXposedHook {
     private IAppOpsService ops =
@@ -89,6 +90,9 @@ public class OpsServiceRegistry implements IXposedHook {
 
                             int code = (int) param.args[0];
                             int uid = (int) param.args[1];
+
+                            if(PkgUtils.isSystemOrPhoneOrShell(uid)) return;
+
                             String pkgName = (String) param.args[2];
                             int mode = ops.checkOperation(code, uid, pkgName);
                             if (mode == AppOpsManager.MODE_IGNORED) {
@@ -114,11 +118,20 @@ public class OpsServiceRegistry implements IXposedHook {
 
                             boolean opsEnabled = ops.isOpsEnabled();
                             if (!opsEnabled) {
+                                // Report.
+                                ops.onStartOp(
+                                        (IBinder) param.args[0],
+                                        (int) param.args[1],
+                                        (int) param.args[2],
+                                        (String) param.args[3]);
                                 return;
                             }
 
                             int code = (int) param.args[1];
                             int uid = (int) param.args[2];
+
+                            if(PkgUtils.isSystemOrPhoneOrShell(uid)) return;
+
                             String pkgName = (String) param.args[3];
                             int mode = ops.checkOperation(code, uid, pkgName);
                             if (mode == AppOpsManager.MODE_IGNORED) {
@@ -156,6 +169,9 @@ public class OpsServiceRegistry implements IXposedHook {
 
                             int code = (int) param.args[0];
                             int uid = (int) param.args[2];
+
+                            if(PkgUtils.isSystemOrPhoneOrShell(uid)) return;
+
                             String pkgName = (String) param.args[3];
                             int mode = ops.checkOperation(code, uid, pkgName);
                             if (mode == AppOpsManager.MODE_IGNORED) {
@@ -186,6 +202,9 @@ public class OpsServiceRegistry implements IXposedHook {
 
                             int code = (int) param.args[0];
                             int uid = (int) param.args[1];
+
+                            if (PkgUtils.isSystemOrPhoneOrShell(uid)) return;
+
                             String pkgName = (String) param.args[2];
                             int mode = ops.checkOperation(code, uid, pkgName);
                             if (mode == AppOpsManager.MODE_IGNORED) {

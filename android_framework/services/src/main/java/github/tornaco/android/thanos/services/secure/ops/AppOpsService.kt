@@ -66,15 +66,14 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
     @Throws(RemoteException::class)
     override fun checkOperation(code: Int, uid: Int, packageName: String): Int {
+        Timber.v("checkOperation: $packageName $code")
         // IllegalArgumentException: Bad operation #71
         return opSettingsRepo["$packageName-$code"]?.toInt() ?: AppOpsManager.MODE_ALLOWED
     }
 
     @Throws(RemoteException::class)
     override fun isOpsEnabled(): Boolean {
-        // Ops is not supported to toggle.
-        // it is work with system ops.
-        return Noop.notSupported()
+        return true
     }
 
     @Throws(RemoteException::class)
