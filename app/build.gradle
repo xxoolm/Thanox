@@ -96,6 +96,9 @@ dependencies {
     // Chart
     implementation deps.chart
 
+    // Licensesdialog
+    implementation deps.licensesdialog
+
     // Arch
     annotationProcessor deps.lifecycle.compiler
 

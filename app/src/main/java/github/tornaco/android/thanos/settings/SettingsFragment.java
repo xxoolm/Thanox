@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import de.psdev.licensesdialog.LicensesDialog;
+import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
+import de.psdev.licensesdialog.licenses.MITLicense;
+import de.psdev.licensesdialog.model.Notice;
+import de.psdev.licensesdialog.model.Notices;
 import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
@@ -201,6 +206,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        Preference licensePref = findPreference(getString(R.string.key_open_source_license));
+        licensePref.setOnPreferenceClickListener(preference12 -> {
+            showLicenseDialog();
+            return true;
+        });
+
         // Market feature control.
         // Wish more row users.
         themePref.setVisible(!ThanosApp.isPrc() || DonateSettings.isDonated(getContext()));
@@ -283,6 +294,100 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Intent intent = new Intent("android.intent.action.OPEN_DOCUMENT");
         intent.setType("*/*");
         startActivityForResult(intent, REQUEST_CODE_RESTORE_FILE_PICK);
+    }
+
+    private void showLicenseDialog() {
+        final Notices notices = new Notices();
+
+        notices.addNotice(
+                new Notice(
+                        "Thanox",
+                        "https://github.com/Tornaco/Thanox",
+                        null,
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "X-APM",
+                        "https://github.com/Tornaco/X-APM",
+                        null,
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "Lombok",
+                        "https://projectlombok.org/",
+                        " Copyright © 2009-2018 The Project Lombok Authors",
+                        new MITLicense()));
+
+        notices.addNotice(
+                new Notice(
+                        "guava",
+                        "https://github.com/google/guava",
+                        null,
+                        new MITLicense()));
+
+        notices.addNotice(
+                new Notice(
+                        "retrofit",
+                        "https://github.com/square/retrofit",
+                        "Copyright 2013 Square, Inc.",
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "RxJava",
+                        "https://github.com/ReactiveX/RxJava",
+                        "Copyright (c) 2016-present, RxJava Contributors.",
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "RxAndroid",
+                        "https://github.com/ReactiveX/RxAndroid",
+                        "Copyright 2015 The RxAndroid authors",
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "RecyclerView-FastScroll",
+                        "https://github.com/timusus/RecyclerView-FastScroll",
+                        null,
+                        new MITLicense()));
+
+        notices.addNotice(
+                new Notice(
+                        "glide",
+                        "https://github.com/bumptech/glide",
+                        null,
+                        new GlideLicense()));
+
+        notices.addNotice(
+                new Notice(
+                        "material-searchview",
+                        "https://github.com/Shahroz16/material-searchview",
+                        " Copyright (C) 2016 Tim Malseed",
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "PatternLockView",
+                        "https://github.com/aritraroy/PatternLockView",
+                        null,
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "PinLockView",
+                        "https://github.com/aritraroy/PinLockView",
+                        null,
+                        new ApacheSoftwareLicense20()));
+
+        new LicensesDialog.Builder(Objects.requireNonNull(getActivity()))
+                .setNotices(notices)
+                .setIncludeOwnLicense(true)
+                .build()
+                .show();
     }
 
     @Override

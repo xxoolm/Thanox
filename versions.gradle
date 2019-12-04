@@ -46,6 +46,7 @@ versions.auto_logging_plugin = "1.0.0"
 versions.chart = "v3.1.0"
 versions.rules = "3.3.0"
 versions.slf4j_android = "1.7.29"
+versions.licensesdialog = "2.1.0"
 ext.versions = versions
 
 def deps = [:]
@@ -142,6 +143,9 @@ deps.junit = "junit:junit:$versions.junit"
 
 deps.chart = "com.github.PhilJay:MPAndroidChart:$versions.chart"
 
+// https://github.com/PSDev/LicensesDialog
+deps.licensesdialog = "de.psdev.licensesdialog:licensesdialog:$versions.licensesdialog"
+
 ext.deps = deps
 
 def addRepos(RepositoryHandler handler) {
@@ -149,7 +153,9 @@ def addRepos(RepositoryHandler handler) {
     handler.jcenter()
     handler.maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     handler.maven { url 'https://jitpack.io' }
-    handler.maven { url "$rootProject.projectDir/gradle_plugins/auto_logging_gradle_plugin/prebuilt_repo" }
+    handler.maven {
+        url "$rootProject.projectDir/gradle_plugins/auto_logging_gradle_plugin/prebuilt_repo"
+    }
 
 }
 

@@ -88,6 +88,10 @@
                 app:persistent="false"
                 app:summary="@string/pref_summary_icon_maker_remix_icon"
                 app:title="@string/pref_title_icon_maker_remix_icon" />
+        <Preference
+                app:key="@string/key_open_source_license"
+                app:persistent="false"
+                app:title="@string/pref_title_open_source_license" />
     </PreferenceCategory>
 
 </PreferenceScreen>
