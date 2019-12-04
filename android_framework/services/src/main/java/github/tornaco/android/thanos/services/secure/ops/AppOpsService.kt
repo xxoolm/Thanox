@@ -10,15 +10,16 @@ import github.tornaco.android.thanos.core.app.AppResources
 import github.tornaco.android.thanos.core.persist.RepoFactory
 import github.tornaco.android.thanos.core.persist.StringMapRepo
 import github.tornaco.android.thanos.core.persist.StringSetRepo
+import github.tornaco.android.thanos.core.pref.IPrefChangeListener
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
-import github.tornaco.android.thanos.core.util.DevNull
 import github.tornaco.android.thanos.core.util.Noop
 import github.tornaco.android.thanos.core.util.Timber
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.ThanoxSystemService
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
 import lombok.SneakyThrows
+import util.ObjectsUtils
 
 class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
@@ -27,6 +28,8 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
     private lateinit var opTemplateRepo: StringMapRepo
     private lateinit var opSettingsRepo: StringMapRepo
+
+    private var opsEnabled = false
 
     private lateinit var opRemindNotificationHelper: OpRemindNotificationHelper
 
@@ -49,8 +52,33 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
             appResources.getStringArray(Res.Strings.OP_REMIND_WHITELIST)
         this.opRemindWhiteList.addAll(opWhiteList)
         Timber.d("opRemindWhiteList: ${opRemindWhiteList.toTypedArray().contentToString()}")
+        initPrefs()
     }
 
+    private fun initPrefs() {
+        readPrefs()
+        listenToPrefs()
+    }
+
+    private fun readPrefs() {
+        val preferenceManagerService = s.preferenceManagerService
+        this.opsEnabled = preferenceManagerService.getBoolean(
+            T.Settings.PREF_OPS_ENABLED.key,
+            T.Settings.PREF_OPS_ENABLED.defaultValue
+        )
+    }
+
+    private fun listenToPrefs() {
+        val listener = object : IPrefChangeListener.Stub() {
+            override fun onPrefChanged(key: String) {
+                if (ObjectsUtils.equals(T.Settings.PREF_OPS_ENABLED.key, key)) {
+                    Timber.i("Pref changed, reload.")
+                    readPrefs()
+                }
+            }
+        }
+        s.preferenceManagerService.registerSettingsChangeListener(listener)
+    }
 
     @Throws(RemoteException::class)
     override fun setMode(code: Int, uid: Int, packageName: String, mode: Int) {
@@ -73,15 +101,19 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
     @Throws(RemoteException::class)
     override fun isOpsEnabled(): Boolean {
-        return true
+        return opsEnabled
     }
 
     @Throws(RemoteException::class)
     override fun setOpsEnabled(enabled: Boolean) {
-        // Ops is not supported to toggle.
-        // it is work with system ops.
-        val res: Boolean = Noop.notSupported()
-        DevNull.accept(res)
+        enforceCallingPermissions()
+        opsEnabled = enabled
+
+        val preferenceManagerService = s.preferenceManagerService
+        preferenceManagerService.putBoolean(
+            T.Settings.PREF_OPS_ENABLED.key,
+            enabled
+        )
     }
 
     @Throws(RemoteException::class)

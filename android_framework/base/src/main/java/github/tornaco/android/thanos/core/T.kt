@@ -228,6 +228,9 @@ object T {
         @JvmField
         val PREF_PROFILE_ENABLED =
             ThanosFeature("PREF_PROFILE_ENABLED", false)
+
+        @JvmField
+        val PREF_OPS_ENABLED = ThanosFeature("PREF_OPS_ENABLED", false)
     }
 
     object Actions {
