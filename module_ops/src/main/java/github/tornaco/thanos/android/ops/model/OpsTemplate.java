@@ -2,6 +2,7 @@ package github.tornaco.thanos.android.ops.model;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
+
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager;
 import github.tornaco.thanos.android.ops.R;
 import lombok.AllArgsConstructor;
@@ -208,11 +209,6 @@ public class OpsTemplate {
             R.drawable.ic_settings_fill,
             6
     );
-
-    public static final OpsTemplate[] ALL_TEMPLATES = new OpsTemplate[]{
-            LOCATION_TEMPLATE, PERSONAL_TEMPLATE, MESSAGING_TEMPLATE,
-            MEDIA_TEMPLATE, DEVICE_TEMPLATE, RUN_IN_BACKGROUND_TEMPLATE
-    };
 
     // this template contains all permissions grouped by templates
     public static final OpsTemplate[] ALL_PERMS_TEMPLATES = new OpsTemplate[]{

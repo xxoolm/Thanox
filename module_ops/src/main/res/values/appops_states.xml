@@ -20,164 +20,164 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string-array name="module_ops_app_ops_summaries">
-        <item>"粗略位置"</item>
-        <item>"精确位置"</item>
-        <item>"GPS"</item>
-        <item>"振动"</item>
-        <item>"读取联系人"</item>
-        <item>"修改联系人"</item>
-        <item>"读取通话记录"</item>
-        <item>"修改通话记录"</item>
-        <item>"读取日历"</item>
-        <item>"修改日历"</item>
-        <item>"WLAN扫描"</item>
-        <item>"通知"</item>
-        <item>"手机网络扫描"</item>
-        <item>"拨打电话"</item>
-        <item>"读取短信"</item>
-        <item>"编写短信"</item>
-        <item>"接收短信"</item>
-        <item>"接收紧急短信"</item>
-        <item>"接收彩信"</item>
-        <item>"接收 WAP PUSH 消息"</item>
-        <item>"发送短信"</item>
-        <item>"读取 ICC 短信"</item>
-        <item>"写入 ICC 短信"</item>
-        <item>"修改设置"</item>
-        <item>"在最上层显示内容"</item>
-        <item>"访问通知"</item>
-        <item>"相机"</item>
-        <item>"录制音频"</item>
-        <item>"播放音频"</item>
-        <item>"读取剪贴板内容"</item>
-        <item>"修改剪贴板内容"</item>
-        <item>"媒体按钮"</item>
-        <item>"音频焦点"</item>
-        <item>"主音量"</item>
-        <item>"语音音量"</item>
-        <item>"铃声音量"</item>
-        <item>"媒体音量"</item>
-        <item>"闹钟音量"</item>
-        <item>"通知音量"</item>
-        <item>"蓝牙音量"</item>
-        <item>"保持唤醒状态"</item>
-        <item>"监测位置"</item>
-        <item>"监控高电耗位置信息服务"</item>
-        <item>"获取使用情况统计信息"</item>
-        <item>"将麦克风静音或取消静音"</item>
-        <item>"显示问候语"</item>
-        <item>"投影媒体"</item>
-        <item>"激活 VPN"</item>
-        <item>"写入壁纸"</item>
-        <item>"辅助结构"</item>
-        <item>"辅助屏幕截图"</item>
-        <item>"读取手机状态"</item>
-        <item>"添加语音邮件"</item>
-        <item>"使用 SIP"</item>
-        <item>"处理拨出电话"</item>
-        <item>"指纹"</item>
-        <item>"身体传感器"</item>
-        <item>"读取小区广播"</item>
-        <item>"模拟位置"</item>
-        <item>"读取存储空间"</item>
-        <item>"写入存储空间"</item>
-        <item>"开启屏幕"</item>
-        <item>"获取帐号"</item>
-        <item>"在后台运行"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
+        <item>coarse location</item>
+        <item>fine location</item>
+        <item>GPS</item>
+        <item>vibrate</item>
+        <item>read contacts</item>
+        <item>modify contacts</item>
+        <item>read call log</item>
+        <item>modify call log</item>
+        <item>read calendar</item>
+        <item>modify calendar</item>
+        <item>wi-fi scan</item>
+        <item>notification</item>
+        <item>cell scan</item>
+        <item>call phone</item>
+        <item>read SMS</item>
+        <item>write SMS</item>
+        <item>receive SMS</item>
+        <item>receive emergency SMS</item>
+        <item>receive MMS</item>
+        <item>receive WAP push</item>
+        <item>send SMS</item>
+        <item>read ICC SMS</item>
+        <item>write ICC SMS</item>
+        <item>modify settings</item>
+        <item>draw on top</item>
+        <item>access notifications</item>
+        <item>camera</item>
+        <item>record audio</item>
+        <item>play audio</item>
+        <item>read clipboard</item>
+        <item>modify clipboard</item>
+        <item>media buttons</item>
+        <item>audio focus</item>
+        <item>master volume</item>
+        <item>voice volume</item>
+        <item>ring volume</item>
+        <item>media volume</item>
+        <item>alarm volume</item>
+        <item>notification volume</item>
+        <item>bluetooth volume</item>
+        <item>keep awake</item>
+        <item>monitor location</item>
+        <item>monitor high power location</item>
+        <item>get usage stats</item>
+        <item>mute/unmute microphone</item>
+        <item>show toast</item>
+        <item>project media</item>
+        <item>activate VPN</item>
+        <item>write wallpaper</item>
+        <item>assist structure</item>
+        <item>assist screenshot</item>
+        <item>read phone state</item>
+        <item>add voicemail</item>
+        <item>use sip</item>
+        <item>process outgoing call</item>
+        <item>fingerprint</item>
+        <item>body sensors</item>
+        <item>read cell broadcasts</item>
+        <item>mock location</item>
+        <item>read storage</item>
+        <item>write storage</item>
+        <item>turn on screen</item>
+        <item>get accounts</item>
+        <item>run in background</item>
+        <item>accessibility volume</item>
+        <item>Read phone number</item>
+        <item>Install packages</item>
+        <item>Picture in picture</item>
+        <item>Instant app start foreground</item>
+        <item>Answer incoming phone calls</item>
+        <item>Run jobs when in background</item>
+        <item>Change Wi-Fi connectivity state</item>
+        <item>Request package deletion through package installer</item>
+        <item>Bind an accessibility service</item>
+        <item>Continue handover of a call from another app</item>
+        <item>Create and Manage IPsec Tunnels</item>
+        <item>Any app start foreground service</item>
+        <item>Blue tooth scan</item>
     </string-array>
     <string-array name="module_ops_app_ops_labels">
-        <item>"位置"</item>
-        <item>"位置"</item>
-        <item>"位置"</item>
-        <item>"振动"</item>
-        <item>"读取联系人"</item>
-        <item>"修改联系人"</item>
-        <item>"读取通话记录"</item>
-        <item>"修改通话记录"</item>
-        <item>"读取日历"</item>
-        <item>"修改日历"</item>
-        <item>"位置"</item>
-        <item>"发布通知"</item>
-        <item>"位置"</item>
-        <item>"拨打电话"</item>
-        <item>"读取短信/彩信"</item>
-        <item>"编写短信/彩信"</item>
-        <item>"接收短信/彩信"</item>
-        <item>"接收短信/彩信"</item>
-        <item>"接收短信/彩信"</item>
-        <item>"接收短信/彩信"</item>
-        <item>"发送短信/彩信"</item>
-        <item>"读取短信/彩信"</item>
-        <item>"编写短信/彩信"</item>
-        <item>"修改设置"</item>
-        <item>"在最上层显示内容"</item>
-        <item>"访问通知"</item>
-        <item>"相机"</item>
-        <item>"录制音频"</item>
-        <item>"播放音频"</item>
-        <item>"读取剪贴板内容"</item>
-        <item>"修改剪贴板内容"</item>
-        <item>"媒体按钮"</item>
-        <item>"音频焦点"</item>
-        <item>"主音量"</item>
-        <item>"语音音量"</item>
-        <item>"铃声音量"</item>
-        <item>"媒体音量"</item>
-        <item>"闹钟音量"</item>
-        <item>"通知音量"</item>
-        <item>"蓝牙音量"</item>
-        <item>"保持唤醒状态"</item>
-        <item>"位置"</item>
-        <item>"位置信息"</item>
-        <item>"获取使用情况统计信息"</item>
-        <item>"将麦克风静音或取消静音"</item>
-        <item>"显示问候语"</item>
-        <item>"投影媒体"</item>
-        <item>"激活 VPN"</item>
-        <item>"写入壁纸"</item>
-        <item>"辅助结构"</item>
-        <item>"辅助屏幕截图"</item>
-        <item>"读取手机状态"</item>
-        <item>"添加语音邮件"</item>
-        <item>"使用 SIP"</item>
-        <item>"处理拨出电话"</item>
-        <item>"指纹"</item>
-        <item>"身体传感器"</item>
-        <item>"读取小区广播"</item>
-        <item>"模拟位置"</item>
-        <item>"读取存储空间"</item>
-        <item>"写入存储空间"</item>
-        <item>"开启屏幕"</item>
-        <item>"获取帐号"</item>
-        <item>"在后台运行"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
-        <item>"无障碍功能音量"</item>
+        <item>Location</item>
+        <item>Location</item>
+        <item>Location</item>
+        <item>Vibrate</item>
+        <item>Read contacts</item>
+        <item>Modify contacts</item>
+        <item>Read call log</item>
+        <item>Modify call log</item>
+        <item>Read calendar</item>
+        <item>Modify calendar</item>
+        <item>Location</item>
+        <item>Post notification</item>
+        <item>Location</item>
+        <item>Call phone</item>
+        <item>Read SMS/MMS</item>
+        <item>Write SMS/MMS</item>
+        <item>Receive SMS/MMS</item>
+        <item>Receive SMS/MMS</item>
+        <item>Receive SMS/MMS</item>
+        <item>Receive SMS/MMS</item>
+        <item>Send SMS/MMS</item>
+        <item>Read SMS/MMS</item>
+        <item>Write SMS/MMS</item>
+        <item>Modify settings</item>
+        <item>Draw on top</item>
+        <item>Access notifications</item>
+        <item>Camera</item>
+        <item>Record audio</item>
+        <item>Play audio</item>
+        <item>Read clipboard</item>
+        <item>Modify clipboard</item>
+        <item>Media buttons</item>
+        <item>Audio focus</item>
+        <item>Master volume</item>
+        <item>Voice volume</item>
+        <item>Ring volume</item>
+        <item>Media volume</item>
+        <item>Alarm volume</item>
+        <item>Notification volume</item>
+        <item>Bluetooth volume</item>
+        <item>Keep awake</item>
+        <item>Location</item>
+        <item>Location</item>
+        <item>Get usage stats</item>
+        <item>Mute/unmute microphone</item>
+        <item>Show toast</item>
+        <item>Project media</item>
+        <item>Activate VPN</item>
+        <item>Write wallpaper</item>
+        <item>Assist structure</item>
+        <item>Assist screenshot</item>
+        <item>Read phone state</item>
+        <item>Add voicemail</item>
+        <item>Use sip</item>
+        <item>Process outgoing call</item>
+        <item>Fingerprint</item>
+        <item>Body sensors</item>
+        <item>Read cell broadcasts</item>
+        <item>Mock location</item>
+        <item>Read storage</item>
+        <item>Write storage</item>
+        <item>Turn on screen</item>
+        <item>Get accounts</item>
+        <item>Run in background</item>
+        <item>Accessibility volume</item>
+        <item>Read phone number</item>
+        <item>Install packages</item>
+        <item>Picture in picture</item>
+        <item>Instant app start foreground</item>
+        <item>Answer incoming phone calls</item>
+        <item>Run jobs when in background</item>
+        <item>Change Wi-Fi connectivity state</item>
+        <item>Request package deletion through package installer</item>
+        <item>Bind an accessibility service</item>
+        <item>Continue handover of a call from another app</item>
+        <item>Create and Manage IPsec Tunnels</item>
+        <item>Any app start foreground service</item>
+        <item>Blue tooth scan</item>
     </string-array>
 
     <integer-array name="module_ops_op_icon">
@@ -245,13 +245,13 @@
         <item>@drawable/module_ops_ic_smartphone_line</item>
         <item>@drawable/module_ops_ic_account_circle_fill</item>
         <item>@drawable/moduel_ops_ic_checkbox_blank_circle_fill</item>
+        <item>@drawable/module_ops_ic_accessibility</item>
+        <item>@drawable/module_ops_ic_call</item>
         <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/module_ops_ic_smartphone_line</item>
         <item>@drawable/ic_settings_fill</item>
-        <item>@drawable/ic_settings_fill</item>
-        <item>@drawable/ic_settings_fill</item>
-        <item>@drawable/ic_settings_fill</item>
-        <item>@drawable/ic_settings_fill</item>
-        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/module_ops_ic_call</item>
+        <item>@drawable/moduel_ops_ic_checkbox_blank_circle_fill</item>
         <item>@drawable/ic_settings_fill</item>
         <item>@drawable/ic_settings_fill</item>
         <item>@drawable/ic_settings_fill</item>

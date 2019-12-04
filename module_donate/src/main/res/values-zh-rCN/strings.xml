@@ -1,8 +1,8 @@
 <resources>
-    <string name="module_donate_title">Donate</string>
+    <string name="module_donate_title">捐赠</string>
 
-    <string name="module_donate_donated">I have donated</string>
-    <string name="module_donate_donated_available">Donated available</string>
+    <string name="module_donate_donated">我已经捐赠</string>
+    <string name="module_donate_donated_available">捐赠后可用</string>
 
     <string name="module_donate_suggestion_alipay_red_packet">领取支付宝红包</string>
     <string name="module_donate_suggestion_summary_alipay_red_packet">感谢支持%1$s 你也可以去捐赠页面点击，每天都可以哦！</string>

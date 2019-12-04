@@ -3,18 +3,18 @@
     <string name="switch_on_text">On</string>
     <string name="switch_off_text">Off</string>
 
-    <string name="app_category_all">全部</string>
-    <string name="app_category_system">系统普通</string>
-    <string name="app_category_system_uid">系统核心</string>
-    <string name="app_category_3rd">用户安装</string>
-    <string name="app_category_media">系统媒体</string>
-    <string name="app_category_phone">系统电话</string>
+    <string name="app_category_all">All</string>
+    <string name="app_category_system">System</string>
+    <string name="app_category_system_uid">SystemCore</string>
+    <string name="app_category_3rd">3-rd</string>
+    <string name="app_category_media">SystemMedia</string>
+    <string name="app_category_phone">SystemPhoto</string>
     <string name="app_category_web_provider">WebView provider</string>
 
-    <string name="common_menu_title_select_all">全部</string>
-    <string name="common_menu_title_un_select_all">全不</string>
-    <string name="common_menu_title_search">搜索</string>
+    <string name="common_menu_title_select_all">All yes</string>
+    <string name="common_menu_title_un_select_all">All no</string>
+    <string name="common_menu_title_search">search</string>
 
-    <string name="app_state_disabled">已冻结</string>
+    <string name="app_state_disabled">Disabled</string>
 
 </resources>
