@@ -27,7 +27,7 @@
     <string name="badge_app_running">Running</string>
     <string name="badge_app_idle">Idle</string>
 
-    <string name="boost_status_running_apps">apps is running</string>
+    <string name="boost_status_running_apps"> apps is running</string>
     <string name="boost_status_blocked_start_count">Blocked %s app start requests</string>
 
     <string name="secure_privacy_enabled_apps">apps has been restricted</string>
@@ -173,7 +173,7 @@
     <string name="badge_paid_app">Paid</string>
 
     <string name="title_app_notice">Be careful!</string>
-    <string name="message_app_notice">In some cases, your device might no longer boot after installing Xposed.\n\nIf you never heard about \"soft brick\" and \"bootloop\" before or if you don\'t know how to recover from such a situation, do <b>NOT</b> install Xposed!\n\nIn any case, having a recent backup is highly recommended.</string>
+    <string name="message_app_notice">In some cases, your device might no longer boot after installing Thanox.\n\nIf you never heard about \"soft brick\" and \"bootloop\" before or if you don\'t know how to recover from such a situation, do <b>NOT</b> install Thanox!\n\nIn any case, having a recent backup is highly recommended.</string>
 
     <string name="menu_title_feature_desc">Feature wiki</string>
 </resources>
