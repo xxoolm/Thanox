@@ -58,6 +58,7 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
                             if (thanos == null) return;
                             IPrivacyManager priv = thanos.getPrivacyManager();
                             if (priv == null) return;
+                            if (!priv.isPrivacyEnabled()) return;
 
                             boolean enabledUid = priv.isUidPrivacyDataCheat(uid);
                             if (!enabledUid) return;
@@ -93,6 +94,7 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
                             if (thanos == null) return;
                             IPrivacyManager priv = thanos.getPrivacyManager();
                             if (priv == null) return;
+                            if (!priv.isPrivacyEnabled()) return;
 
                             boolean enabledUid = priv.isUidPrivacyDataCheat(uid);
                             if (!enabledUid) return;
