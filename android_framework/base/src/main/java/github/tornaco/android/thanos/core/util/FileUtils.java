@@ -47,7 +47,6 @@ public class FileUtils {
         public void onProgress(float progress);
     }
 
-
     public static void copy(String spath, String dpath, ProgressListener listener) throws IOException {
         FileInputStream fis = new FileInputStream(spath);
         FileOutputStream fos = new FileOutputStream(dpath);

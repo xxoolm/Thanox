@@ -35,7 +35,6 @@ import github.tornaco.android.thanos.apps.AppDetailsActivity;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.profile.ProfileManager;
-import github.tornaco.android.thanos.core.util.FileUtils;
 import github.tornaco.android.thanos.core.util.ObjectToStringUtils;
 import github.tornaco.android.thanos.core.util.Optional;
 import github.tornaco.android.thanos.core.util.Timber;
@@ -219,35 +218,33 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return;
             }
 
+            if (getActivity() == null) return;
+
             Uri uri = data.getData();
             if (uri == null) {
+                Toast.makeText(getActivity(), "uri == null", Toast.LENGTH_LONG).show();
                 Timber.e("No uri.");
                 return;
             }
 
-            File file = FileUtils.getFileForUri(Objects.requireNonNull(getContext()), uri);
-            if (file == null) {
-                Timber.e("No file");
-                return;
-            }
-
             Optional.ofNullable(getActivity())
-                    .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity).performRestore(new SettingsViewModel.RestoreListener() {
-                        @Override
-                        public void onSuccess() {
-                            if (getActivity() == null) return;
-                            new AlertDialog.Builder(getActivity())
-                                    .setMessage(getString(R.string.pre_message_restore_success))
-                                    .setCancelable(false)
-                                    .setPositiveButton(android.R.string.ok, null)
-                                    .show();
-                        }
+                    .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity)
+                            .performRestore(new SettingsViewModel.RestoreListener() {
+                                @Override
+                                public void onSuccess() {
+                                    if (getActivity() == null) return;
+                                    new AlertDialog.Builder(getActivity())
+                                            .setMessage(getString(R.string.pre_message_restore_success))
+                                            .setCancelable(false)
+                                            .setPositiveButton(android.R.string.ok, null)
+                                            .show();
+                                }
 
-                        @Override
-                        public void onFail(String errMsg) {
-                            Toast.makeText(fragmentActivity.getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
-                        }
-                    }, file));
+                                @Override
+                                public void onFail(String errMsg) {
+                                    Toast.makeText(fragmentActivity.getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
+                                }
+                            }, uri));
         }
     }
 

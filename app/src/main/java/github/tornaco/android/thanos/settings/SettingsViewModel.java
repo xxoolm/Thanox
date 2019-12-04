@@ -1,13 +1,21 @@
 package github.tornaco.android.thanos.settings;
 
 import android.app.Application;
+import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
 import androidx.lifecycle.AndroidViewModel;
+
 import com.google.common.io.Files;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.backup.IBackupCallback;
 import github.tornaco.android.thanos.core.backup.IFileDescriptorConsumer;
@@ -18,24 +26,35 @@ import github.tornaco.android.thanos.core.util.Timber;
 import io.reactivex.Observable;
 import rx2.android.schedulers.AndroidSchedulers;
 
-import java.io.File;
-import java.io.IOException;
-
 public class SettingsViewModel extends AndroidViewModel {
 
     public SettingsViewModel(@NonNull Application application) {
         super(application);
     }
 
-    void performRestore(RestoreListener listener, File zipFile) {
+    @SuppressWarnings("UnstableApiUsage")
+    void performRestore(RestoreListener listener, Uri uri) {
         ThanosManager.from(getApplication())
                 .ifServiceInstalled(thanosManager -> {
                     File tmpDir = new File(getApplication().getCacheDir(), "restore_tmp");
 
                     try {
-                        File tmpZipFile = new File(tmpDir, zipFile.getName());
+                        File tmpZipFile = new File(tmpDir,
+                                String.format("tem_restore_%s.zip", System.currentTimeMillis()));
                         Files.createParentDirs(tmpZipFile);
-                        Files.copy(zipFile, tmpZipFile);
+
+                        InputStream inputStream = getApplication()
+                                .getContentResolver()
+                                .openInputStream(uri);
+
+                        if (inputStream == null) {
+                            listener.onFail("Input stream is null..." + uri);
+                            return;
+                        }
+
+                        byte[] buffer = new byte[inputStream.available()];
+                        inputStream.read(buffer);
+                        Files.write(buffer, tmpZipFile);
 
                         ParcelFileDescriptor pfd = ParcelFileDescriptor.open(tmpZipFile, ParcelFileDescriptor.MODE_READ_ONLY);
                         thanosManager.getBackupAgent().performRestore(pfd, null, null, new IBackupCallback.Stub() {
