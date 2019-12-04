@@ -98,6 +98,32 @@
         <item>Create and Manage IPsec Tunnels</item>
         <item>Any app start foreground service</item>
         <item>Blue tooth scan</item>
+
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+
+        <item>获取已安装应用</item>
     </string-array>
 
     <string-array name="module_ops_app_ops_labels" tools:ignore="InconsistentArrays">
@@ -179,5 +205,31 @@
         <item>Create and Manage IPsec Tunnels</item>
         <item>Any app start foreground service</item>
         <item>Blue tooth scan</item>
+
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+
+        <item>获取已安装应用列表</item>
     </string-array>
 </resources>

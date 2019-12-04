@@ -98,7 +98,34 @@
         <item>Create and Manage IPsec Tunnels</item>
         <item>Any app start foreground service</item>
         <item>Blue tooth scan</item>
+
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+
+        <item>Get installed apps</item>
     </string-array>
+
     <string-array name="module_ops_app_ops_labels">
         <item>Location</item>
         <item>Location</item>
@@ -178,6 +205,32 @@
         <item>Create and Manage IPsec Tunnels</item>
         <item>Any app start foreground service</item>
         <item>Blue tooth scan</item>
+
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+        <item>Placeholder</item>
+
+        <item>Get installed apps</item>
     </string-array>
 
     <integer-array name="module_ops_op_icon">
@@ -259,5 +312,32 @@
         <item>@drawable/ic_settings_fill</item>
         <item>@drawable/ic_settings_fill</item>
         <item>@drawable/ic_settings_fill</item>
+
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+        <item>@drawable/ic_settings_fill</item>
+
+        <item>@drawable/ic_apps_fill</item>
+
     </integer-array>
 </resources>

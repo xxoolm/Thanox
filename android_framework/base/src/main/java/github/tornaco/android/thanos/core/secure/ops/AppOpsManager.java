@@ -441,10 +441,37 @@ public class AppOpsManager {
      * @hide
      */
     public static final int OP_BLUETOOTH_SCAN = 77;
+
+    public static final int OP_PLACE_HOLDER_1 = 78;
+    public static final int OP_PLACE_HOLDER_2 = 79;
+    public static final int OP_PLACE_HOLDER_3 = 80;
+    public static final int OP_PLACE_HOLDER_4 = 81;
+    public static final int OP_PLACE_HOLDER_5 = 82;
+    public static final int OP_PLACE_HOLDER_6 = 83;
+    public static final int OP_PLACE_HOLDER_7 = 84;
+    public static final int OP_PLACE_HOLDER_8 = 85;
+    public static final int OP_PLACE_HOLDER_9 = 86;
+    public static final int OP_PLACE_HOLDER_10 = 87;
+    public static final int OP_PLACE_HOLDER_11 = 88;
+    public static final int OP_PLACE_HOLDER_12 = 89;
+    public static final int OP_PLACE_HOLDER_13 = 90;
+    public static final int OP_PLACE_HOLDER_14 = 91;
+    public static final int OP_PLACE_HOLDER_15 = 92;
+    public static final int OP_PLACE_HOLDER_16 = 93;
+    public static final int OP_PLACE_HOLDER_17 = 94;
+    public static final int OP_PLACE_HOLDER_18 = 95;
+    public static final int OP_PLACE_HOLDER_19 = 96;
+    public static final int OP_PLACE_HOLDER_20 = 97;
+    public static final int OP_PLACE_HOLDER_21 = 98;
+    public static final int OP_PLACE_HOLDER_22 = 99;
+    public static final int OP_PLACE_HOLDER_23 = 100;
+
+    public static final int OP_GET_INSTALLED_PACKAGES = 101;
+
     /**
      * @hide
      */
-    public static final int _NUM_OP = 78;
+    public static final int _NUM_OP = 102;
 
     /**
      * Access to coarse location information.
@@ -1022,6 +1049,32 @@ public class AppOpsManager {
             OP_MANAGE_IPSEC_TUNNELS,            // MANAGE_IPSEC_HANDOVERS
             OP_START_FOREGROUND,                // START_FOREGROUND
             OP_COARSE_LOCATION,                 // BLUETOOTH_SCAN
+
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+            OP_PLACE_HOLDER_1,
+
+            OP_GET_INSTALLED_PACKAGES,
     };
 
     /**
@@ -1106,6 +1159,32 @@ public class AppOpsManager {
             OPSTR_MANAGE_IPSEC_TUNNELS,
             OPSTR_START_FOREGROUND,
             OPSTR_BLUETOOTH_SCAN,
+
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+
+            "thanox:get_installed_packages",
     };
 
     /**
@@ -1191,6 +1270,32 @@ public class AppOpsManager {
             "MANAGE_IPSEC_TUNNELS",
             "START_FOREGROUND",
             "BLUETOOTH_SCAN",
+
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+            "PLACEHOLDER",
+
+            "GET_INSTALLED_PACKAGES",
     };
 
     /**
@@ -1276,6 +1381,32 @@ public class AppOpsManager {
             null, // no permission for OP_MANAGE_IPSEC_TUNNELS
             ManifestCompat.permission.FOREGROUND_SERVICE,
             null, // no permission for OP_BLUETOOTH_SCAN
+
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+
+            null,
     };
 
     /**
@@ -1362,6 +1493,32 @@ public class AppOpsManager {
             null, // MANAGE_IPSEC_TUNNELS
             null, // START_FOREGROUND
             null, // maybe should be UserManager.DISALLOW_SHARE_LOCATION, //BLUETOOTH_SCAN
+
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+
+            null,
     };
 
     /**
@@ -1447,6 +1604,32 @@ public class AppOpsManager {
             false, // MANAGE_IPSEC_HANDOVERS
             false, // START_FOREGROUND
             true, // BLUETOOTH_SCAN
+
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+
+            true,
     };
 
     /**
@@ -1531,6 +1714,32 @@ public class AppOpsManager {
             AppOpsManager.MODE_ERRORED,  // MANAGE_IPSEC_TUNNELS
             AppOpsManager.MODE_ALLOWED,  // OP_START_FOREGROUND
             AppOpsManager.MODE_ALLOWED,  // OP_BLUETOOTH_SCAN
+
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+
+            AppOpsManager.MODE_ALLOWED,
     };
 
     /**
@@ -1619,6 +1828,33 @@ public class AppOpsManager {
             false, // MANAGE_IPSEC_TUNNELS
             false, // START_FOREGROUND
             false, // BLUETOOTH_SCAN
+
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+
+            false,
+
     };
 
     /**

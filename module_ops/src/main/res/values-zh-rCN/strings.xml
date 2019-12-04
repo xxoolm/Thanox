@@ -6,6 +6,7 @@
     <string name="module_ops_category_device">设备</string>
     <string name="module_ops_category_bg">后台</string>
     <string name="module_ops_category_remaining">其他</string>
+    <string name="module_ops_category_thanox">Thanox</string>
 
     <string name="module_ops_title_op_remind_apps">受监视的应用</string>
 

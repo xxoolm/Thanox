@@ -6,6 +6,7 @@
     <string name="module_ops_category_device">Device</string>
     <string name="module_ops_category_bg">Background</string>
     <string name="module_ops_category_remaining">Others</string>
+    <string name="module_ops_category_thanox">Thanox</string>
 
     <string name="module_ops_title_op_remind_apps">Watching apps</string>
 

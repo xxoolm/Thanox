@@ -170,6 +170,14 @@ public class OpsTemplate {
             5
     );
 
+    public static final OpsTemplate THANOX_TEMPLATE = new OpsTemplate(
+            new int[]{AppOpsManager.OP_GET_INSTALLED_PACKAGES},
+            new boolean[]{},
+            R.string.module_ops_category_thanox,
+            R.string.module_ops_category_thanox,
+            R.drawable.ic_shield_cross_line,
+            6
+    );
 
     // this template should contain all ops which are not part of any other template in
     // ALL_TEMPLATES
@@ -207,13 +215,15 @@ public class OpsTemplate {
             R.string.module_ops_category_remaining,
             R.string.module_ops_category_remaining,
             R.drawable.ic_settings_fill,
-            6
+            7
     );
+
 
     // this template contains all permissions grouped by templates
     public static final OpsTemplate[] ALL_PERMS_TEMPLATES = new OpsTemplate[]{
             LOCATION_TEMPLATE, PERSONAL_TEMPLATE, MESSAGING_TEMPLATE,
             MEDIA_TEMPLATE, DEVICE_TEMPLATE, RUN_IN_BACKGROUND_TEMPLATE,
+            THANOX_TEMPLATE,
             REMAINING_TEMPLATE
     };
 }

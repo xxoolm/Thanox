@@ -4,6 +4,11 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.ParceledListSlice;
 import android.os.Binder;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -12,16 +17,24 @@ import github.tornaco.android.thanos.core.IThanos;
 import github.tornaco.android.thanos.core.app.ThanosManagerNative;
 import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.secure.IPrivacyManager;
+import github.tornaco.android.thanos.core.secure.ops.AppOpsManager;
+import github.tornaco.android.thanos.core.secure.ops.IAppOpsService;
+import github.tornaco.android.thanos.core.util.ArrayUtils;
 import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.apihint.Beta;
 import github.tornaco.android.thanos.services.xposed.IXposedHook;
 import github.tornaco.xposed.annotation.XposedHook;
 
-import java.util.Arrays;
-import java.util.Set;
-
-import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._21;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._22;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._23;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._24;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._25;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._26;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._27;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._28;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 
 /**
  * Created by guohao4 on 2017/10/31.
@@ -56,18 +69,36 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
 
                             IThanos thanos = ThanosManagerNative.getDefault();
                             if (thanos == null) return;
+
+                            IAppOpsService ops = thanos.getAppOpsService();
+                            if (ops != null && ops.isOpsEnabled()) {
+                                String[] pkgNames = thanos.getPkgManager()
+                                        .getPkgNameForUid(uid);
+                                if (!ArrayUtils.isEmpty(pkgNames)) for (String pkg : pkgNames) {
+                                    int mode = ops.checkOperation(
+                                            AppOpsManager.OP_GET_INSTALLED_PACKAGES,
+                                            uid,
+                                            pkg);
+                                    if (mode == AppOpsManager.MODE_IGNORED) {
+                                        Timber.v("getInstalledPackages, Op denied for %s OP_GET_INSTALLED_PACKAGES", pkg);
+                                        ParceledListSlice<PackageInfo> empty = new ParceledListSlice<>(new ArrayList<>(0));
+                                        param.setResult(empty);
+                                        break;
+                                    }
+                                }
+                            }
+
                             IPrivacyManager priv = thanos.getPrivacyManager();
-                            if (priv == null) return;
-                            if (!priv.isPrivacyEnabled()) return;
+                            if (priv != null && priv.isPrivacyEnabled()) {
+                                boolean enabledUid = priv.isUidPrivacyDataCheat(uid);
+                                if (!enabledUid) return;
 
-                            boolean enabledUid = priv.isUidPrivacyDataCheat(uid);
-                            if (!enabledUid) return;
+                                PackageInfo[] cheated = priv.getCheatedInstalledPackagesForUid(uid);
+                                if (cheated == null) return;
 
-                            PackageInfo[] cheated = priv.getCheatedInstalledPackagesForUid(uid);
-                            if (cheated == null) return;
-
-                            ParceledListSlice<PackageInfo> empty = new ParceledListSlice<>(Arrays.asList(cheated));
-                            param.setResult(empty);
+                                ParceledListSlice<PackageInfo> empty = new ParceledListSlice<>(Arrays.asList(cheated));
+                                param.setResult(empty);
+                            }
                         }
                     });
             Timber.d("hookGetInstalledPkgs OK:" + unHooks);
@@ -92,18 +123,38 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
 
                             IThanos thanos = ThanosManagerNative.getDefault();
                             if (thanos == null) return;
+
+                            // Check op.
+                            IAppOpsService ops = thanos.getAppOpsService();
+                            if (ops != null && ops.isOpsEnabled()) {
+                                String[] pkgNames = thanos.getPkgManager()
+                                        .getPkgNameForUid(uid);
+                                if (!ArrayUtils.isEmpty(pkgNames)) for (String pkg : pkgNames) {
+                                    int mode = ops.checkOperation(
+                                            AppOpsManager.OP_GET_INSTALLED_PACKAGES,
+                                            uid,
+                                            pkg);
+                                    if (mode == AppOpsManager.MODE_IGNORED) {
+                                        Timber.v("getInstalledApplications, Op denied for %s OP_GET_INSTALLED_PACKAGES", pkg);
+                                        ParceledListSlice<ApplicationInfo> empty = new ParceledListSlice<>(new ArrayList<>(0));
+                                        param.setResult(empty);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Check priv.
                             IPrivacyManager priv = thanos.getPrivacyManager();
-                            if (priv == null) return;
-                            if (!priv.isPrivacyEnabled()) return;
+                            if (priv != null && priv.isPrivacyEnabled()) {
+                                boolean enabledUid = priv.isUidPrivacyDataCheat(uid);
+                                if (!enabledUid) return;
 
-                            boolean enabledUid = priv.isUidPrivacyDataCheat(uid);
-                            if (!enabledUid) return;
+                                ApplicationInfo[] cheated = priv.getCheatedInstalledApplicationsUid(uid);
+                                if (cheated == null) return;
 
-                            ApplicationInfo[] cheated = priv.getCheatedInstalledApplicationsUid(uid);
-                            if (cheated == null) return;
-
-                            ParceledListSlice<ApplicationInfo> empty = new ParceledListSlice<>(Arrays.asList(cheated));
-                            param.setResult(empty);
+                                ParceledListSlice<ApplicationInfo> empty = new ParceledListSlice<>(Arrays.asList(cheated));
+                                param.setResult(empty);
+                            }
                         }
                     });
             Timber.d("hookGetInstalledApps OK:" + unHooks);

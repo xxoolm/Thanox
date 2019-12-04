@@ -4,6 +4,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,9 +99,11 @@ public class ActivityTrampolineActivity extends ThemeActivity implements Activit
         View layout = LayoutInflater.from(this).inflate(R.layout.module_activity_trampoline_comp_replace_editor, null, false);
 
         final AppCompatEditText fromEditText = layout.findViewById(R.id.from_comp);
+        fromEditText.setFilters(new InputFilter[]{new EmojiExcludeFilter()});
         fromEditText.setText(from);
 
         final AppCompatEditText toEditText = layout.findViewById(R.id.to_comp);
+        toEditText.setFilters(new InputFilter[]{new EmojiExcludeFilter()});
         toEditText.setText(to);
 
         AlertDialog d = new AlertDialog.Builder(ActivityTrampolineActivity.this)
@@ -191,5 +195,24 @@ public class ActivityTrampolineActivity extends ThemeActivity implements Activit
         ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory
                 .getInstance(activity.getApplication());
         return ViewModelProviders.of(activity, factory).get(TrampolineViewModel.class);
+    }
+
+    private class EmojiExcludeFilter implements InputFilter {
+
+        @Override
+        public CharSequence filter(CharSequence source,
+                                   int start,
+                                   int end,
+                                   Spanned dest,
+                                   int dstart,
+                                   int dend) {
+            for (int i = start; i < end; i++) {
+                int type = Character.getType(source.charAt(i));
+                if (type == Character.SURROGATE || type == Character.OTHER_SYMBOL) {
+                    return "";
+                }
+            }
+            return null;
+        }
     }
 }

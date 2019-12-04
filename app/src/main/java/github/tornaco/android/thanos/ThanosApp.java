@@ -17,7 +17,7 @@ public class ThanosApp extends MultipleModulesApp {
             Timber.e("\n");
         });
 
-        // CrashHandler.install(this);
+        CrashHandler.install(this);
 
         if (BuildConfig.DEBUG) {
             DeveloperDiag.diag(this);

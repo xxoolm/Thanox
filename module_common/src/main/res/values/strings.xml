@@ -8,7 +8,7 @@
     <string name="app_category_system_uid">SystemCore</string>
     <string name="app_category_3rd">3-rd</string>
     <string name="app_category_media">SystemMedia</string>
-    <string name="app_category_phone">SystemPhoto</string>
+    <string name="app_category_phone">SystemPhone</string>
     <string name="app_category_web_provider">WebView provider</string>
 
     <string name="common_menu_title_select_all">All yes</string>
