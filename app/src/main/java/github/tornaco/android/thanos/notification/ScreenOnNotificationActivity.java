@@ -29,7 +29,7 @@ public class ScreenOnNotificationActivity extends CommonFuncToggleAppListFilterA
     @NonNull
     @Override
     protected String getTitleString() {
-        return getString(R.string.feature_title_light_on_notifiation);
+        return getString(R.string.feature_title_light_on_notification);
     }
 
     @NonNull

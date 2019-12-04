@@ -5,176 +5,175 @@
     <string name="switch_on_text">On</string>
     <string name="switch_off_text">Off</string>
 
-    <string name="status_active">已激活</string>
-    <string name="status_not_active">未激活</string>
-    <string name="message_active_needed">请在XposedInstaller中激活或集成Thanox核心补丁到你的系统中</string>
-    <string name="status_need_reboot">请重启</string>
+    <string name="status_active">Active</string>
+    <string name="status_not_active">Not active</string>
+    <string name="message_active_needed">Please active thanox in XposedInstaller</string>
+    <string name="status_need_reboot">Reboot</string>
 
-    <string name="nav_title_boost">加速</string>
-    <string name="nav_title_secure">安全</string>
-    <string name="nav_title_settings">设置</string>
-    <string name="nav_title_exp">拓展</string>
-    <string name="nav_title_plugin">插件</string>
+    <string name="nav_title_boost">Boost</string>
+    <string name="nav_title_secure">Security</string>
+    <string name="nav_title_settings">Settings</string>
+    <string name="nav_title_exp">Extension</string>
+    <string name="nav_title_plugin">Plugin</string>
 
-    <string name="title_no_plugins_installed">暂无插件可用</string>
+    <string name="title_no_plugins_installed">No plugin available</string>
 
-    <string name="title_show_current_activity">显示当前活动</string>
-    <string name="reboot_needed">需要重启</string>
-    <string name="message_reboot_needed">模块已经更新，需要重启系统才能生效</string>
-    <string name="reboot_now">立即重启</string>
-    <string name="reboot_later">稍后重启</string>
+    <string name="title_show_current_activity">Show current activity</string>
+    <string name="reboot_needed">Reboot</string>
+    <string name="message_reboot_needed">Please reboot your device to update thanox-core</string>
+    <string name="reboot_now">Reboot now</string>
+    <string name="reboot_later">Not now</string>
 
-    <string name="badge_app_running">运行</string>
-    <string name="badge_app_idle">休眠</string>
+    <string name="badge_app_running">Running</string>
+    <string name="badge_app_idle">Idle</string>
 
-    <string name="boost_status_running_apps">个应用正在运行</string>
-    <string name="boost_status_blocked_start_count">已阻止%s次应用启动请求</string>
+    <string name="boost_status_running_apps">apps is running</string>
+    <string name="boost_status_blocked_start_count">Blocked %s app start requests</string>
 
-    <string name="secure_privacy_enabled_apps">个应用受限</string>
-    <string name="secure_privacy_request_count">已处理%s次身份信息请求</string>
+    <string name="secure_privacy_enabled_apps">apps has been restricted</string>
+    <string name="secure_privacy_request_count">Handle %s app privacy data requests</string>
 
-    <string name="boost_status_system_memory">系统内存</string>
-    <string name="boost_status_system_storage">存储空间</string>
+    <string name="boost_status_system_memory">Memory</string>
+    <string name="boost_status_system_storage">Storage</string>
 
-    <string name="feature_category_start_manage">启动</string>
-    <string name="feature_title_start_restrict">后台启动</string>
-    <string name="feature_desc_start_restrict">允许应用后台自启动</string>
-    <string name="feature_title_bg_restrict">后台运行</string>
-    <string name="feature_desc_bg_restrict">允许应用锁屏后继续运行</string>
+    <string name="feature_category_start_manage">Start</string>
+    <string name="feature_title_start_restrict">Background start</string>
+    <string name="feature_desc_start_restrict">Allow apps to start from background</string>
+    <string name="feature_title_bg_restrict">Background task</string>
+    <string name="feature_desc_bg_restrict">Allow apps keep running in background even if screen has been turned off</string>
 
-    <string name="menu_title_start_restrict_charts">阻止记录</string>
+    <string name="menu_title_start_restrict_charts">Block record</string>
 
-    <string name="feature_category_app_clean_up">清理</string>
-    <string name="feature_title_clean_when_task_removed">任务清理</string>
-    <string name="feature_desc_clean_when_task_removed">清除最近任务后同时清理应用后台</string>
+    <string name="feature_category_app_clean_up">Clean</string>
+    <string name="feature_title_clean_when_task_removed">Clean tasks</string>
+    <string name="feature_desc_clean_when_task_removed">Clean background process if app has been removed from recent task</string>
 
-    <string name="activity_title_start_restrict">后台启动</string>
-    <string name="activity_title_bg_restrict">后台运行</string>
-    <string name="activity_title_clean_when_task_removed">任务清理</string>
+    <string name="activity_title_start_restrict">Background start</string>
+    <string name="activity_title_bg_restrict">Background task</string>
+    <string name="activity_title_clean_when_task_removed">Clean tasks</string>
 
-    <string name="feature_title_process_manage">进程管理</string>
-    <string name="activity_title_process_manage">运行中（%s）</string>
-    <string name="item_summary_process_count">%s个进程</string>
+    <string name="feature_title_process_manage">Process manager</string>
+    <string name="activity_title_process_manage">Running（%s）</string>
+    <string name="item_summary_process_count">%s processes</string>
     <string name="item_summary_mem_size">%s</string>
-    <string name="snack_process_update_message">正在运行的应用信息可更新</string>
-    <string name="snack_process_update_refresh">刷新</string>
+    <string name="snack_process_update_message">Process list changed, please update</string>
+    <string name="snack_process_update_refresh">Update</string>
 
-    <string name="feature_category_app_manage">应用</string>
-    <string name="feature_title_apps_manager">应用管理</string>
-    <string name="activity_title_apps_manager">应用管理（%s）</string>
-    <string name="feature_summary_apps_manager">应用的配置与管理</string>
-    <string name="titile_suggested_apps_recent_used">最近打开的应用</string>
-    <string name="titile_suggested_apps_view_all">查看全部应用</string>
+    <string name="feature_category_app_manage">Apps</string>
+    <string name="feature_title_apps_manager">App manager</string>
+    <string name="activity_title_apps_manager">App manager（%s）</string>
+    <string name="feature_summary_apps_manager">Manage and config per app</string>
+    <string name="titile_suggested_apps_recent_used">Recent used apps</string>
+    <string name="titile_suggested_apps_view_all">Show all apps</string>
 
-    <string name="feature_category_privacy">隐私</string>
-    <string name="feature_category_remind">提醒</string>
+    <string name="feature_category_privacy">Privacy</string>
+    <string name="feature_category_remind">Reminding</string>
 
-    <string name="feature_title_recent_task_blur">卡片模糊</string>
-    <string name="feature_summary_recent_task_blur">给最近任务卡片加上模糊效果</string>
+    <string name="feature_title_recent_task_blur">Task blur</string>
+    <string name="feature_summary_recent_task_blur">Add blur effect to recent tasks</string>
 
-    <string name="feature_title_app_lock">应用锁</string>
-    <string name="feature_summary_app_lock">使用密码锁定应用界面</string>
+    <string name="feature_title_app_lock">App lock</string>
+    <string name="feature_summary_app_lock">Show lock interface before app launch</string>
 
-    <string name="feature_category_notifiation">通知</string>
-    <string name="feature_title_light_on_notifiation">通知亮屏</string>
-    <string name="feature_title_push_delegate">消息代收</string>
+    <string name="feature_category_notification">Notification</string>
+    <string name="feature_title_light_on_notification">Light up</string>
+    <string name="feature_summary_light_on_notification">Light up screen on new notification</string>
+    <string name="feature_title_push_delegate">Push delegate</string>
 
-    <string name="feature_category_ext">拓展</string>
-    <string name="feature_category_power_save">电源</string>
-    <string name="feature_title_smart_app_standby">智能休眠</string>
-    <string name="feature_summary_smart_app_standby">未充电时，应用回到后台自动休眠</string>
+    <string name="feature_category_ext">Extension</string>
+    <string name="feature_category_power_save">Power</string>
+    <string name="feature_title_smart_app_standby">Smart standby</string>
+    <string name="feature_summary_smart_app_standby">Put background apps to standby state if battery un-plug</string>
     <string name="feature_desc_smart_app_standby">
-        1. 应用回到后台会被自动休眠。\n
-        2. 智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\n
-        3. 在系统电池优化白名单中的应用将不会被休眠。\n
-        4. 充电时将不会休眠应用。
+        1. Background apps will go into standby mode.\n
+        2. This feature works only if Adaptive battery is enabled @Android Pie+.\n
+        3. Apps in not-optimized list will be ignored.\n
+        4. Won-t work during charging
     </string>
 
-    <string name="dialog_title_smart_app_standby_need_enable_platform_app_idle">开启自适应电池</string>
+    <string name="dialog_title_smart_app_standby_need_enable_platform_app_idle">Enabled Adaptive Battery</string>
     <string name="dialog_message_smart_app_standby_need_enable_platform_app_idle">
-        智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\n\nThanox当前无法准确判断你的系统是否支持并开启了该选项。
+        This feature works only if Adaptive battery is enabled @Android Pie+.
     </string>
 
-    <string name="feature_title_data_cheat">隐匿</string>
-    <string name="feature_desc_data_cheat">隐藏手机号，SIM序列等敏感信息</string>
-    <string name="activity_title_data_cheat">隐匿</string>
-    <string name="feature_summary_pkg_data_cheat">身份隐藏</string>
+    <string name="feature_title_data_cheat">Incognito</string>
+    <string name="feature_desc_data_cheat">Hide SIM info, serial id etc</string>
+    <string name="activity_title_data_cheat">Incognito</string>
+    <string name="feature_summary_pkg_data_cheat">Incognito</string>
 
-    <string name="title_allow">允许</string>
-    <string name="title_block">禁止</string>
+    <string name="title_allow">Allow</string>
+    <string name="title_block">Deny</string>
 
-    <string name="menu_start_manage_info">帮助信息</string>
-    <string name="info_title_start_restrict">提示</string>
-    <string name="info_message_start_restrict">阻止应用自启动，关联启动</string>
-    <string name="info_title_bg_restrict">提示</string>
-    <string name="info_message_bg_restrict">屏幕锁定后，禁止的应用会被清理</string>
+    <string name="menu_start_manage_info">Help</string>
+    <string name="info_title_start_restrict">Tips</string>
+    <string name="info_message_start_restrict">Prevent apps start from background</string>
+    <string name="info_title_bg_restrict">Tips</string>
+    <string name="info_message_bg_restrict">Background process will be clear if screen has been turned off</string>
 
-    <string name="pre_category_ui">外观</string>
-    <string name="pre_title_app_theme">主题</string>
-    <string name="pre_title_app_icon_pack">图标包</string>
-    <string name="pre_category_strategy">策略</string>
-    <string name="pre_category_profile">情景</string>
-    <string name="pre_category_data">数据</string>
-    <string name="pre_category_about">关于</string>
-    <string name="pre_category_dev_tools">开发者</string>
-    <string name="pre_category_app_feature_config">配置项</string>
-    <string name="pre_category_app_disable_enable">冻结</string>
+    <string name="pre_category_ui">Looks</string>
+    <string name="pre_title_app_theme">Theme</string>
+    <string name="pre_title_app_icon_pack">Icon pack</string>
+    <string name="pre_category_strategy">Strategy</string>
+    <string name="pre_category_profile">Profile</string>
+    <string name="pre_category_data">Data</string>
+    <string name="pre_category_about">About</string>
+    <string name="pre_category_dev_tools">Developers</string>
+    <string name="pre_category_app_feature_config">Configs</string>
+    <string name="pre_category_app_disable_enable">Disable</string>
 
-    <string name="pref_title_enable_logging">开启日志</string>
-    <string name="pref_summary_enable_logging">你可以从控制台或者劫持框架中获取到输出的日志内容</string>
-    <string name="pref_title_show_current_activity">显示当前活动</string>
-    <string name="pref_title_build_info_app">应用信息</string>
-    <string name="pref_title_build_info_server">核心信息</string>
-    <string name="pre_title_ignore_system_app">排除系统应用</string>
-    <string name="pre_summary_ignore_system_app">在功能列表中不展示系统应用，这些系统应用也不会被干涉</string>
+    <string name="pref_title_enable_logging">Enable logging</string>
+    <string name="pref_summary_enable_logging">Show logging info in console</string>
+    <string name="pref_title_show_current_activity">Show current activity</string>
+    <string name="pref_title_build_info_app">App info</string>
+    <string name="pref_title_build_info_server">Core info</string>
+    <string name="pre_title_ignore_system_app">Exclude system apps</string>
+    <string name="pre_summary_ignore_system_app">Put system apps into white lists</string>
 
-    <string name="pref_title_icon_maker_remix_icon">图标提供者</string>
+    <string name="pref_title_icon_maker_remix_icon">Icon provider</string>
     <string name="pref_summary_icon_maker_remix_icon">Remix Design © 2018 https://remixicon.com</string>
 
-    <string name="pref_title_rss_e">群组</string>
+    <string name="pref_title_rss_e">Groups</string>
     <string name="pref_summary_rss_e">TG@THANOX</string>
 
-    <string name="pref_title_app_state_enabled">应用已启用</string>
-    <string name="pref_title_app_to_disable">冻结</string>
-    <string name="pref_title_app_state_disabled">应用已被冻结</string>
-    <string name="pref_title_app_to_enable">解冻</string>
+    <string name="pref_title_app_state_enabled">App is enabled</string>
+    <string name="pref_title_app_to_disable">Disable</string>
+    <string name="pref_title_app_state_disabled">App is disabled</string>
+    <string name="pref_title_app_to_enable">Enable</string>
 
-    <string name="pre_title_backup">备份</string>
-    <string name="pre_summary_backup">备份Thanox设置到外置存储中</string>
-    <string name="pre_title_restore">恢复</string>
-    <string name="pre_sumary_restore">选择一个备份包以恢复Thanox设置</string>
+    <string name="pre_title_backup">Backup</string>
+    <string name="pre_summary_backup">Backup thanox settings to external storage</string>
+    <string name="pre_title_restore">Restore</string>
+    <string name="pre_sumary_restore">Restore thanox settings from external file</string>
 
-    <string name="pref_title_new_installed_apps_config_enabled">启用自动配置</string>
-    <string name="pref_summary_new_installed_apps_config_enabled">为新安装的App自动使用模板配置</string>
-    <string name="pref_title_new_installed_apps_config">模板设置</string>
-    <string name="pref_summary_new_installed_apps_config">设置自动应用的模板</string>
+    <string name="pref_title_new_installed_apps_config_enabled">Auto config</string>
+    <string name="pref_summary_new_installed_apps_config_enabled">Auto config new installed apps</string>
+    <string name="pref_title_new_installed_apps_config">Config template</string>
+    <string name="pref_summary_new_installed_apps_config">Edit template for auto configuration</string>
 
-    <string name="pre_message_restore_success">恢复成功，请尽快重启设备以生效</string>
-    <string name="pre_message_backup_success">备份成功</string>
+    <string name="pre_message_restore_success">Restore success, please reboot to take effect</string>
+    <string name="pre_message_backup_success">Backup success</string>
 
-    <string name="pre_cheat_field_category_original">原数据</string>
-    <string name="pre_cheat_field_category_cheated">隐匿数据</string>
-    <string name="pre_cheat_field_category_others">其他</string>
-    <string name="pre_title_cheat_sim_serial">SIM系列号</string>
-    <string name="pre_title_cheat_line_one_num">电话号码</string>
-    <string name="pre_title_cheat_device_id">设备ID</string>
-    <string name="pre_title_cheat_not_set">未指定</string>
-    <string name="pre_title_cheat_installed_apps">隐藏已安装应用</string>
-    <string name="pre_title_cheat_show_cheated_apps_notifications">显示隐匿通知</string>
+    <string name="pre_cheat_field_category_original">Original field</string>
+    <string name="pre_cheat_field_category_cheated">Incognito field</string>
+    <string name="pre_cheat_field_category_others">Others</string>
+    <string name="pre_title_cheat_sim_serial">SIM serial</string>
+    <string name="pre_title_cheat_line_one_num">Phone number</string>
+    <string name="pre_title_cheat_device_id">Device ID</string>
+    <string name="pre_title_cheat_not_set">Not set</string>
+    <string name="pre_title_cheat_installed_apps">Hide installed aps</string>
+    <string name="pre_title_cheat_show_cheated_apps_notifications">Show notification</string>
 
-    <string name="pre_title_bg_screen_off_clean_up_delay">锁屏清理延时</string>
-    <string name="pre_title_bg_screen_off_clean_up_skip_audio">不清理音频</string>
-    <string name="pre_summary_bg_screen_off_clean_up_skip_audio">正在播放音频的App不会被清理</string>
+    <string name="pre_title_bg_screen_off_clean_up_delay">Screen off clean delay</string>
+    <string name="pre_title_bg_screen_off_clean_up_skip_audio">Audio playing</string>
+    <string name="pre_summary_bg_screen_off_clean_up_skip_audio">Keep audio playing apps</string>
 
-    <string name="pre_title_bg_screen_off_clean_up_skip_notification">不清理有通知应用</string>
+    <string name="pre_title_bg_screen_off_clean_up_skip_notification">Keep apps has notification</string>
 
-    <string name="badge_trying_app">试用</string>
-    <string name="badge_paid_app">已购买</string>
+    <string name="badge_trying_app">Trying</string>
+    <string name="badge_paid_app">Paid</string>
 
-    <string name="title_app_notice">注意事项</string>
-    <string name="message_app_notice">
-        Thanox对于新手甚至老鸟都及其危险，请做好启用之后无法开机的准备，启用之前请务必做好数据备份。\n\n测试版本建议打开Thanox设置，开启日志，如果发现了崩溃重启等异常问题，请将data/system/thanos/logging下的日志反馈
-    </string>
+    <string name="title_app_notice">Be careful!</string>
+    <string name="message_app_notice">In some cases, your device might no longer boot after installing Xposed.\n\nIf you never heard about \"soft brick\" and \"bootloop\" before or if you don\'t know how to recover from such a situation, do <b>NOT</b> install Xposed!\n\nIn any case, having a recent backup is highly recommended.</string>
 
-    <string name="menu_title_feature_desc">功能介绍</string>
+    <string name="menu_title_feature_desc">Feature wiki</string>
 </resources>

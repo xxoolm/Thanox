@@ -357,7 +357,7 @@ public class NavViewModel extends AndroidViewModel {
                         Tile.builder()
                                 .iconRes(R.drawable.ic_cloud_fill)
                                 .title(resources.getString(R.string.feature_title_push_delegate))
-                                .category(resources.getString(R.string.feature_category_notifiation))
+                                .category(resources.getString(R.string.feature_category_notification))
                                 .themeColor(R.color.md_grey_400)
                                 .disabled(!thanosManager.isServiceInstalled()
                                         || !thanosManager.hasFeature(BuildProp.THANOX_FEATURE_PUSH_DELEGATE))
@@ -366,7 +366,8 @@ public class NavViewModel extends AndroidViewModel {
                                 .build(),
                         Tile.builder()
                                 .iconRes(R.drawable.ic_notification_badge_fill)
-                                .title(resources.getString(R.string.feature_title_light_on_notifiation))
+                                .title(resources.getString(R.string.feature_title_light_on_notification))
+                                .summary(resources.getString(R.string.feature_summary_light_on_notification))
                                 .themeColor(R.color.md_red_500)
                                 .onClickListener(view -> ScreenOnNotificationActivity.start(getApplication()))
                                 .build(),
@@ -437,8 +438,9 @@ public class NavViewModel extends AndroidViewModel {
         unRegisterEventReceivers();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private String getChannelString() {
-        return BuildConfig.DEBUG ? "D" : null;
+        return BuildConfig.FLAVOR.contains("row") ? "PRO" : "";
     }
 
     void cleanUpBackgroundTasks() {

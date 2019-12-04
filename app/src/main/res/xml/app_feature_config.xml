@@ -37,7 +37,7 @@
         <SwitchPreferenceCompat
                 android:persistent="false"
                 app:key="@string/key_app_feature_config_screen_on_notification"
-                app:title="@string/feature_title_light_on_notifiation" />
+                app:title="@string/feature_title_light_on_notification" />
 
         <SwitchPreferenceCompat
                 android:persistent="false"
