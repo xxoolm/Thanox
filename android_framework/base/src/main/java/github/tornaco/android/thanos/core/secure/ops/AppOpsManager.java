@@ -20,18 +20,16 @@ import android.annotation.SystemApi;
 import android.annotation.TestApi;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.os.UserManager;
+
+import java.util.HashMap;
+
 import github.tornaco.android.thanos.core.annotation.Nullable;
 import github.tornaco.android.thanos.core.compat.ManifestCompat;
 import github.tornaco.android.thanos.core.util.ArrayUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-
-import java.util.HashMap;
-import java.util.List;
 
 @AllArgsConstructor
 public class AppOpsManager {
@@ -1784,31 +1782,6 @@ public class AppOpsManager {
     final IAppOpsService service;
 
     @SneakyThrows
-    public int checkPackage(int uid, String packageName) {
-        return service.checkPackage(uid, packageName);
-    }
-
-    @SneakyThrows
-    public List<android.app.AppOpsManager.PackageOps> getPackagesForOps(int[] ops) {
-        return service.getPackagesForOps(ops);
-    }
-
-    @SneakyThrows
-    public List<android.app.AppOpsManager.PackageOps> getOpsForPackage(int uid, String packageName, int[] ops) {
-        return service.getOpsForPackage(uid, packageName, ops);
-    }
-
-    @SneakyThrows
-    public List<android.app.AppOpsManager.PackageOps> getUidOps(int uid, int[] ops) {
-        return service.getUidOps(uid, ops);
-    }
-
-    @SneakyThrows
-    public void setUidMode(int code, int uid, int mode) {
-        service.setUidMode(code, uid, mode);
-    }
-
-    @SneakyThrows
     public void setMode(int code, int uid, String packageName, int mode) {
         service.setMode(code, uid, packageName, mode);
     }
@@ -1821,21 +1794,6 @@ public class AppOpsManager {
     @SneakyThrows
     public int checkOperation(int code, int uid, String packageName) {
         return service.checkOperation(code, uid, packageName);
-    }
-
-    @SneakyThrows
-    public void setUserRestrictions(Bundle restrictions, IBinder token, int userHandle) {
-        service.setUserRestrictions(restrictions, token, userHandle);
-    }
-
-    @SneakyThrows
-    public void setUserRestriction(int code, boolean restricted, IBinder token, int userHandle, String[] exceptionPackages) {
-        service.setUserRestriction(code, restricted, token, userHandle, exceptionPackages);
-    }
-
-    @SneakyThrows
-    public void removeUser(int userHandle) {
-        service.removeUser(userHandle);
     }
 
     @SneakyThrows

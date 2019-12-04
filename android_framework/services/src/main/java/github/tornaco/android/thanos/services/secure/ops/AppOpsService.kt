@@ -1,9 +1,8 @@
 package github.tornaco.android.thanos.services.secure.ops
 
-import android.app.AppOpsManager
 import android.content.Context
-import android.os.*
-import android.util.Log
+import android.os.IBinder
+import android.os.RemoteException
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.T
@@ -11,7 +10,7 @@ import github.tornaco.android.thanos.core.app.AppResources
 import github.tornaco.android.thanos.core.persist.RepoFactory
 import github.tornaco.android.thanos.core.persist.StringMapRepo
 import github.tornaco.android.thanos.core.persist.StringSetRepo
-import github.tornaco.android.thanos.core.profile.ProfileManager
+import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
 import github.tornaco.android.thanos.core.util.DevNull
 import github.tornaco.android.thanos.core.util.Noop
@@ -20,16 +19,15 @@ import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.ThanoxSystemService
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
 import lombok.SneakyThrows
-import java.util.*
-import kotlin.collections.HashSet
 
 class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
-    private var androidService: com.android.internal.app.IAppOpsService? = AndroidAppOpsDefault()
-
     private lateinit var opRemindOpRepo: StringSetRepo
     private lateinit var opRemindPkgRepo: StringSetRepo
+
     private lateinit var opTemplateRepo: StringMapRepo
+    private lateinit var opSettingsRepo: StringMapRepo
+
     private lateinit var opRemindNotificationHelper: OpRemindNotificationHelper
 
     private val opRemindWhiteList: MutableSet<String> = HashSet()
@@ -37,180 +35,39 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
     @SneakyThrows
     override fun onStart(context: Context) {
         super.onStart(context)
-        androidService =
-            com.android.internal.app.IAppOpsService.Stub.asInterface(ServiceManager.getService(Context.APP_OPS_SERVICE))
-        Timber.d("IAppOpsService of android is: %s", androidService)
-        if (androidService == null) {
-            androidService = AndroidAppOpsDefault()
-        }
-        Timber.d("IAppOpsService of android is: %s", androidService)
-
         opRemindOpRepo = RepoFactory.get().getOrCreateStringSetRepo(T.opRemindOpsFile().path)
         opRemindPkgRepo = RepoFactory.get().getOrCreateStringSetRepo(T.opRemindPkgFile().path)
         opTemplateRepo = RepoFactory.get().getOrCreateStringMapRepo(T.opTemplateFile().path)
+        opSettingsRepo = RepoFactory.get().getOrCreateStringMapRepo(T.opSettingsFile().path)
         opRemindNotificationHelper = OpRemindNotificationHelper(context, s)
     }
 
     override fun systemReady() {
         super.systemReady()
         val appResources = AppResources(context, BuildProp.THANOS_APP_PKG_NAME)
-        val opWhiteList: Array<String> = appResources.getStringArray(Res.Strings.OP_REMIND_WHITELIST)
+        val opWhiteList: Array<String> =
+            appResources.getStringArray(Res.Strings.OP_REMIND_WHITELIST)
         this.opRemindWhiteList.addAll(opWhiteList)
-        Timber.d("opRemindWhiteList: ${Arrays.toString(opRemindWhiteList.toTypedArray())}")
+        Timber.d("opRemindWhiteList: ${opRemindWhiteList.toTypedArray().contentToString()}")
     }
 
-    @Throws(RemoteException::class)
-    override fun checkPackage(uid: Int, packageName: String): Int {
-        val ident = Binder.clearCallingIdentity()
-        try {
-            return androidService!!.checkPackage(uid, packageName)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
-    }
-
-    @Throws(RemoteException::class)
-    override fun getPackagesForOps(ops: IntArray): List<AppOpsManager.PackageOps> {
-        val ident = Binder.clearCallingIdentity()
-        try {
-            return androidService!!.getPackagesForOps(ops)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
-    }
-
-    @Throws(RemoteException::class)
-    override fun getOpsForPackage(uid: Int, packageName: String, ops: IntArray): List<AppOpsManager.PackageOps> {
-        val ident = Binder.clearCallingIdentity()
-        try {
-            return androidService!!.getOpsForPackage(uid, packageName, ops)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
-    }
-
-    @Throws(RemoteException::class)
-    override fun getUidOps(uid: Int, ops: IntArray): List<AppOpsManager.PackageOps> {
-        val ident = Binder.clearCallingIdentity()
-        try {
-            return androidService!!.getUidOps(uid, ops)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
-    }
-
-    @Throws(RemoteException::class)
-    override fun setUidMode(code: Int, uid: Int, mode: Int) {
-        enforceCallingPermissions()
-        val ident = Binder.clearCallingIdentity()
-        try {
-            androidService!!.setUidMode(code, uid, mode)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
-    }
 
     @Throws(RemoteException::class)
     override fun setMode(code: Int, uid: Int, packageName: String, mode: Int) {
         enforceCallingPermissions()
-        // Hooks.
-        if (onInterceptSetMode(code, uid, packageName, mode)) {
-            return
-        }
-
-        val ident = Binder.clearCallingIdentity()
-        try {
-            Timber.v("setMode: %s %s %s %s", code, uid, packageName, mode)
-            androidService!!.setMode(code, uid, packageName, mode)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
-    }
-
-    private fun onInterceptSetMode(code: Int, uid: Int, packageName: String, mode: Int): Boolean {
-        if (Objects.equals(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME, packageName)) {
-            opTemplateRepo["$code"] = "$mode"
-            Timber.d("onInterceptSetMode, set op template, code: %s, mode: %s", code, mode)
-            return true
-        }
-        return false
+        Timber.v("setMode: %s %s %s %s", code, uid, packageName, mode)
+        opSettingsRepo["$packageName-$code"] = mode.toString()
     }
 
     @Throws(RemoteException::class)
     override fun resetAllModes(reqUserId: Int, reqPackageName: String) {
         enforceCallingPermissions()
-        val ident = Binder.clearCallingIdentity()
-        try {
-            androidService!!.resetAllModes(reqUserId, reqPackageName)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
     }
 
     @Throws(RemoteException::class)
     override fun checkOperation(code: Int, uid: Int, packageName: String): Int {
-        // Hooks.
-        val mode = onInterceptCheckOperation(code, uid, packageName)
-        if (mode != Int.MIN_VALUE) {
-            return mode
-        }
-
-        val ident = Binder.clearCallingIdentity()
         // IllegalArgumentException: Bad operation #71
-        return try {
-            androidService!!.checkOperation(code, uid, packageName)
-        } catch (e: Throwable) {
-            Timber.w("checkOperation: %s", Log.getStackTraceString(e))
-            github.tornaco.android.thanos.core.secure.ops.AppOpsManager.MODE_ERRORED
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
-    }
-
-    private fun onInterceptCheckOperation(code: Int, uid: Int, packageName: String): Int {
-        if (Objects.equals(packageName, ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)) {
-            val mode: String = opTemplateRepo["$code"]
-                ?: return github.tornaco.android.thanos.core.secure.ops.AppOpsManager.MODE_ALLOWED
-            return mode.toInt()
-        }
-        return Int.MIN_VALUE
-    }
-
-    override fun setUserRestrictions(restrictions: Bundle, token: IBinder, userHandle: Int) {
-        enforceCallingPermissions()
-        val ident = Binder.clearCallingIdentity()
-        try {
-            androidService!!.setUserRestrictions(restrictions, token, userHandle)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
-    }
-
-    override fun setUserRestriction(
-        code: Int,
-        restricted: Boolean,
-        token: IBinder,
-        userHandle: Int,
-        exceptionPackages: Array<String>
-    ) {
-        enforceCallingPermissions()
-        val ident = Binder.clearCallingIdentity()
-        try {
-            androidService!!.setUserRestriction(code, restricted, token, userHandle, exceptionPackages)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
-    }
-
-    @Throws(RemoteException::class)
-    override fun removeUser(userHandle: Int) {
-        enforceCallingPermissions()
-        val ident = Binder.clearCallingIdentity()
-        try {
-            androidService!!.removeUser(userHandle)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
-        }
+        return opSettingsRepo["$packageName-$code"]?.toInt() ?: AppOpsManager.MODE_ALLOWED
     }
 
     @Throws(RemoteException::class)
@@ -251,7 +108,10 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
     @Throws(RemoteException::class)
     override fun onStartOp(token: IBinder?, code: Int, uid: Int, packageName: String?) {
-        if (isSystemReady && isNotificationPostReady && isOpRemindEnabled(code) && isOpRemindablePkg(packageName)) {
+        if (isSystemReady && isNotificationPostReady && isOpRemindEnabled(code) && isOpRemindablePkg(
+                packageName
+            )
+        ) {
             executeInternal(Runnable {
                 onStartOpInternal(token, code, uid, packageName)
             })
