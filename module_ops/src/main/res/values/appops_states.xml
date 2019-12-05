@@ -124,6 +124,7 @@
         <item>Placeholder</item>
 
         <item>Get installed apps</item>
+        <item>Query intent(LAUNCHER, usually used to query installed apps) activities</item>
     </string-array>
 
     <string-array name="module_ops_app_ops_labels">
@@ -231,6 +232,7 @@
         <item>Placeholder</item>
 
         <item>Get installed apps</item>
+        <item>Query intent activities</item>
     </string-array>
 
     <integer-array name="module_ops_op_icon">
@@ -337,6 +339,7 @@
         <item>@drawable/ic_settings_fill</item>
         <item>@drawable/ic_settings_fill</item>
 
+        <item>@drawable/ic_apps_fill</item>
         <item>@drawable/ic_apps_fill</item>
 
     </integer-array>

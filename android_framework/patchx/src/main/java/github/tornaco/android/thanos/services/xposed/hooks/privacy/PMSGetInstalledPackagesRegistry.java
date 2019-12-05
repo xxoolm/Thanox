@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.ParceledListSlice;
 import android.os.Binder;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +25,7 @@ import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.apihint.Beta;
 import github.tornaco.android.thanos.services.xposed.IXposedHook;
+import github.tornaco.android.thanos.services.xposed.hooks.ErrorReporter;
 import github.tornaco.xposed.annotation.XposedHook;
 
 import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._21;
@@ -46,10 +48,11 @@ import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 public class PMSGetInstalledPackagesRegistry implements IXposedHook {
 
     @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
         if (PackageManager.packageNameOfAndroid().equals(lpparam.packageName)) {
             hookGetInstalledPkgs(lpparam);
             hookGetInstalledApps(lpparam);
+            hookQueryIntentActivities(lpparam);
         }
     }
 
@@ -96,6 +99,7 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
                                 PackageInfo[] cheated = priv.getCheatedInstalledPackagesForUid(uid);
                                 if (cheated == null) return;
 
+                                Timber.v("getInstalledPackages, priv cheat for %s", uid);
                                 ParceledListSlice<PackageInfo> empty = new ParceledListSlice<>(Arrays.asList(cheated));
                                 param.setResult(empty);
                             }
@@ -103,7 +107,8 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
                     });
             Timber.d("hookGetInstalledPkgs OK:" + unHooks);
         } catch (Exception e) {
-            Timber.d("Fail hookGetInstalledPkgs:" + e);
+            Timber.e("Fail hookGetInstalledPkgs:" + e);
+            ErrorReporter.report("hookGetInstalledPkgs", Log.getStackTraceString(e));
         }
     }
 
@@ -152,6 +157,7 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
                                 ApplicationInfo[] cheated = priv.getCheatedInstalledApplicationsUid(uid);
                                 if (cheated == null) return;
 
+                                Timber.v("getInstalledApplications, priv cheat for %s", uid);
                                 ParceledListSlice<ApplicationInfo> empty = new ParceledListSlice<>(Arrays.asList(cheated));
                                 param.setResult(empty);
                             }
@@ -160,6 +166,50 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
             Timber.d("hookGetInstalledApps OK:" + unHooks);
         } catch (Exception e) {
             Timber.d("Fail hookGetInstalledApps:" + e);
+            ErrorReporter.report("hookGetInstalledApps", Log.getStackTraceString(e));
+        }
+    }
+
+    private void hookQueryIntentActivities(XC_LoadPackage.LoadPackageParam lpparam) {
+        Timber.d("hookQueryIntentActivities...");
+        try {
+            Class clz = XposedHelpers.findClass("com.android.server.pm.PackageManagerService",
+                    lpparam.classLoader);
+            Set unHooks = XposedBridge.hookAllMethods(clz,
+                    "queryIntentActivities", new XC_MethodHook() {
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            super.beforeHookedMethod(param);
+
+                            int uid = Binder.getCallingUid();
+                            if (PkgUtils.isSystemOrPhoneOrShell(uid)) return;
+
+                            IThanos thanos = ThanosManagerNative.getDefault();
+                            if (thanos == null) return;
+
+                            IAppOpsService ops = thanos.getAppOpsService();
+                            if (ops != null && ops.isOpsEnabled()) {
+                                String[] pkgNames = thanos.getPkgManager()
+                                        .getPkgNameForUid(uid);
+                                if (!ArrayUtils.isEmpty(pkgNames)) for (String pkg : pkgNames) {
+                                    int mode = ops.checkOperation(
+                                            AppOpsManager.OP_QUERY_INTENT_ACTIVITIES,
+                                            uid,
+                                            pkg);
+                                    if (mode == AppOpsManager.MODE_IGNORED) {
+                                        Timber.v("queryIntentActivities, Op denied for %s OP_QUERY_INTENT_ACTIVITIES", pkg);
+                                        ParceledListSlice<PackageInfo> empty = new ParceledListSlice<>(new ArrayList<>(0));
+                                        param.setResult(empty);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
+            Timber.d("hookQueryIntentActivities OK:" + unHooks);
+        } catch (Exception e) {
+            Timber.d("Fail hookQueryIntentActivities:" + e);
+            ErrorReporter.report("hookQueryIntentActivities", Log.getStackTraceString(e));
         }
     }
 

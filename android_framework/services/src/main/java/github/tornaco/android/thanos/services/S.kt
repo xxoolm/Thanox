@@ -43,4 +43,6 @@ interface S {
     val profileService: ProfileService
 
     val powerService: PowerService
+
+    fun reportFrameworkInitializeError(identify: String, errorMessage: String)
 }

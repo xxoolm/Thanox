@@ -124,6 +124,7 @@
         <item>Placeholder</item>
 
         <item>获取已安装应用</item>
+        <item>Query intent(LAUNCHER, 经常用于查询应用列表) activities</item>
     </string-array>
 
     <string-array name="module_ops_app_ops_labels" tools:ignore="InconsistentArrays">
@@ -231,5 +232,6 @@
         <item>Placeholder</item>
 
         <item>获取已安装应用列表</item>
+        <item>Query intent activities</item>
     </string-array>
 </resources>

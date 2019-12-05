@@ -171,7 +171,8 @@ public class OpsTemplate {
     );
 
     public static final OpsTemplate THANOX_TEMPLATE = new OpsTemplate(
-            new int[]{AppOpsManager.OP_GET_INSTALLED_PACKAGES},
+            new int[]{AppOpsManager.OP_GET_INSTALLED_PACKAGES,
+                    AppOpsManager.OP_QUERY_INTENT_ACTIVITIES},
             new boolean[]{},
             R.string.module_ops_category_thanox,
             R.string.module_ops_category_thanox,

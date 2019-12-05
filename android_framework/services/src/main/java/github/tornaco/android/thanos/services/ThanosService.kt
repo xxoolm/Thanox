@@ -3,8 +3,10 @@ package github.tornaco.android.thanos.services
 import android.content.Context
 import android.os.IBinder
 import android.os.ServiceManager
+import com.google.common.io.Files
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.T
+import github.tornaco.android.thanos.core.T.baseServerLoggingDir
 import github.tornaco.android.thanos.core.util.Timber
 import github.tornaco.android.thanos.services.app.ActivityManagerService
 import github.tornaco.android.thanos.services.app.ActivityStackSupervisorService
@@ -20,6 +22,11 @@ import github.tornaco.android.thanos.services.push.PushManagerService
 import github.tornaco.android.thanos.services.secure.PrivacyService
 import github.tornaco.android.thanos.services.secure.ops.AppOpsService
 import github.tornaco.android.thanos.services.wm.WindowManagerService
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
+import java.io.File
+import java.io.IOException
+import java.nio.charset.Charset
 import java.util.*
 
 class ThanosService : SystemService(), S {
@@ -134,4 +141,29 @@ class ThanosService : SystemService(), S {
         BootStrap.setLoggingEnabled(loggingEnabled)
     }
 
+    @Suppress("UnstableApiUsage")
+    override fun reportFrameworkInitializeError(identify: String, errorMessage: String) {
+        Completable.fromRunnable {
+            // Dump.
+            val logFile = File(
+                baseServerLoggingDir(),
+                "log/initialize/" + BuildProp.BUILD_DATE.time + "/" + identify + ".log"
+            )
+            Timber.e("reportFrameworkInitializeError: $identify, $errorMessage to: $logFile")
+            if (!logFile.exists()) {
+                Timber.w("Writing to log file: %s", logFile)
+                try {
+                    Files.createParentDirs(logFile)
+                    Files.asByteSink(logFile)
+                        .asCharSink(Charset.defaultCharset()).write(errorMessage)
+                    Timber.w(
+                        "Write complete to log file: %s",
+                        logFile
+                    )
+                } catch (e: IOException) {
+                    Timber.e("Fail write log file", e)
+                }
+            }
+        }.subscribeOn(Schedulers.io()).subscribe()
+    }
 }
