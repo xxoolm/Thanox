@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.tornaco.android.thanos.common.AppItemViewClickListener;
+import github.tornaco.android.thanos.common.AppItemViewLongClickListener;
 import github.tornaco.android.thanos.databinding.ItemProcessManageBinding;
 import lombok.Getter;
 import util.Consumer;
@@ -19,9 +20,12 @@ public class ProcessManageAdapter extends RecyclerView.Adapter<ProcessManageAdap
 
     private final List<ProcessModel> processModels = new ArrayList<>();
     private final AppItemViewClickListener listener;
+    private final AppItemViewLongClickListener longClickListener;
 
-    public ProcessManageAdapter(@NonNull AppItemViewClickListener listener) {
+    ProcessManageAdapter(AppItemViewClickListener listener,
+                         AppItemViewLongClickListener longClickListener) {
         this.listener = listener;
+        this.longClickListener = longClickListener;
     }
 
     @NonNull
@@ -38,6 +42,10 @@ public class ProcessManageAdapter extends RecyclerView.Adapter<ProcessManageAdap
         holder.binding.setBadge1(model.getBadge1());
         holder.binding.setBadge2(model.getBadge2());
         holder.binding.setListener(view -> listener.onAppItemClick(model.getAppInfo()));
+        holder.binding.appItemRoot.setOnLongClickListener(v -> {
+            longClickListener.onAppItemLongClick(model.getAppInfo());
+            return true;
+        });
         holder.binding.executePendingBindings();
     }
 

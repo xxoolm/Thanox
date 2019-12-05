@@ -158,6 +158,16 @@ public class ProcessManageViewModel extends AndroidViewModel {
         unRegisterEventReceivers();
     }
 
+    void killApp(AppInfo appInfo) {
+        ThanosManager.from(getApplication())
+                .ifServiceInstalled(thanosManager -> {
+                    thanosManager.getActivityManager()
+                            .forceStopPackage(appInfo.getPkgName());
+
+                    loadProcess();
+                });
+    }
+
     void setAppCategoryFilter(int index) {
         categoryIndex.set(CategoryIndex.values()[index]);
         start();
