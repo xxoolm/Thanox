@@ -92,6 +92,11 @@
                 app:key="@string/key_open_source_license"
                 app:persistent="false"
                 app:title="@string/pref_title_open_source_license" />
+
+        <Preference
+                app:key="@string/key_contributors"
+                app:persistent="false"
+                app:title="Contributors" />
     </PreferenceCategory>
 
 </PreferenceScreen>

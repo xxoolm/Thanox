@@ -212,6 +212,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        findPreference(getString(R.string.key_contributors))
+                .setSummary(BuildProp.THANOX_CONTRIBUTORS);
+
         // Market feature control.
         // Wish more row users.
         themePref.setVisible(!ThanosApp.isPrc() || DonateSettings.isDonated(getContext()));
