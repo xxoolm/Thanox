@@ -27,7 +27,7 @@ public class XposedHookEntry implements IXposedHook {
         }
 
         // Dummy.
-        ErrorReporter.report("XposedHookEntry-dummy-error", "This is dummy error.");
+        // ErrorReporter.report("XposedHookEntry-dummy-error", "This is dummy error.");
     }
 
     @Override
