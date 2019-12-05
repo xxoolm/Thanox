@@ -18,6 +18,8 @@ import github.tornaco.android.thanos.core.profile.IProfileManager
 import github.tornaco.android.thanos.core.push.IPushManager
 import github.tornaco.android.thanos.core.secure.IPrivacyManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
+import github.tornaco.android.thanos.core.util.ArrayUtils
+import github.tornaco.android.thanos.core.util.Timber
 import github.tornaco.android.thanos.core.wm.IWindowManager
 import github.tornaco.android.thanos.services.app.*
 import github.tornaco.android.thanos.services.audio.AudioService
@@ -45,6 +47,7 @@ import github.tornaco.android.thanos.services.secure.ops.AppOpsService
 import github.tornaco.android.thanos.services.secure.ops.AppOpsServiceStub
 import github.tornaco.android.thanos.services.wm.WindowManagerService
 import github.tornaco.android.thanos.services.wm.WindowManagerServiceStub
+import java.io.File
 import java.io.FileDescriptor
 import java.io.PrintWriter
 
@@ -157,5 +160,21 @@ internal class ThanosServiceStub(
 
     override fun hasFeature(feature: String?): Boolean {
         return FeatureManager.hasFeature(feature)
+    }
+
+    override fun hasFrameworkInitializeError(): Boolean {
+        val logFile = File(
+            T.baseServerLoggingDir(),
+            "log/initialize/" + BuildProp.BUILD_DATE.time
+        )
+        if (!logFile.exists()) {
+            return false
+        }
+        if (!logFile.isDirectory) {
+            Timber.e("Not a dir: $logFile")
+            return false
+        }
+        val subFiles = logFile.listFiles()
+        return !ArrayUtils.isEmpty(subFiles)
     }
 }

@@ -9,6 +9,8 @@
     <string name="status_not_active">未激活</string>
     <string name="message_active_needed">请在XposedInstaller中激活或集成Thanox核心补丁到你的系统中</string>
     <string name="status_need_reboot">请重启</string>
+    <string name="title_framework_error">核心初始化错误</string>
+    <string name="message_framework_error">Thanox可信初始化时遇到兼容性错误，可能会影响某些功能，请把/data/system/thanos/log下面的日志反馈给开发者</string>
 
     <string name="nav_title_boost">加速</string>
     <string name="nav_title_secure">安全</string>
@@ -173,9 +175,11 @@
 
     <string name="badge_trying_app">试用</string>
     <string name="badge_paid_app">已购买</string>
+    <string name="badge_framework_err">不兼容</string>
 
+    <string name="title_remember">不再提醒</string>
     <string name="title_app_notice">小心!</string>
-    <string name="message_app_notice">In some cases, your device might no longer boot after installing Thanox.\n\nIf you never heard about \"soft brick\" and \"bootloop\" before or if you don\'t know how to recover from such a situation, do <b>NOT</b> install Thanox!\n\nIn any case, having a recent backup is highly recommended.</string>
+    <string name="message_app_notice">在某种情况下，安装激活Thanox后，你的设备可能无法启动.\n\n如果你之前从未听说过变砖、死机 或者不清楚发生上述问题后改如何恢复你的设备, 千万 <b>不要</b> 安装 Thanox!\n\n无论如何，使用之前请做好数据备份！</string>
 
     <string name="menu_title_feature_desc">功能介绍</string>
 </resources>

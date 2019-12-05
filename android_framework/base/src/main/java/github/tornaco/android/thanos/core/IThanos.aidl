@@ -47,4 +47,5 @@ interface IThanos {
     void setLoggingEnabled(boolean enable);
 
     boolean hasFeature(String feature);
+    boolean hasFrameworkInitializeError();
 }

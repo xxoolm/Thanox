@@ -19,6 +19,10 @@
                 name="tryingBadgeClickListener"
                 type="android.view.View.OnClickListener"/>
 
+        <variable
+                name="frameworkErrorClickListener"
+                type="android.view.View.OnClickListener"/>
+
     </data>
 
     <RelativeLayout
@@ -77,6 +81,16 @@
                         android:visibility="@{viewmodel.state == State.Active ? View.GONE : View.VISIBLE}"
                         tools:text="Active"
                         android:onClick="@{stateBadgeClickListener}"
+                        android:textColor="@color/md_white"
+                        android:background="@color/md_red_500"/>
+
+                <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/badge_framework_err"
+                        android:visibility="@{viewmodel.hasFrameworkError ? View.VISIBLE : View.GONE}"
+                        tools:text="Active"
+                        android:onClick="@{frameworkErrorClickListener}"
                         android:textColor="@color/md_white"
                         android:background="@color/md_red_500"/>
 

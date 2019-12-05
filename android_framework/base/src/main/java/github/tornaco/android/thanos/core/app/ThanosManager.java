@@ -147,6 +147,11 @@ public class ThanosManager {
         return service.hasFeature(feature);
     }
 
+    @SneakyThrows
+    public boolean hasFrameworkInitializeError() {
+        return service.hasFrameworkInitializeError();
+    }
+
     public static ThanosManager from(Context context) {
         return new ThanosManager(context, ThanosManagerNative.getDefault());
     }

@@ -74,8 +74,10 @@ public class NavActivity extends ThemeActivity implements NavFragment.FragmentAt
                 .setTitle(R.string.title_app_notice)
                 .setMessage(R.string.message_app_notice)
                 .setCancelable(false)
-                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> AppPreference.setFirstRun(getApplication(), false))
-                .setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> AppPreference.setFirstRun(getApplication(), true))
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                })
+                .setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> finishAffinity())
+                .setNeutralButton(R.string.title_remember, (dialog, which) -> AppPreference.setFirstRun(getApplication(), false))
                 .create()
                 .show();
     }
@@ -92,6 +94,7 @@ public class NavActivity extends ThemeActivity implements NavFragment.FragmentAt
             }
         });
         binding.setTryingBadgeClickListener(view -> DonateActivity.start(NavActivity.this));
+        binding.setFrameworkErrorClickListener(v -> showFrameworkErrorDialog());
         binding.executePendingBindings();
     }
 
@@ -134,6 +137,17 @@ public class NavActivity extends ThemeActivity implements NavFragment.FragmentAt
         new AlertDialog.Builder(NavActivity.this)
                 .setTitle(R.string.status_not_active)
                 .setMessage(R.string.message_active_needed)
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                    // Noop.
+                })
+                .create()
+                .show();
+    }
+
+    private void showFrameworkErrorDialog() {
+        new AlertDialog.Builder(NavActivity.this)
+                .setTitle(R.string.title_framework_error)
+                .setMessage(R.string.message_framework_error)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
                     // Noop.
                 })

@@ -1,12 +1,14 @@
 package github.tornaco.android.thanos.pref;
 
 import android.content.Context;
+
 import androidx.preference.PreferenceManager;
-import github.tornaco.android.thanos.BuildConfig;
+
+import github.tornaco.android.thanos.BuildProp;
 
 public class AppPreference {
 
-    private static final String PREF_KEY_FIRST_RUN = "PREF_KEY_FIRST_RUN_" + BuildConfig.VERSION_NAME;
+    private static final String PREF_KEY_FIRST_RUN = "PREF_KEY_FIRST_RUN_" + BuildProp.FINGERPRINT;
 
     public static boolean isFirstRun(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)

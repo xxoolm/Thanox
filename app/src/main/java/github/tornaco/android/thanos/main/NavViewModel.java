@@ -73,6 +73,8 @@ public class NavViewModel extends AndroidViewModel {
     private final ObservableField<String> channel = new ObservableField<>();
     @Getter
     private final ObservableBoolean isPaid = new ObservableBoolean(false);
+    @Getter
+    private final ObservableBoolean hasFrameworkError = new ObservableBoolean(false);
 
     private final List<Disposable> disposables = new ArrayList<>();
 
@@ -119,6 +121,7 @@ public class NavViewModel extends AndroidViewModel {
         }
 
         // Init app info.
+        hasFrameworkError.set(thanos.isServiceInstalled() && thanos.hasFrameworkInitializeError());
         channel.set(getChannelString());
         isPaid.set(!ThanosApp.isPrc() || DonateSettings.isDonated(getApplication().getApplicationContext()));
         Timber.v("isPaid? %s", isPaid.get());

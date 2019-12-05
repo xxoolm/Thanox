@@ -9,6 +9,8 @@
     <string name="status_not_active">Not active</string>
     <string name="message_active_needed">Please active thanox in XposedInstaller</string>
     <string name="status_need_reboot">Reboot</string>
+    <string name="title_framework_error">Framework error</string>
+    <string name="message_framework_error">Thanox framework got error during initializing, please report the logs under /data/system/thanos/log to developer</string>
 
     <string name="nav_title_boost">Boost</string>
     <string name="nav_title_secure">Security</string>
@@ -173,7 +175,9 @@
 
     <string name="badge_trying_app">Trying</string>
     <string name="badge_paid_app">Paid</string>
+    <string name="badge_framework_err">Error</string>
 
+    <string name="title_remember">Remember</string>
     <string name="title_app_notice">Be careful!</string>
     <string name="message_app_notice">In some cases, your device might no longer boot after installing Thanox.\n\nIf you never heard about \"soft brick\" and \"bootloop\" before or if you don\'t know how to recover from such a situation, do <b>NOT</b> install Thanox!\n\nIn any case, having a recent backup is highly recommended.</string>
 
