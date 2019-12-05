@@ -3,6 +3,7 @@ package github.tornaco.android.thanos.core
 import android.content.Context
 import android.os.Environment
 import android.os.UserHandle
+import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.app.activity.ActivityStackSupervisor
 import java.io.File
 
@@ -231,6 +232,9 @@ object T {
 
         @JvmField
         val PREF_OPS_ENABLED = ThanosFeature("PREF_OPS_ENABLED", false)
+
+        @JvmField
+        val PREF_FIRST_ACTIVATE = ThanosFeature("PREF_FIRST_ACTIVATE_" + BuildProp.FINGERPRINT, true)
     }
 
     object Actions {
@@ -263,5 +267,6 @@ object T {
     object Tags {
         const val N_TAG_BG_RESTRICT_APPS_CHANGED = "thanox.n.tag.bg.restrict.apps.changed"
         const val N_TAG_PKG_PRIVACY_DATA_CHEATING = "thanox.n.tag.privacy.pkg.cheating"
+        const val N_TAG_THANOX_ACTIVATED = "thanox.n.tag.thanox.core.activated"
     }
 }

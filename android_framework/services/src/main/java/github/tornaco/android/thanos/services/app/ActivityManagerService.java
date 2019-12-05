@@ -101,6 +101,7 @@ import util.ObjectsUtils;
 import static github.tornaco.android.thanos.core.T.Actions.ACTION_RUNNING_PROCESS_CLEAR;
 import static github.tornaco.android.thanos.core.T.Actions.ACTION_RUNNING_PROCESS_VIEWER;
 import static github.tornaco.android.thanos.core.T.Tags.N_TAG_BG_RESTRICT_APPS_CHANGED;
+import static github.tornaco.android.thanos.core.T.Tags.N_TAG_THANOX_ACTIVATED;
 import static github.tornaco.android.thanos.core.compat.NotificationCompat.VISIBILITY_PUBLIC;
 
 public class ActivityManagerService extends ThanoxSystemService implements IActivityManager {
@@ -204,6 +205,57 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
         initPrefs();
         registerReceivers();
+    }
+
+    @Override
+    public void onNotificationReady() {
+        super.onNotificationReady();
+        showActiveNotificationIfNeed();
+    }
+
+    private void showActiveNotificationIfNeed() {
+        PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
+        boolean isFirstActivateForThisBuild = preferenceManagerService.getBoolean(
+                T.Settings.PREF_FIRST_ACTIVATE.getKey(),
+                T.Settings.PREF_FIRST_ACTIVATE.getDefaultValue());
+
+        if (isFirstActivateForThisBuild) {
+            preferenceManagerService.putBoolean(
+                    T.Settings.PREF_FIRST_ACTIVATE.getKey(),
+                    false);
+            executeInternal(this::showActiveNotificationInternal);
+        }
+    }
+
+    private void showActiveNotificationInternal() {
+        Timber.w("showActiveNotificationInternal");
+        // For oreo.
+        notificationHelper.createSilenceNotificationChannel(Objects.requireNonNull(getContext()));
+
+        AppResources appResource = new AppResources(getContext(), BuildProp.THANOS_APP_PKG_NAME);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(),
+                T.serviceSilenceNotificationChannel());
+
+        SystemUI.overrideNotificationAppName(getContext(), builder,
+                appResource.getString(Res.Strings.STRING_SERVICE_NOTIFICATION_OVERRIDE_THANOS));
+
+        Notification n = builder
+                .setContentTitle("Thanox is active!")
+                .setContentText(String.format("The core version is %s", BuildProp.VERSION))
+                .setSmallIcon(android.R.drawable.stat_sys_warning)
+                .setVisibility(VISIBILITY_PUBLIC)
+                .setAutoCancel(true)
+                .build();
+
+        if (OsUtils.isMOrAbove()) {
+            n.setSmallIcon(appResource.getIcon(Res.Drawables.DRAWABLE_HEART_FILL));
+        }
+
+        NotificationManagerCompat.from(getContext())
+                .notify(NotificationIdFactory.getIdByTag(N_TAG_THANOX_ACTIVATED), n);
+
+
     }
 
     private void registerReceivers() {

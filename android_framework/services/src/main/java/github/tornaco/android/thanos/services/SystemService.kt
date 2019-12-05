@@ -33,6 +33,10 @@ open class SystemService {
         setNotificationReadyDelayed()
     }
 
+    open fun onNotificationReady() {
+        Timber.i("onNotificationReady@" + serviceName())
+    }
+
     @CallSuper
     open fun shutdown() {
         Timber.i("shutdown")
@@ -79,6 +83,7 @@ open class SystemService {
                     Action {
                         Timber.d("isNotificationPostReady = true ...")
                         isNotificationPostReady = true
+                        onNotificationReady()
                     })
         )
     }

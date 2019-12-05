@@ -46,6 +46,7 @@ abstract class Res {
         const val DRAWABLE_MUSIC_FILL = "module_ops_ic_music_fill"
         const val DRAWABLE_MAP_PIN_FILL = "ic_map_pin_2_fill"
         const val DRAWABLE_CHECK_DOUBLE_FILL = "ic_check_double_fill"
+        const val DRAWABLE_HEART_FILL = "ic_heart_2_fill"
     }
 
 }
