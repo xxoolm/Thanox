@@ -80,7 +80,6 @@
                     android:ellipsize="end"
                     android:text="@{op.summary}"
                     android:maxLines="30"
-                    android:maxLength="24"
                     android:textAppearance="@style/TextAppearance.TileSubTitle"/>
 
             <androidx.appcompat.widget.SwitchCompat
