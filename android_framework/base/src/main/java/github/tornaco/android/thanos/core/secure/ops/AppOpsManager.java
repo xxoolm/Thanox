@@ -27,6 +27,7 @@ import github.tornaco.android.thanos.core.util.ArrayUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
+@SuppressWarnings("JavaDoc")
 @AllArgsConstructor
 public class AppOpsManager {
 
@@ -438,18 +439,55 @@ public class AppOpsManager {
      */
     public static final int OP_BLUETOOTH_SCAN = 77;
 
-    public static final int OP_PLACE_HOLDER_1 = 78;
-    public static final int OP_PLACE_HOLDER_2 = 79;
-    public static final int OP_PLACE_HOLDER_3 = 80;
-    public static final int OP_PLACE_HOLDER_4 = 81;
-    public static final int OP_PLACE_HOLDER_5 = 82;
-    public static final int OP_PLACE_HOLDER_6 = 83;
-    public static final int OP_PLACE_HOLDER_7 = 84;
-    public static final int OP_PLACE_HOLDER_8 = 85;
-    public static final int OP_PLACE_HOLDER_9 = 86;
-    public static final int OP_PLACE_HOLDER_10 = 87;
-    public static final int OP_PLACE_HOLDER_11 = 88;
-    public static final int OP_PLACE_HOLDER_12 = 89;
+    /**
+     * @hide Use the BiometricPrompt/BiometricManager APIs.
+     */
+    public static final int OP_USE_BIOMETRIC = 78;
+    /**
+     * @hide Physical activity recognition.
+     */
+    public static final int OP_ACTIVITY_RECOGNITION = 79;
+    /**
+     * @hide Financial app sms read.
+     */
+    public static final int OP_SMS_FINANCIAL_TRANSACTIONS = 80;
+    /**
+     * @hide Read media of audio type.
+     */
+    public static final int OP_READ_MEDIA_AUDIO = 81;
+    /**
+     * @hide Write media of audio type.
+     */
+    public static final int OP_WRITE_MEDIA_AUDIO = 82;
+    /**
+     * @hide Read media of video type.
+     */
+    public static final int OP_READ_MEDIA_VIDEO = 83;
+    /**
+     * @hide Write media of video type.
+     */
+    public static final int OP_WRITE_MEDIA_VIDEO = 84;
+    /**
+     * @hide Read media of image type.
+     */
+    public static final int OP_READ_MEDIA_IMAGES = 85;
+    /**
+     * @hide Write media of image type.
+     */
+    public static final int OP_WRITE_MEDIA_IMAGES = 86;
+    /**
+     * @hide Has a legacy (non-isolated) view of storage.
+     */
+    public static final int OP_LEGACY_STORAGE = 87;
+    /**
+     * @hide Accessing accessibility features
+     */
+    public static final int OP_ACCESS_ACCESSIBILITY = 88;
+    /**
+     * @hide Read the device identifiers (IMEI / MEID, IMSI, SIM / Build serial)
+     */
+    public static final int OP_READ_DEVICE_IDENTIFIERS = 89;
+
     public static final int OP_PLACE_HOLDER_13 = 90;
     public static final int OP_PLACE_HOLDER_14 = 91;
     public static final int OP_PLACE_HOLDER_15 = 92;
@@ -554,18 +592,19 @@ public class AppOpsManager {
             ManifestCompat.permission.FOREGROUND_SERVICE,
             null, // no permission for OP_BLUETOOTH_SCAN
 
+            ManifestCompat.permission.USE_BIOMETRIC,
+            ManifestCompat.permission.ACTIVITY_RECOGNITION,
+            ManifestCompat.permission.SMS_FINANCIAL_TRANSACTIONS,
             null,
+            null, // no permission for OP_WRITE_MEDIA_AUDIO
             null,
+            null, // no permission for OP_WRITE_MEDIA_VIDEO
             null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            null, // no permission for OP_WRITE_MEDIA_IMAGES
+            null, // no permission for OP_LEGACY_STORAGE
+            null, // no permission for OP_ACCESS_ACCESSIBILITY
+            null, // no direct permission for OP_READ_DEVICE_IDENTIFIERS
+
             null,
             null,
             null,

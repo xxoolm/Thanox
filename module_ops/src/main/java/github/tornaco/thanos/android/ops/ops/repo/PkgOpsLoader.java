@@ -1,7 +1,16 @@
 package github.tornaco.thanos.android.ops.ops.repo;
 
 import android.content.Context;
+
 import com.google.common.collect.Sets;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager;
@@ -10,8 +19,6 @@ import github.tornaco.thanos.android.ops.model.Op;
 import github.tornaco.thanos.android.ops.model.OpGroup;
 import github.tornaco.thanos.android.ops.model.Ops;
 import github.tornaco.thanos.android.ops.model.OpsTemplate;
-
-import java.util.*;
 
 public class PkgOpsLoader {
 
@@ -24,7 +31,7 @@ public class PkgOpsLoader {
             AppOpsManager ops = thanos.getAppOpsManager();
             for (int op = 0; op < numOp; op++) {
                 String perm = AppOpsManager.opToPermission(op);
-                boolean hold = permissions.contains(perm) || appInfo.isDummy();
+                boolean hold = perm == null || permissions.contains(perm) || appInfo.isDummy();
                 if (hold) {
                     OpsTemplate template = Ops.templateOfOp(op);
                     if (template != null) {

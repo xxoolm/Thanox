@@ -122,6 +122,9 @@ public class ManifestCompat {
         public static final String ACCESS_BROADCAST_RADIO = "android.permission.ACCESS_BROADCAST_RADIO";
         public static final String ACCEPT_HANDOVER = "android.permission.ACCEPT_HANDOVER";
         public static final String FOREGROUND_SERVICE = "android.permission.FOREGROUND_SERVICE";
+        public static final String USE_BIOMETRIC = "android.permission.USE_BIOMETRIC";
+        public static final String ACTIVITY_RECOGNITION = "android.permission.ACTIVITY_RECOGNITION";
+        public static final String SMS_FINANCIAL_TRANSACTIONS = "android.permission.SMS_FINANCIAL_TRANSACTIONS";
         /**
          * @deprecated
          */
