@@ -7,7 +7,6 @@ import android.os.Binder;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -17,7 +16,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import github.tornaco.android.thanos.core.IThanos;
 import github.tornaco.android.thanos.core.app.ThanosManagerNative;
 import github.tornaco.android.thanos.core.pm.PackageManager;
-import github.tornaco.android.thanos.core.secure.IPrivacyManager;
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager;
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService;
 import github.tornaco.android.thanos.core.util.ArrayUtils;
@@ -90,19 +88,6 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
                                     }
                                 }
                             }
-
-                            IPrivacyManager priv = thanos.getPrivacyManager();
-                            if (priv != null && priv.isPrivacyEnabled()) {
-                                boolean enabledUid = priv.isUidPrivacyDataCheat(uid);
-                                if (!enabledUid) return;
-
-                                PackageInfo[] cheated = priv.getCheatedInstalledPackagesForUid(uid);
-                                if (cheated == null) return;
-
-                                Timber.v("getInstalledPackages, priv cheat for %s", uid);
-                                ParceledListSlice<PackageInfo> empty = new ParceledListSlice<>(Arrays.asList(cheated));
-                                param.setResult(empty);
-                            }
                         }
                     });
             Timber.d("hookGetInstalledPkgs OK:" + unHooks);
@@ -146,20 +131,6 @@ public class PMSGetInstalledPackagesRegistry implements IXposedHook {
                                         break;
                                     }
                                 }
-                            }
-
-                            // Check priv.
-                            IPrivacyManager priv = thanos.getPrivacyManager();
-                            if (priv != null && priv.isPrivacyEnabled()) {
-                                boolean enabledUid = priv.isUidPrivacyDataCheat(uid);
-                                if (!enabledUid) return;
-
-                                ApplicationInfo[] cheated = priv.getCheatedInstalledApplicationsUid(uid);
-                                if (cheated == null) return;
-
-                                Timber.v("getInstalledApplications, priv cheat for %s", uid);
-                                ParceledListSlice<ApplicationInfo> empty = new ParceledListSlice<>(Arrays.asList(cheated));
-                                param.setResult(empty);
                             }
                         }
                     });

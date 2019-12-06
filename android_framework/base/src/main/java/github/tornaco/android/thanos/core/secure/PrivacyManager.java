@@ -1,7 +1,5 @@
 package github.tornaco.android.thanos.core.secure;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.location.Location;
 
 import lombok.AllArgsConstructor;
@@ -34,16 +32,6 @@ public class PrivacyManager {
     @SneakyThrows
     public boolean isUidPrivacyDataCheat(int uid) {
         return server.isUidPrivacyDataCheat(uid);
-    }
-
-    @SneakyThrows
-    public PackageInfo[] getCheatedInstalledPackagesForUid(int uid) {
-        return server.getCheatedInstalledPackagesForUid(uid);
-    }
-
-    @SneakyThrows
-    public ApplicationInfo[] getCheatedInstalledApplicationsUid(int uid) {
-        return server.getCheatedInstalledApplicationsUid(uid);
     }
 
     @SneakyThrows
@@ -104,16 +92,6 @@ public class PrivacyManager {
     @SneakyThrows
     public String getOriginalSimSerialNumber() {
         return server.getOriginalSimSerialNumber();
-    }
-
-    @SneakyThrows
-    public void setInstalledPackagesReturnEmptyEnableForPkg(String pkg, boolean enable) {
-        server.setInstalledPackagesReturnEmptyEnableForPkg(pkg, enable);
-    }
-
-    @SneakyThrows
-    public boolean isInstalledPackagesReturnEmptyEnableForPkg(String pkg) {
-        return server.isInstalledPackagesReturnEmptyEnableForPkg(pkg);
     }
 
     @SneakyThrows

@@ -25,14 +25,6 @@ public interface IPrivacyManager extends android.os.IInterface
     @Override public void setPkgPrivacyDataCheat(java.lang.String pkg, boolean enable) throws android.os.RemoteException
     {
     }
-    @Override public android.content.pm.PackageInfo[] getCheatedInstalledPackagesForUid(int uid) throws android.os.RemoteException
-    {
-      return null;
-    }
-    @Override public android.content.pm.ApplicationInfo[] getCheatedInstalledApplicationsUid(int uid) throws android.os.RemoteException
-    {
-      return null;
-    }
     @Override public java.lang.String getCheatedDeviceIdForPkg(java.lang.String pkg) throws android.os.RemoteException
     {
       return null;
@@ -69,15 +61,6 @@ public interface IPrivacyManager extends android.os.IInterface
     }
     @Override public void setCheatedSimSerialNumberForPkg(java.lang.String pkg, java.lang.String num) throws android.os.RemoteException
     {
-    }
-    // Return am empty array while rquest instal apps.
-
-    @Override public void setInstalledPackagesReturnEmptyEnableForPkg(java.lang.String pkg, boolean enable) throws android.os.RemoteException
-    {
-    }
-    @Override public boolean isInstalledPackagesReturnEmptyEnableForPkg(java.lang.String pkg) throws android.os.RemoteException
-    {
-      return false;
     }
     @Override public int getPrivacyDataCheatPkgCount() throws android.os.RemoteException
     {
@@ -183,26 +166,6 @@ public interface IPrivacyManager extends android.os.IInterface
           _arg1 = (0!=data.readInt());
           this.setPkgPrivacyDataCheat(_arg0, _arg1);
           reply.writeNoException();
-          return true;
-        }
-        case TRANSACTION_getCheatedInstalledPackagesForUid:
-        {
-          data.enforceInterface(descriptor);
-          int _arg0;
-          _arg0 = data.readInt();
-          android.content.pm.PackageInfo[] _result = this.getCheatedInstalledPackagesForUid(_arg0);
-          reply.writeNoException();
-          reply.writeTypedArray(_result, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
-          return true;
-        }
-        case TRANSACTION_getCheatedInstalledApplicationsUid:
-        {
-          data.enforceInterface(descriptor);
-          int _arg0;
-          _arg0 = data.readInt();
-          android.content.pm.ApplicationInfo[] _result = this.getCheatedInstalledApplicationsUid(_arg0);
-          reply.writeNoException();
-          reply.writeTypedArray(_result, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
           return true;
         }
         case TRANSACTION_getCheatedDeviceIdForPkg:
@@ -313,27 +276,6 @@ public interface IPrivacyManager extends android.os.IInterface
           _arg1 = data.readString();
           this.setCheatedSimSerialNumberForPkg(_arg0, _arg1);
           reply.writeNoException();
-          return true;
-        }
-        case TRANSACTION_setInstalledPackagesReturnEmptyEnableForPkg:
-        {
-          data.enforceInterface(descriptor);
-          java.lang.String _arg0;
-          _arg0 = data.readString();
-          boolean _arg1;
-          _arg1 = (0!=data.readInt());
-          this.setInstalledPackagesReturnEmptyEnableForPkg(_arg0, _arg1);
-          reply.writeNoException();
-          return true;
-        }
-        case TRANSACTION_isInstalledPackagesReturnEmptyEnableForPkg:
-        {
-          data.enforceInterface(descriptor);
-          java.lang.String _arg0;
-          _arg0 = data.readString();
-          boolean _result = this.isInstalledPackagesReturnEmptyEnableForPkg(_arg0);
-          reply.writeNoException();
-          reply.writeInt(((_result)?(1):(0)));
           return true;
         }
         case TRANSACTION_getPrivacyDataCheatPkgCount:
@@ -490,48 +432,6 @@ public interface IPrivacyManager extends android.os.IInterface
           _reply.recycle();
           _data.recycle();
         }
-      }
-      @Override public android.content.pm.PackageInfo[] getCheatedInstalledPackagesForUid(int uid) throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        android.content.pm.PackageInfo[] _result;
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeInt(uid);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_getCheatedInstalledPackagesForUid, _data, _reply, 0);
-          if (!_status && getDefaultImpl() != null) {
-            return getDefaultImpl().getCheatedInstalledPackagesForUid(uid);
-          }
-          _reply.readException();
-          _result = _reply.createTypedArray(android.content.pm.PackageInfo.CREATOR);
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-        return _result;
-      }
-      @Override public android.content.pm.ApplicationInfo[] getCheatedInstalledApplicationsUid(int uid) throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        android.content.pm.ApplicationInfo[] _result;
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeInt(uid);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_getCheatedInstalledApplicationsUid, _data, _reply, 0);
-          if (!_status && getDefaultImpl() != null) {
-            return getDefaultImpl().getCheatedInstalledApplicationsUid(uid);
-          }
-          _reply.readException();
-          _result = _reply.createTypedArray(android.content.pm.ApplicationInfo.CREATOR);
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-        return _result;
       }
       @Override public java.lang.String getCheatedDeviceIdForPkg(java.lang.String pkg) throws android.os.RemoteException
       {
@@ -749,49 +649,6 @@ public interface IPrivacyManager extends android.os.IInterface
           _data.recycle();
         }
       }
-      // Return am empty array while rquest instal apps.
-
-      @Override public void setInstalledPackagesReturnEmptyEnableForPkg(java.lang.String pkg, boolean enable) throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeString(pkg);
-          _data.writeInt(((enable)?(1):(0)));
-          boolean _status = mRemote.transact(Stub.TRANSACTION_setInstalledPackagesReturnEmptyEnableForPkg, _data, _reply, 0);
-          if (!_status && getDefaultImpl() != null) {
-            getDefaultImpl().setInstalledPackagesReturnEmptyEnableForPkg(pkg, enable);
-            return;
-          }
-          _reply.readException();
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-      }
-      @Override public boolean isInstalledPackagesReturnEmptyEnableForPkg(java.lang.String pkg) throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        boolean _result;
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeString(pkg);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_isInstalledPackagesReturnEmptyEnableForPkg, _data, _reply, 0);
-          if (!_status && getDefaultImpl() != null) {
-            return getDefaultImpl().isInstalledPackagesReturnEmptyEnableForPkg(pkg);
-          }
-          _reply.readException();
-          _result = (0!=_reply.readInt());
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-        return _result;
-      }
       @Override public int getPrivacyDataCheatPkgCount() throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
@@ -878,24 +735,20 @@ public interface IPrivacyManager extends android.os.IInterface
     static final int TRANSACTION_isUidPrivacyDataCheat = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
     static final int TRANSACTION_isPkgPrivacyDataCheat = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
     static final int TRANSACTION_setPkgPrivacyDataCheat = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
-    static final int TRANSACTION_getCheatedInstalledPackagesForUid = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
-    static final int TRANSACTION_getCheatedInstalledApplicationsUid = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
-    static final int TRANSACTION_getCheatedDeviceIdForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
-    static final int TRANSACTION_getCheatedLine1NumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
-    static final int TRANSACTION_getCheatedSimSerialNumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
-    static final int TRANSACTION_getCheatedLocationForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
-    static final int TRANSACTION_getOriginalDeviceId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
-    static final int TRANSACTION_getOriginalLine1Number = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
-    static final int TRANSACTION_getOriginalSimSerialNumber = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
-    static final int TRANSACTION_setCheatedDeviceIdForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
-    static final int TRANSACTION_setCheatedLine1NumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
-    static final int TRANSACTION_setCheatedSimSerialNumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
-    static final int TRANSACTION_setInstalledPackagesReturnEmptyEnableForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
-    static final int TRANSACTION_isInstalledPackagesReturnEmptyEnableForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
-    static final int TRANSACTION_getPrivacyDataCheatPkgCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
-    static final int TRANSACTION_getPrivacyDataCheatRequestCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
-    static final int TRANSACTION_isPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
-    static final int TRANSACTION_setPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
+    static final int TRANSACTION_getCheatedDeviceIdForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
+    static final int TRANSACTION_getCheatedLine1NumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
+    static final int TRANSACTION_getCheatedSimSerialNumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
+    static final int TRANSACTION_getCheatedLocationForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
+    static final int TRANSACTION_getOriginalDeviceId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
+    static final int TRANSACTION_getOriginalLine1Number = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
+    static final int TRANSACTION_getOriginalSimSerialNumber = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
+    static final int TRANSACTION_setCheatedDeviceIdForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+    static final int TRANSACTION_setCheatedLine1NumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+    static final int TRANSACTION_setCheatedSimSerialNumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+    static final int TRANSACTION_getPrivacyDataCheatPkgCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
+    static final int TRANSACTION_getPrivacyDataCheatRequestCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+    static final int TRANSACTION_isPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+    static final int TRANSACTION_setPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.secure.IPrivacyManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -912,8 +765,6 @@ public interface IPrivacyManager extends android.os.IInterface
   public boolean isUidPrivacyDataCheat(int uid) throws android.os.RemoteException;
   public boolean isPkgPrivacyDataCheat(java.lang.String pkg) throws android.os.RemoteException;
   public void setPkgPrivacyDataCheat(java.lang.String pkg, boolean enable) throws android.os.RemoteException;
-  public android.content.pm.PackageInfo[] getCheatedInstalledPackagesForUid(int uid) throws android.os.RemoteException;
-  public android.content.pm.ApplicationInfo[] getCheatedInstalledApplicationsUid(int uid) throws android.os.RemoteException;
   public java.lang.String getCheatedDeviceIdForPkg(java.lang.String pkg) throws android.os.RemoteException;
   public java.lang.String getCheatedLine1NumberForPkg(java.lang.String pkg) throws android.os.RemoteException;
   public java.lang.String getCheatedSimSerialNumberForPkg(java.lang.String pkg) throws android.os.RemoteException;
@@ -924,10 +775,6 @@ public interface IPrivacyManager extends android.os.IInterface
   public void setCheatedDeviceIdForPkg(java.lang.String pkg, java.lang.String deviceId) throws android.os.RemoteException;
   public void setCheatedLine1NumberForPkg(java.lang.String pkg, java.lang.String num) throws android.os.RemoteException;
   public void setCheatedSimSerialNumberForPkg(java.lang.String pkg, java.lang.String num) throws android.os.RemoteException;
-  // Return am empty array while rquest instal apps.
-
-  public void setInstalledPackagesReturnEmptyEnableForPkg(java.lang.String pkg, boolean enable) throws android.os.RemoteException;
-  public boolean isInstalledPackagesReturnEmptyEnableForPkg(java.lang.String pkg) throws android.os.RemoteException;
   public int getPrivacyDataCheatPkgCount() throws android.os.RemoteException;
   public long getPrivacyDataCheatRequestCount() throws android.os.RemoteException;
   public boolean isPrivacyNotificationEnabled() throws android.os.RemoteException;

@@ -3,8 +3,6 @@ package github.tornaco.android.thanos.services.secure
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.IntentFilter
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
 import android.location.Location
 import android.os.IBinder
 import android.telephony.TelephonyManager
@@ -45,7 +43,6 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     private lateinit var pkgDeviceIdRepo: StringMapRepo
     private lateinit var pkgSimNumRepo: StringMapRepo
     private lateinit var pkgLine1NumRepo: StringMapRepo
-    private lateinit var installedPkgsReturnEmptyRepo: StringMapRepo
 
     private lateinit var privacyDataCheatPkgRepo: StringSetRepo
 
@@ -68,8 +65,6 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         pkgDeviceIdRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacyDeviceIdFile().path)
         pkgLine1NumRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacyLine1NumFile().path)
         pkgSimNumRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacySimNumFile().path)
-        installedPkgsReturnEmptyRepo =
-            RepoFactory.get().getOrCreateStringMapRepo(T.privacyInstalledPkgsReturnEmptyFile().path)
 
         privacyDataCheatPkgRepo =
             RepoFactory.get().getOrCreateStringSetRepo(T.privacyPkgSettingsFile().path)
@@ -167,61 +162,6 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
 
     override fun setPkgPrivacyDataCheat(pkg: String, enable: Boolean) {
         if (enable) privacyDataCheatPkgRepo.add(pkg) else privacyDataCheatPkgRepo.remove(pkg)
-    }
-
-    override fun getCheatedInstalledPackagesForUid(uid: Int): Array<PackageInfo?>? {
-        val pkgNames: Array<String> = s.pkgManagerService.getPkgNameForUid(uid)
-        if (ArrayUtils.isEmpty(pkgNames)) {
-            Timber.e("Pkg name not found for uid: $uid")
-            return null
-        }
-
-        val pkgName = pkgNames[0]
-        Timber.v("getInstalledPackages: $pkgName")
-
-        val useSet = installedPkgsReturnEmptyRepo[pkgName]
-        if (!TextUtils.isEmpty(useSet) && true.toString() == useSet) {
-            return arrayOfNulls(0)
-        }
-        val allSet = installedPkgsReturnEmptyRepo["*"]
-        Timber.v("getCheatedInstalledApplicationsUid, allSet: $allSet")
-        if (!TextUtils.isEmpty(allSet) && true.toString() == allSet) {
-            return arrayOfNulls(0)
-        }
-        // Do not cheat.
-        return null
-    }
-
-    override fun getCheatedInstalledApplicationsUid(uid: Int): Array<ApplicationInfo?>? {
-        val pkgNames: Array<String> = s.pkgManagerService.getPkgNameForUid(uid)
-        if (ArrayUtils.isEmpty(pkgNames)) {
-            Timber.e("Pkg name not found for uid: $uid")
-            return null
-        }
-
-        val pkgName = pkgNames[0]
-        Timber.v("getInstalledApplications: $pkgName")
-
-        val useSet = installedPkgsReturnEmptyRepo[pkgName]
-        if (!TextUtils.isEmpty(useSet) && true.toString() == useSet) {
-            return arrayOfNulls(0)
-        }
-        val allSet = installedPkgsReturnEmptyRepo["*"]
-        Timber.v("getCheatedInstalledApplicationsUid, allSet: $allSet")
-        if (!TextUtils.isEmpty(allSet) && true.toString() == allSet) {
-            return arrayOfNulls(0)
-        }
-        // Do not cheat.
-        return null
-    }
-
-    override fun isInstalledPackagesReturnEmptyEnableForPkg(pkg: String?): Boolean {
-        val set = installedPkgsReturnEmptyRepo[pkg]
-        return !TextUtils.isEmpty(set) && true.toString() == set
-    }
-
-    override fun setInstalledPackagesReturnEmptyEnableForPkg(pkg: String?, enable: Boolean) {
-        installedPkgsReturnEmptyRepo[pkg] = enable.toString()
     }
 
     override fun getCheatedDeviceIdForPkg(pkg: String): String? {

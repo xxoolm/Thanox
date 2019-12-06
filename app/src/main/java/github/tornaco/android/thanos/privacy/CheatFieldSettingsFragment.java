@@ -40,14 +40,6 @@ public class CheatFieldSettingsFragment extends PreferenceFragmentCompat {
         new SimSerial(getString(R.string.key_original_field_sim_serial), true).bind();
         new DeviceId(getString(R.string.key_original_field_device_id), true).bind();
 
-        SwitchPreferenceCompat switchPreference = findPreference(getString(R.string.key_cheat_field_installed_apps));
-        Objects.requireNonNull(switchPreference).setChecked(thanos.getPrivacyManager().isInstalledPackagesReturnEmptyEnableForPkg("*"));
-        switchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            boolean checked = (boolean) newValue;
-            thanos.getPrivacyManager().setInstalledPackagesReturnEmptyEnableForPkg("*", checked);
-            return true;
-        });
-
         SwitchPreferenceCompat showNotificationPref = findPreference(getString(R.string.key_cheat_field_show_cheated_app_notifications));
         Objects.requireNonNull(showNotificationPref).setChecked(thanos.getPrivacyManager().isPrivacyNotificationEnabled());
         showNotificationPref.setOnPreferenceChangeListener((preference, newValue) -> {

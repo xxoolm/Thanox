@@ -37,10 +37,6 @@
                 app:persistent="false"
                 app:title="@string/pre_title_cheat_sim_serial" />
 
-        <SwitchPreferenceCompat
-                app:key="@string/key_cheat_field_installed_apps"
-                app:persistent="false"
-                app:title="@string/pre_title_cheat_installed_apps" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pre_cheat_field_category_others">
