@@ -246,6 +246,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
                 .setSmallIcon(android.R.drawable.stat_sys_warning)
                 .setVisibility(VISIBILITY_PUBLIC)
                 .setAutoCancel(true)
+                .setOngoing(false)
                 .build();
 
         if (OsUtils.isMOrAbove()) {
@@ -255,6 +256,9 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         NotificationManagerCompat.from(getContext())
                 .notify(NotificationIdFactory.getIdByTag(N_TAG_THANOX_ACTIVATED), n);
 
+        // Cancel later.
+        executeInternal(() -> NotificationManagerCompat.from(getContext())
+                .cancel(NotificationIdFactory.getIdByTag(N_TAG_THANOX_ACTIVATED)), 12 * 1000);
 
     }
 
