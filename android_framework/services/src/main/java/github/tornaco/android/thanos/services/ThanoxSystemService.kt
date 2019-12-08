@@ -15,8 +15,8 @@ open class ThanoxSystemService(@JvmField protected val s: S) : SystemService() {
         if (PkgUtils.isSystemOrPhoneOrShell(callingUid)) {
             return
         }
-        val thanosAppUid = s.pkgManagerService.thanosAppUid
-        if (thanosAppUid == callingUid) {
+
+        if (s.pkgManagerService.mayBeThanosAppUid(callingUid)) {
             return
         }
 

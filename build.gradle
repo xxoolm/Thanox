@@ -53,7 +53,8 @@ androidGitVersion {
 }
 
 ext {
-    thanosApplicationId = getCurrentFlavor() == "row" ? "github.tornaco.android.thanos.pro" : "github.tornaco.android.thanos"
+    thanosApplicationIdPrefix = "github.tornaco.android.thanos"
+    thanosApplicationId = getCurrentFlavor() == "row" ? "${thanosApplicationIdPrefix}.pro" : "${thanosApplicationIdPrefix}"
     println "### CurrentVariant: ${getCurrentVariant()} ###"
     println "### CurrentFlavor: ${getCurrentFlavor()} ###"
     println "### thanosApplicationId: $thanosApplicationId ###"

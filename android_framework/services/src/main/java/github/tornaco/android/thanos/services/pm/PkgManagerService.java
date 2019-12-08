@@ -112,8 +112,8 @@ public class PkgManagerService extends ThanoxSystemService implements IPkgManage
         return uid == null ? -1 : uid;
     }
 
-    public int getThanosAppUid() {
-        return getPkgCache().getThanosAppUid();
+    public boolean mayBeThanosAppUid(int uid) {
+        return getPkgCache().getThanosAppUid().contains(uid);
     }
 
     @Override

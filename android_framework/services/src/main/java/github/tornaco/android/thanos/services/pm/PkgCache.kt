@@ -53,7 +53,7 @@ internal class PkgCache {
 
     val webViewProviderPkgs = ArrayList<String>()
 
-    var thanosAppUid = 0
+    var thanosAppUid: HashSet<Int> = HashSet()
 
     fun onStart(context: Context) {
         this.context = context
@@ -134,8 +134,8 @@ internal class PkgCache {
         val pm = context!!.packageManager
 
         // Cache for thanos.
-        if (pkgName == BuildProp.THANOS_APP_PKG_NAME) {
-            thanosAppUid = applicationInfo.uid
+        if (pkgName.contains(BuildProp.THANOS_APP_PKG_NAME_PREFIX)) {
+            thanosAppUid.add(applicationInfo.uid)
             Timber.w("thanosAppUid=%s", thanosAppUid)
         }
 
