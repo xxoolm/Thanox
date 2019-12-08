@@ -148,6 +148,8 @@
     <string name="pre_summary_backup">Backup thanox settings to external storage</string>
     <string name="pre_title_restore">Restore</string>
     <string name="pre_sumary_restore">Restore thanox settings from external file</string>
+    <string name="pre_title_restore_default">Restore default</string>
+    <string name="pre_summary_restore_default">Restore thanox default settings</string>
 
     <string name="pref_title_new_installed_apps_config_enabled">Auto config</string>
     <string name="pref_summary_new_installed_apps_config_enabled">Auto config new installed apps</string>

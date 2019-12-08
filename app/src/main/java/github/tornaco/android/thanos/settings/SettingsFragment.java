@@ -180,6 +180,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             SettingsFragmentPermissionRequester.restoreRequestedChecked(SettingsFragment.this);
             return true;
         });
+        findPreference(getString(R.string.key_restore_default)).setOnPreferenceClickListener(preference -> {
+            ThanosManager.from(getActivity())
+                    .ifServiceInstalled(thanosManager -> {
+                        if (thanosManager.getBackupAgent().restoreDefault()) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setMessage(getString(R.string.pre_message_restore_success))
+                                    .setCancelable(false)
+                                    .setPositiveButton(android.R.string.ok, null)
+                                    .show();
+                        } else {
+                            new AlertDialog.Builder(getActivity())
+                                    .setMessage("Error:(")
+                                    .setCancelable(false)
+                                    .setPositiveButton(android.R.string.ok, null)
+                                    .show();
+                        }
+                    });
+            return true;
+        });
 
         // Auto config.
         SwitchPreferenceCompat autoConfigPref = findPreference(getString(R.string.key_new_installed_apps_config_enabled));

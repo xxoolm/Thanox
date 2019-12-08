@@ -148,6 +148,8 @@
     <string name="pre_summary_backup">备份Thanox设置到外置存储中</string>
     <string name="pre_title_restore">恢复</string>
     <string name="pre_sumary_restore">选择一个备份包以恢复Thanox设置</string>
+    <string name="pre_title_restore_default">恢复默认</string>
+    <string name="pre_summary_restore_default">恢复Thanox默认配置</string>
 
     <string name="pref_title_new_installed_apps_config_enabled">启用自动配置</string>
     <string name="pref_summary_new_installed_apps_config_enabled">为新安装的App自动使用模板配置</string>

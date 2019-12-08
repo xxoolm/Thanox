@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.core.backup;
 
 import android.os.ParcelFileDescriptor;
+
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -18,4 +19,8 @@ public class BackupAgent {
         server.performRestore(pfd, domain, path, callback);
     }
 
+    @SneakyThrows
+    public boolean restoreDefault() {
+        return server.restoreDefault();
+    }
 }

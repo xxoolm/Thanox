@@ -11,14 +11,14 @@ import github.tornaco.android.thanos.core.backup.IFileDescriptorConsumer
 import github.tornaco.android.thanos.core.backup.IFileDescriptorInitializer
 import github.tornaco.android.thanos.core.util.*
 import github.tornaco.android.thanos.services.S
-import github.tornaco.android.thanos.services.SystemService
+import github.tornaco.android.thanos.services.ThanoxSystemService
 import util.IoUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
-class BackupAgentService(s: S) : SystemService(), IBackupAgent {
+class BackupAgentService(s: S) : ThanoxSystemService(s), IBackupAgent {
 
     override fun performBackup(
         init: IFileDescriptorInitializer?,
@@ -135,6 +135,12 @@ class BackupAgentService(s: S) : SystemService(), IBackupAgent {
         } finally {
             FileUtils.deleteDirQuiet(tmpDir)
         }
+    }
+
+    override fun restoreDefault(): Boolean {
+        enforceCallingPermissions()
+        Timber.w("restoreDefault, deleting: ${T.baseServerDataDir()}")
+        return FileUtils.deleteDir(T.baseServerDataDir())
     }
 
     override fun asBinder(): IBinder {

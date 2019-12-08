@@ -47,6 +47,12 @@
                 app:persistent="false"
                 app:summary="@string/pre_sumary_restore"
                 app:title="@string/pre_title_restore" />
+
+        <Preference
+                app:key="@string/key_restore_default"
+                app:persistent="false"
+                app:summary="@string/pre_summary_restore_default"
+                app:title="@string/pre_title_restore_default" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pre_category_dev_tools">
