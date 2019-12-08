@@ -1,7 +1,9 @@
 package github.tornaco.thanox.thanox_framework_base
 
 import android.content.Context
+import com.google.gson.Gson
 import github.tornaco.android.thanos.core.app.ThanosManager
+import github.tornaco.android.thanos.core.pm.AppInfo
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -9,6 +11,8 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 class ThanoxFrameworkBasePlugin(private val context: Context) : MethodCallHandler {
+
+    private val gson = Gson()
 
     companion object {
         @JvmStatic
@@ -39,6 +43,12 @@ class ThanoxFrameworkBasePlugin(private val context: Context) : MethodCallHandle
         if (call.method == "versionName") {
             val thanox = ThanosManager.from(context)
             result.success(thanox.versionName)
+            return
+        }
+
+        if (call.method == "getInstalledPkgs") {
+            val thanox = ThanosManager.from(context)
+            result.success(gson.toJson(thanox.pkgManager.getInstalledPkgs(AppInfo.FLAGS_ALL)))
             return
         }
 

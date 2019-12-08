@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/services.dart';
+
+import 'app_info.dart';
 
 class ThanoxFrameworkBase {
   static const MethodChannel _channel =
@@ -19,5 +22,12 @@ class ThanoxFrameworkBase {
   static Future<String> get fingerPrint async {
     final String fp = await _channel.invokeMethod('fingerPrint');
     return fp;
+  }
+
+  static Future<AppInfoList> get getInstalledPkgs async {
+    final String res = await _channel.invokeMethod('getInstalledPkgs');
+    List<dynamic> list = json.decode(res);
+    AppInfoList appList = AppInfoList.fromJson(list);
+    return appList;
   }
 }

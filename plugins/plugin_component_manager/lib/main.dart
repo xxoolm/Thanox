@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:thanox_framework_base/app_info.dart';
 import 'package:thanox_framework_base/thanox_framework_base.dart';
 
 void main() => runApp(MyApp());
@@ -69,6 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
+
+    AppInfoList appList = await ThanoxFrameworkBase.getInstalledPkgs;
+    appList.appList
+        .forEach((member) => print('App name is ${member.appLabel}'));
 
     setState(() {
       _platformVersion = platformVersion;
