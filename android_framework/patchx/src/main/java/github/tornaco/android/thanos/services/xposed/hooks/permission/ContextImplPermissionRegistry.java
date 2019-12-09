@@ -4,6 +4,10 @@ import android.Manifest;
 import android.app.AndroidAppHelper;
 import android.os.Binder;
 import android.util.Log;
+
+import java.util.Arrays;
+import java.util.Set;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -15,10 +19,15 @@ import github.tornaco.android.thanos.services.xposed.IXposedHook;
 import github.tornaco.android.thanos.services.xposed.XposedLogger;
 import github.tornaco.xposed.annotation.XposedHook;
 
-import java.util.Arrays;
-import java.util.Set;
-
-import static github.tornaco.xposed.annotation.XposedHook.SdkVersions.*;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._21;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._22;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._23;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._24;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._25;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._26;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._27;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._28;
+import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 
 // For permission enhancement.
 // No need, we will find new solution instead of this hook.
@@ -77,7 +86,7 @@ public class ContextImplPermissionRegistry implements IXposedHook {
     }
 
     private static boolean isThanosCalling() {
-        return BuildProp.THANOS_APP_PKG_NAME.equals(AndroidAppHelper.currentPackageName());
+        return AndroidAppHelper.currentPackageName().contains(BuildProp.THANOS_APP_PKG_NAME_PREFIX);
     }
 
     @Override
