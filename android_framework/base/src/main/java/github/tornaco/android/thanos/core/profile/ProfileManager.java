@@ -82,4 +82,34 @@ public class ProfileManager {
     public boolean isProfileEnabled() {
         return server.isProfileEnabled();
     }
+
+    @SneakyThrows
+    public boolean addGlobalRuleVar(String varName, String[] varArray) {
+        return server.addGlobalRuleVar(varName, varArray);
+    }
+
+    @SneakyThrows
+    public boolean appendGlobalRuleVar(String varName, String[] varArray) {
+        return server.appendGlobalRuleVar(varName, varArray);
+    }
+
+    @SneakyThrows
+    public boolean removeGlobalRuleVar(String varName) {
+        return server.removeGlobalRuleVar(varName);
+    }
+
+    @SneakyThrows
+    public String[] getAllGlobalRuleVarNames() {
+        return server.getAllGlobalRuleVarNames();
+    }
+
+    @SneakyThrows
+    public String[] getGlobalRuleVarByName(String varName) {
+        return server.getGlobalRuleVarByName(varName);
+    }
+
+    @SneakyThrows
+    public boolean isGlobalRuleVarByNameExists(String varName) {
+        return server.isGlobalRuleVarByNameExists(varName);
+    }
 }

@@ -41,6 +41,11 @@ object T {
     }
 
     @JvmStatic
+    fun globalRuleVarsRepoFile(): File {
+        return File(profileRulesDir(), "global_rule_vars.xml")
+    }
+
+    @JvmStatic
     fun startBlockerRepoFile(): File {
         return File(baseServerDataDir(), "start_blocking_pkgs.xml")
     }

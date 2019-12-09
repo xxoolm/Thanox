@@ -10,6 +10,8 @@ import android.os.UserHandle
 import android.util.Log
 import com.google.common.collect.Sets
 import com.google.common.io.Files
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.T
@@ -19,6 +21,7 @@ import github.tornaco.android.thanos.core.app.event.ThanosEvent
 import github.tornaco.android.thanos.core.compat.NotificationCompat
 import github.tornaco.android.thanos.core.compat.NotificationManagerCompat
 import github.tornaco.android.thanos.core.persist.RepoFactory
+import github.tornaco.android.thanos.core.persist.StringMapRepo
 import github.tornaco.android.thanos.core.persist.StringSetRepo
 import github.tornaco.android.thanos.core.pm.AppInfo
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener
@@ -43,6 +46,7 @@ import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.mvel.MVELRuleFactory
 import org.jeasy.rules.support.JsonRuleDefinitionReader
 import org.jeasy.rules.support.YamlRuleDefinitionReader
+import util.CollectionUtils
 import util.ObjectsUtils
 import java.io.File
 import java.io.StringReader
@@ -66,6 +70,9 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     private val ruleFactoryYaml = MVELRuleFactory(YamlRuleDefinitionReader())
 
     private lateinit var enabledRuleNameRepo: StringSetRepo
+    private lateinit var globalRuleVarRepo: StringMapRepo
+
+    private val gson = Gson()
 
     private val monitor = object : PackageMonitor() {
         override fun onPackageAdded(packageName: String, uid: Int) {
@@ -162,6 +169,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         super.onStart(context)
         enabledRuleNameRepo =
             RepoFactory.get().getOrCreateStringSetRepo(T.profileEnabledRulesRepoFile().path)
+        globalRuleVarRepo =
+            RepoFactory.get().getOrCreateStringMapRepo(T.globalRuleVarsRepoFile().path)
     }
 
     override fun systemReady() {
@@ -435,6 +444,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         }
     }
 
+
     @Suppress("UnstableApiUsage")
     @ExecuteBySystemHandler
     private fun addRule(
@@ -614,6 +624,56 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         return profileEnabled
     }
 
+    override fun isGlobalRuleVarByNameExists(varName: String?): Boolean {
+        return globalRuleVarRepo.containsKey(varName)
+    }
+
+    override fun removeGlobalRuleVar(varName: String?): Boolean {
+        return globalRuleVarRepo.remove(varName) != null
+    }
+
+    override fun addGlobalRuleVar(varName: String, varArray: Array<out String>): Boolean {
+        Timber.v("addGlobalRuleVar: %s %s", varName, varArray)
+        enforceCallingPermissions()
+        // Force write.
+        val varList = mutableListOf<String>()
+        varList.addAll(varArray)
+        val json = gson.toJson(varList)
+        globalRuleVarRepo[varName] = json
+        return true
+    }
+
+    override fun appendGlobalRuleVar(varName: String, varArray: Array<out String>): Boolean {
+        Timber.v("addGlobalRuleVar: %s %s", varName, varArray)
+        enforceCallingPermissions()
+        val varList = mutableListOf<String>()
+        varList.addAll(varArray)
+        varList.addAll(getGlobalRuleVarByName(varName))
+        val json = gson.toJson(varList)
+        globalRuleVarRepo[varName] = json
+        return true
+    }
+
+    override fun getGlobalRuleVarByName(varName: String?): Array<String> {
+        if (globalRuleVarRepo.containsKey(varName)) {
+            try {
+                val current = globalRuleVarRepo[varName]
+                val currentList: List<String> =
+                    gson.fromJson<List<String>>(current, object : TypeToken<List<String>>() {}.type)
+                if (!CollectionUtils.isNullOrEmpty(currentList)) {
+                    return currentList.toTypedArray()
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "getAllGlobalRuleVarByName")
+            }
+        }
+        return emptyArray()
+    }
+
+    override fun getAllGlobalRuleVarNames(): Array<String> {
+        return globalRuleVarRepo.keys.toTypedArray()
+    }
+
     override fun setProfileEnabled(enable: Boolean) {
         ensureProfileFeature()
         enforceCallingPermissions()
@@ -625,6 +685,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             enable
         )
     }
+
 
     fun publishFacts(facts: Facts) {
         executeInternal(Runnable {
@@ -641,11 +702,22 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             Timber.v("Profile not enabled, won't fire any fact.")
             return
         }
-        rulesEngine.fire(rules, injectHandles(facts))
+
+        injectGlobalVars(facts)
+        injectHandles(facts)
+
+        rulesEngine.fire(rules, facts)
     }
 
     private fun injectHandles(facts: Facts): Facts {
         return Handle.inject(context, s, facts)
+    }
+
+    private fun injectGlobalVars(facts: Facts): Facts {
+        allGlobalRuleVarNames.forEach {
+            facts.put("globalVarOf$$it", arrayListOf(getGlobalRuleVarByName(it)))
+        }
+        return facts
     }
 
     override fun asBinder(): IBinder {

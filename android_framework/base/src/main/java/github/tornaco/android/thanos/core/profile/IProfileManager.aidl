@@ -23,4 +23,12 @@ interface IProfileManager {
 
     void setProfileEnabled(boolean enable);
     boolean isProfileEnabled();
+
+    boolean addGlobalRuleVar(String varName, in String[] varArray);
+    boolean appendGlobalRuleVar(String varName, in String[] varArray);
+    boolean removeGlobalRuleVar(String varName);
+
+    String[] getAllGlobalRuleVarNames();
+    String[] getGlobalRuleVarByName(String varName);
+    boolean isGlobalRuleVarByNameExists(String varName);
 }

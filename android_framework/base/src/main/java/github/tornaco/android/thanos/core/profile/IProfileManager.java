@@ -54,6 +54,30 @@ public interface IProfileManager extends android.os.IInterface
     {
       return false;
     }
+    @Override public boolean addGlobalRuleVar(java.lang.String varName, java.lang.String[] varArray) throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public boolean appendGlobalRuleVar(java.lang.String varName, java.lang.String[] varArray) throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public boolean removeGlobalRuleVar(java.lang.String varName) throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public java.lang.String[] getAllGlobalRuleVarNames() throws android.os.RemoteException
+    {
+      return null;
+    }
+    @Override public java.lang.String[] getGlobalRuleVarByName(java.lang.String varName) throws android.os.RemoteException
+    {
+      return null;
+    }
+    @Override public boolean isGlobalRuleVarByNameExists(java.lang.String varName) throws android.os.RemoteException
+    {
+      return false;
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -218,6 +242,68 @@ public interface IProfileManager extends android.os.IInterface
         {
           data.enforceInterface(descriptor);
           boolean _result = this.isProfileEnabled();
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_addGlobalRuleVar:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          java.lang.String[] _arg1;
+          _arg1 = data.createStringArray();
+          boolean _result = this.addGlobalRuleVar(_arg0, _arg1);
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_appendGlobalRuleVar:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          java.lang.String[] _arg1;
+          _arg1 = data.createStringArray();
+          boolean _result = this.appendGlobalRuleVar(_arg0, _arg1);
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_removeGlobalRuleVar:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _result = this.removeGlobalRuleVar(_arg0);
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_getAllGlobalRuleVarNames:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String[] _result = this.getAllGlobalRuleVarNames();
+          reply.writeNoException();
+          reply.writeStringArray(_result);
+          return true;
+        }
+        case TRANSACTION_getGlobalRuleVarByName:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          java.lang.String[] _result = this.getGlobalRuleVarByName(_arg0);
+          reply.writeNoException();
+          reply.writeStringArray(_result);
+          return true;
+        }
+        case TRANSACTION_isGlobalRuleVarByNameExists:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          boolean _result = this.isGlobalRuleVarByNameExists(_arg0);
           reply.writeNoException();
           reply.writeInt(((_result)?(1):(0)));
           return true;
@@ -506,6 +592,133 @@ public interface IProfileManager extends android.os.IInterface
         }
         return _result;
       }
+      @Override public boolean addGlobalRuleVar(java.lang.String varName, java.lang.String[] varArray) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(varName);
+          _data.writeStringArray(varArray);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_addGlobalRuleVar, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().addGlobalRuleVar(varName, varArray);
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public boolean appendGlobalRuleVar(java.lang.String varName, java.lang.String[] varArray) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(varName);
+          _data.writeStringArray(varArray);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_appendGlobalRuleVar, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().appendGlobalRuleVar(varName, varArray);
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public boolean removeGlobalRuleVar(java.lang.String varName) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(varName);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_removeGlobalRuleVar, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().removeGlobalRuleVar(varName);
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public java.lang.String[] getAllGlobalRuleVarNames() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        java.lang.String[] _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getAllGlobalRuleVarNames, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getAllGlobalRuleVarNames();
+          }
+          _reply.readException();
+          _result = _reply.createStringArray();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public java.lang.String[] getGlobalRuleVarByName(java.lang.String varName) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        java.lang.String[] _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(varName);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getGlobalRuleVarByName, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getGlobalRuleVarByName(varName);
+          }
+          _reply.readException();
+          _result = _reply.createStringArray();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public boolean isGlobalRuleVarByNameExists(java.lang.String varName) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(varName);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isGlobalRuleVarByNameExists, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isGlobalRuleVarByNameExists(varName);
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       public static github.tornaco.android.thanos.core.profile.IProfileManager sDefaultImpl;
     }
     static final int TRANSACTION_setAutoApplyForNewInstalledAppsEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -521,6 +734,12 @@ public interface IProfileManager extends android.os.IInterface
     static final int TRANSACTION_getEnabledRules = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
     static final int TRANSACTION_setProfileEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
     static final int TRANSACTION_isProfileEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+    static final int TRANSACTION_addGlobalRuleVar = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+    static final int TRANSACTION_appendGlobalRuleVar = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+    static final int TRANSACTION_removeGlobalRuleVar = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
+    static final int TRANSACTION_getAllGlobalRuleVarNames = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+    static final int TRANSACTION_getGlobalRuleVarByName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+    static final int TRANSACTION_isGlobalRuleVarByNameExists = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.profile.IProfileManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -545,4 +764,10 @@ public interface IProfileManager extends android.os.IInterface
   public github.tornaco.android.thanos.core.profile.RuleInfo[] getEnabledRules() throws android.os.RemoteException;
   public void setProfileEnabled(boolean enable) throws android.os.RemoteException;
   public boolean isProfileEnabled() throws android.os.RemoteException;
+  public boolean addGlobalRuleVar(java.lang.String varName, java.lang.String[] varArray) throws android.os.RemoteException;
+  public boolean appendGlobalRuleVar(java.lang.String varName, java.lang.String[] varArray) throws android.os.RemoteException;
+  public boolean removeGlobalRuleVar(java.lang.String varName) throws android.os.RemoteException;
+  public java.lang.String[] getAllGlobalRuleVarNames() throws android.os.RemoteException;
+  public java.lang.String[] getGlobalRuleVarByName(java.lang.String varName) throws android.os.RemoteException;
+  public boolean isGlobalRuleVarByNameExists(java.lang.String varName) throws android.os.RemoteException;
 }
