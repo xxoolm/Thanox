@@ -11,7 +11,10 @@ import android.content.pm.ServiceInfo;
 import android.os.Process;
 import android.os.UserHandle;
 
+import java.util.List;
+
 import github.tornaco.android.thanos.core.annotation.NonNull;
+import lombok.val;
 import util.ObjectsUtils;
 
 public class PkgUtils {
@@ -30,6 +33,10 @@ public class PkgUtils {
     }
 
     public static boolean isPkgInstalled(Context context, String pkg) {
+        return getApplicationInfo(context, pkg) != null;
+    }
+
+    public static ApplicationInfo getApplicationInfo(Context context, String pkg) {
         PackageManager pm = context.getPackageManager();
         try {
             ApplicationInfo info;
@@ -38,9 +45,36 @@ public class PkgUtils {
             } else {
                 info = pm.getApplicationInfo(pkg, PackageManager.GET_UNINSTALLED_PACKAGES);
             }
-            return info != null;
+            return info;
         } catch (Throwable e) {
-            return false;
+            Timber.e(e);
+            return null;
+        }
+    }
+
+    public static PackageInfo getPackageInfo(Context context, String pkg) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo info;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                info = pm.getPackageInfo(pkg, PackageManager.MATCH_UNINSTALLED_PACKAGES);
+            } else {
+                info = pm.getPackageInfo(pkg, PackageManager.GET_UNINSTALLED_PACKAGES);
+            }
+            return info;
+        } catch (Throwable e) {
+            Timber.e(e);
+            return null;
+        }
+    }
+
+    public static List<ApplicationInfo> getInstalledApplications(Context context) {
+        val pm = context.getPackageManager();
+        if (OsUtils.isNOrAbove()) {
+            return pm.getInstalledApplications(PackageManager.MATCH_UNINSTALLED_PACKAGES);
+
+        } else {
+            return pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
         }
     }
 

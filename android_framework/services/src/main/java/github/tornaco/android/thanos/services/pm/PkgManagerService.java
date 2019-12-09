@@ -21,29 +21,32 @@ import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.util.ArrayUtils;
 import github.tornaco.android.thanos.core.util.FileUtils;
 import github.tornaco.android.thanos.core.util.Noop;
+import github.tornaco.android.thanos.core.util.Optional;
 import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BackgroundThread;
 import github.tornaco.android.thanos.services.S;
 import github.tornaco.android.thanos.services.ThanoxSystemService;
 import lombok.Getter;
+import lombok.val;
 
 public class PkgManagerService extends ThanoxSystemService implements IPkgManager {
     @Getter
-    private final PkgCache pkgCache = new PkgCache();
+    @Nullable
+    private Optional<PkgPool> pkgCache;
 
     @Getter
     private final PackageMonitor monitor = new PackageMonitor() {
         @Override
         public void onPackageAdded(String packageName, int uid) {
             super.onPackageAdded(packageName, uid);
-            getPkgCache().invalidate();
+            pkgCache.ifPresent(pkgPool -> pkgPool.addOrUpdate(packageName));
         }
 
         @Override
         public void onPackageRemoved(String packageName, int uid) {
             super.onPackageRemoved(packageName, uid);
-            getPkgCache().invalidate();
+            pkgCache.ifPresent(pkgPool -> pkgPool.remove(packageName));
             if (Objects.equals(packageName, BuildProp.THANOS_APP_PKG_NAME)) {
                 onThanoxAppPackageRemoved();
             }
@@ -51,7 +54,7 @@ public class PkgManagerService extends ThanoxSystemService implements IPkgManage
 
         @Override
         public boolean onPackageChanged(String packageName, int uid, String[] components) {
-            getPkgCache().invalidate();
+            pkgCache.ifPresent(pkgPool -> pkgPool.addOrUpdate(packageName));
             return super.onPackageChanged(packageName, uid, components);
         }
     };
@@ -63,13 +66,13 @@ public class PkgManagerService extends ThanoxSystemService implements IPkgManage
     @Override
     public void onStart(Context context) {
         super.onStart(context);
-        getPkgCache().onStart(context);
     }
 
     @Override
     public void systemReady() {
         super.systemReady();
-        getPkgCache().invalidate();
+        this.pkgCache = Optional.of(new PkgPool(getContext()));
+        this.pkgCache.ifPresent(PkgPool::invalidateAll);
         getMonitor().register(getContext(), UserHandle.CURRENT, true, BackgroundThread.getHandler());
     }
 
@@ -89,8 +92,12 @@ public class PkgManagerService extends ThanoxSystemService implements IPkgManage
         if (PkgUtils.isSystemOrPhoneOrShell(uid)) {
             return new String[]{PackageManager.packageNameOfAndroid()};
         }
-        return getPkgCache().getUid2Pkg().containsKey(uid)
-                ? getPkgCache().getUid2Pkg().get(uid).toArray(new String[0])
+        if (!pkgCache.isPresent()) {
+            return null;
+        }
+        val pool = pkgCache.get();
+        return pool.getUid2PkgMap().containsKey(uid)
+                ? pool.getUid2PkgMap().get(uid).toArray(new String[0])
                 : null;
     }
 
@@ -108,43 +115,55 @@ public class PkgManagerService extends ThanoxSystemService implements IPkgManage
 
     @Override
     public int getUidForPkgName(String pkgName) {
-        Integer uid = getPkgCache().getPkg2Uid().get(pkgName);
+        if (!pkgCache.isPresent()) {
+            return -1;
+        }
+        val pool = pkgCache.get();
+        Integer uid = pool.getPkg2UidMap().get(pkgName);
         return uid == null ? -1 : uid;
     }
 
     public boolean mayBeThanosAppUid(int uid) {
-        return getPkgCache().getThanosAppUid().contains(uid);
+        if (!pkgCache.isPresent()) {
+            return false;
+        }
+        val pool = pkgCache.get();
+        return pool.getThanosAppUid().contains(uid);
     }
 
     @Override
     public AppInfo[] getInstalledPkgs(int flags) {
+        if (!pkgCache.isPresent()) {
+            return new AppInfo[0];
+        }
+        val pool = pkgCache.get();
         List<AppInfo> res = new ArrayList<>();
         if ((flags & AppInfo.FLAGS_SYSTEM) != 0) {
-            res.addAll(pkgCache.getSystemApps());
+            res.addAll(pool.getSystemApps());
             Timber.d("getInstalledPkgs, adding FLAGS_SYSTEM");
         }
         if ((flags & AppInfo.FLAGS_SYSTEM_MEDIA) != 0) {
-            res.addAll(pkgCache.getMediaUidApps());
+            res.addAll(pool.getMediaUidApps());
             Timber.d("getInstalledPkgs, adding FLAGS_SYSTEM_MEDIA");
         }
         if ((flags & AppInfo.FLAGS_SYSTEM_PHONE) != 0) {
-            res.addAll(pkgCache.getPhoneUidApps());
+            res.addAll(pool.getPhoneUidApps());
             Timber.d("getInstalledPkgs, adding FLAGS_SYSTEM_PHONE");
         }
         if ((flags & AppInfo.FLAGS_SYSTEM_UID) != 0) {
-            res.addAll(pkgCache.getSystemUidApps());
+            res.addAll(pool.getSystemUidApps());
             Timber.d("getInstalledPkgs, adding FLAGS_SYSTEM_UID");
         }
         if ((flags & AppInfo.FLAGS_USER) != 0) {
-            res.addAll(pkgCache.get_3rdApps());
+            res.addAll(pool.get_3rdApps());
             Timber.d("getInstalledPkgs, adding FLAGS_USER");
         }
         if ((flags & AppInfo.FLAGS_WEB_VIEW_PROVIDER) != 0) {
-            res.addAll(pkgCache.getWebViewProviderApps());
+            res.addAll(pool.getWebViewProviderApps());
             Timber.d("getInstalledPkgs, adding FLAGS_WEB_VIEW_PROVIDER");
         }
         if ((flags & AppInfo.FLAGS_WHITE_LISTED) != 0) {
-            res.addAll(pkgCache.getWhiteListApps());
+            res.addAll(pool.getWhiteListApps());
             Timber.d("getInstalledPkgs, adding FLAGS_WHITE_LISTED");
         }
         return res.toArray(new AppInfo[0]);
@@ -152,17 +171,29 @@ public class PkgManagerService extends ThanoxSystemService implements IPkgManage
 
     @Override
     public AppInfo getAppInfo(String pkgName) {
-        return pkgCache.getAllApps().get(pkgName);
+        if (!pkgCache.isPresent()) {
+            return null;
+        }
+        val pool = pkgCache.get();
+        return pool.getAllAppsMap().get(pkgName);
     }
 
     @Override
     public String[] getWhiteListPkgs() {
-        return pkgCache.getWhiteList().toArray(new String[0]);
+        if (!pkgCache.isPresent()) {
+            return new String[0];
+        }
+        val pool = pkgCache.get();
+        return pool.getWhiteListPkgs().toArray(new String[0]);
     }
 
     @Override
     public boolean isPkgInWhiteList(String pkg) {
-        return pkgCache.getWhiteList().contains(pkg);
+        if (!pkgCache.isPresent()) {
+            return false;
+        }
+        val pool = pkgCache.get();
+        return pool.getWhiteListPkgs().contains(pkg);
     }
 
     public boolean isSystemUidPkg(String pkg) {

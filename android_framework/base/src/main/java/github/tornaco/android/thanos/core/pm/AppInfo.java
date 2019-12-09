@@ -21,6 +21,7 @@ import util.PinyinComparatorUtils;
 @ToString
 public class AppInfo implements Parcelable, Comparable<AppInfo> {
 
+    public static final int FLAGS_NONE = 0;
     public static final int FLAGS_USER = 0x00000001;
     public static final int FLAGS_SYSTEM = 0x00000002;
     public static final int FLAGS_SYSTEM_UID = 0x00000004;
@@ -112,17 +113,12 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AppInfo appInfo = (AppInfo) o;
-        return versionCode == appInfo.versionCode &&
-                pkgName.equals(appInfo.pkgName);
+        return pkgName.equals(appInfo.pkgName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkgName, versionCode);
-    }
-
-    public boolean is3rdParty() {
-        return flags == FLAGS_USER;
+        return Objects.hash(pkgName);
     }
 
     public boolean disabled() {
