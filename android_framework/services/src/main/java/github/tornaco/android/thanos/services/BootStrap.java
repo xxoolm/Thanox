@@ -5,7 +5,9 @@ import android.content.Context;
 import android.os.Build;
 import android.os.UserHandle;
 import android.util.Log;
+
 import de.robv.android.xposed.XposedBridge;
+import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.core.util.Timber;
 import io.reactivex.plugins.RxJavaPlugins;
 import lombok.Getter;
@@ -14,7 +16,12 @@ import lombok.Getter;
 public class BootStrap {
     private static final String LOG_PREFIX = "[ThanosS]";
 
-    private static boolean loggingEnabled = true;
+    @SuppressWarnings("ConstantConditions")
+    public static final boolean IS_RELEASE_BUILD =
+            BuildProp.THANOS_BUILD_VARIANT.equals("release");
+
+    @SuppressWarnings("ConstantConditions")
+    private static boolean loggingEnabled = !IS_RELEASE_BUILD;
 
     private BootStrap() {
         // Noop.

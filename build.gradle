@@ -55,8 +55,8 @@ androidGitVersion {
 ext {
     thanosApplicationIdPrefix = "github.tornaco.android.thanos"
     thanosApplicationId = getCurrentFlavor() == "row" ? "${thanosApplicationIdPrefix}.pro" : "${thanosApplicationIdPrefix}"
-    println "### CurrentVariant: ${getCurrentVariant()} ###"
-    println "### CurrentFlavor: ${getCurrentFlavor()} ###"
+    thanosBuildVariant = getCurrentVariant()
+    println "### thanosBuildVariant: ${thanosBuildVariant} ###"
     println "### thanosApplicationId: $thanosApplicationId ###"
     lockerApplicationId = "github.tornaco.practice.honeycomb.locker"
     versionCode = androidGitVersion.code() as int

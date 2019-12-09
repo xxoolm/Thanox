@@ -15,6 +15,7 @@ import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
 import github.tornaco.android.thanos.core.util.Noop
 import github.tornaco.android.thanos.core.util.Timber
+import github.tornaco.android.thanos.services.BootStrap
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.ThanoxSystemService
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
@@ -22,6 +23,8 @@ import lombok.SneakyThrows
 import util.ObjectsUtils
 
 class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
+    // Turn off for production build.
+    private val debugOp = !BootStrap.IS_RELEASE_BUILD
 
     private lateinit var opRemindOpRepo: StringSetRepo
     private lateinit var opRemindPkgRepo: StringSetRepo
@@ -94,7 +97,7 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
     @Throws(RemoteException::class)
     override fun checkOperation(code: Int, uid: Int, packageName: String): Int {
-        Timber.v("checkOperation: $packageName $code")
+        if (debugOp) Timber.v("checkOperation: $packageName $code")
         // IllegalArgumentException: Bad operation #71
         return opSettingsRepo["$packageName-$code"]?.toInt() ?: AppOpsManager.MODE_ALLOWED
     }
@@ -139,6 +142,7 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
     @Throws(RemoteException::class)
     override fun onStartOp(token: IBinder?, code: Int, uid: Int, packageName: String?) {
+        if (debugOp) Timber.v("onStartOp: $code, $packageName")
         if (isSystemReady && isNotificationPostReady && isOpRemindEnabled(code) && isOpRemindablePkg(
                 packageName
             )
