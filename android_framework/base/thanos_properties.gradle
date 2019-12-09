@@ -14,6 +14,7 @@ buildConfig {
     charset = 'UTF-8'
 
     buildConfigField 'String', 'THANOS_BUILD_VARIANT', rootProject.ext.thanosBuildVariant
+    buildConfigField 'String', 'THANOS_BUILD_HOST', rootProject.ext.thanosBuildHost
     buildConfigField 'String', 'THANOS_APP_PKG_NAME', rootProject.ext.thanosApplicationId
     buildConfigField 'String', 'THANOS_APP_PKG_NAME_PREFIX', rootProject.ext.thanosApplicationIdPrefix
     // UUID from current time.

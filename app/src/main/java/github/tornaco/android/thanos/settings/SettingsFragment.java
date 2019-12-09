@@ -119,7 +119,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         // Build.
         findPreference(getString(R.string.key_build_info_app))
-                .setSummary(BuildConfig.VERSION_NAME + "\n" + BuildProp.FINGERPRINT + "\n" + BuildProp.BUILD_DATE.toString());
+                .setSummary(BuildConfig.VERSION_NAME + "\n"
+                        + BuildProp.FINGERPRINT + "\n"
+                        + BuildProp.BUILD_DATE.toString() + "\n"
+                        + BuildProp.THANOS_BUILD_HOST);
         findPreference(getString(R.string.key_build_info_app))
                 .setOnPreferenceClickListener(preference -> {
                     PlatLogoActivity.start(getActivity());

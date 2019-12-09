@@ -56,11 +56,19 @@ ext {
     thanosApplicationIdPrefix = "github.tornaco.android.thanos"
     thanosApplicationId = getCurrentFlavor() == "row" ? "${thanosApplicationIdPrefix}.pro" : "${thanosApplicationIdPrefix}"
     thanosBuildVariant = getCurrentVariant()
+    thanosBuildHost = getHostName()
+    println "### thanosBuildHost: ${thanosBuildHost} ###"
     println "### thanosBuildVariant: ${thanosBuildVariant} ###"
     println "### thanosApplicationId: $thanosApplicationId ###"
     lockerApplicationId = "github.tornaco.practice.honeycomb.locker"
     versionCode = androidGitVersion.code() as int
     versionName = androidGitVersion.name()
+
+}
+
+@SuppressWarnings("GrMethodMayBeStatic")
+def getHostName() {
+    return InetAddress.getLocalHost().getHostName()
 }
 
 def getCurrentVariant() {
@@ -87,21 +95,20 @@ def getCurrentVariant() {
 
 def getCurrentFlavor() {
     Gradle gradle = getGradle()
-    String  tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+    String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
 
     Pattern pattern;
 
-    if( tskReqStr.contains( "assemble" ) )
+    if (tskReqStr.contains("assemble"))
         pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
     else
         pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
 
-    Matcher matcher = pattern.matcher( tskReqStr )
+    Matcher matcher = pattern.matcher(tskReqStr)
 
-    if( matcher.find() )
+    if (matcher.find())
         return matcher.group(1).toLowerCase()
-    else
-    {
+    else {
         println "NO MATCH FOUND"
         return "";
     }
