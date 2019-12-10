@@ -179,6 +179,9 @@ object T {
         @JvmField
         val PREF_BG_TASK_CLEAN_UP_DELAY_MILLS =
             ThanosFeature("PREF_BG_TASK_CLEAN_UP_DELAY_MILLS", 0L /*Noop*/)
+        @JvmField
+        val PREF_BG_TASK_CLEAN_UP_SKIP_WHEN_HAS_RECENT_TASK =
+            ThanosFeature("PREF_BG_TASK_CLEAN_UP_SKIP_WHEN_HAS_RECENT_TASK", false)
 
         @JvmField
         val PREF_CLEAN_UP_ON_TASK_REMOVED = ThanosFeature("PREF_CLEAN_UP_ON_TASK_REMOVED", false)
@@ -244,7 +247,8 @@ object T {
         val PREF_OPS_ENABLED = ThanosFeature("PREF_OPS_ENABLED", false)
 
         @JvmField
-        val PREF_FIRST_ACTIVATE = ThanosFeature("PREF_FIRST_ACTIVATE_" + BuildProp.FINGERPRINT, true)
+        val PREF_FIRST_ACTIVATE =
+            ThanosFeature("PREF_FIRST_ACTIVATE_" + BuildProp.FINGERPRINT, true)
     }
 
     object Actions {
@@ -255,7 +259,8 @@ object T {
             "thanox.a.extra.front_activity.changed.pkg.to"
 
         const val ACTION_ACTIVITY_RESUMED = "thanox.a.activity.resumed"
-        const val ACTION_ACTIVITY_RESUMED_EXTRA_COMPONENT_NAME = "thanox.a.activity.resumed.extra.name"
+        const val ACTION_ACTIVITY_RESUMED_EXTRA_COMPONENT_NAME =
+            "thanox.a.activity.resumed.extra.name"
         const val ACTION_ACTIVITY_RESUMED_EXTRA_PACKAGE_NAME = "thanox.a.activity.resumed.extra.pkg"
 
         const val ACTION_PACKAGE_STOPPED = "thanox.a.package.stopped"

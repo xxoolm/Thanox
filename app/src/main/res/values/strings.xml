@@ -180,6 +180,7 @@
     <string name="pre_entry_exclude_recent_task_exclude">Exclude</string>
 
     <string name="pre_title_bg_screen_off_clean_up_skip_notification">Keep apps has notification</string>
+    <string name="pre_title_bg_screen_off_clean_up_skip_recent_task">Keep apps has recent task</string>
 
     <string name="badge_trying_app">Trying</string>
     <string name="badge_paid_app">Paid</string>

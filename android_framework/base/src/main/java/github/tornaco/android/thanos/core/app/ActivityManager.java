@@ -3,6 +3,7 @@ package github.tornaco.android.thanos.core.app;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.os.IBinder;
 
 import java.util.List;
 
@@ -290,5 +291,19 @@ public class ActivityManager {
     @SneakyThrows
     public void setRecentTaskExcludeSettingForPackage(String pkgName, int setting) {
         server.setRecentTaskExcludeSettingForPackage(pkgName, setting);
+    }
+
+    @SneakyThrows
+    public boolean isBgTaskCleanUpSkipWhenHasRecentTaskEnabled() {
+        return server.isBgTaskCleanUpSkipWhenHasRecentTaskEnabled();
+    }
+
+    @SneakyThrows
+    public void setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(boolean enable) {
+        server.setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(enable);
+    }
+
+    public IBinder asBinder() {
+        return server.asBinder();
     }
 }

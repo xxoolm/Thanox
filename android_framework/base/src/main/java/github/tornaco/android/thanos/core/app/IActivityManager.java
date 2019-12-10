@@ -226,6 +226,15 @@ public interface IActivityManager extends android.os.IInterface
     @Override public void setRecentTaskExcludeSettingForPackage(java.lang.String pkgName, int setting) throws android.os.RemoteException
     {
     }
+    // Keep when has recent task.
+
+    @Override public boolean isBgTaskCleanUpSkipWhenHasRecentTaskEnabled() throws android.os.RemoteException
+    {
+      return false;
+    }
+    @Override public void setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(boolean enable) throws android.os.RemoteException
+    {
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -858,6 +867,23 @@ public interface IActivityManager extends android.os.IInterface
           int _arg1;
           _arg1 = data.readInt();
           this.setRecentTaskExcludeSettingForPackage(_arg0, _arg1);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_isBgTaskCleanUpSkipWhenHasRecentTaskEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _result = this.isBgTaskCleanUpSkipWhenHasRecentTaskEnabled();
+          reply.writeNoException();
+          reply.writeInt(((_result)?(1):(0)));
+          return true;
+        }
+        case TRANSACTION_setBgTaskCleanUpSkipWhenHasRecentTaskEnabled:
+        {
+          data.enforceInterface(descriptor);
+          boolean _arg0;
+          _arg0 = (0!=data.readInt());
+          this.setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(_arg0);
           reply.writeNoException();
           return true;
         }
@@ -2093,6 +2119,47 @@ public interface IActivityManager extends android.os.IInterface
           _data.recycle();
         }
       }
+      // Keep when has recent task.
+
+      @Override public boolean isBgTaskCleanUpSkipWhenHasRecentTaskEnabled() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        boolean _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_isBgTaskCleanUpSkipWhenHasRecentTaskEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().isBgTaskCleanUpSkipWhenHasRecentTaskEnabled();
+          }
+          _reply.readException();
+          _result = (0!=_reply.readInt());
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
+      @Override public void setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(boolean enable) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeInt(((enable)?(1):(0)));
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setBgTaskCleanUpSkipWhenHasRecentTaskEnabled, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(enable);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
       public static github.tornaco.android.thanos.core.app.IActivityManager sDefaultImpl;
     }
     static final int TRANSACTION_getCurrentFrontApp = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -2151,6 +2218,8 @@ public interface IActivityManager extends android.os.IInterface
     static final int TRANSACTION_getLastRecentUsedPackages = (android.os.IBinder.FIRST_CALL_TRANSACTION + 53);
     static final int TRANSACTION_getRecentTaskExcludeSettingForPackage = (android.os.IBinder.FIRST_CALL_TRANSACTION + 54);
     static final int TRANSACTION_setRecentTaskExcludeSettingForPackage = (android.os.IBinder.FIRST_CALL_TRANSACTION + 55);
+    static final int TRANSACTION_isBgTaskCleanUpSkipWhenHasRecentTaskEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 56);
+    static final int TRANSACTION_setBgTaskCleanUpSkipWhenHasRecentTaskEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 57);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.app.IActivityManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -2232,4 +2301,8 @@ public interface IActivityManager extends android.os.IInterface
   public java.lang.String[] getLastRecentUsedPackages(int count) throws android.os.RemoteException;
   public int getRecentTaskExcludeSettingForPackage(java.lang.String pkgName) throws android.os.RemoteException;
   public void setRecentTaskExcludeSettingForPackage(java.lang.String pkgName, int setting) throws android.os.RemoteException;
+  // Keep when has recent task.
+
+  public boolean isBgTaskCleanUpSkipWhenHasRecentTaskEnabled() throws android.os.RemoteException;
+  public void setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(boolean enable) throws android.os.RemoteException;
 }

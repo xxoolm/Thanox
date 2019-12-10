@@ -180,6 +180,7 @@
     <string name="pre_entry_exclude_recent_task_exclude">强制隐藏</string>
 
     <string name="pre_title_bg_screen_off_clean_up_skip_notification">不清理有通知应用</string>
+    <string name="pre_title_bg_screen_off_clean_up_skip_recent_task">不清理最近任务里的应用</string>
 
     <string name="badge_trying_app">试用</string>
     <string name="badge_paid_app">已购买</string>

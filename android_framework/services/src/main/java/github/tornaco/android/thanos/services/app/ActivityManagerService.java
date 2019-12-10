@@ -127,6 +127,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     private boolean bgTaskCleanUpSkipAudioFocused;
     private boolean bgTaskCleanUpSkipNotificationFocused;
+    private boolean bgTaskCleanUpSkipWhenHasRecentTask;
     private long bgTaskCleanUpDelayMills;
     private final CompositeDisposable bgTaskCleanUpDisposable = new CompositeDisposable();
 
@@ -305,6 +306,9 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         this.bgTaskCleanUpDelayMills = preferenceManagerService.getLong(
                 T.Settings.PREF_BG_TASK_CLEAN_UP_DELAY_MILLS.getKey(),
                 T.Settings.PREF_BG_TASK_CLEAN_UP_DELAY_MILLS.getDefaultValue());
+        this.bgTaskCleanUpSkipWhenHasRecentTask = preferenceManagerService.getBoolean(
+                T.Settings.PREF_BG_TASK_CLEAN_UP_SKIP_WHEN_HAS_RECENT_TASK.getKey(),
+                T.Settings.PREF_BG_TASK_CLEAN_UP_SKIP_WHEN_HAS_RECENT_TASK.getDefaultValue());
         this.recentTaskBlurEnabled = preferenceManagerService.getBoolean(
                 T.Settings.PREF_RECENT_TASK_BLUR_ENABLED.getKey(),
                 T.Settings.PREF_RECENT_TASK_BLUR_ENABLED.getDefaultValue());
@@ -318,15 +322,8 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         preferenceManagerService.registerSettingsChangeListener(new IPrefChangeListener.Stub() {
             @Override
             public void onPrefChanged(String key) {
-                if (ObjectsUtils.equals(T.Settings.PREF_START_BLOCKER_ENABLED.getKey(), key)
-                        || (ObjectsUtils.equals(T.Settings.PREF_BG_RESTRICT_ENABLED.getKey(), key)
-                        || (ObjectsUtils.equals(T.Settings.PREF_CLEAN_UP_ON_TASK_REMOVED.getKey(), key)
-                        || (ObjectsUtils.equals(T.Settings.PREF_BG_TASK_CLEAN_UP_DELAY_MILLS.getKey(), key)
-                        || (ObjectsUtils.equals(T.Settings.PREF_SHOW_BG_RESTRICT_APPS_NOTIFICATION_ENABLED.getKey(), key)
-                ))))) {
-                    Timber.i("Pref changed, reload.");
-                    readPrefs();
-                }
+                Timber.i("Pref changed: %s, reload.", key);
+                readPrefs();
             }
         });
     }
@@ -1381,6 +1378,10 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
                 Timber.d("Package %s has notification, ignore.", pkg);
                 return false;
             }
+            if (bgTaskCleanUpSkipWhenHasRecentTask && taskMapping.hasRecentTaskForPkg(getContext(), pkg)) {
+                Timber.d("Package %s has recent task, ignore.", pkg);
+                return false;
+            }
 
             return true;
         };
@@ -1527,5 +1528,20 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         Timber.v("setRecentTaskExcludeSettingForPackage: %s %s", pkgName, setting);
         enforceCallingPermissions();
         recentTaskExcludingSettings.put(pkgName, String.valueOf(setting));
+    }
+
+    @Override
+    public boolean isBgTaskCleanUpSkipWhenHasRecentTaskEnabled() {
+        return bgTaskCleanUpSkipWhenHasRecentTask;
+    }
+
+    @Override
+    public void setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(boolean enable) {
+        enforceCallingPermissions();
+        this.bgTaskCleanUpSkipWhenHasRecentTask = enable;
+        PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
+        preferenceManagerService.putBoolean(
+                T.Settings.PREF_BG_TASK_CLEAN_UP_SKIP_WHEN_HAS_RECENT_TASK.getKey(),
+                enable);
     }
 }

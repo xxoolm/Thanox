@@ -23,6 +23,11 @@
                 app:key="@string/key_bg_screen_off_clean_up_skip_notification"
                 app:title="@string/pre_title_bg_screen_off_clean_up_skip_notification"
                 android:persistent="false"/>
+
+        <SwitchPreferenceCompat
+                app:key="@string/key_bg_screen_off_clean_up_skip_recent_task"
+                app:title="@string/pre_title_bg_screen_off_clean_up_skip_recent_task"
+                android:persistent="false"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

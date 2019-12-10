@@ -94,4 +94,8 @@ interface IActivityManager {
 
     int getRecentTaskExcludeSettingForPackage(String pkgName);
     void setRecentTaskExcludeSettingForPackage(String pkgName, int setting);
+
+    // Keep when has recent task.
+    boolean isBgTaskCleanUpSkipWhenHasRecentTaskEnabled();
+    void setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(boolean enable);
 }

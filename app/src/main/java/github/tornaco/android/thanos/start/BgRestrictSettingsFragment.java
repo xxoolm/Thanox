@@ -51,5 +51,14 @@ public class BgRestrictSettingsFragment extends PreferenceFragmentCompat {
             thanos.getActivityManager().setBgTaskCleanUpSkipWhichHasNotificationEnabled(checked);
             return true;
         });
+
+        SwitchPreferenceCompat skipT = findPreference(getString(R.string.key_bg_screen_off_clean_up_skip_recent_task));
+        boolean enabledT = thanos.getActivityManager().isBgTaskCleanUpSkipWhenHasRecentTaskEnabled();
+        Objects.requireNonNull(skipT).setChecked(enabledT);
+        skipT.setOnPreferenceChangeListener((preference, newValue) -> {
+            boolean checked = (boolean) newValue;
+            thanos.getActivityManager().setBgTaskCleanUpSkipWhenHasRecentTaskEnabled(checked);
+            return true;
+        });
     }
 }
