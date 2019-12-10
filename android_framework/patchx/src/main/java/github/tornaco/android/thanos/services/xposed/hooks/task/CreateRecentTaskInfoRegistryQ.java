@@ -11,16 +11,11 @@ import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 @XposedHook(targetSdkVersion = {_29})
 @Beta
 @Keep
-public class CreateRecentTaskInfoRegistryQ extends CreateRecentTaskInfoRegistry {
+public class CreateRecentTaskInfoRegistryQ extends CreateRecentTaskInfoRegistryP {
 
     @Override
     protected Class clazzToHook(XC_LoadPackage.LoadPackageParam lpparam) {
         return XposedHelpers.findClass("com.android.server.wm.RecentTasks",
                 lpparam.classLoader);
-    }
-
-    @Override
-    protected String methodToHook() {
-        return "createRecentTaskInfo";
     }
 }
