@@ -175,6 +175,7 @@ public class PkgManagerService extends ThanoxSystemService implements IPkgManage
             return null;
         }
         val pool = pkgCache.get();
+        pool.addIfNotExists(pkgName);
         return pool.getAllAppsMap().get(pkgName);
     }
 

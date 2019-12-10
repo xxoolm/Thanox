@@ -77,6 +77,11 @@ public class PkgPool {
         loadSingleAppByPackageName(pkgName);
     }
 
+    public void addIfNotExists(String pkgName) {
+        if (allAppsMap.containsKey(pkgName)) return;
+        addOrUpdate(pkgName);
+    }
+
     public void remove(String pkgName) {
         AppInfo dummy = new AppInfo();
         dummy.setPkgName(pkgName);

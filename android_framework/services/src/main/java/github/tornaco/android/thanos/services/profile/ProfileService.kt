@@ -79,7 +79,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             super.onPackageAdded(packageName, uid)
             Timber.v("onPackageAdded: %s", packageName)
 
-            val disposable = Observable.just(packageName).delay(8, TimeUnit.SECONDS)
+            val disposable = Observable.just(packageName).delay(1, TimeUnit.SECONDS)
                 .observeOn(ThanosSchedulers.serverThread())
                 .observeOn(ThanosSchedulers.serverThread())
                 .subscribe {
