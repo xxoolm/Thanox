@@ -83,6 +83,9 @@ public class PkgPool {
         _3rdApps.remove(dummy);
         allAppsMap.remove(dummy.getPkgName());
         pkg2UidMap.remove(dummy.getPkgName());
+        webViewProviderApps.remove(dummy);
+        // Try add or update.
+        addOrUpdate(pkgName);
     }
 
     private void loadWhiteList() {
@@ -163,6 +166,7 @@ public class PkgPool {
         if ((flags & AppInfo.FLAGS_SYSTEM_UID) != 0) {
             systemUidApps.remove(appInfo);
             systemUidApps.add(appInfo);
+            Timber.v("Add to systemUid apps: %s", appInfo);
         }
         if ((flags & AppInfo.FLAGS_USER) != 0) {
             _3rdApps.remove(appInfo);
@@ -222,11 +226,11 @@ public class PkgPool {
         if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
             val sharedUserId = packageInfo.sharedUserId;
             if (PkgUtils.isSharedUserIdMedia(sharedUserId)) {
-                flags |= AppInfo.FLAGS_SYSTEM;
+                flags |= AppInfo.FLAGS_SYSTEM_MEDIA;
             } else if (PkgUtils.isSharedUserIdPhone(sharedUserId)) {
-                flags |= AppInfo.FLAGS_SYSTEM;
+                flags |= AppInfo.FLAGS_SYSTEM_PHONE;
             } else if (PkgUtils.isSharedUserIdSystem(sharedUserId)) {
-                flags |= AppInfo.FLAGS_SYSTEM;
+                flags |= AppInfo.FLAGS_SYSTEM_UID;
             } else {
                 flags |= AppInfo.FLAGS_SYSTEM;
             }
