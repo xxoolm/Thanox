@@ -22,7 +22,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public final class GlobalVar implements Parcelable {
-    private final static Gson GSON = new Gson();
+    private static final Gson GSON = new Gson();
 
     private String name;
     private List<String> stringList;
