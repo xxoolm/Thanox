@@ -57,13 +57,17 @@ public final class GlobalVar implements Parcelable {
 
     @Nullable
     public String listToJson() {
-        if (this.stringList == null) return null;
+        if (this.stringList == null) {
+            return null;
+        }
         return GSON.toJson(this.stringList);
     }
 
     @Nullable
     public static GlobalVar fromJson(String json) {
-        if (json == null) return null;
+        if (json == null) {
+            return null;
+        }
         try {
             return GSON.fromJson(json, GlobalVar.class);
         } catch (Throwable e) {
@@ -73,7 +77,9 @@ public final class GlobalVar implements Parcelable {
 
     @Nullable
     public static ArrayList<String> listFromJson(String json) {
-        if (json == null) return null;
+        if (json == null) {
+            return null;
+        }
         try {
             return GSON.fromJson(json, new TypeToken<ArrayList<String>>() {
             }.getType());
