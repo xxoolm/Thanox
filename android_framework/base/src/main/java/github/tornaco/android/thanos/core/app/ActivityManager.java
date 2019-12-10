@@ -15,10 +15,10 @@ import lombok.SneakyThrows;
 @AllArgsConstructor
 public class ActivityManager {
 
-    public interface ExcludeRecentSetting {
-        int NONE = 0;
-        int INCLUDE = 1;
-        int EXCLUDE = -1;
+    public final class ExcludeRecentSetting {
+        public static final int NONE = 0;
+        public static final int INCLUDE = 1;
+        public static final int EXCLUDE = -1;
     }
 
     private IActivityManager server;

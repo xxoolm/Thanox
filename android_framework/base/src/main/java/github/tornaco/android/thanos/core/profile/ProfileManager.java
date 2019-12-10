@@ -1,7 +1,5 @@
 package github.tornaco.android.thanos.core.profile;
 
-import android.os.RemoteException;
-
 import lombok.SneakyThrows;
 
 public class ProfileManager {
