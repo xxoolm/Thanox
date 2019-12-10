@@ -259,7 +259,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
         // Cancel later.
         executeInternal(() -> NotificationManagerCompat.from(getContext())
-                .cancel(NotificationIdFactory.getIdByTag(N_TAG_THANOX_ACTIVATED)), 12 * 1000);
+                .cancel(NotificationIdFactory.getIdByTag(N_TAG_THANOX_ACTIVATED)), 60 * 1000);
 
     }
 
