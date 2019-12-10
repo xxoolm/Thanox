@@ -71,6 +71,11 @@ object T {
     }
 
     @JvmStatic
+    fun recentTaskExcludingSettingsRepoFile(): File {
+        return File(baseServerDataDir(), "recent_task_excluding_settings.xml")
+    }
+
+    @JvmStatic
     fun appLockRepoFile(): File {
         return File(baseServerDataDir(), "app_lock_pkgs.xml")
     }

@@ -74,6 +74,14 @@
                 app:key="@string/key_app_feature_config_ops"
                 app:title="@string/module_ops_feature_title_app_ops_list" />
 
+        <DropDownPreference
+                android:entries="@array/recent_task_exclude_entry"
+                android:entryValues="@array/recent_task_exclude_value"
+                app:key="@string/key_recent_task_exclude_settings"
+                app:persistent="false"
+                app:summary="@string/pre_summary_exclude_recent_task"
+                app:title="@string/pre_title_exclude_recent_task"
+                app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
 </PreferenceScreen>

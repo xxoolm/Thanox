@@ -13,6 +13,13 @@ import lombok.SneakyThrows;
 
 @AllArgsConstructor
 public class ActivityManager {
+
+    public interface ExcludeRecentSetting {
+        int NONE = 0;
+        int INCLUDE = 1;
+        int EXCLUDE = -1;
+    }
+
     private IActivityManager server;
 
     @SneakyThrows
@@ -273,5 +280,15 @@ public class ActivityManager {
     @SneakyThrows
     public String[] getLastRecentUsedPackages(int count) {
         return server.getLastRecentUsedPackages(count);
+    }
+
+    @SneakyThrows
+    public int getRecentTaskExcludeSettingForPackage(String pkgName) {
+        return server.getRecentTaskExcludeSettingForPackage(pkgName);
+    }
+
+    @SneakyThrows
+    public void setRecentTaskExcludeSettingForPackage(String pkgName, int setting) {
+        server.setRecentTaskExcludeSettingForPackage(pkgName, setting);
     }
 }

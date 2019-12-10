@@ -173,6 +173,12 @@
     <string name="pre_title_bg_screen_off_clean_up_skip_audio">Audio playing</string>
     <string name="pre_summary_bg_screen_off_clean_up_skip_audio">Keep audio playing apps</string>
 
+    <string name="pre_title_exclude_recent_task">Exclude recent task</string>
+    <string name="pre_summary_exclude_recent_task">Set force exclude or include recent task for this app</string>
+    <string name="pre_entry_exclude_recent_task_default">Default</string>
+    <string name="pre_entry_exclude_recent_task_include">Include</string>
+    <string name="pre_entry_exclude_recent_task_exclude">Exclude</string>
+
     <string name="pre_title_bg_screen_off_clean_up_skip_notification">Keep apps has notification</string>
 
     <string name="badge_trying_app">Trying</string>

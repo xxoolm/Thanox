@@ -62,4 +62,6 @@
 
     <string name="key_new_installed_apps_config" translatable="false">key_new_installed_apps_config</string>
     <string name="key_new_installed_apps_config_enabled" translatable="false">key_new_installed_apps_config_enabled</string>
+
+    <string name="key_recent_task_exclude_settings" translatable="false">key_recent_task_exclude_settings</string>
 </resources>

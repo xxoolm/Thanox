@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.preference.DropDownPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
@@ -44,6 +45,19 @@ public class FeatureConfigFragment extends PreferenceFragmentCompat {
         bindFeatureConfigPref();
         bindAppStatePref();
         bindOpsPref();
+        bindRecentTaskExcludePref();
+    }
+
+    private void bindRecentTaskExcludePref() {
+        ThanosManager thanos = ThanosManager.from(getContext());
+        DropDownPreference pref = findPreference(getString(R.string.key_recent_task_exclude_settings));
+        int currentMode = thanos.getActivityManager().getRecentTaskExcludeSettingForPackage(appInfo.getPkgName());
+        Objects.requireNonNull(pref).setValue(String.valueOf(currentMode));
+        pref.setOnPreferenceChangeListener((preference, newValue) -> {
+            int mode = Integer.parseInt(String.valueOf(newValue));
+            thanos.getActivityManager().setRecentTaskExcludeSettingForPackage(appInfo.getPkgName(), mode);
+            return true;
+        });
     }
 
     private void bindOpsPref() {

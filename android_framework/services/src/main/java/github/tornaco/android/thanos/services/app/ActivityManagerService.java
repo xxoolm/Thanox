@@ -59,6 +59,7 @@ import github.tornaco.android.thanos.core.app.start.StartResultExt;
 import github.tornaco.android.thanos.core.compat.NotificationCompat;
 import github.tornaco.android.thanos.core.compat.NotificationManagerCompat;
 import github.tornaco.android.thanos.core.persist.RepoFactory;
+import github.tornaco.android.thanos.core.persist.i.MapRepo;
 import github.tornaco.android.thanos.core.persist.i.SetRepo;
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener;
 import github.tornaco.android.thanos.core.process.ProcessRecord;
@@ -134,6 +135,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     private SetRepo<String> cleanUpTaskRemovalApps;
     private SetRepo<String> recentTaskBlurApps;
     private SetRepo<String> smartStandByApps;
+    private MapRepo<String, String> recentTaskExcludingSettings;
 
     private Map<String, Integer> processCrashingTimes = new ConcurrentHashMap<>();
 
@@ -194,6 +196,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         this.cleanUpTaskRemovalApps = RepoFactory.get().getOrCreateStringSetRepo(T.cleanUpOnTaskRemovalRepoFile().getPath());
         this.recentTaskBlurApps = RepoFactory.get().getOrCreateStringSetRepo(T.recentTaskBlurRepoFile().getPath());
         this.smartStandByApps = RepoFactory.get().getOrCreateStringSetRepo(T.smartStandByRepoFile().getPath());
+        this.recentTaskExcludingSettings = RepoFactory.get().getOrCreateStringMapRepo(T.recentTaskExcludingSettingsRepoFile().getPath());
     }
 
     @Override
@@ -1493,5 +1496,36 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
         Timber.d("Now, doSmartStandByForPkg: %s", pkg);
         idlePackage(pkg);
+    }
+
+    public int getRecentTaskExcludeSetting(ComponentName componentName) {
+        if (!isSystemReady() || componentName == null || componentName.getPackageName() == null) {
+            return github.tornaco.android.thanos.core.app.ActivityManager.ExcludeRecentSetting.NONE;
+        }
+        return getRecentTaskExcludeSettingForPackage(componentName.getPackageName());
+    }
+
+    @Override
+    public int getRecentTaskExcludeSettingForPackage(@NonNull String pkgName) {
+        if (!isSystemReady()) {
+            return github.tornaco.android.thanos.core.app.ActivityManager.ExcludeRecentSetting.NONE;
+        }
+        String settingsStr = recentTaskExcludingSettings.get(pkgName);
+        if (settingsStr == null) {
+            return github.tornaco.android.thanos.core.app.ActivityManager.ExcludeRecentSetting.NONE;
+        }
+        try {
+            return Integer.parseInt(settingsStr);
+        } catch (Throwable e) {
+            Timber.e(e, "Integer.parseInt@getRecentTaskExcludeSetting");
+            return github.tornaco.android.thanos.core.app.ActivityManager.ExcludeRecentSetting.NONE;
+        }
+    }
+
+    @Override
+    public void setRecentTaskExcludeSettingForPackage(String pkgName, int setting) {
+        Timber.v("setRecentTaskExcludeSettingForPackage: %s %s", pkgName, setting);
+        enforceCallingPermissions();
+        recentTaskExcludingSettings.put(pkgName, String.valueOf(setting));
     }
 }
