@@ -52,7 +52,7 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
         super.systemReady()
         val appResources = AppResources(context, BuildProp.THANOS_APP_PKG_NAME)
         val opWhiteList: Array<String> =
-            appResources.getStringArray(Res.Strings.OP_REMIND_WHITELIST)
+            appResources.getStringArray(Res.Strings.STRING_OP_REMIND_WHITELIST)
         this.opRemindWhiteList.addAll(opWhiteList)
         Timber.d("opRemindWhiteList: ${opRemindWhiteList.toTypedArray().contentToString()}")
         initPrefs()

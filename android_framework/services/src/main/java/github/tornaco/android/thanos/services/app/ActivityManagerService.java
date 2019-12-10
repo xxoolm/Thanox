@@ -80,7 +80,6 @@ import github.tornaco.android.thanos.services.ThreadPriorityBooster;
 import github.tornaco.android.thanos.services.apihint.Beta;
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler;
 import github.tornaco.android.thanos.services.app.start.StartRecorder;
-import github.tornaco.android.thanos.services.app.task.RecentTasks;
 import github.tornaco.android.thanos.services.app.task.TaskMapping;
 import github.tornaco.android.thanos.services.n.NotificationHelper;
 import github.tornaco.android.thanos.services.n.NotificationIdFactory;
@@ -116,8 +115,6 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     @Getter
     private final TaskMapping taskMapping;
     @Getter
-    private final RecentTasks recentTasks;
-    @Getter
     private final NotificationHelper notificationHelper;
 
     private boolean startBlockerEnabled;
@@ -141,6 +138,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     private Map<String, Integer> processCrashingTimes = new ConcurrentHashMap<>();
 
     private Set<String> startBlockCallerWhiteList = new HashSet<>();
+    private Set<String> taskRemovalMultipleTaskCheckList = new HashSet<>();
 
     // Last recent used 5 apps.
     private final LinkedList<AppLaunchRecord> appLaunchRecords = new LinkedList<>();
@@ -185,7 +183,6 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     public ActivityManagerService(S s) {
         super(s);
         this.taskMapping = new TaskMapping();
-        this.recentTasks = new RecentTasks();
         this.notificationHelper = new NotificationHelper();
     }
 
@@ -280,6 +277,8 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         AppResources appResources = new AppResources(getContext(), BuildProp.THANOS_APP_PKG_NAME);
         this.startBlockCallerWhiteList.addAll(Arrays.asList(appResources.getStringArray(Res.Strings.STRING_START_BLOCKER_CALLER_WHITELIST)));
         Timber.d("startBlockCallerWhiteList:\n%s", Arrays.toString(startBlockCallerWhiteList.toArray()));
+        this.taskRemovalMultipleTaskCheckList.addAll(Arrays.asList(appResources.getStringArray(Res.Strings.STRING_TASK_REMOVAL_MULTIPLE_TASK_CHECK_LIST)));
+        Timber.d("taskRemovalMultipleTaskCheckList:\n%s", Arrays.toString(taskRemovalMultipleTaskCheckList.toArray()));
 
         PreferenceManagerService preferenceManagerService = s.getPreferenceManagerService();
         this.startBlockerEnabled = preferenceManagerService.getBoolean(
@@ -504,12 +503,29 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         return new StartResultExt(StartResult.BY_PASS_DEFAULT, receiverPkgName);
     }
 
+    public void onProcessRemoved(ProcessRecord record) {
+        if (record == null) return;
+        executeInternal(() -> onProcessRemovedInternal(record));
+    }
+
+    public void onProcessRemovedInternal(ProcessRecord record) {
+        boolean isAppStillRunning = isPackageRunning(record.getPackageName());
+        Timber.v("onProcessRemovedInternal: %s, isAppStillRunning? %s", record, isAppStillRunning);
+        if (!isAppStillRunning) {
+            onPackageStopRunningInternal(record.getPackageName());
+        }
+    }
+
+    private void onPackageStopRunningInternal(String pkgName) {
+        Timber.v("onPackageStopRunningInternal: %s", pkgName);
+        taskMapping.removeTasksFromMapForPackage(pkgName);
+    }
+
     @Override
     public boolean checkStartProcess(final ApplicationInfo applicationInfo, String hostType, String hostName) {
         StartResult res = Single
-                .create((SingleOnSubscribe<StartResultExt>) emitter -> {
-                    emitter.onSuccess(checkStartProcessInternal(applicationInfo, hostType));
-                })
+                .create((SingleOnSubscribe<StartResultExt>) emitter ->
+                        emitter.onSuccess(checkStartProcessInternal(applicationInfo, hostType)))
                 .doOnSuccess(startResult -> {
                     if (startResult.getPackageName() != null) {
                         Runnable recorder = () -> startRecorder.add(StartRecord.builder()
@@ -722,6 +738,28 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
         }
     }
 
+    public boolean hasRunningAppProcessForPackage(String pkgName) {
+        boostPriorityForLockedSection();
+        try {
+            List<ActivityManager.RunningAppProcessInfo> processRecordList = getRunningAppProcessLegacy();
+            if (CollectionUtils.isNullOrEmpty(processRecordList)) {
+                Timber.e("processRecordList not found for pkg: %s", pkgName);
+                return false;
+            }
+
+            for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : processRecordList) {
+                String[] pkgList = runningAppProcessInfo.pkgList;
+                if (!ArrayUtils.isEmpty(pkgList) && ArrayUtils.contains(pkgList, pkgName)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } finally {
+            resetPriorityAfterLockedSection();
+        }
+    }
+
     @Override
     public List<ActivityManager.RunningAppProcessInfo> getRunningAppProcessLegacy() {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -767,7 +805,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     @Override
     public boolean isPackageRunning(String pkgName) {
-        return !ArrayUtils.isEmpty(getRunningAppProcessForPackage(pkgName));
+        return hasRunningAppProcessForPackage(pkgName);
     }
 
     @Override
@@ -1081,10 +1119,6 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
 
     public void removeTaskForPackage(String pkgName) {
         enforceCallingPermissions();
-        if (!getRecentTasks().hasRecentTaskForPkg(pkgName)) {
-            Timber.v("removeTaskForPackage: %s, has no task, skip.", pkgName);
-            return;
-        }
         List<Integer> taskIds = getTaskMapping().getTasksIdForPackage(getContext(), pkgName);
         Timber.v("removeTaskForPackage: %s", taskIds.toArray());
         if (!CollectionUtils.isNullOrEmpty(taskIds)) {
@@ -1117,7 +1151,7 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
                 userId,
                 currentUserId);
         if (intent != null) {
-            recentTasks.remove(intent.getComponent());
+            taskMapping.remove(intent.getComponent());
             onTaskRemoving(PkgUtils.packageNameOf(intent), userId, currentUserId);
         }
     }
@@ -1146,11 +1180,13 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
             Timber.w("onTaskRemovingInternal, user is not current, will not clear tasks.");
             return;
         }
-        boolean hasAnyOtherTask = recentTasks.hasRecentTaskForPkg(taskPkgName);
-        Timber.v("onTaskRemovingInternal: task pkg is: %s, has other task? %s",
+        boolean multipleTaskKeep =
+                taskRemovalMultipleTaskCheckList.contains(taskPkgName)
+                        && taskMapping.hasRecentTaskForPkg(getContext(), taskPkgName);
+        Timber.v("onTaskRemovingInternal: task pkg is: %s, multipleTaskKeep? %s",
                 taskPkgName,
-                hasAnyOtherTask);
-        if (!hasAnyOtherTask
+                multipleTaskKeep);
+        if (!multipleTaskKeep
                 && cleanUpOnTaskRemovalEnabled
                 && isPkgCleanUpOnTaskRemovalEnabled(taskPkgName)) {
 
@@ -1167,7 +1203,6 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     public void notifyTaskCreated(int taskId, ComponentName componentName) {
         Timber.v("notifyTaskCreated: taskId: %s, componentName: %s", taskId, componentName);
         DevNull.accept(taskMapping.put(taskId, componentName));
-        recentTasks.add(componentName);
     }
 
     @Override

@@ -27,6 +27,7 @@ import java.util.concurrent.Executors
 import java.util.regex.Pattern
 import kotlin.collections.HashSet
 
+@Deprecated("Use Pool instead.")
 internal class PkgCache {
     private var context: Context? = null
     private val executor = Executors.newSingleThreadExecutor()

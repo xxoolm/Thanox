@@ -132,4 +132,8 @@
         <item>com.miui.face</item>
         <item>com.miui.face</item>
     </string-array>
+
+    <string-array name="task_removal_multiple_task_check_list">
+        <item>com.tencent.mm</item>
+    </string-array>
 </resources>

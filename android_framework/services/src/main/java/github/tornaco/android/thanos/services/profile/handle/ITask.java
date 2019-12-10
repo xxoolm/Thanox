@@ -30,7 +30,7 @@ interface ITask {
 
         @Override
         public boolean hasTaskFromPackage(String pkgName) {
-            return s.getActivityManagerService().getRecentTasks().hasRecentTaskForPkg(pkgName);
+            return s.getActivityManagerService().getTaskMapping().hasRecentTaskForPkg(context, pkgName);
         }
 
         @Override

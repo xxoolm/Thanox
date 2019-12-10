@@ -9,9 +9,9 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import github.tornaco.android.thanos.core.util.PkgUtils;
 import github.tornaco.android.thanos.core.util.Timber;
@@ -21,11 +21,26 @@ import util.ObjectsUtils;
 public class TaskMapping {
 
     @SuppressLint("UseSparseArrays")
-    private final Map<Integer, ComponentName> taskIdCompMap = new HashMap<>();
+    private final Map<Integer, ComponentName> taskIdCompMap = new ConcurrentHashMap<>();
 
     @TargetApi(Build.VERSION_CODES.O)
     public ComponentName put(int taskId, ComponentName componentName) {
         return taskIdCompMap.put(taskId, componentName);
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    public void remove(ComponentName toRemove) {
+        Timber.v("To remove: %s", toRemove);
+        if (toRemove != null) {
+            Integer[] tasksId = taskIdCompMap.keySet().toArray(new Integer[0]);
+            for (int id : tasksId) {
+                ComponentName componentName = taskIdCompMap.get(id);
+                if (ObjectsUtils.equals(componentName, toRemove)) {
+                    taskIdCompMap.remove(id);
+                    Timber.v("Removed: " + id);
+                }
+            }
+        }
     }
 
     public String getPackageNameForTaskId(Context context, int taskId) {
@@ -89,6 +104,25 @@ public class TaskMapping {
                         }
                     }
                 }
+            }
+        }
+        return res;
+    }
+
+    public boolean hasRecentTaskForPkg(Context context, String pkg) {
+        return !CollectionUtils.isNullOrEmpty(getTasksIdForPackage(context, pkg));
+    }
+
+    public List<Integer> removeTasksFromMapForPackage(String packageName) {
+        Timber.v("removeTasksFromMapForPackage: %s", packageName);
+        List<Integer> res = new ArrayList<>();
+        Integer[] tasksId = taskIdCompMap.keySet().toArray(new Integer[0]);
+        for (int id : tasksId) {
+            ComponentName componentName = taskIdCompMap.get(id);
+            if (ObjectsUtils.equals(componentName.getPackageName(), packageName)) {
+                res.add(id);
+                taskIdCompMap.remove(id);
+                Timber.v("removeTasksFromMapForPackage: %s, removed: %s", packageName, id);
             }
         }
         return res;
