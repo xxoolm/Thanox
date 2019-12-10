@@ -522,6 +522,8 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
     private void onPackageStopRunningInternal(String pkgName) {
         Timber.v("onPackageStopRunningInternal: %s", pkgName);
         taskMapping.removeTasksFromMapForPackage(pkgName);
+        // broadcast.
+        broadcastPackageStoppedInternal(pkgName);
     }
 
     @Override
@@ -1000,8 +1002,6 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
             ActivityManager am = (ActivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.ACTIVITY_SERVICE);
             am.forceStopPackage(packageName);
             Timber.d("forceStopped Package: %s", packageName);
-            // broadcast.
-            broadcastPackageStoppedInternal(packageName);
         }).subscribeOn(ThanosSchedulers.serverThread()).subscribe();
     }
 
