@@ -51,9 +51,7 @@ public class GlobalVarListActivity extends ThemeActivity implements VarItemClick
         binding.swipe.setColorSchemeColors(getResources().getIntArray(
                 github.tornaco.android.thanos.module.common.R.array.common_swipe_refresh_colors));
 
-        binding.fab.setOnClickListener((View v) -> {
-
-        });
+        binding.fab.setOnClickListener((View v) -> GlobalVarEditorActivity.start(thisActivity(), null));
     }
 
     private void setupViewModel() {
@@ -73,7 +71,7 @@ public class GlobalVarListActivity extends ThemeActivity implements VarItemClick
 
     @Override
     public void onItemClick(@NonNull GlobalVar var) {
-
+        GlobalVarEditorActivity.start(thisActivity(), var);
     }
 
     public static GlobalVarViewModel obtainViewModel(FragmentActivity activity) {

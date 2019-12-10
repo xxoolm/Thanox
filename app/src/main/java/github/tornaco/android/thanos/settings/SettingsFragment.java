@@ -184,22 +184,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
         findPreference(getString(R.string.key_restore_default)).setOnPreferenceClickListener(preference -> {
-            ThanosManager.from(getActivity())
-                    .ifServiceInstalled(thanosManager -> {
-                        if (thanosManager.getBackupAgent().restoreDefault()) {
-                            new AlertDialog.Builder(getActivity())
-                                    .setMessage(getString(R.string.pre_message_restore_success))
-                                    .setCancelable(false)
-                                    .setPositiveButton(android.R.string.ok, null)
-                                    .show();
-                        } else {
-                            new AlertDialog.Builder(getActivity())
-                                    .setMessage("Error:(")
-                                    .setCancelable(false)
-                                    .setPositiveButton(android.R.string.ok, null)
-                                    .show();
-                        }
-                    });
+            new AlertDialog.Builder(getActivity())
+                    .setMessage(R.string.pre_title_restore_default)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) ->
+                            ThanosManager.from(getActivity())
+                                    .ifServiceInstalled(thanosManager -> {
+                                        if (thanosManager.getBackupAgent().restoreDefault()) {
+                                            new AlertDialog.Builder(getActivity())
+                                                    .setMessage(getString(R.string.pre_message_restore_success))
+                                                    .setCancelable(false)
+                                                    .setPositiveButton(android.R.string.ok, null)
+                                                    .show();
+                                        } else {
+                                            new AlertDialog.Builder(getActivity())
+                                                    .setMessage("Error:(")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton(android.R.string.ok, null)
+                                                    .show();
+                                        }
+                                    }))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+
             return true;
         });
 

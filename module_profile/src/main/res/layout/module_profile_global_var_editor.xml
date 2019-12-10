@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+                name="var"
+                type="github.tornaco.android.thanos.core.profile.GlobalVar" />
+
+        <variable
+                name="placeholder"
+                type="String" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="?appbarTheme"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:popupTheme="?appbarPopupTheme"
+                    app:theme="?toolbarTheme"
+                    app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    app:titleTextColor="?menuIconTint">
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/editor_actions_toolbar"
+                android:layout_below="@id/app_bar"
+                android:layout_margin="@dimen/common_view_margin_tiny"
+                android:gravity="top"
+                android:scrollbars="vertical"
+                android:text="@{var== null? placeholder : var.listToJson()}"
+                android:textSize="@dimen/module_profile_editor_text_size" />
+
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/editor_actions_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentBottom="true"
+                android:background="?attr/colorPrimary"
+                android:gravity="center"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="?appbarPopupTheme"
+                app:theme="?toolbarTheme">
+
+            <View
+                    android:layout_width="@dimen/common_view_margin_default"
+                    android:layout_height="wrap_content" />
+
+            <ImageView
+                    android:id="@+id/ruleCheckIndicator"
+                    android:layout_width="@dimen/module_profile_editor_rule_checker_indicator_size"
+                    android:layout_height="@dimen/module_profile_editor_rule_checker_indicator_size"
+                    android:src="@drawable/module_profile_ic_rule_valid_green_fill" />
+        </androidx.appcompat.widget.Toolbar>
+
+    </RelativeLayout>
+</layout>
