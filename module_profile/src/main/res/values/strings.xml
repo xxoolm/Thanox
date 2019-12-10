@@ -1,6 +1,8 @@
 <resources>
     <string name="module_profile_feature_name">Profile</string>
-    <string name="module_profile_feature_summary">Perform custom actions if match given condiction</string>
+    <string name="module_profile_feature_summary">Perform custom actions if match given condition</string>
+
+    <string name="module_profile_title_global_var">Global variant</string>
 
     <string name="module_profile_rule_edit_action_save">Save</string>
     <string name="module_profile_rule_edit_action_discard">Discard</string>
@@ -8,7 +10,7 @@
     <string name="module_profile_rule_edit_action_text_size_dec">Decrease</string>
 
     <string name="module_profile_rule_wiki">Wiki</string>
-    <string name="module_profile_rule_impor_from_file">Import file file</string>
+    <string name="module_profile_rule_impor_from_file">Import from file</string>
     <string name="module_profile_rule_impor_example">Import examples</string>
 
     <string name="module_profile_rule_edit">Edit</string>

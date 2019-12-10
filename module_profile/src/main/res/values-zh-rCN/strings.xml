@@ -2,6 +2,8 @@
     <string name="module_profile_feature_name">情景模式</string>
     <string name="module_profile_feature_summary">基于场景执行自定义操作</string>
 
+    <string name="module_profile_title_global_var">全局变量</string>
+
     <string name="module_profile_rule_edit_action_save">保存</string>
     <string name="module_profile_rule_edit_action_discard">取消</string>
     <string name="module_profile_rule_edit_action_text_size_inc">放大</string>

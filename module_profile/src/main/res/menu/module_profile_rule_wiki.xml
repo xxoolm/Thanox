@@ -22,4 +22,11 @@
             android:title="@string/module_profile_rule_impor_example"
             app:showAsAction="never"
             tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/action_global_var"
+        android:icon="@drawable/ic_download_cloud_fill"
+        android:title="@string/module_profile_title_global_var"
+        app:showAsAction="never"
+        tools:ignore="AlwaysShowAction" />
 </menu>

@@ -674,6 +674,14 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         return globalRuleVarRepo.keys.toTypedArray()
     }
 
+    override fun getAllGlobalRuleVar(): Array<GlobalVar> {
+        val res = arrayListOf<GlobalVar>()
+        allGlobalRuleVarNames.forEach {
+            res.add(GlobalVar(it, getGlobalRuleVarByName(it).toMutableList()))
+        }
+        return res.toTypedArray()
+    }
+
     override fun setProfileEnabled(enable: Boolean) {
         ensureProfileFeature()
         enforceCallingPermissions()

@@ -4,5 +4,6 @@
     <application>
         <activity android:name=".RuleListActivity" />
         <activity android:name=".RuleEditorActivity" />
+        <activity android:name=".GlobalVarListActivity" />
     </application>
 </manifest>

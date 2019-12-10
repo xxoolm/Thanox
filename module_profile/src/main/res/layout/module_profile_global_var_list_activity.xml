@@ -9,7 +9,7 @@
 
         <variable
                 name="viewModel"
-                type="github.tornaco.thanos.android.module.profile.RuleListViewModel" />
+                type="github.tornaco.thanos.android.module.profile.GlobalVarViewModel" />
     </data>
 
 
@@ -31,7 +31,7 @@
                     android:layout_height="?actionBarSize"
                     app:popupTheme="?appbarPopupTheme"
                     app:theme="?toolbarTheme"
-                    app:title="@string/module_profile_feature_name"
+                    app:title="@string/module_profile_title_global_var"
                     app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:titleTextColor="?menuIconTint"
                     tools:title="Title very long very very long!!!!">
@@ -45,14 +45,6 @@
                 android:layout_below="@id/appbar"
                 android:orientation="vertical">
 
-            <github.tornaco.android.thanos.widget.SwitchBar
-                    android:id="@+id/switch_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize"
-                    android:foreground="?selectableItemBackground"
-                    android:theme="?switchBarTheme"
-                    tools:ignore="UnusedAttribute" />
-
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                     android:id="@+id/swipe"
                     android:layout_width="wrap_content"
@@ -60,11 +52,11 @@
                     app:refreshing="@{viewModel.isDataLoading}">
 
                 <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-                        android:id="@+id/rule_list_view"
+                        android:id="@+id/var_list_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="?cardsBackgroundColor"
-                        android:ruleInfoList="@{viewModel.ruleInfoList}" />
+                        android:globalVars="@{viewModel.globalVars}" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>

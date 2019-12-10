@@ -1,5 +1,7 @@
 package github.tornaco.android.thanos.core.profile;
 
+import android.os.RemoteException;
+
 import lombok.SneakyThrows;
 
 public class ProfileManager {
@@ -111,5 +113,10 @@ public class ProfileManager {
     @SneakyThrows
     public boolean isGlobalRuleVarByNameExists(String varName) {
         return server.isGlobalRuleVarByNameExists(varName);
+    }
+
+    @SneakyThrows
+    public GlobalVar[] getAllGlobalRuleVar() {
+        return server.getAllGlobalRuleVar();
     }
 }

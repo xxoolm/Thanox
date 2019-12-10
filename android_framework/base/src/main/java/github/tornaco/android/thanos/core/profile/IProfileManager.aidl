@@ -30,5 +30,6 @@ interface IProfileManager {
 
     String[] getAllGlobalRuleVarNames();
     String[] getGlobalRuleVarByName(String varName);
+    GlobalVar[] getAllGlobalRuleVar();
     boolean isGlobalRuleVarByNameExists(String varName);
 }

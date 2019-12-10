@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import github.tornaco.android.thanos.core.profile.GlobalVar;
 import github.tornaco.android.thanos.core.profile.RuleInfo;
 import util.Consumer;
 
@@ -16,6 +17,13 @@ public class DataBindingAdapters {
     @BindingAdapter("android:ruleInfoList")
     public static void setRuleInfoList(RecyclerView view, List<RuleInfo> models) {
         Consumer<List<RuleInfo>> consumer = (Consumer<List<RuleInfo>>) view.getAdapter();
+        consumer.accept(models);
+    }
+
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
+    @BindingAdapter("android:globalVars")
+    public static void setGlobalVars(RecyclerView view, List<GlobalVar> models) {
+        Consumer<List<GlobalVar>> consumer = (Consumer<List<GlobalVar>>) view.getAdapter();
         consumer.accept(models);
     }
 

@@ -21,11 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.common.io.CharStreams;
-
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import github.tornaco.android.thanos.BuildProp;
@@ -70,8 +65,8 @@ public class RuleListActivity extends ThemeActivity implements RuleItemClickList
         }
 
         // List.
-        binding.replacements.setLayoutManager(new LinearLayoutManager(this));
-        binding.replacements.setAdapter(new RuleListAdapter(this, (ruleInfo, checked) -> {
+        binding.ruleListView.setLayoutManager(new LinearLayoutManager(this));
+        binding.ruleListView.setAdapter(new RuleListAdapter(this, (ruleInfo, checked) -> {
             ruleInfo.setEnabled(checked);
             if (checked) ThanosManager.from(getApplicationContext())
                     .getProfileManager()
@@ -171,6 +166,11 @@ public class RuleListActivity extends ThemeActivity implements RuleItemClickList
 
         if (R.id.action_import_examples == item.getItemId()) {
             viewModel.importRuleExamples();
+            return true;
+        }
+
+        if (R.id.action_global_var == item.getItemId()) {
+            GlobalVarListActivity.start(this);
             return true;
         }
 
