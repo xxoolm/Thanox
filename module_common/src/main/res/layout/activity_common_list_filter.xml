@@ -87,18 +87,16 @@
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="@dimen/common_view_margin_default"
-                android:text="@string/switch_off_text"
-                android:textColor="@color/md_white"
+                android:src="@drawable/ic_check_fill_white"
                 android:tint="@color/md_white"
                 app:backgroundTint="?colorAccent"
-                app:icon="@drawable/ic_check_fill_white"
                 app:iconTint="@color/md_white" />
 
     </RelativeLayout>
