@@ -39,19 +39,19 @@
     <string name="boost_status_system_storage">存储空间</string>
 
     <string name="feature_category_start_manage">启动</string>
-    <string name="feature_title_start_restrict">启动管理</string>
-    <string name="feature_desc_start_restrict">允许应用后台自启动、关联启动</string>
+    <string name="feature_title_start_restrict">自启动管理</string>
+    <string name="feature_desc_start_restrict">允许选中的应用自启动、关联启动</string>
     <string name="feature_title_bg_restrict">后台管理</string>
-    <string name="feature_desc_bg_restrict">允许应用锁屏后继续运行，清理应用时不清理允许运行的应用</string>
+    <string name="feature_desc_bg_restrict">允许选中的应用锁屏后继续运行，同时在清理后台时保留允许运行的应用</string>
 
     <string name="menu_title_start_restrict_charts">阻止记录</string>
 
     <string name="feature_category_app_clean_up">清理</string>
     <string name="feature_title_clean_when_task_removed">任务清理</string>
-    <string name="feature_desc_clean_when_task_removed">清除最近任务后同时清理应用后台，应用会被强行停止运行</string>
+    <string name="feature_desc_clean_when_task_removed">清除最近任务后同时清理应用后台</string>
 
-    <string name="activity_title_start_restrict">后台启动</string>
-    <string name="activity_title_bg_restrict">后台运行</string>
+    <string name="activity_title_start_restrict">自启动管理</string>
+    <string name="activity_title_bg_restrict">后台管理</string>
     <string name="activity_title_clean_when_task_removed">任务清理</string>
 
     <string name="feature_title_process_manage">进程管理</string>
