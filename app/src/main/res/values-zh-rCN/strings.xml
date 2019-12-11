@@ -39,16 +39,16 @@
     <string name="boost_status_system_storage">存储空间</string>
 
     <string name="feature_category_start_manage">启动</string>
-    <string name="feature_title_start_restrict">后台启动</string>
-    <string name="feature_desc_start_restrict">允许应用后台自启动</string>
-    <string name="feature_title_bg_restrict">后台运行</string>
-    <string name="feature_desc_bg_restrict">允许应用锁屏后继续运行</string>
+    <string name="feature_title_start_restrict">启动管理</string>
+    <string name="feature_desc_start_restrict">允许应用后台自启动、关联启动</string>
+    <string name="feature_title_bg_restrict">后台管理</string>
+    <string name="feature_desc_bg_restrict">允许应用锁屏后继续运行，清理应用时不清理允许运行的应用</string>
 
     <string name="menu_title_start_restrict_charts">阻止记录</string>
 
     <string name="feature_category_app_clean_up">清理</string>
     <string name="feature_title_clean_when_task_removed">任务清理</string>
-    <string name="feature_desc_clean_when_task_removed">清除最近任务后同时清理应用后台</string>
+    <string name="feature_desc_clean_when_task_removed">清除最近任务后同时清理应用后台，应用会被强行停止运行</string>
 
     <string name="activity_title_start_restrict">后台启动</string>
     <string name="activity_title_bg_restrict">后台运行</string>
@@ -64,7 +64,7 @@
     <string name="feature_category_app_manage">应用</string>
     <string name="feature_title_apps_manager">应用管理</string>
     <string name="activity_title_apps_manager">应用管理（%s）</string>
-    <string name="feature_summary_apps_manager">应用的配置与管理</string>
+    <string name="feature_summary_apps_manager">应用的单独配置与管理</string>
     <string name="titile_suggested_apps_recent_used">最近打开的应用</string>
     <string name="titile_suggested_apps_view_all">查看全部应用</string>
 
@@ -95,7 +95,7 @@
 
     <string name="dialog_title_smart_app_standby_need_enable_platform_app_idle">开启自适应电池</string>
     <string name="dialog_message_smart_app_standby_need_enable_platform_app_idle">
-        智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\n\nThanox当前无法准确判断你的系统是否支持并开启了该选项。
+        Android 9+设备使用智能休眠需要开启系统设置中的电池-自适应电池选项才能正常工作。\n\nThanox当前无法准确判断你的系统是否支持并开启了该选项。
     </string>
 
     <string name="feature_title_data_cheat">隐匿</string>
