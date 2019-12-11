@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 
+import com.vic797.syntaxhighlight.SyntaxListener;
+
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.profile.ProfileManager;
 import github.tornaco.android.thanos.core.profile.RuleAddCallback;
@@ -24,10 +26,11 @@ import github.tornaco.android.thanos.core.util.TextWatcherAdapter;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
+import github.tornaco.android.thanos.util.TypefaceHelper;
 import github.tornaco.thanos.android.module.profile.databinding.ModuleProfileWorkflowEditorBinding;
 import util.ObjectsUtils;
 
-public class RuleEditorActivity extends ThemeActivity {
+public class RuleEditorActivity extends ThemeActivity implements SyntaxListener {
 
     private ModuleProfileWorkflowEditorBinding binding;
     @Nullable
@@ -149,6 +152,14 @@ public class RuleEditorActivity extends ThemeActivity {
         binding.setPlaceholder(null);
         binding.setLifecycleOwner(this);
         binding.executePendingBindings();
+
+        binding.editText.setTypeface(TypefaceHelper.googleSourceCodePro(thisActivity()));
+        binding.lineLayout.setTypeface(TypefaceHelper.googleSourceCodePro(thisActivity()));
+        binding.editText.setListener(this);
+        binding.editText.addSyntax(getAssets(), "json.json");
+        binding.lineLayout.attachEditText(binding.editText);
+        binding.editText.startHighlight(true);
+        binding.editText.updateVisibleRegion();
     }
 
     private String getCurrentEditingContent() {
@@ -237,5 +248,25 @@ public class RuleEditorActivity extends ThemeActivity {
                             }
                         },
                         format);
+    }
+
+    @Override
+    public void onLineClick(Editable editable, String text, int line) {
+        Timber.v("onLineClick");
+    }
+
+    @Override
+    public void onHighlightStart(Editable editable) {
+        Timber.v("onHighlightStart");
+    }
+
+    @Override
+    public void onHighlightEnd(Editable editable) {
+        Timber.v("onHighlightEnd");
+    }
+
+    @Override
+    public void onError(Exception e) {
+        Timber.e(e, "onError");
     }
 }

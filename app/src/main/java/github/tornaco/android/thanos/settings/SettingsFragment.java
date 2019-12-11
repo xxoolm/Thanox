@@ -430,7 +430,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         notices.addNotice(
                 new Notice(
-                        "easy-rules",
+                        "Timber",
                         "https://github.com/JakeWharton/timber",
                         "Copyright 2013 Jake Wharton",
                         new ApacheSoftwareLicense20()));
@@ -482,6 +482,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         "zip4j",
                         "https://github.com/srikanth-lingala/zip4j",
                         null,
+                        new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "android_native_code_view",
+                        "https://github.com/vic797/android_native_code_view",
+                        "Copyright 2017 Victor Campos",
                         new ApacheSoftwareLicense20()));
 
         new LicensesDialog.Builder(Objects.requireNonNull(getActivity()))

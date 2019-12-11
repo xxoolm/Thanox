@@ -15,6 +15,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.common.collect.Lists;
+import com.vic797.syntaxhighlight.SyntaxListener;
 
 import java.util.List;
 
@@ -23,9 +24,10 @@ import github.tornaco.android.thanos.core.profile.GlobalVar;
 import github.tornaco.android.thanos.core.util.TextWatcherAdapter;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
+import github.tornaco.android.thanos.util.TypefaceHelper;
 import github.tornaco.thanos.android.module.profile.databinding.ModuleProfileGlobalVarEditorBinding;
 
-public class GlobalVarEditorActivity extends ThemeActivity {
+public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxListener {
 
     private ModuleProfileGlobalVarEditorBinding binding;
     private boolean hasAnyInput;
@@ -114,6 +116,14 @@ public class GlobalVarEditorActivity extends ThemeActivity {
         binding.setPlaceholder(null);
         binding.setLifecycleOwner(this);
         binding.executePendingBindings();
+
+        binding.editText.setTypeface(TypefaceHelper.googleSourceCodePro(thisActivity()));
+        binding.lineLayout.setTypeface(TypefaceHelper.googleSourceCodePro(thisActivity()));
+        binding.editText.setListener(this);
+        binding.editText.addSyntax(getAssets(), "json.json");
+        binding.lineLayout.attachEditText(binding.editText);
+        binding.editText.startHighlight(true);
+        binding.editText.updateVisibleRegion();
     }
 
     private String getCurrentEditingContent() {
@@ -189,5 +199,25 @@ public class GlobalVarEditorActivity extends ThemeActivity {
         } else {
             binding.ruleCheckIndicator.setImageResource(R.drawable.module_profile_ic_rule_invalid_red_fill);
         }
+    }
+
+    @Override
+    public void onLineClick(Editable editable, String text, int line) {
+        // Noop.
+    }
+
+    @Override
+    public void onHighlightStart(Editable editable) {
+        // Noop.
+    }
+
+    @Override
+    public void onHighlightEnd(Editable editable) {
+        // Noop.
+    }
+
+    @Override
+    public void onError(Exception e) {
+        // Noop.
     }
 }

@@ -47,17 +47,26 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/edit_text"
+        <com.vic797.syntaxhighlight.LineCountLayout
+                android:id="@+id/line_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/editor_actions_toolbar"
                 android:layout_below="@id/app_bar"
-                android:layout_margin="@dimen/common_view_margin_tiny"
-                android:gravity="top"
-                android:scrollbars="vertical"
-                android:text="@{ruleInfo== null? placeholder : ruleInfo.ruleString}"
-                android:textSize="@dimen/module_profile_editor_text_size" />
+                app:numberColor="?colorAccent"
+                app:numberSize="12sp"
+                app:stripColor="?colorPrimary">
+
+            <com.vic797.syntaxhighlight.SyntaxHighlighter
+                    android:id="@+id/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@{ruleInfo== null? placeholder : ruleInfo.ruleString}"
+                    android:textSize="@dimen/module_profile_editor_text_size"
+                    app:stripLineColor="?colorPrimary" />
+
+        </com.vic797.syntaxhighlight.LineCountLayout>
 
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/editor_actions_toolbar"

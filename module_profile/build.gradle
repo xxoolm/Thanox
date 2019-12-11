@@ -63,6 +63,8 @@ dependencies {
     compileOnly project(':gradle_plugins:permission-requester-annotation')
     annotationProcessor project(':gradle_plugins:permission-requester-compiler')
 
+    implementation project(':third_party:nativesyntax')
+
     testImplementation deps.junit
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

@@ -11,6 +11,7 @@ public class TypefaceHelper {
 
     private static Typeface sGoogleFont;
     private static Typeface sGoogleFontBold;
+    private static Typeface sGoogleSourceCodePro;
 
     public static Typeface googleSans(Context context) {
         synchronized (TypefaceHelper.class) {
@@ -27,6 +28,15 @@ public class TypefaceHelper {
                 sGoogleFontBold = Typeface.createFromAsset(context.getAssets(), "fonts/google/ProductSansBold.ttf");
             }
             return sGoogleFontBold;
+        }
+    }
+
+    public static Typeface googleSourceCodePro(Context context) {
+        synchronized (TypefaceHelper.class) {
+            if (sGoogleSourceCodePro == null) {
+                sGoogleSourceCodePro = Typeface.createFromAsset(context.getAssets(), "fonts/google/SourceSansPro-Regular.ttf");
+            }
+            return sGoogleSourceCodePro;
         }
     }
 }
