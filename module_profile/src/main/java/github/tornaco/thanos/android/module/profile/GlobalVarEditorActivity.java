@@ -21,18 +21,23 @@ import java.util.List;
 
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.profile.GlobalVar;
+import github.tornaco.android.thanos.core.util.DateUtils;
 import github.tornaco.android.thanos.core.util.TextWatcherAdapter;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.util.TypefaceHelper;
 import github.tornaco.thanos.android.module.profile.databinding.ModuleProfileGlobalVarEditorBinding;
+import util.ObjectsUtils;
 
 public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxListener {
 
     private ModuleProfileGlobalVarEditorBinding binding;
-    private boolean hasAnyInput;
+    private String originalContent;
     @Nullable
-    private GlobalVar globalVar = new GlobalVar("New", Lists.newArrayList());
+    private GlobalVar globalVar
+            = new GlobalVar(
+            "New_" + DateUtils.formatForFileName(System.currentTimeMillis()),
+            Lists.newArrayList());
 
     public static void start(Context context, GlobalVar globalVar) {
         Bundle data = new Bundle();
@@ -57,6 +62,10 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
                 globalVar = extra;
             }
         }
+        if (globalVar == null) {
+            return false;
+        }
+        originalContent = globalVar.listToJson();
         return true;
     }
 
@@ -80,7 +89,14 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
                 if (!TextUtils.isEmpty(current)) {
                     checkRuleAndUpdateTips(current);
                 }
-                hasAnyInput = true;
+            }
+        });
+
+        binding.toolbarTitle.addTextChangedListener(new TextWatcherAdapter() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                super.afterTextChanged(editable);
+                globalVar.setName(getCurrentEditingTitle());
             }
         });
 
@@ -90,8 +106,16 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
                 if (TextUtils.isEmpty(getCurrentEditingContent())) {
                     return false;
                 }
+                if (TextUtils.isEmpty(getCurrentEditingTitle())) {
+                    return false;
+                }
                 List<String> stringList = GlobalVar.listFromJson(getCurrentEditingContent());
                 if (stringList == null) {
+                    new AlertDialog.Builder(thisActivity())
+                            .setMessage(R.string.module_profile_editor_save_check_error)
+                            .setCancelable(true)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show();
                     return false;
                 }
                 ThanosManager.from(getApplicationContext())
@@ -100,6 +124,8 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
                                         .getProfileManager()
                                         .addGlobalRuleVar(globalVar.getName(),
                                                 stringList.toArray(new String[0])));
+                finish();
+                return true;
             }
             if (item.getItemId() == R.id.action_text_size_inc) {
                 binding.editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, binding.editText.getTextSize() + 5f);
@@ -124,11 +150,18 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
         binding.lineLayout.attachEditText(binding.editText);
         binding.editText.startHighlight(true);
         binding.editText.updateVisibleRegion();
+
+        setTitle(globalVar.getName());
     }
 
     private String getCurrentEditingContent() {
         if (binding.editText.getText() == null) return "";
         return binding.editText.getText().toString().trim();
+    }
+
+    private String getCurrentEditingTitle() {
+        if (binding.toolbarTitle.getText() == null) return "";
+        return binding.toolbarTitle.getText().toString().trim();
     }
 
     @Override
@@ -163,13 +196,13 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
     }
 
     private void onRequestAbort() {
-        if (!hasAnyInput) {
+        if (ObjectsUtils.equals(originalContent, getCurrentEditingContent())) {
             finish();
             return;
         }
         new AlertDialog.Builder(thisActivity())
-                .setTitle(R.string.module_profile_rule_editor_discard_dialog_title)
-                .setMessage(R.string.module_profile_rule_editor_discard_dialog_message)
+                .setTitle(R.string.module_profile_editor_discard_dialog_title)
+                .setMessage(R.string.module_profile_editor_discard_dialog_message)
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> finish())
                 .setNegativeButton(android.R.string.cancel, null)
@@ -178,8 +211,8 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
 
     private void onRequestDelete() {
         new AlertDialog.Builder(thisActivity())
-                .setTitle(R.string.module_profile_rule_editor_delete_dialog_title)
-                .setMessage(R.string.module_profile_rule_editor_delete_dialog_message)
+                .setTitle(R.string.module_profile_editor_delete_dialog_title)
+                .setMessage(R.string.module_profile_editor_delete_dialog_message)
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     if (globalVar != null) {
@@ -195,10 +228,27 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
 
     private void checkRuleAndUpdateTips(String rule) {
         if (GlobalVar.listFromJson(rule) != null) {
-            binding.ruleCheckIndicator.setImageResource(R.drawable.module_profile_ic_rule_valid_green_fill);
+            binding.checkIndicator.setImageResource(R.drawable.module_profile_ic_rule_valid_green_fill);
         } else {
-            binding.ruleCheckIndicator.setImageResource(R.drawable.module_profile_ic_rule_invalid_red_fill);
+            binding.checkIndicator.setImageResource(R.drawable.module_profile_ic_rule_invalid_red_fill);
         }
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        // super.setTitle(titleId);
+        setTitleInternal(getString(titleId));
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        // super.setTitle(title);
+        setTitleInternal(title);
+    }
+
+    private void setTitleInternal(CharSequence title) {
+        if (binding == null) return;
+        binding.toolbarTitle.setText(title);
     }
 
     @Override

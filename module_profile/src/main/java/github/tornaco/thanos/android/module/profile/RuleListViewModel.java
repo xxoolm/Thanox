@@ -105,7 +105,7 @@ public class RuleListViewModel extends AndroidViewModel {
                 protected void onRuleAddSuccess() {
                     super.onRuleAddSuccess();
                     Toast.makeText(getApplication(),
-                            R.string.module_profile_rule_editor_save_success,
+                            R.string.module_profile_editor_save_success,
                             Toast.LENGTH_LONG)
                             .show();
                 }
@@ -142,14 +142,14 @@ public class RuleListViewModel extends AndroidViewModel {
                             protected void onRuleAddFail(int errorCode, String errorMessage) {
                                 super.onRuleAddFail(errorCode, errorMessage);
                                 Toast.makeText(getApplication(),
-                                        R.string.module_profile_rule_editor_save_check_error,
+                                        R.string.module_profile_editor_save_check_error,
                                         Toast.LENGTH_LONG)
                                         .show();
                             }
                         }, type);
             }
             Toast.makeText(getApplication(),
-                    R.string.module_profile_rule_editor_save_success,
+                    R.string.module_profile_editor_save_success,
                     Toast.LENGTH_LONG)
                     .show();
             // Reload.

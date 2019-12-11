@@ -85,7 +85,7 @@ public class RuleListActivity extends ThemeActivity implements RuleItemClickList
         binding.fab.setOnClickListener((View v) -> {
             AtomicInteger format = new AtomicInteger(ProfileManager.RULE_FORMAT_JSON);
             new AlertDialog.Builder(thisActivity())
-                    .setTitle(R.string.module_profile_rule_editor_select_format)
+                    .setTitle(R.string.module_profile_editor_select_format)
                     .setSingleChoiceItems(new String[]{
                             "JSON",
                             "YAML"

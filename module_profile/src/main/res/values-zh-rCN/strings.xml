@@ -17,15 +17,15 @@
     <string name="module_profile_rule_new">新建</string>
     <string name="module_profile_rule_example"></string>
 
-    <string name="module_profile_rule_editor_select_format">选择文件格式</string>
-    <string name="module_profile_rule_editor_save_success">保存成功，请点击开关以启用</string>
-    <string name="module_profile_rule_editor_save_check_error">语法错误</string>
+    <string name="module_profile_editor_select_format">选择文件格式</string>
+    <string name="module_profile_editor_save_success">保存成功，请点击开关以启用</string>
+    <string name="module_profile_editor_save_check_error">语法错误</string>
 
-    <string name="module_profile_rule_editor_discard_dialog_title">取消编辑</string>
-    <string name="module_profile_rule_editor_discard_dialog_message">确定退出吗？你输入的内容将被丢弃！</string>
+    <string name="module_profile_editor_discard_dialog_title">取消编辑</string>
+    <string name="module_profile_editor_discard_dialog_message">确定退出吗？你输入的内容将被丢弃！</string>
 
-    <string name="module_profile_rule_editor_delete_dialog_title">删除</string>
-    <string name="module_profile_rule_editor_delete_dialog_message">确定删除吗，删除后内容无法找回！</string>
+    <string name="module_profile_editor_delete_dialog_title">删除</string>
+    <string name="module_profile_editor_delete_dialog_message">确定删除吗，删除后内容无法找回！</string>
 
-    <string name="module_profile_rule_edit_delete">删除</string>
+    <string name="module_profile_edit_delete">删除</string>
 </resources>

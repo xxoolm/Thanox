@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/icon"
-                    android:background="@color/md_blue_a700"
+                    android:background="?colorAccent"
                     android:text="@{format}"
                     android:textColor="@color/md_white"
                     android:textSize="@dimen/list_item_main_text_size_ext_small"

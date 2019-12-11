@@ -17,15 +17,15 @@
     <string name="module_profile_rule_new">New</string>
     <string name="module_profile_rule_example"></string>
 
-    <string name="module_profile_rule_editor_select_format">Choose format</string>
-    <string name="module_profile_rule_editor_save_success">Save success, you can enable it</string>
-    <string name="module_profile_rule_editor_save_check_error">Bad content</string>
+    <string name="module_profile_editor_select_format">Choose format</string>
+    <string name="module_profile_editor_save_success">Save success, you can enable it</string>
+    <string name="module_profile_editor_save_check_error">Bad content</string>
 
-    <string name="module_profile_rule_editor_discard_dialog_title">Discard</string>
-    <string name="module_profile_rule_editor_discard_dialog_message">Are you sure?</string>
+    <string name="module_profile_editor_discard_dialog_title">Discard</string>
+    <string name="module_profile_editor_discard_dialog_message">Are you sure?</string>
 
-    <string name="module_profile_rule_editor_delete_dialog_title">Delete</string>
-    <string name="module_profile_rule_editor_delete_dialog_message">Are you sure?</string>
+    <string name="module_profile_editor_delete_dialog_title">Delete</string>
+    <string name="module_profile_editor_delete_dialog_message">Are you sure?</string>
 
-    <string name="module_profile_rule_edit_delete">Delete</string>
+    <string name="module_profile_edit_delete">Delete</string>
 </resources>

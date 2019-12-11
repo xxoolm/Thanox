@@ -103,7 +103,7 @@ public class RuleEditorActivity extends ThemeActivity implements SyntaxListener 
                                     protected void onRuleAddSuccess() {
                                         super.onRuleAddSuccess();
                                         Toast.makeText(getApplicationContext(),
-                                                R.string.module_profile_rule_editor_save_success,
+                                                R.string.module_profile_editor_save_success,
                                                 Toast.LENGTH_LONG)
                                                 .show();
                                         // Disable rule since it has been changed.
@@ -119,7 +119,7 @@ public class RuleEditorActivity extends ThemeActivity implements SyntaxListener 
                                     protected void onRuleAddFail(int errorCode, String errorMessage) {
                                         super.onRuleAddFail(errorCode, errorMessage);
                                         new AlertDialog.Builder(thisActivity())
-                                                .setTitle(R.string.module_profile_rule_editor_save_check_error)
+                                                .setTitle(R.string.module_profile_editor_save_check_error)
                                                 .setMessage(errorMessage)
                                                 .setCancelable(true)
                                                 .setPositiveButton(android.R.string.ok, null)
@@ -204,8 +204,8 @@ public class RuleEditorActivity extends ThemeActivity implements SyntaxListener 
             return;
         }
         new AlertDialog.Builder(thisActivity())
-                .setTitle(R.string.module_profile_rule_editor_discard_dialog_title)
-                .setMessage(R.string.module_profile_rule_editor_discard_dialog_message)
+                .setTitle(R.string.module_profile_editor_discard_dialog_title)
+                .setMessage(R.string.module_profile_editor_discard_dialog_message)
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> finish())
                 .setNegativeButton(android.R.string.cancel, null)
@@ -214,8 +214,8 @@ public class RuleEditorActivity extends ThemeActivity implements SyntaxListener 
 
     private void onRequestDelete() {
         new AlertDialog.Builder(thisActivity())
-                .setTitle(R.string.module_profile_rule_editor_delete_dialog_title)
-                .setMessage(R.string.module_profile_rule_editor_delete_dialog_message)
+                .setTitle(R.string.module_profile_editor_delete_dialog_title)
+                .setMessage(R.string.module_profile_editor_delete_dialog_message)
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     if (ruleInfo != null) {
