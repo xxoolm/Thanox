@@ -35,10 +35,12 @@ public class CheatFieldSettingsFragment extends PreferenceFragmentCompat {
         new Line1Num(getString(R.string.key_cheat_field_line1_num), false).bind();
         new SimSerial(getString(R.string.key_cheat_field_sim_serial), false).bind();
         new DeviceId(getString(R.string.key_cheat_field_device_id), false).bind();
+        new AndroidId(getString(R.string.key_cheat_field_android_id), false).bind();
 
         new Line1Num(getString(R.string.key_original_field_line1_num), true).bind();
         new SimSerial(getString(R.string.key_original_field_sim_serial), true).bind();
         new DeviceId(getString(R.string.key_original_field_device_id), true).bind();
+        new AndroidId(getString(R.string.key_original_field_android_id), true).bind();
 
         SwitchPreferenceCompat showNotificationPref = findPreference(getString(R.string.key_cheat_field_show_cheated_app_notifications));
         Objects.requireNonNull(showNotificationPref).setChecked(thanos.getPrivacyManager().isPrivacyNotificationEnabled());
@@ -138,6 +140,38 @@ public class CheatFieldSettingsFragment extends PreferenceFragmentCompat {
             ThanosManager.from(getContext())
                     .getPrivacyManager()
                     .setCheatedDeviceIdForPkg("*", value.trim());
+            return true;
+        }
+    }
+
+
+    class AndroidId extends FieldPrefHandler {
+
+        AndroidId(String key, boolean isOriginal) {
+            super(key, isOriginal);
+        }
+
+        @Nullable
+        @Override
+        String getCurrentCheatValue() {
+            return ThanosManager.from(getContext())
+                    .getPrivacyManager()
+                    .getCheatedAndroidIdForPkg("*");
+        }
+
+        @Nullable
+        @Override
+        String getOriginalValue() {
+            return ThanosManager.from(getContext())
+                    .getPrivacyManager()
+                    .getOriginalAndroidId();
+        }
+
+        @Override
+        boolean updateValue(@NonNull String value) {
+            ThanosManager.from(getContext())
+                    .getPrivacyManager()
+                    .setCheatedAndroidForPkg("*", value.trim());
             return true;
         }
     }

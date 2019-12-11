@@ -9,6 +9,11 @@
                 app:title="@string/pre_title_cheat_device_id" />
 
         <EditTextPreference
+                app:key="@string/key_original_field_android_id"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_android_id" />
+
+        <EditTextPreference
                 app:key="@string/key_original_field_line1_num"
                 app:persistent="false"
                 app:title="@string/pre_title_cheat_line_one_num" />
@@ -26,6 +31,11 @@
                 app:key="@string/key_cheat_field_device_id"
                 app:persistent="false"
                 app:title="@string/pre_title_cheat_device_id" />
+
+        <EditTextPreference
+                app:key="@string/key_cheat_field_android_id"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_android_id" />
 
         <EditTextPreference
                 app:key="@string/key_cheat_field_line1_num"

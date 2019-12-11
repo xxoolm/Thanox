@@ -103,4 +103,19 @@ public class PrivacyManager {
     public void setPrivacyNotificationEnabled(boolean enabled) {
         server.setPrivacyNotificationEnabled(enabled);
     }
+
+    @SneakyThrows
+    public String getOriginalAndroidId() {
+        return server.getOriginalAndroidId();
+    }
+
+    @SneakyThrows
+    public void setCheatedAndroidForPkg(String pkg, String id) {
+        server.setCheatedAndroidForPkg(pkg, id);
+    }
+
+    @SneakyThrows
+    public String getCheatedAndroidIdForPkg(String pkg) {
+        return server.getCheatedAndroidIdForPkg(pkg);
+    }
 }

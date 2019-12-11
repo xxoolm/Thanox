@@ -165,6 +165,7 @@
     <string name="pre_title_cheat_sim_serial">SIM serial</string>
     <string name="pre_title_cheat_line_one_num">Phone number</string>
     <string name="pre_title_cheat_device_id">Device ID</string>
+    <string name="pre_title_cheat_android_id">Android ID</string>
     <string name="pre_title_cheat_not_set">Not set</string>
     <string name="pre_title_cheat_installed_apps">Hide installed aps</string>
     <string name="pre_title_cheat_show_cheated_apps_notifications">Show notification</string>

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.location.Location
 import android.os.IBinder
+import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import github.tornaco.android.thanos.BuildProp
@@ -43,6 +44,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     private lateinit var pkgDeviceIdRepo: StringMapRepo
     private lateinit var pkgSimNumRepo: StringMapRepo
     private lateinit var pkgLine1NumRepo: StringMapRepo
+    private lateinit var pkgAndroidIdRepo: StringMapRepo
 
     private lateinit var privacyDataCheatPkgRepo: StringSetRepo
 
@@ -65,6 +67,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         pkgDeviceIdRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacyDeviceIdFile().path)
         pkgLine1NumRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacyLine1NumFile().path)
         pkgSimNumRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacySimNumFile().path)
+        pkgAndroidIdRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacyAndroidIdFile().path)
 
         privacyDataCheatPkgRepo =
             RepoFactory.get().getOrCreateStringSetRepo(T.privacyPkgSettingsFile().path)
@@ -203,6 +206,19 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         return null
     }
 
+    override fun getCheatedAndroidIdForPkg(pkg: String?): String? {
+        privacyRequestHandleTimes++
+        val useSet = pkgAndroidIdRepo[pkg]
+        if (!TextUtils.isEmpty(useSet)) {
+            return useSet
+        }
+        val allSet = pkgAndroidIdRepo["*"]
+        if (!TextUtils.isEmpty(allSet)) {
+            return allSet
+        }
+        return null
+    }
+
     override fun getCheatedLocationForPkg(pkg: String?, actual: Location?): Location {
         privacyRequestHandleTimes++
         val res = Location(actual)
@@ -222,6 +238,10 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
 
     override fun setCheatedSimSerialNumberForPkg(pkg: String, num: String) {
         pkgSimNumRepo[pkg] = num
+    }
+
+    override fun setCheatedAndroidForPkg(pkg: String?, id: String?) {
+        pkgAndroidIdRepo[pkg] = id
     }
 
     @SuppressLint("HardwareIds")
@@ -262,6 +282,21 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
             .create(SingleOnSubscribe<String> { emitter ->
                 emitter.onSuccess(
                     Optional.ofNullable(TelephonyManager.from(context).simSerialNumber).orElse(
+                        NPEFixing.emptyString()
+                    )
+                )
+            })
+            .subscribeOn(ThanosSchedulers.serverThread())
+            .timeout(300, TimeUnit.MILLISECONDS)
+            .onErrorReturnItem(NPEFixing.emptyString())
+            .blockingGet()
+    }
+
+    override fun getOriginalAndroidId(): String {
+        return Single
+            .create(SingleOnSubscribe<String> { emitter ->
+                emitter.onSuccess(
+                    Optional.ofNullable(Settings.Secure.ANDROID_ID).orElse(
                         NPEFixing.emptyString()
                     )
                 )

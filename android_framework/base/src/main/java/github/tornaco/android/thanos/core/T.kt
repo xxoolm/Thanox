@@ -116,6 +116,11 @@ object T {
     }
 
     @JvmStatic
+    fun privacyAndroidIdFile(): File {
+        return File(baseServerDataDir(), "priv_android_id.xml")
+    }
+
+    @JvmStatic
     fun privacyInstalledPkgsReturnEmptyFile(): File {
         return File(baseServerDataDir(), "priv_installed_empty.xml")
     }

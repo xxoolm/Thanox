@@ -16,12 +16,14 @@
 
     <string name="key_cheat_field_line1_num" translatable="false">key_cheat_field_line1_num</string>
     <string name="key_cheat_field_device_id" translatable="false">key_cheat_field_device_id</string>
+    <string name="key_cheat_field_android_id" translatable="false">key_cheat_field_android_id</string>
     <string name="key_cheat_field_sim_serial" translatable="false">key_cheat_field_sim_serial</string>
     <string name="key_cheat_field_installed_apps" translatable="false">key_cheat_field_installed_apps</string>
     <string name="key_cheat_field_show_cheated_app_notifications" translatable="false">key_cheat_field_show_cheated_app_notifications</string>
 
     <string name="key_original_field_line1_num" translatable="false">key_original_field_line1_num</string>
     <string name="key_original_field_device_id" translatable="false">key_original_field_device_id</string>
+    <string name="key_original_field_android_id" translatable="false">key_original_field_android_id</string>
     <string name="key_original_field_sim_serial" translatable="false">key_original_field_sim_serial</string>
 
     <string name="key_bg_screen_off_clean_up_delay" translatable="false">key_bg_screen_off_clean_up_delay</string>

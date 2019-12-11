@@ -37,6 +37,10 @@ public interface IPrivacyManager extends android.os.IInterface
     {
       return null;
     }
+    @Override public java.lang.String getCheatedAndroidIdForPkg(java.lang.String pkg) throws android.os.RemoteException
+    {
+      return null;
+    }
     @Override public android.location.Location getCheatedLocationForPkg(java.lang.String pkg, android.location.Location actual) throws android.os.RemoteException
     {
       return null;
@@ -53,6 +57,10 @@ public interface IPrivacyManager extends android.os.IInterface
     {
       return null;
     }
+    @Override public java.lang.String getOriginalAndroidId() throws android.os.RemoteException
+    {
+      return null;
+    }
     @Override public void setCheatedDeviceIdForPkg(java.lang.String pkg, java.lang.String deviceId) throws android.os.RemoteException
     {
     }
@@ -60,6 +68,9 @@ public interface IPrivacyManager extends android.os.IInterface
     {
     }
     @Override public void setCheatedSimSerialNumberForPkg(java.lang.String pkg, java.lang.String num) throws android.os.RemoteException
+    {
+    }
+    @Override public void setCheatedAndroidForPkg(java.lang.String pkg, java.lang.String id) throws android.os.RemoteException
     {
     }
     @Override public int getPrivacyDataCheatPkgCount() throws android.os.RemoteException
@@ -198,6 +209,16 @@ public interface IPrivacyManager extends android.os.IInterface
           reply.writeString(_result);
           return true;
         }
+        case TRANSACTION_getCheatedAndroidIdForPkg:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          java.lang.String _result = this.getCheatedAndroidIdForPkg(_arg0);
+          reply.writeNoException();
+          reply.writeString(_result);
+          return true;
+        }
         case TRANSACTION_getCheatedLocationForPkg:
         {
           data.enforceInterface(descriptor);
@@ -245,6 +266,14 @@ public interface IPrivacyManager extends android.os.IInterface
           reply.writeString(_result);
           return true;
         }
+        case TRANSACTION_getOriginalAndroidId:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _result = this.getOriginalAndroidId();
+          reply.writeNoException();
+          reply.writeString(_result);
+          return true;
+        }
         case TRANSACTION_setCheatedDeviceIdForPkg:
         {
           data.enforceInterface(descriptor);
@@ -275,6 +304,17 @@ public interface IPrivacyManager extends android.os.IInterface
           java.lang.String _arg1;
           _arg1 = data.readString();
           this.setCheatedSimSerialNumberForPkg(_arg0, _arg1);
+          reply.writeNoException();
+          return true;
+        }
+        case TRANSACTION_setCheatedAndroidForPkg:
+        {
+          data.enforceInterface(descriptor);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          java.lang.String _arg1;
+          _arg1 = data.readString();
+          this.setCheatedAndroidForPkg(_arg0, _arg1);
           reply.writeNoException();
           return true;
         }
@@ -496,6 +536,27 @@ public interface IPrivacyManager extends android.os.IInterface
         }
         return _result;
       }
+      @Override public java.lang.String getCheatedAndroidIdForPkg(java.lang.String pkg) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        java.lang.String _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(pkg);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getCheatedAndroidIdForPkg, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getCheatedAndroidIdForPkg(pkg);
+          }
+          _reply.readException();
+          _result = _reply.readString();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       @Override public android.location.Location getCheatedLocationForPkg(java.lang.String pkg, android.location.Location actual) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
@@ -589,6 +650,26 @@ public interface IPrivacyManager extends android.os.IInterface
         }
         return _result;
       }
+      @Override public java.lang.String getOriginalAndroidId() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        java.lang.String _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getOriginalAndroidId, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getOriginalAndroidId();
+          }
+          _reply.readException();
+          _result = _reply.readString();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       @Override public void setCheatedDeviceIdForPkg(java.lang.String pkg, java.lang.String deviceId) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
@@ -640,6 +721,26 @@ public interface IPrivacyManager extends android.os.IInterface
           boolean _status = mRemote.transact(Stub.TRANSACTION_setCheatedSimSerialNumberForPkg, _data, _reply, 0);
           if (!_status && getDefaultImpl() != null) {
             getDefaultImpl().setCheatedSimSerialNumberForPkg(pkg, num);
+            return;
+          }
+          _reply.readException();
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+      }
+      @Override public void setCheatedAndroidForPkg(java.lang.String pkg, java.lang.String id) throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          _data.writeString(pkg);
+          _data.writeString(id);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_setCheatedAndroidForPkg, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            getDefaultImpl().setCheatedAndroidForPkg(pkg, id);
             return;
           }
           _reply.readException();
@@ -738,17 +839,20 @@ public interface IPrivacyManager extends android.os.IInterface
     static final int TRANSACTION_getCheatedDeviceIdForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
     static final int TRANSACTION_getCheatedLine1NumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
     static final int TRANSACTION_getCheatedSimSerialNumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
-    static final int TRANSACTION_getCheatedLocationForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
-    static final int TRANSACTION_getOriginalDeviceId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
-    static final int TRANSACTION_getOriginalLine1Number = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
-    static final int TRANSACTION_getOriginalSimSerialNumber = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
-    static final int TRANSACTION_setCheatedDeviceIdForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
-    static final int TRANSACTION_setCheatedLine1NumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
-    static final int TRANSACTION_setCheatedSimSerialNumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
-    static final int TRANSACTION_getPrivacyDataCheatPkgCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
-    static final int TRANSACTION_getPrivacyDataCheatRequestCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
-    static final int TRANSACTION_isPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
-    static final int TRANSACTION_setPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
+    static final int TRANSACTION_getCheatedAndroidIdForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
+    static final int TRANSACTION_getCheatedLocationForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
+    static final int TRANSACTION_getOriginalDeviceId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
+    static final int TRANSACTION_getOriginalLine1Number = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
+    static final int TRANSACTION_getOriginalSimSerialNumber = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+    static final int TRANSACTION_getOriginalAndroidId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+    static final int TRANSACTION_setCheatedDeviceIdForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+    static final int TRANSACTION_setCheatedLine1NumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
+    static final int TRANSACTION_setCheatedSimSerialNumberForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+    static final int TRANSACTION_setCheatedAndroidForPkg = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+    static final int TRANSACTION_getPrivacyDataCheatPkgCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
+    static final int TRANSACTION_getPrivacyDataCheatRequestCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
+    static final int TRANSACTION_isPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
+    static final int TRANSACTION_setPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.secure.IPrivacyManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -768,13 +872,16 @@ public interface IPrivacyManager extends android.os.IInterface
   public java.lang.String getCheatedDeviceIdForPkg(java.lang.String pkg) throws android.os.RemoteException;
   public java.lang.String getCheatedLine1NumberForPkg(java.lang.String pkg) throws android.os.RemoteException;
   public java.lang.String getCheatedSimSerialNumberForPkg(java.lang.String pkg) throws android.os.RemoteException;
+  public java.lang.String getCheatedAndroidIdForPkg(java.lang.String pkg) throws android.os.RemoteException;
   public android.location.Location getCheatedLocationForPkg(java.lang.String pkg, android.location.Location actual) throws android.os.RemoteException;
   public java.lang.String getOriginalDeviceId() throws android.os.RemoteException;
   public java.lang.String getOriginalLine1Number() throws android.os.RemoteException;
   public java.lang.String getOriginalSimSerialNumber() throws android.os.RemoteException;
+  public java.lang.String getOriginalAndroidId() throws android.os.RemoteException;
   public void setCheatedDeviceIdForPkg(java.lang.String pkg, java.lang.String deviceId) throws android.os.RemoteException;
   public void setCheatedLine1NumberForPkg(java.lang.String pkg, java.lang.String num) throws android.os.RemoteException;
   public void setCheatedSimSerialNumberForPkg(java.lang.String pkg, java.lang.String num) throws android.os.RemoteException;
+  public void setCheatedAndroidForPkg(java.lang.String pkg, java.lang.String id) throws android.os.RemoteException;
   public int getPrivacyDataCheatPkgCount() throws android.os.RemoteException;
   public long getPrivacyDataCheatRequestCount() throws android.os.RemoteException;
   public boolean isPrivacyNotificationEnabled() throws android.os.RemoteException;
