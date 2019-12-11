@@ -1,6 +1,7 @@
 package github.tornaco.thanos.android.module.profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,9 +18,11 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.common.collect.Lists;
 import com.vic797.syntaxhighlight.SyntaxListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.profile.GlobalVar;
 import github.tornaco.android.thanos.core.util.TextWatcherAdapter;
 import github.tornaco.android.thanos.picker.AppPickerActivity;
@@ -27,9 +30,12 @@ import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.util.TypefaceHelper;
 import github.tornaco.thanos.android.module.profile.databinding.ModuleProfileGlobalVarEditorBinding;
+import util.CollectionUtils;
 import util.ObjectsUtils;
 
 public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxListener {
+
+    private static final int REQ_PICK_APPS = 0x100;
 
     private ModuleProfileGlobalVarEditorBinding binding;
     private String originalContent;
@@ -183,7 +189,7 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (R.id.action_pick_app == item.getItemId()) {
-            AppPickerActivity.start(thisActivity());
+            AppPickerActivity.start(thisActivity(), REQ_PICK_APPS);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -254,6 +260,23 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
     private void setTitleInternal(CharSequence title) {
         if (binding == null) return;
         binding.toolbarTitle.setText(title);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (REQ_PICK_APPS == requestCode && resultCode == RESULT_OK && data != null && data.hasExtra("apps")) {
+            List<AppInfo> appInfos = data.getParcelableArrayListExtra("apps");
+            List<String> stringList = new ArrayList<>();
+            CollectionUtils.consumeRemaining(appInfos, appInfo -> stringList.add(appInfo.getPkgName()));
+            if (globalVar != null) {
+                if (!CollectionUtils.isNullOrEmpty(globalVar.getStringList())) {
+                    stringList.addAll(globalVar.getStringList());
+                }
+                globalVar.setStringList(stringList);
+                binding.setVar(globalVar);
+            }
+        }
     }
 
     @Override

@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import github.tornaco.android.thanos.module.common.R;
@@ -102,6 +103,8 @@ public abstract class CommonAppListFilterActivity extends ThemeActivity {
                 viewModel.clearSearchText();
             }
         });
+
+        onSetupFab(binding.fab);
     }
 
     @StringRes
@@ -134,6 +137,10 @@ public abstract class CommonAppListFilterActivity extends ThemeActivity {
 
     protected void onSwitchBarCheckChanged(Switch switchBar, boolean isChecked) {
         // Noop.
+    }
+
+    protected void onSetupFab(FloatingActionButton fab) {
+        fab.hide();
     }
 
     protected CommonAppListFilterAdapter onCreateCommonAppListFilterAdapter() {

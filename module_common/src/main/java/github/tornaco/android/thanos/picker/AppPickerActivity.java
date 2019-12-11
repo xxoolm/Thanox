@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.picker;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -40,8 +42,8 @@ public class AppPickerActivity extends CommonAppListFilterActivity {
         }
     };
 
-    public static void start(Context context) {
-        ActivityUtils.startActivity(context, AppPickerActivity.class);
+    public static void start(Activity context, int requestCode) {
+        ActivityUtils.startActivityForResult(context, AppPickerActivity.class, requestCode);
     }
 
     @Override
@@ -53,6 +55,17 @@ public class AppPickerActivity extends CommonAppListFilterActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         selectedAppInfoMap.clear();
+    }
+
+    @Override
+    protected void onSetupFab(FloatingActionButton fab) {
+        fab.show();
+        fab.setOnClickListener(v -> {
+            setResult(Activity.RESULT_OK, new Intent().putParcelableArrayListExtra(
+                    "apps",
+                    Lists.newArrayList(selectedAppInfoMap.values())));
+            finish();
+        });
     }
 
     @Override

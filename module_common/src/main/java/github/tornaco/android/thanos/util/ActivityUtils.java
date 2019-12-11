@@ -28,4 +28,8 @@ public class ActivityUtils {
         context.startActivity(intent);
     }
 
+    public static void startActivityForResult(Activity context, Class<? extends Activity> clazz, int requestCode) {
+        Intent intent = new Intent(context, clazz);
+        context.startActivityForResult(intent, requestCode);
+    }
 }

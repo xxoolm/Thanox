@@ -58,6 +58,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginEnd="@dimen/common_view_margin_default"
                     android:ellipsize="middle"
+                    android:maxLines="3"
                     android:fadingEdge="horizontal"
                     android:text="@{var.stringList.toString()}"
                     android:textAppearance="@style/TextAppearance.TileSubTitle"
