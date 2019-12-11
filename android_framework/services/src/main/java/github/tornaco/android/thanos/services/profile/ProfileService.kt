@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.os.UserHandle
 import android.util.Log
+import com.google.common.collect.Lists
 import com.google.common.collect.Sets
 import com.google.common.io.Files
 import com.google.gson.Gson
@@ -723,7 +724,8 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
     private fun injectGlobalVars(facts: Facts): Facts {
         allGlobalRuleVarNames.forEach {
-            facts.put("globalVarOf$$it", arrayListOf(getGlobalRuleVarByName(it)))
+            val list = Lists.newArrayList<String>(getGlobalRuleVarByName(it).toList())
+            facts.put("globalVarOf$$it", list)
         }
         return facts
     }

@@ -30,4 +30,5 @@
     <string name="module_profile_edit_delete">删除</string>
 
     <string name="module_profile_edit_var_title_hint">请输入名称</string>
+    <string name="module_profile_var_list_item_size">%s个变量</string>
 </resources>

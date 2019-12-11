@@ -275,6 +275,8 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
                 }
                 globalVar.setStringList(stringList);
                 binding.setVar(globalVar);
+                binding.editText.startHighlight(true);
+                binding.editText.updateVisibleRegion();
             }
         }
     }

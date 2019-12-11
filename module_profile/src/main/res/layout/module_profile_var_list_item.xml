@@ -58,9 +58,9 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginEnd="@dimen/common_view_margin_default"
                     android:ellipsize="middle"
-                    android:maxLines="3"
                     android:fadingEdge="horizontal"
-                    android:text="@{var.stringList.toString()}"
+                    android:maxLines="3"
+                    android:text="@{String.format(@string/module_profile_var_list_item_size, var.stringList.size())}"
                     android:textAppearance="@style/TextAppearance.TileSubTitle"
                     tools:text="@string/app_name" />
 

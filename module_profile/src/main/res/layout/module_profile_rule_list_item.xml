@@ -32,13 +32,22 @@
             android:onClick="@{() -> ruleItemClickListener.onItemClick(rule)}"
             android:soundEffectsEnabled="false">
 
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/dashboard_tile_image_size"
+                android:layout_height="@dimen/dashboard_tile_image_size"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dashboard_tile_image_margin_start"
+                android:layout_marginEnd="@dimen/dashboard_tile_image_margin_end"
+                android:src="@drawable/ic_thunderstorms_fill_purple" />
+
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/common_view_margin_default"
                 android:layout_marginEnd="@dimen/dashboard_category_title_margin_end"
-                android:layout_marginBottom="@dimen/dashboard_category_bot_margin">
+                android:layout_marginBottom="@dimen/dashboard_category_bot_margin"
+                android:layout_toEndOf="@+id/icon">
 
             <TextView
                     android:id="@+id/name"
@@ -61,11 +70,12 @@
                     android:layout_below="@id/name"
                     android:layout_alignParentStart="true"
                     android:layout_marginEnd="@dimen/common_view_margin_default"
+                    android:layout_toStartOf="@id/item_switch"
                     android:ellipsize="middle"
                     android:fadingEdge="horizontal"
                     android:text="@{rule.description}"
                     android:textAppearance="@style/TextAppearance.TileSubTitle"
-                    tools:text="@string/app_name" />
+                    tools:text="This is a long text example, it can be very long...." />
 
             <Switch
                     android:id="@+id/item_switch"
@@ -92,7 +102,7 @@
                 android:layout_marginStart="@dimen/common_view_margin_default"
                 android:layout_marginEnd="@dimen/common_view_margin_default"
                 android:background="?android:attr/dividerVertical"
-                android:visibility="@{isLastOne ? View.GONE : View.VISIBLE}"
+                android:visibility="@{isLastOne ? View.GONE : View.GONE}"
                 tools:visibility="visible" />
     </RelativeLayout>
 </layout>
