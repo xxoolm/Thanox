@@ -18,4 +18,5 @@ android {
 
 dependencies {
     implementation deps.support.recyclerview
+    implementation deps.support.interpolator
 }

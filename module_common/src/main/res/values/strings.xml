@@ -14,6 +14,7 @@
     <string name="common_menu_title_select_all">All yes</string>
     <string name="common_menu_title_un_select_all">All no</string>
     <string name="common_menu_title_search">search</string>
+    <string name="common_fab_title_done">Done</string>
 
     <string name="app_state_disabled">Disabled</string>
 

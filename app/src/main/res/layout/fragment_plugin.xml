@@ -47,6 +47,7 @@
                 android:layout_margin="@dimen/common_view_margin_default"
                 android:src="@drawable/ic_add_fill"
                 android:tint="@color/md_white"
-                app:backgroundTint="@color/md_blue_a700" />
+                app:backgroundTint="@color/md_blue_a700"
+                app:iconTint="@color/md_white" />
     </RelativeLayout>
 </layout>

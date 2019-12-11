@@ -35,6 +35,8 @@ dependencies {
     api deps.support.recyclerview
     api deps.support.preference
     api deps.support.constraint
+    api deps.support.interpolator
+    api deps.support.swiperefreshlayout
 
     // Glide
     api deps.glide.api
