@@ -28,4 +28,6 @@
     <string name="module_profile_editor_delete_dialog_message">Are you sure?</string>
 
     <string name="module_profile_edit_delete">Delete</string>
+
+    <string name="module_profile_edit_var_title_hint">Please input name</string>
 </resources>

@@ -15,6 +15,7 @@ import java.util.List;
 import github.tornaco.android.thanos.module.common.R;
 import github.tornaco.android.thanos.module.common.databinding.ItemCommonAppBinding;
 import lombok.Getter;
+import lombok.Setter;
 import util.Consumer;
 
 public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppListFilterAdapter.VH>
@@ -22,14 +23,25 @@ public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppLi
         FastScrollRecyclerView.SectionedAdapter,
         FastScrollRecyclerView.MeasurableAdapter<CommonAppListFilterAdapter.VH> {
 
-    private final List<AppListModel> processModels = new ArrayList<>();
+    @Getter
+    private final List<AppListModel> listModels = new ArrayList<>();
 
     @Nullable
     private final AppItemViewClickListener itemViewClickListener;
 
+    @Setter
+    private boolean iconCheckable = false;
+
     public CommonAppListFilterAdapter(
             @Nullable AppItemViewClickListener itemViewClickListener) {
         this.itemViewClickListener = itemViewClickListener;
+    }
+
+    public CommonAppListFilterAdapter(
+            @Nullable AppItemViewClickListener itemViewClickListener,
+            boolean iconCheckable) {
+        this.itemViewClickListener = itemViewClickListener;
+        this.iconCheckable = iconCheckable;
     }
 
     @NonNull
@@ -40,24 +52,33 @@ public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppLi
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        AppListModel model = processModels.get(position);
+        AppListModel model = listModels.get(position);
         holder.binding.setApp(model.appInfo);
         holder.binding.setIsLastOne(false);
-        holder.binding.setListener(itemViewClickListener);
+        holder.binding.setListener(appInfo -> {
+            if (iconCheckable) {
+                appInfo.setSelected(!appInfo.isSelected());
+                holder.binding.icon.toggle();
+            }
+            if (itemViewClickListener != null) itemViewClickListener.onAppItemClick(appInfo);
+        });
         holder.binding.setBadge1(model.badge);
         holder.binding.setBadge2(model.badge2);
+        if (iconCheckable) {
+            holder.binding.icon.setChecked(model.appInfo.isSelected(), false);
+        }
         holder.binding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        return processModels.size();
+        return listModels.size();
     }
 
     @Override
     public void accept(List<AppListModel> processModels) {
-        this.processModels.clear();
-        this.processModels.addAll(processModels);
+        this.listModels.clear();
+        this.listModels.addAll(processModels);
         notifyDataSetChanged();
     }
 
@@ -69,7 +90,7 @@ public class CommonAppListFilterAdapter extends RecyclerView.Adapter<CommonAppLi
     @NonNull
     @Override
     public String getSectionName(int position) {
-        AppListModel model = processModels.get(position);
+        AppListModel model = listModels.get(position);
         String appName = model.appInfo.getAppLabel();
         if (appName == null
                 || appName.length() < 1) {

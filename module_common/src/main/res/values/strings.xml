@@ -17,4 +17,6 @@
 
     <string name="app_state_disabled">Disabled</string>
 
+    <string name="app_picker_title">Pick app</string>
+
 </resources>

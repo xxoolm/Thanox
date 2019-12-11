@@ -16,4 +16,6 @@
     <string name="common_menu_title_search">搜索</string>
 
     <string name="app_state_disabled">已冻结</string>
+
+    <string name="app_picker_title">选取应用</string>
 </resources>

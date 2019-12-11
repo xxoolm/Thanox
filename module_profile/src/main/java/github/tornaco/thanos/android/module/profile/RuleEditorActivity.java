@@ -137,6 +137,9 @@ public class RuleEditorActivity extends ThemeActivity implements SyntaxListener 
                 binding.editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, binding.editText.getTextSize() - 5f);
                 return true;
             }
+            if (R.id.action_delete == item.getItemId()) {
+                onRequestDelete();
+            }
             return false;
         });
 
@@ -169,7 +172,7 @@ public class RuleEditorActivity extends ThemeActivity implements SyntaxListener 
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.action_delete).setVisible(ruleInfo != null);
+        binding.editorActionsToolbar.getMenu().findItem(R.id.action_delete).setVisible(ruleInfo != null);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -181,9 +184,6 @@ public class RuleEditorActivity extends ThemeActivity implements SyntaxListener 
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (R.id.action_delete == item.getItemId()) {
-            onRequestDelete();
-        }
         return super.onOptionsItemSelected(item);
     }
 

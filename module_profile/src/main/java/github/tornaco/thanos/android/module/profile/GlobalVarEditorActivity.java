@@ -21,8 +21,8 @@ import java.util.List;
 
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.profile.GlobalVar;
-import github.tornaco.android.thanos.core.util.DateUtils;
 import github.tornaco.android.thanos.core.util.TextWatcherAdapter;
+import github.tornaco.android.thanos.picker.AppPickerActivity;
 import github.tornaco.android.thanos.theme.ThemeActivity;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.util.TypefaceHelper;
@@ -36,7 +36,7 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
     @Nullable
     private GlobalVar globalVar
             = new GlobalVar(
-            "New_" + DateUtils.formatForFileName(System.currentTimeMillis()),
+            "",
             Lists.newArrayList());
 
     public static void start(Context context, GlobalVar globalVar) {
@@ -135,6 +135,10 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
                 binding.editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, binding.editText.getTextSize() - 5f);
                 return true;
             }
+            if (R.id.action_delete == item.getItemId()) {
+                onRequestDelete();
+                return true;
+            }
             return false;
         });
 
@@ -166,20 +170,21 @@ public class GlobalVarEditorActivity extends ThemeActivity implements SyntaxList
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.action_delete).setVisible(globalVar != null);
+        binding.editorActionsToolbar.getMenu().findItem(R.id.action_delete).setVisible(globalVar != null);
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.module_profile_rule_editor, menu);
+        getMenuInflater().inflate(R.menu.module_profile_var_editor, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (R.id.action_delete == item.getItemId()) {
-            onRequestDelete();
+        if (R.id.action_pick_app == item.getItemId()) {
+            AppPickerActivity.start(thisActivity());
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

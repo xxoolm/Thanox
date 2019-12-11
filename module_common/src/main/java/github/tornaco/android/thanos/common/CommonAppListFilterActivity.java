@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Switch;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -16,7 +17,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
 import github.tornaco.android.thanos.module.common.R;
 import github.tornaco.android.thanos.module.common.databinding.ActivityCommonListFilterBinding;
 import github.tornaco.android.thanos.theme.ThemeActivity;
@@ -66,7 +69,7 @@ public abstract class CommonAppListFilterActivity extends ThemeActivity {
 
         // List.
         binding.apps.setLayoutManager(new LinearLayoutManager(this));
-        binding.apps.setAdapter(new CommonAppListFilterAdapter(onCreateAppItemViewClickListener()));
+        binding.apps.setAdapter(onCreateCommonAppListFilterAdapter());
         binding.swipe.setOnRefreshListener(() -> viewModel.start());
         binding.swipe.setColorSchemeColors(getResources().getIntArray(R.array.common_swipe_refresh_colors));
 
@@ -133,6 +136,10 @@ public abstract class CommonAppListFilterActivity extends ThemeActivity {
         // Noop.
     }
 
+    protected CommonAppListFilterAdapter onCreateCommonAppListFilterAdapter() {
+        return new CommonAppListFilterAdapter(onCreateAppItemViewClickListener(), false);
+    }
+
     @Override
     public void setTitle(CharSequence title) {
         super.setTitle(title);
@@ -145,12 +152,17 @@ public abstract class CommonAppListFilterActivity extends ThemeActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_common_list_filter, menu);
+        onInflateOptionsMenu(menu);
         MenuItem item = menu.findItem(R.id.action_search);
         binding.searchView.setMenuItem(item);
         return true;
+    }
+
+    protected void onInflateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_common_list_filter, menu);
     }
 
     @Override

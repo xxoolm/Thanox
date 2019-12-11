@@ -1,2 +1,7 @@
-<manifest
-        package="github.tornaco.android.thanos.module.common"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="github.tornaco.android.thanos.module.common">
+
+    <application>
+        <activity android:name="github.tornaco.android.thanos.picker.AppPickerActivity" />
+    </application>
+</manifest>
