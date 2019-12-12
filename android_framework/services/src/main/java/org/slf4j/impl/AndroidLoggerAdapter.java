@@ -31,6 +31,7 @@ import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 
 import github.tornaco.android.thanos.core.util.Timber;
+import github.tornaco.android.thanos.services.BootStrap;
 
 /**
  * <p>A simple implementation that delegates all log requests to the Google Android
@@ -500,6 +501,9 @@ class AndroidLoggerAdapter extends MarkerIgnoringBase {
         if (throwable != null) {
             message += '\n' + Log.getStackTraceString(throwable);
         }
-        Timber.w(name + "\t:" + message);
+        // Only show log for debug build.
+        if (!BootStrap.IS_RELEASE_BUILD) {
+            Timber.log(priority, name + "\t:" + message);
+        }
     }
 }
