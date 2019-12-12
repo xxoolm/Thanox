@@ -12,6 +12,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import github.tornaco.android.thanos.core.IThanos;
 import github.tornaco.android.thanos.core.app.ThanosManagerNative;
+import github.tornaco.android.thanos.core.pm.PackageManager;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.services.BootStrap;
 import github.tornaco.android.thanos.services.apihint.Beta;
@@ -59,6 +60,21 @@ public class SecureSettingsRegistry implements IXposedHook {
 
                                 String pkgName = AndroidAppHelper.currentPackageName();
                                 if (pkgName == null) return;
+
+                                // Check if it is android.
+                                if (PackageManager.packageNameOfAndroid().equals(pkgName)) {
+                                    Log.w(XposedLogger.LOG_PREFIX, "Not handle get ANDROID_ID, packageNameOfAndroid pkg:" + pkgName);
+                                    return;
+                                }
+                                if (PackageManager.packageNameOfPhone().equals(pkgName)) {
+                                    Log.w(XposedLogger.LOG_PREFIX, "Not handle get ANDROID_ID, packageNameOfPhone pkg:" + pkgName);
+                                    return;
+                                }
+                                if (PackageManager.packageNameOfTelecom().equals(pkgName)) {
+                                    Log.w(XposedLogger.LOG_PREFIX, "Not handle get ANDROID_ID, packageNameOfTelecom pkg:" + pkgName);
+                                    return;
+                                }
+
                                 if (!thanox.getPrivacyManager().isPkgPrivacyDataCheat(pkgName)) {
                                     return;
                                 }
