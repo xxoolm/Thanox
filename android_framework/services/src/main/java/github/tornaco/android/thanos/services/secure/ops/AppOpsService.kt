@@ -3,6 +3,7 @@ package github.tornaco.android.thanos.services.secure.ops
 import android.content.Context
 import android.os.IBinder
 import android.os.RemoteException
+import com.google.common.collect.Maps
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.Res
 import github.tornaco.android.thanos.core.T
@@ -11,6 +12,7 @@ import github.tornaco.android.thanos.core.persist.RepoFactory
 import github.tornaco.android.thanos.core.persist.StringMapRepo
 import github.tornaco.android.thanos.core.persist.StringSetRepo
 import github.tornaco.android.thanos.core.pref.IPrefChangeListener
+import github.tornaco.android.thanos.core.profile.ProfileManager
 import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
 import github.tornaco.android.thanos.core.util.Noop
@@ -37,6 +39,9 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
     private lateinit var opRemindNotificationHelper: OpRemindNotificationHelper
 
     private val opRemindWhiteList: MutableSet<String> = HashSet()
+
+    private val opIgnoreRecord: Map<String, List<Int>> = Maps.newHashMap()
+    private val opAllowRecord: Map<String, List<Int>> = Maps.newHashMap()
 
     @SneakyThrows
     override fun onStart(context: Context) {
@@ -91,15 +96,31 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
     }
 
     @Throws(RemoteException::class)
-    override fun resetAllModes(reqUserId: Int, reqPackageName: String) {
+    override fun resetAllModes(reqPackageName: String) {
         enforceCallingPermissions()
+        Timber.w("resetAllModes: $reqPackageName")
+        opSettingsRepo.keys.toTypedArray().forEach {
+            // Check if it is template.
+            if (!it.startsWith(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)) {
+                opSettingsRepo[it] = AppOpsManager.MODE_ALLOWED.toString()
+                Timber.v("Reset $it to MODE_ALLOWED")
+            }
+        }
     }
 
     @Throws(RemoteException::class)
     override fun checkOperation(code: Int, uid: Int, packageName: String): Int {
-        if (debugOp) Timber.v("checkOperation: $packageName $code")
         // IllegalArgumentException: Bad operation #71
-        return opSettingsRepo["$packageName-$code"]?.toInt() ?: AppOpsManager.MODE_ALLOWED
+        val mode = opSettingsRepo["$packageName-$code"]?.toInt() ?: AppOpsManager.MODE_ALLOWED
+        if (debugOp) Timber.v("checkOperation: $packageName $code, mode: $mode")
+        executeInternal(Runnable {
+            reportCheckResultInternal(packageName, code, mode)
+        })
+        return mode
+    }
+
+    private fun reportCheckResultInternal(pkg: String, code: Int, mode: Int) {
+
     }
 
     @Throws(RemoteException::class)

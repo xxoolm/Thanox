@@ -30,14 +30,18 @@ public class PkgOpsLoader {
         if (thanos.isServiceInstalled()) {
             AppOpsManager ops = thanos.getAppOpsManager();
             for (int op = 0; op < numOp; op++) {
+                int mode = ops.checkOperation(op, appInfo.getUid(), appInfo.getPkgName());
                 String perm = AppOpsManager.opToPermission(op);
-                boolean hold = perm == null || permissions.contains(perm) || appInfo.isDummy();
-                if (hold) {
+                boolean show = perm == null
+                        || permissions.contains(perm)
+                        || appInfo.isDummy()
+                        || mode == AppOpsManager.MODE_IGNORED;
+                if (show) {
                     OpsTemplate template = Ops.templateOfOp(op);
                     if (template != null) {
                         OpGroup group = opsCategoryOpGroupMap.get(template);
                         if (group == null) group = new OpGroup(template, new ArrayList<>());
-                        int mode = ops.checkOperation(op, appInfo.getUid(), appInfo.getPkgName());
+
                         if (mode != AppOpsManager.MODE_ERRORED) {
                             Op opm = Ops.toOp(context, op, mode);
                             if (opm != null) {

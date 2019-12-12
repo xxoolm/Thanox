@@ -10,6 +10,8 @@
 
     <string name="module_ops_title_op_remind_apps">受监视的应用</string>
 
+    <string name="module_ops_title_reset_ops_mode_for_all">重置全部应用的配置</string>
+
     <string name="module_ops_feature_title_app_ops_list">权限管理</string>
     <string name="module_ops_feature_summary_app_ops_list">按应用</string>
     <string name="module_ops_activity_title_app_ops_list">按应用（%s）</string>

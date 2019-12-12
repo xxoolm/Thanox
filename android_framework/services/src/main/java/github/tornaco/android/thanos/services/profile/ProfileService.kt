@@ -340,17 +340,22 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
         // Set ops.
         val numOp = AppOpsManager._NUM_OP
+        val permissions = PkgUtils.getAllDeclaredPermissions(context, appInfo.pkgName).toSet()
         for (i in 0 until numOp) {
+            val permToHold = AppOpsManager.opToPermission(i)
+            val set = permToHold == null || permissions.contains(permToHold)
+            if (!set) {
+                Timber.v("Skip set for pkg: $pkg, does not hold perm: $permToHold for op: $i")
+                continue
+            }
+
             val templateMode = s.appOpsService.checkOperation(
                 i,
                 -1,
                 ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME
             )
-            if (templateMode != AppOpsManager.MODE_IGNORED) {
-                Timber.d("Op $i is not MODE_IGNORED, no need to set...")
-                continue
-            }
             Timber.v("Set op by template: $i, mode: $templateMode")
+
             try {
                 s.appOpsService.setMode(i, appInfo.uid, appInfo.pkgName, templateMode)
             } catch (e: Throwable) {

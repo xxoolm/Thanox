@@ -10,6 +10,8 @@
 
     <string name="module_ops_title_op_remind_apps">Watching apps</string>
 
+    <string name="module_ops_title_reset_ops_mode_for_all">Reset all</string>
+
     <string name="module_ops_feature_title_app_ops_list">App ops</string>
     <string name="module_ops_feature_summary_app_ops_list">By app</string>
     <string name="module_ops_activity_title_app_ops_list">By app（%s）</string>

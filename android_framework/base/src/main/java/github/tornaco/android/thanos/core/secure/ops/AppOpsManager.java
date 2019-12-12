@@ -637,7 +637,6 @@ public class AppOpsManager {
         return sOpPerms[op];
     }
 
-
     final Context context;
     final IAppOpsService service;
 
@@ -647,8 +646,8 @@ public class AppOpsManager {
     }
 
     @SneakyThrows
-    public void resetAllModes(int reqUserId, String reqPackageName) {
-        service.resetAllModes(reqUserId, reqPackageName);
+    public void resetAllModes(String reqPackageName) {
+        service.resetAllModes(reqPackageName);
     }
 
     @SneakyThrows

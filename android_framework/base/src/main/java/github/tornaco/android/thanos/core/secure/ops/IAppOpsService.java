@@ -10,7 +10,7 @@ public interface IAppOpsService extends android.os.IInterface
     @Override public void setMode(int code, int uid, java.lang.String packageName, int mode) throws android.os.RemoteException
     {
     }
-    @Override public void resetAllModes(int reqUserId, java.lang.String reqPackageName) throws android.os.RemoteException
+    @Override public void resetAllModes(java.lang.String reqPackageName) throws android.os.RemoteException
     {
     }
     @Override public int checkOperation(int code, int uid, java.lang.String packageName) throws android.os.RemoteException
@@ -105,11 +105,9 @@ public interface IAppOpsService extends android.os.IInterface
         case TRANSACTION_resetAllModes:
         {
           data.enforceInterface(descriptor);
-          int _arg0;
-          _arg0 = data.readInt();
-          java.lang.String _arg1;
-          _arg1 = data.readString();
-          this.resetAllModes(_arg0, _arg1);
+          java.lang.String _arg0;
+          _arg0 = data.readString();
+          this.resetAllModes(_arg0);
           reply.writeNoException();
           return true;
         }
@@ -259,17 +257,16 @@ public interface IAppOpsService extends android.os.IInterface
           _data.recycle();
         }
       }
-      @Override public void resetAllModes(int reqUserId, java.lang.String reqPackageName) throws android.os.RemoteException
+      @Override public void resetAllModes(java.lang.String reqPackageName) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeInt(reqUserId);
           _data.writeString(reqPackageName);
           boolean _status = mRemote.transact(Stub.TRANSACTION_resetAllModes, _data, _reply, 0);
           if (!_status && getDefaultImpl() != null) {
-            getDefaultImpl().resetAllModes(reqUserId, reqPackageName);
+            getDefaultImpl().resetAllModes(reqPackageName);
             return;
           }
           _reply.readException();
@@ -492,7 +489,7 @@ public interface IAppOpsService extends android.os.IInterface
     }
   }
   public void setMode(int code, int uid, java.lang.String packageName, int mode) throws android.os.RemoteException;
-  public void resetAllModes(int reqUserId, java.lang.String reqPackageName) throws android.os.RemoteException;
+  public void resetAllModes(java.lang.String reqPackageName) throws android.os.RemoteException;
   public int checkOperation(int code, int uid, java.lang.String packageName) throws android.os.RemoteException;
   public boolean isOpsEnabled() throws android.os.RemoteException;
   public void setOpsEnabled(boolean enabled) throws android.os.RemoteException;

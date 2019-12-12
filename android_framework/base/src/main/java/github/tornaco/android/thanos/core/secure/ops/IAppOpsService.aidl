@@ -5,7 +5,7 @@ import android.os.Bundle;
 interface IAppOpsService {
     void setMode(int code, int uid, String packageName, int mode);
 
-    void resetAllModes(int reqUserId, String reqPackageName);
+    void resetAllModes(String reqPackageName);
 
     int checkOperation(int code, int uid, String packageName);
 
