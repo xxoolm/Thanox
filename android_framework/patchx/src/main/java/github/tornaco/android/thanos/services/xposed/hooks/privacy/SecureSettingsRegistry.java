@@ -82,12 +82,10 @@ public class SecureSettingsRegistry implements IXposedHook {
                                     Log.v(XposedLogger.LOG_PREFIX, "Will handle get ANDROID_ID, pkg:" + pkgName);
                                 }
                                 String androidId = thanox.getPrivacyManager().getCheatedAndroidIdForPkg(pkgName);
-                                if (androidId != null) {
-                                    if (!BootStrap.IS_RELEASE_BUILD) {
-                                        Log.w(XposedLogger.LOG_PREFIX, "Using user defined ANDROID_ID: " + pkgName + " for: " + pkgName);
-                                    }
-                                    param.setResult(androidId);
+                                if (!BootStrap.IS_RELEASE_BUILD) {
+                                    Log.w(XposedLogger.LOG_PREFIX, "Using user defined ANDROID_ID: " + pkgName + " for: " + pkgName);
                                 }
+                                param.setResult(androidId);
                             }
                         }
                     });

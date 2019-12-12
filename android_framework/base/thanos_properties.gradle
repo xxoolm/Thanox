@@ -47,6 +47,8 @@ buildConfig {
     buildConfigField 'String', 'THANOX_FEATURE_APP_TRAMPOLINE', serviceProps.getProperty("thanox.feature.app.trampoline")
     buildConfigField 'String', 'THANOX_FEATURE_APP_SMART_SERVICE_STOPPER', serviceProps.getProperty("thanox.feature.app.smart_service_stopper")
     buildConfigField 'String', 'THANOX_FEATURE_PUSH_DELEGATE', serviceProps.getProperty("thanox.feature.push.delegate")
+    buildConfigField 'String', 'THANOX_FEATURE_PRIVACY_FIELD_IMEI', serviceProps.getProperty("thanox.feature.privacy.field.imei")
+    buildConfigField 'String', 'THANOX_FEATURE_PRIVACY_FIELD_MEID', serviceProps.getProperty("thanox.feature.privacy.field.meid")
 
     // Contributors.
     buildConfigField 'String', 'THANOX_CONTRIBUTORS', serviceProps.getProperty("thanox.dev.contributors")
