@@ -65,7 +65,7 @@ public class AppOpsListActivity extends ThemeActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         //Creating the ArrayAdapter instance having the category list
-        // 0:Allow 1:Ignore 2:All
+        // 0:All 1:allow 2:ignore
         String[] category = getResources().getStringArray(R.array.module_ops_filter_by_op_mode);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 github.tornaco.android.thanos.module.common.R.layout.ghost_text_view, category);

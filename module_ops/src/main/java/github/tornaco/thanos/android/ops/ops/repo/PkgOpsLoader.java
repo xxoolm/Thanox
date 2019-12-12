@@ -21,9 +21,9 @@ import github.tornaco.thanos.android.ops.model.Ops;
 import github.tornaco.thanos.android.ops.model.OpsTemplate;
 
 public class PkgOpsLoader {
-    public static final int FILTER_ALL = 2;
-    public static final int FILTER_ALLOWED = 0;
-    public static final int FILTER_DENIED = 1;
+    public static final int FILTER_ALL = 0;
+    public static final int FILTER_ALLOWED = 1;
+    public static final int FILTER_DENIED = 2;
 
     public List<OpGroup> getPkgOps(Context context, AppInfo appInfo, int filter) {
         ThanosManager thanos = ThanosManager.from(context);
