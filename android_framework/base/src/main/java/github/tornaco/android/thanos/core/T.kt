@@ -121,6 +121,16 @@ object T {
     }
 
     @JvmStatic
+    fun privacyImeiFile(): File {
+        return File(baseServerDataDir(), "priv_imei.xml")
+    }
+
+    @JvmStatic
+    fun privacyMeidFile(): File {
+        return File(baseServerDataDir(), "priv_meid.xml")
+    }
+
+    @JvmStatic
     fun privacyInstalledPkgsReturnEmptyFile(): File {
         return File(baseServerDataDir(), "priv_installed_empty.xml")
     }

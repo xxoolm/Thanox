@@ -45,6 +45,8 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     private lateinit var pkgSimNumRepo: StringMapRepo
     private lateinit var pkgLine1NumRepo: StringMapRepo
     private lateinit var pkgAndroidIdRepo: StringMapRepo
+    private lateinit var pkgImeiRepo: StringMapRepo
+    private lateinit var pkgMeidRepo: StringMapRepo
 
     private lateinit var privacyDataCheatPkgRepo: StringSetRepo
 
@@ -68,6 +70,8 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         pkgLine1NumRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacyLine1NumFile().path)
         pkgSimNumRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacySimNumFile().path)
         pkgAndroidIdRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacyAndroidIdFile().path)
+        pkgImeiRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacyImeiFile().path)
+        pkgMeidRepo = RepoFactory.get().getOrCreateStringMapRepo(T.privacyMeidFile().path)
 
         privacyDataCheatPkgRepo =
             RepoFactory.get().getOrCreateStringSetRepo(T.privacyPkgSettingsFile().path)
@@ -219,6 +223,32 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         return null
     }
 
+    override fun getCheatedImeiForPkg(pkg: String?, slotIndex: Int): String? {
+        privacyRequestHandleTimes++
+        val useSet = pkgImeiRepo["${pkg}_$slotIndex"]
+        if (!TextUtils.isEmpty(useSet)) {
+            return useSet
+        }
+        val allSet = pkgImeiRepo["*_$slotIndex"]
+        if (!TextUtils.isEmpty(allSet)) {
+            return allSet
+        }
+        return null
+    }
+
+    override fun getCheatedMeidForPkg(pkg: String?, slotIndex: Int): String? {
+        privacyRequestHandleTimes++
+        val useSet = pkgMeidRepo["${pkg}_$slotIndex"]
+        if (!TextUtils.isEmpty(useSet)) {
+            return useSet
+        }
+        val allSet = pkgMeidRepo["*_$slotIndex"]
+        if (!TextUtils.isEmpty(allSet)) {
+            return allSet
+        }
+        return null
+    }
+
     override fun getCheatedLocationForPkg(pkg: String?, actual: Location?): Location {
         privacyRequestHandleTimes++
         val res = Location(actual)
@@ -240,8 +270,16 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
         pkgSimNumRepo[pkg] = num
     }
 
-    override fun setCheatedAndroidForPkg(pkg: String?, id: String?) {
+    override fun setCheatedAndroidIdForPkg(pkg: String?, id: String?) {
         pkgAndroidIdRepo[pkg] = id
+    }
+
+    override fun setCheatedImeiForPkg(pkg: String?, id: String?, slotIndex: Int) {
+        pkgImeiRepo["${pkg}_$slotIndex"] = id
+    }
+
+    override fun setCheatedMeidForPkg(pkg: String?, id: String?, slotIndex: Int) {
+        pkgMeidRepo["${pkg}_$slotIndex"] = id
     }
 
     @SuppressLint("HardwareIds")
@@ -308,6 +346,62 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
             .subscribeOn(ThanosSchedulers.serverThread())
             .timeout(300, TimeUnit.MILLISECONDS)
             .onErrorReturnItem(NPEFixing.emptyString())
+            .blockingGet()
+    }
+
+    // It is hidden API before 26
+    @SuppressLint("NewApi")
+    override fun getOriginalImei(slotIndex: Int): String {
+        return Single
+            .create(SingleOnSubscribe<String> { emitter ->
+                emitter.onSuccess(
+                    Optional.ofNullable(TelephonyManager.from(context).getImei(slotIndex)).orElse(
+                        NPEFixing.emptyString()
+                    )
+                )
+            })
+            .subscribeOn(ThanosSchedulers.serverThread())
+            .timeout(300, TimeUnit.MILLISECONDS)
+            .onErrorReturnItem(NPEFixing.emptyString())
+            .blockingGet()
+    }
+
+    // It is hidden API before 26
+    @SuppressLint("NewApi")
+    override fun getOriginalMeid(slotIndex: Int): String {
+        return Single
+            .create(SingleOnSubscribe<String> { emitter ->
+                emitter.onSuccess(
+                    Optional.ofNullable(TelephonyManager.from(context).getMeid(slotIndex)).orElse(
+                        NPEFixing.emptyString()
+                    )
+                )
+            })
+            .subscribeOn(ThanosSchedulers.serverThread())
+            .timeout(300, TimeUnit.MILLISECONDS)
+            .onErrorReturnItem(NPEFixing.emptyString())
+            .blockingGet()
+    }
+
+    /**
+     * Returns the number of phones available.
+     * Returns 0 if none of voice, sms, data is not supported
+     * Returns 1 for Single standby mode (Single SIM functionality)
+     * Returns 2 for Dual standby mode.(Dual SIM functionality)
+     * Returns 3 for Tri standby mode.(Tri SIM functionality)
+     */
+    override fun getPhoneCount(): Int {
+        return Single
+            .create(SingleOnSubscribe<Int> { emitter ->
+                emitter.onSuccess(
+                    Optional.ofNullable(TelephonyManager.from(context).phoneCount).orElse(
+                        0
+                    )
+                )
+            })
+            .subscribeOn(ThanosSchedulers.serverThread())
+            .timeout(300, TimeUnit.MILLISECONDS)
+            .onErrorReturnItem(0)
             .blockingGet()
     }
 

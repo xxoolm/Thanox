@@ -110,12 +110,47 @@ public class PrivacyManager {
     }
 
     @SneakyThrows
-    public void setCheatedAndroidForPkg(String pkg, String id) {
-        server.setCheatedAndroidForPkg(pkg, id);
+    public void setCheatedAndroidIdForPkg(String pkg, String id) {
+        server.setCheatedAndroidIdForPkg(pkg, id);
     }
 
     @SneakyThrows
     public String getCheatedAndroidIdForPkg(String pkg) {
         return server.getCheatedAndroidIdForPkg(pkg);
+    }
+
+    @SneakyThrows
+    public String getCheatedImeiForPkg(String pkg, int slotIndex) {
+        return server.getCheatedImeiForPkg(pkg, slotIndex);
+    }
+
+    @SneakyThrows
+    public String getOriginalImei(int slotIndex) {
+        return server.getOriginalImei(slotIndex);
+    }
+
+    @SneakyThrows
+    public void setCheatedImeiForPkg(String pkg, String id, int slotIndex) {
+        server.setCheatedImeiForPkg(pkg, id, slotIndex);
+    }
+
+    @SneakyThrows
+    public String getCheatedMeidForPkg(String pkg, int slotIndex) {
+        return server.getCheatedMeidForPkg(pkg, slotIndex);
+    }
+
+    @SneakyThrows
+    public String getOriginalMeid(int slotIndex) {
+        return server.getOriginalMeid(slotIndex);
+    }
+
+    @SneakyThrows
+    public void setCheatedMeidForPkg(String pkg, String id, int slotIndex) {
+        server.setCheatedMeidForPkg(pkg, id, slotIndex);
+    }
+
+    @SneakyThrows
+    public int getPhoneCount() {
+        return server.getPhoneCount();
     }
 }

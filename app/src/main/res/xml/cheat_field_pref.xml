@@ -22,6 +22,38 @@
                 app:key="@string/key_original_field_sim_serial"
                 app:persistent="false"
                 app:title="@string/pre_title_cheat_sim_serial" />
+
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_original_field_imei_slot_1"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_imei_slot1" />
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_original_field_imei_slot_2"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_imei_slot2" />
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_original_field_imei_slot_3"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_imei_slot3" />
+
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_original_field_meid_slot_1"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_meid_slot1" />
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_original_field_meid_slot_2"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_meid_slot2" />
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_original_field_meid_slot_3"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_meid_slot3" />
     </PreferenceCategory>
 
 
@@ -46,6 +78,38 @@
                 app:key="@string/key_cheat_field_sim_serial"
                 app:persistent="false"
                 app:title="@string/pre_title_cheat_sim_serial" />
+
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_cheat_field_imei_slot_1"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_imei_slot1" />
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_cheat_field_imei_slot_2"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_imei_slot2" />
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_cheat_field_imei_slot_3"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_imei_slot3" />
+
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_cheat_field_meid_slot_1"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_meid_slot1" />
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_cheat_field_meid_slot_2"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_meid_slot2" />
+        <EditTextPreference
+                app:isPreferenceVisible="false"
+                app:key="@string/key_cheat_field_meid_slot_3"
+                app:persistent="false"
+                app:title="@string/pre_title_cheat_meid_slot3" />
 
     </PreferenceCategory>
 
