@@ -48,11 +48,6 @@ versions.auto_logging_plugin = "1.0.0"
 versions.chart = "v3.1.0"
 versions.rules = "3.3.0"
 versions.slf4j_android = "1.7.29"
-versions.mvel2 = "2.4.3.Final"
-versions.slf4j_simple = "1.7.26"
-versions.jackson_databind = "2.9.9"
-versions.jackson_dataformat_yaml = "2.9.9"
-versions.spring_expression = "4.3.24.RELEASE"
 versions.licensesdialog = "2.1.0"
 ext.versions = versions
 
@@ -122,12 +117,6 @@ rules.core = "org.jeasy:easy-rules-core:$versions.rules"
 rules.mvel = "org.jeasy:easy-rules-mvel:$versions.rules"
 rules.support = "org.jeasy:easy-rules-support:$versions.rules"
 deps.rules = rules
-
-deps.mvel2 = "org.mvel:mvel2:$versions.mvel2"
-deps.slf4j_simple = "org.slf4j:slf4j-simple:$versions.slf4j_simple"
-deps.jackson_databind = "com.fasterxml.jackson.core:jackson-databind:$versions.jackson_databind"
-deps.jackson_dataformat_yaml = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$versions.jackson_dataformat_yaml"
-deps.spring_expression = "org.springframework:spring-expression:$versions.spring_expression"
 
 def lifecycle = [:]
 lifecycle.runtime = "androidx.lifecycle:lifecycle-runtime:$versions.lifecycle"
