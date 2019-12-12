@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.core.secure;
 
 import android.location.Location;
+import android.telephony.SubscriptionInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -152,5 +153,10 @@ public class PrivacyManager {
     @SneakyThrows
     public int getPhoneCount() {
         return server.getPhoneCount();
+    }
+
+    @SneakyThrows
+    public SubscriptionInfo[] getAccessibleSubscriptionInfoList() {
+        return server.getAccessibleSubscriptionInfoList();
     }
 }

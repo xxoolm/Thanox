@@ -114,6 +114,10 @@ public interface IPrivacyManager extends android.os.IInterface
     {
       return 0;
     }
+    @Override public android.telephony.SubscriptionInfo[] getAccessibleSubscriptionInfoList() throws android.os.RemoteException
+    {
+      return null;
+    }
     @Override
     public android.os.IBinder asBinder() {
       return null;
@@ -453,6 +457,14 @@ public interface IPrivacyManager extends android.os.IInterface
           int _result = this.getPhoneCount();
           reply.writeNoException();
           reply.writeInt(_result);
+          return true;
+        }
+        case TRANSACTION_getAccessibleSubscriptionInfoList:
+        {
+          data.enforceInterface(descriptor);
+          android.telephony.SubscriptionInfo[] _result = this.getAccessibleSubscriptionInfoList();
+          reply.writeNoException();
+          reply.writeTypedArray(_result, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
           return true;
         }
         default:
@@ -1081,6 +1093,26 @@ public interface IPrivacyManager extends android.os.IInterface
         }
         return _result;
       }
+      @Override public android.telephony.SubscriptionInfo[] getAccessibleSubscriptionInfoList() throws android.os.RemoteException
+      {
+        android.os.Parcel _data = android.os.Parcel.obtain();
+        android.os.Parcel _reply = android.os.Parcel.obtain();
+        android.telephony.SubscriptionInfo[] _result;
+        try {
+          _data.writeInterfaceToken(DESCRIPTOR);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_getAccessibleSubscriptionInfoList, _data, _reply, 0);
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getAccessibleSubscriptionInfoList();
+          }
+          _reply.readException();
+          _result = _reply.createTypedArray(android.telephony.SubscriptionInfo.CREATOR);
+        }
+        finally {
+          _reply.recycle();
+          _data.recycle();
+        }
+        return _result;
+      }
       public static github.tornaco.android.thanos.core.secure.IPrivacyManager sDefaultImpl;
     }
     static final int TRANSACTION_isPrivacyEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
@@ -1112,6 +1144,7 @@ public interface IPrivacyManager extends android.os.IInterface
     static final int TRANSACTION_isPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
     static final int TRANSACTION_setPrivacyNotificationEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 27);
     static final int TRANSACTION_getPhoneCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 28);
+    static final int TRANSACTION_getAccessibleSubscriptionInfoList = (android.os.IBinder.FIRST_CALL_TRANSACTION + 29);
     public static boolean setDefaultImpl(github.tornaco.android.thanos.core.secure.IPrivacyManager impl) {
       if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
@@ -1152,4 +1185,5 @@ public interface IPrivacyManager extends android.os.IInterface
   public boolean isPrivacyNotificationEnabled() throws android.os.RemoteException;
   public void setPrivacyNotificationEnabled(boolean enabled) throws android.os.RemoteException;
   public int getPhoneCount() throws android.os.RemoteException;
+  public android.telephony.SubscriptionInfo[] getAccessibleSubscriptionInfoList() throws android.os.RemoteException;
 }

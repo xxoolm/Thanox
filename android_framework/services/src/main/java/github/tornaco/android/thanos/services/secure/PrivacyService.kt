@@ -6,6 +6,8 @@ import android.content.IntentFilter
 import android.location.Location
 import android.os.IBinder
 import android.provider.Settings
+import android.telephony.SubscriptionInfo
+import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import github.tornaco.android.thanos.BuildProp
@@ -25,8 +27,8 @@ import github.tornaco.android.thanos.core.pref.IPrefChangeListener
 import github.tornaco.android.thanos.core.secure.IPrivacyManager
 import github.tornaco.android.thanos.core.util.*
 import github.tornaco.android.thanos.services.S
-import github.tornaco.android.thanos.services.SystemService
 import github.tornaco.android.thanos.services.ThanosSchedulers
+import github.tornaco.android.thanos.services.ThanoxSystemService
 import github.tornaco.android.thanos.services.app.EventBus
 import github.tornaco.android.thanos.services.n.NotificationHelper
 import github.tornaco.android.thanos.services.n.NotificationIdFactory
@@ -37,7 +39,7 @@ import io.reactivex.SingleOnSubscribe
 import util.ObjectsUtils
 import java.util.concurrent.TimeUnit
 
-class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
+class PrivacyService(s: S) : ThanoxSystemService(s), IPrivacyManager {
 
     private val notificationHelper: NotificationHelper = NotificationHelper()
 
@@ -259,31 +261,38 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     }
 
     override fun setCheatedDeviceIdForPkg(pkg: String, deviceId: String) {
+        enforceCallingPermissions()
         pkgDeviceIdRepo[pkg] = deviceId
     }
 
     override fun setCheatedLine1NumberForPkg(pkg: String, num: String) {
+        enforceCallingPermissions()
         pkgLine1NumRepo[pkg] = num
     }
 
     override fun setCheatedSimSerialNumberForPkg(pkg: String, num: String) {
+        enforceCallingPermissions()
         pkgSimNumRepo[pkg] = num
     }
 
     override fun setCheatedAndroidIdForPkg(pkg: String?, id: String?) {
+        enforceCallingPermissions()
         pkgAndroidIdRepo[pkg] = id
     }
 
     override fun setCheatedImeiForPkg(pkg: String?, id: String?, slotIndex: Int) {
+        enforceCallingPermissions()
         pkgImeiRepo["${pkg}_$slotIndex"] = id
     }
 
     override fun setCheatedMeidForPkg(pkg: String?, id: String?, slotIndex: Int) {
+        enforceCallingPermissions()
         pkgMeidRepo["${pkg}_$slotIndex"] = id
     }
 
     @SuppressLint("HardwareIds")
     override fun getOriginalDeviceId(): String {
+        enforceCallingPermissions()
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
                 emitter.onSuccess(
@@ -300,6 +309,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
 
     @SuppressLint("HardwareIds")
     override fun getOriginalLine1Number(): String {
+        enforceCallingPermissions()
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
                 emitter.onSuccess(
@@ -316,6 +326,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
 
     @SuppressLint("HardwareIds")
     override fun getOriginalSimSerialNumber(): String {
+        enforceCallingPermissions()
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
                 emitter.onSuccess(
@@ -332,6 +343,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
 
     @SuppressLint("HardwareIds")
     override fun getOriginalAndroidId(): String {
+        enforceCallingPermissions()
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
                 emitter.onSuccess(
@@ -352,6 +364,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     // It is hidden API before 26
     @SuppressLint("NewApi")
     override fun getOriginalImei(slotIndex: Int): String {
+        enforceCallingPermissions()
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
                 emitter.onSuccess(
@@ -369,6 +382,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
     // It is hidden API before 26
     @SuppressLint("NewApi")
     override fun getOriginalMeid(slotIndex: Int): String {
+        enforceCallingPermissions()
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
                 emitter.onSuccess(
@@ -391,6 +405,7 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
      * Returns 3 for Tri standby mode.(Tri SIM functionality)
      */
     override fun getPhoneCount(): Int {
+        enforceCallingPermissions()
         return Single
             .create(SingleOnSubscribe<Int> { emitter ->
                 emitter.onSuccess(
@@ -402,6 +417,48 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
             .subscribeOn(ThanosSchedulers.serverThread())
             .timeout(300, TimeUnit.MILLISECONDS)
             .onErrorReturnItem(0)
+            .blockingGet()
+    }
+
+    /**
+     * Gets the SubscriptionInfo(s) of all embedded subscriptions accessible to the calling app, if
+     * any.
+     *
+     * <p>Only those subscriptions for which the calling app has carrier privileges per the
+     * subscription metadata, if any, will be included in the returned list.
+     *
+     * <p>The records will be sorted by {@link SubscriptionInfo#getSimSlotIndex} then by
+     * {@link SubscriptionInfo#getSubscriptionId}.
+     *
+     * @return Sorted list of the current embedded {@link SubscriptionInfo} records available on the
+     * device which are accessible to the caller.
+     * <ul>
+     * <li>
+     * If null is returned the current state is unknown but if a
+     * {@link OnSubscriptionsChangedListener} has been registered
+     * {@link OnSubscriptionsChangedListener#onSubscriptionsChanged} will be invoked in the future.
+     * <li>
+     * If the list is empty then there are no {@link SubscriptionInfo} records currently available.
+     * <li>
+     * if the list is non-empty the list is sorted by {@link SubscriptionInfo#getSimSlotIndex}
+     * then by {@link SubscriptionInfo#getSubscriptionId}.
+     * </ul>
+     */
+    override fun getAccessibleSubscriptionInfoList(): Array<SubscriptionInfo> {
+        enforceCallingPermissions()
+        return Single
+            .create(SingleOnSubscribe<Array<SubscriptionInfo>> { emitter ->
+                emitter.onSuccess(
+                    Optional.ofNullable(
+                        SubscriptionManager.from(context).activeSubscriptionInfoList.toTypedArray()
+                    ).orElse(
+                        emptyArray()
+                    )
+                )
+            })
+            .subscribeOn(ThanosSchedulers.serverThread())
+            .timeout(300, TimeUnit.MILLISECONDS)
+            .onErrorReturnItem(emptyArray())
             .blockingGet()
     }
 

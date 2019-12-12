@@ -1,6 +1,7 @@
 package github.tornaco.android.thanos.privacy;
 
 import android.os.Bundle;
+import android.telephony.SubscriptionInfo;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -9,12 +10,16 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import java.util.Arrays;
 import java.util.Objects;
 
+import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.core.app.ThanosManager;
+import github.tornaco.android.thanos.core.util.ArrayUtils;
 import github.tornaco.android.thanos.core.util.Optional;
+import github.tornaco.android.thanos.core.util.Timber;
 import lombok.AllArgsConstructor;
 
 public class CheatFieldSettingsFragment extends PreferenceFragmentCompat {
@@ -43,24 +48,7 @@ public class CheatFieldSettingsFragment extends PreferenceFragmentCompat {
         new DeviceId(getString(R.string.key_original_field_device_id), true).bind();
         new AndroidId(getString(R.string.key_original_field_android_id), true).bind();
 
-        // Bind cheat imei.
-        if (thanos.hasFeature(BuildProp.THANOX_FEATURE_PRIVACY_FIELD_IMEI)) {
-            int phoneCount = thanos.getPrivacyManager().getPhoneCount();
-            for (int i = 1; i < phoneCount; i++) {
-                new Imei(getString(R.string.key_cheat_field_imei_slot_) + i, false, i).bind();
-                new Imei(getString(R.string.key_original_field_imei_slot_) + i, true, i).bind();
-            }
-        }
-
-        // Bind cheat meid.
-        if (thanos.hasFeature(BuildProp.THANOX_FEATURE_PRIVACY_FIELD_MEID)) {
-            int phoneCount = thanos.getPrivacyManager().getPhoneCount();
-            for (int i = 1; i < phoneCount; i++) {
-                new Meid(getString(R.string.key_cheat_field_meid_slot_) + i, false, i).bind();
-                new Meid(getString(R.string.key_original_field_meid_slot_) + i, true, i).bind();
-            }
-        }
-
+        bindImeiAndMeid();
 
         SwitchPreferenceCompat showNotificationPref = findPreference(getString(R.string.key_cheat_field_show_cheated_app_notifications));
         Objects.requireNonNull(showNotificationPref).setChecked(thanos.getPrivacyManager().isPrivacyNotificationEnabled());
@@ -69,6 +57,50 @@ public class CheatFieldSettingsFragment extends PreferenceFragmentCompat {
             thanos.getPrivacyManager().setPrivacyNotificationEnabled(checked);
             return true;
         });
+    }
+
+    private void bindImeiAndMeid() {
+        ThanosManager thanos = ThanosManager.from(getContext());
+        if (!thanos.isServiceInstalled()) {
+            return;
+        }
+
+        if (BuildConfig.DEBUG) {
+            int phoneCount = thanos.getPrivacyManager().getPhoneCount();
+            Timber.w("phoneCount: %s", phoneCount);
+        }
+
+        SubscriptionInfo[] subscriptionInfos = thanos.getPrivacyManager().getAccessibleSubscriptionInfoList();
+        Timber.w("subscriptionInfos: %s", Arrays.toString(subscriptionInfos));
+        if (ArrayUtils.isEmpty(subscriptionInfos)) {
+            return;
+        }
+
+        // Bind cheat imei.
+        if (thanos.hasFeature(BuildProp.THANOX_FEATURE_PRIVACY_FIELD_IMEI)) {
+            int nameIndex = 1;
+            for (SubscriptionInfo sub : subscriptionInfos) {
+                int slotId = sub.getSimSlotIndex();
+                Timber.w("nameIndex: %s, slotId: %s", nameIndex, slotId);
+                new Imei(getString(R.string.key_cheat_field_imei_slot_) + nameIndex, false, slotId).bind();
+                new Imei(getString(R.string.key_original_field_imei_slot_) + nameIndex, true, slotId).bind();
+
+                nameIndex++;
+            }
+        }
+
+        // Bind cheat meid.
+        if (thanos.hasFeature(BuildProp.THANOX_FEATURE_PRIVACY_FIELD_MEID)) {
+            int nameIndex = 1;
+            for (SubscriptionInfo sub : subscriptionInfos) {
+                int slotId = sub.getSimSlotIndex();
+                Timber.w("nameIndex: %s, slotId: %s", nameIndex, slotId);
+                new Meid(getString(R.string.key_cheat_field_meid_slot_) + nameIndex, false, slotId).bind();
+                new Meid(getString(R.string.key_original_field_meid_slot_) + nameIndex, true, slotId).bind();
+
+                nameIndex++;
+            }
+        }
     }
 
     class Line1Num extends FieldPrefHandler {

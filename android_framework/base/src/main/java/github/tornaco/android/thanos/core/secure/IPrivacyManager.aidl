@@ -38,4 +38,5 @@ interface IPrivacyManager {
     void setPrivacyNotificationEnabled(boolean enabled);
 
     int getPhoneCount();
+    SubscriptionInfo[] getAccessibleSubscriptionInfoList();
 }
