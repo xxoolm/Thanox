@@ -3,6 +3,7 @@ package github.tornaco.android.thanos.services.secure.ops
 import android.content.Context
 import android.os.IBinder
 import android.os.RemoteException
+import android.os.UserHandle
 import com.google.common.collect.Maps
 import github.tornaco.android.thanos.BuildProp
 import github.tornaco.android.thanos.core.Res
@@ -17,10 +18,12 @@ import github.tornaco.android.thanos.core.secure.ops.AppOpsManager
 import github.tornaco.android.thanos.core.secure.ops.IAppOpsService
 import github.tornaco.android.thanos.core.util.Noop
 import github.tornaco.android.thanos.core.util.Timber
+import github.tornaco.android.thanos.services.BackgroundThread
 import github.tornaco.android.thanos.services.BootStrap
 import github.tornaco.android.thanos.services.S
 import github.tornaco.android.thanos.services.ThanoxSystemService
 import github.tornaco.android.thanos.services.apihint.ExecuteBySystemHandler
+import github.tornaco.android.thanos.services.pm.PackageMonitor
 import lombok.SneakyThrows
 import util.ObjectsUtils
 
@@ -43,6 +46,16 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
     private val opIgnoreRecord: Map<String, List<Int>> = Maps.newHashMap()
     private val opAllowRecord: Map<String, List<Int>> = Maps.newHashMap()
 
+    private val monitor = object : PackageMonitor() {
+        override fun onPackageRemoved(packageName: String?, uid: Int) {
+            super.onPackageRemoved(packageName, uid)
+            Timber.w("onPackageRemoved: $packageName, rest it's ops.")
+            executeInternal(Runnable {
+                resetAllModes(packageName)
+            })
+        }
+    }
+
     @SneakyThrows
     override fun onStart(context: Context) {
         super.onStart(context)
@@ -60,7 +73,9 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
             appResources.getStringArray(Res.Strings.STRING_OP_REMIND_WHITELIST)
         this.opRemindWhiteList.addAll(opWhiteList)
         Timber.d("opRemindWhiteList: ${opRemindWhiteList.toTypedArray().contentToString()}")
+
         initPrefs()
+        registerReceivers()
     }
 
     private fun initPrefs() {
@@ -88,6 +103,10 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
         s.preferenceManagerService.registerSettingsChangeListener(listener)
     }
 
+    private fun registerReceivers() {
+        monitor.register(context, UserHandle.CURRENT, true, BackgroundThread.getHandler())
+    }
+
     @Throws(RemoteException::class)
     override fun setMode(code: Int, uid: Int, packageName: String, mode: Int) {
         enforceCallingPermissions()
@@ -96,9 +115,25 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
     }
 
     @Throws(RemoteException::class)
-    override fun resetAllModes(reqPackageName: String) {
+    override fun resetAllModes(reqPackageName: String?) {
         enforceCallingPermissions()
         Timber.w("resetAllModes: $reqPackageName")
+        if (reqPackageName == null) {
+            return
+        }
+        if ("*" == reqPackageName) {
+            resetModeForAllPkgs()
+        } else {
+            val numOp = AppOpsManager._NUM_OP
+            for (i in 0 until numOp) {
+                Timber.v("Set $i to MODE_ALLOWED for pkg $reqPackageName")
+                opSettingsRepo["$reqPackageName-$i"] = AppOpsManager.MODE_ALLOWED.toString()
+            }
+        }
+    }
+
+    private fun resetModeForAllPkgs() {
+        Timber.w("resetModeForAllPkgs")
         opSettingsRepo.keys.toTypedArray().forEach {
             // Check if it is template.
             if (!it.startsWith(ProfileManager.PROFILE_AUTO_APPLY_NEW_INSTALLED_APPS_CONFIG_PKG_NAME)) {

@@ -76,6 +76,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     private val gson = Gson()
 
     private val monitor = object : PackageMonitor() {
+
         override fun onPackageAdded(packageName: String, uid: Int) {
             super.onPackageAdded(packageName, uid)
             Timber.v("onPackageAdded: %s", packageName)
@@ -94,6 +95,11 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                     }
                 }
             compositeDisposable.add(disposable)
+        }
+
+        override fun onPackageRemoved(packageName: String?, uid: Int) {
+            super.onPackageRemoved(packageName, uid)
+            Timber.w("onPackageRemoved: $packageName")
         }
     }
 
