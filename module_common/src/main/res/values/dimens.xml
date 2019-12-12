@@ -5,6 +5,7 @@
     <dimen name="common_view_margin_middle">12dp</dimen>
     <dimen name="common_view_margin_default">16dp</dimen>
     <dimen name="common_view_margin_large">32dp</dimen>
+    <dimen name="common_view_margin_very_large">48dp</dimen>
 
     <dimen name="list_item_app_icon_w">40dp</dimen>
     <dimen name="list_item_app_icon_h">40dp</dimen>

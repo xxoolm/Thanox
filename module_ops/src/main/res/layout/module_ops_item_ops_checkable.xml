@@ -3,28 +3,30 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
-        <import type="github.tornaco.android.thanos.core.secure.ops.AppOpsManager"/>
+
+        <import type="android.view.View" />
+
+        <import type="github.tornaco.android.thanos.core.secure.ops.AppOpsManager" />
 
         <variable
                 name="app"
-                type="github.tornaco.android.thanos.core.pm.AppInfo"/>
+                type="github.tornaco.android.thanos.core.pm.AppInfo" />
 
         <variable
                 name="op"
-                type="github.tornaco.thanos.android.ops.model.Op"/>
+                type="github.tornaco.thanos.android.ops.model.Op" />
 
         <variable
                 name="isLastOne"
-                type="boolean"/>
+                type="boolean" />
 
         <variable
                 name="clickListener"
-                type="github.tornaco.thanos.android.ops.ops.OpItemClickListener"/>
+                type="github.tornaco.thanos.android.ops.ops.OpItemClickListener" />
 
         <variable
                 name="switchListener"
-                type="github.tornaco.thanos.android.ops.ops.by.app.OpItemSwitchChangeListener"/>
+                type="github.tornaco.thanos.android.ops.ops.by.app.OpItemSwitchChangeListener" />
 
     </data>
 
@@ -32,69 +34,70 @@
             android:id="@+id/app_item_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
             android:minHeight="@dimen/list_item_height"
-            android:soundEffectsEnabled="false"
             android:onClick="@{() -> clickListener.onOpItemClick(op)}"
-            android:background="?selectableItemBackground">
+            android:soundEffectsEnabled="false">
 
         <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/dashboard_tile_image_margin_end"
                 android:layout_marginStart="@dimen/dashboard_tile_image_margin_start"
+                android:layout_marginEnd="@dimen/dashboard_tile_image_margin_end"
+                android:opIcon="@{op}"
                 android:padding="@dimen/dashboard_tile_image_padding"
-                tools:src="@drawable/module_ops_ic_contacts_fill"
                 android:tint="?colorAccent"
-                android:opIcon="@{op}"/>
+                tools:src="@drawable/module_ops_ic_contacts_fill" />
 
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginBottom="@dimen/dashboard_category_bot_margin"
                 android:layout_marginEnd="@dimen/dashboard_category_title_margin_end"
+                android:layout_marginBottom="@dimen/dashboard_category_bot_margin"
                 android:layout_toEndOf="@+id/icon">
 
             <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fadingEdge="horizontal"
-                    tools:text="@string/app_name"
-                    android:text="@{op.title}"
-                    android:ellipsize="middle"
-                    android:layout_toStartOf="@id/item_switch"
                     android:layout_alignParentStart="true"
                     android:layout_marginEnd="@dimen/common_view_margin_default"
-                    android:textAppearance="@style/TextAppearance.TileTitle"/>
+                    android:layout_toStartOf="@id/item_switch"
+                    android:ellipsize="middle"
+                    android:fadingEdge="horizontal"
+                    android:text="@{op.title}"
+                    android:textAppearance="@style/TextAppearance.TileTitle"
+                    tools:text="@string/app_name" />
 
             <TextView
                     android:id="@+id/summary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@android:id/title"
                     android:layout_below="@id/title"
-                    tools:text="This is summary"
+                    android:layout_alignStart="@android:id/title"
+                    android:layout_marginEnd="@dimen/common_view_margin_very_large"
                     android:ellipsize="end"
-                    android:text="@{op.summary}"
                     android:maxLines="30"
-                    android:textAppearance="@style/TextAppearance.TileSubTitle"/>
+                    android:text="@{op.summary}"
+                    android:textAppearance="@style/TextAppearance.TileSubTitle"
+                    tools:text="This is summary, it can be very very very very very very long" />
 
             <androidx.appcompat.widget.SwitchCompat
-                    android:soundEffectsEnabled="false"
+                    android:id="@+id/item_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/item_switch"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:checked="@{op.mode == AppOpsManager.MODE_ALLOWED}"
-                    android:theme="@style/SwitchTheme"
-                    tools:checked="true"
+                    android:soundEffectsEnabled="false"
                     android:switchApp="@{app}"
                     android:switchListener="@{switchListener}"
-                    android:switchOp="@{op}"/>
+                    android:switchOp="@{op}"
+                    android:theme="@style/SwitchTheme"
+                    tools:checked="true" />
         </RelativeLayout>
 
         <View
@@ -103,7 +106,7 @@
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:layout_toEndOf="@+id/icon"
-                android:visibility="invisible"
-                android:background="?android:attr/dividerVertical"/>
+                android:background="?android:attr/dividerVertical"
+                android:visibility="invisible" />
     </RelativeLayout>
 </layout>
