@@ -38,7 +38,7 @@ import static github.tornaco.xposed.annotation.XposedHook.SdkVersions._29;
 // Hook hookGetStringForUser settings.
 @Beta
 @XposedHook(targetSdkVersion = {_21, _22, _23, _24, _25, _26, _27, _28, _29})
-class SecureSettingsRegistry implements IXposedHook {
+public class SecureSettingsRegistry implements IXposedHook {
 
     private void hookGetStringForUser() {
         Timber.v("hookGetStringForUser...");

@@ -292,11 +292,15 @@ class PrivacyService(private val s: S) : SystemService(), IPrivacyManager {
             .blockingGet()
     }
 
+    @SuppressLint("HardwareIds")
     override fun getOriginalAndroidId(): String {
         return Single
             .create(SingleOnSubscribe<String> { emitter ->
                 emitter.onSuccess(
-                    Optional.ofNullable(Settings.Secure.ANDROID_ID).orElse(
+                    Optional.ofNullable(
+                        Settings.Secure
+                            .getString(context!!.contentResolver, Settings.Secure.ANDROID_ID)
+                    ).orElse(
                         NPEFixing.emptyString()
                     )
                 )
