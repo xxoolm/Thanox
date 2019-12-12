@@ -99,18 +99,19 @@
         <item>Any app start foreground service</item>
         <item>Blue tooth scan</item>
 
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
+        <item>Use the BiometricPrompt/BiometricManager APIs</item>
+        <item>Physical activity recognition</item>
+        <item>Financial app sms read</item>
+        <item>Read media of audio type</item>
+        <item>Write media of audio type</item>
+        <item>Read media of video type</item>
+        <item>Write media of video type</item>
+        <item>Read media of image type</item>
+        <item>Write media of image type</item>
+        <item>Has a legacy (non-isolated) view of storage</item>
+        <item>Accessing accessibility features</item>
+        <item>Read the device identifiers (IMEI / MEID, IMSI, SIM / Build serial)</item>
+
         <item>Placeholder</item>
         <item>Placeholder</item>
         <item>Placeholder</item>
@@ -207,18 +208,19 @@
         <item>Any app start foreground service</item>
         <item>Blue tooth scan</item>
 
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
-        <item>Placeholder</item>
+        <item>Use BiometricPrompt</item>
+        <item>Physical activity recognition</item>
+        <item>Financial app sms read</item>
+        <item>Read media of audio type</item>
+        <item>Write media of audio type</item>
+        <item>Read media of video type</item>
+        <item>Write media of video type</item>
+        <item>Read media of image type</item>
+        <item>Write media of image type</item>
+        <item>Has a legacy view of storage</item>
+        <item>Accessing accessibility features</item>
+        <item>Read the device identifiers</item>
+
         <item>Placeholder</item>
         <item>Placeholder</item>
         <item>Placeholder</item>
