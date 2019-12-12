@@ -21,8 +21,11 @@ import github.tornaco.thanos.android.ops.model.Ops;
 import github.tornaco.thanos.android.ops.model.OpsTemplate;
 
 public class PkgOpsLoader {
+    public static final int FILTER_ALL = 2;
+    public static final int FILTER_ALLOWED = 0;
+    public static final int FILTER_DENIED = 1;
 
-    public List<OpGroup> getPkgOps(Context context, AppInfo appInfo) {
+    public List<OpGroup> getPkgOps(Context context, AppInfo appInfo, int filter) {
         ThanosManager thanos = ThanosManager.from(context);
         Map<OpsTemplate, OpGroup> opsCategoryOpGroupMap = new HashMap<>();
         Set<String> permissions = Sets.newHashSet(PkgUtils.getAllDeclaredPermissions(context, appInfo.getPkgName()));
@@ -31,6 +34,11 @@ public class PkgOpsLoader {
             AppOpsManager ops = thanos.getAppOpsManager();
             for (int op = 0; op < numOp; op++) {
                 int mode = ops.checkOperation(op, appInfo.getUid(), appInfo.getPkgName());
+
+                // Check filter.
+                if (filter == FILTER_ALLOWED && mode == AppOpsManager.MODE_IGNORED) continue;
+                if (filter == FILTER_DENIED && mode == AppOpsManager.MODE_ALLOWED) continue;
+
                 String perm = AppOpsManager.opToPermission(op);
                 boolean show = perm == null
                         || permissions.contains(perm)

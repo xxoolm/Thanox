@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.AndroidViewModel;
 
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public class AppOpsListViewModel extends AndroidViewModel {
     @Getter
     protected final ObservableArrayList<OpGroup> opGroups = new ObservableArrayList<>();
 
+    private final ObservableInt categoryIndex = new ObservableInt(PkgOpsLoader.FILTER_ALL /* All */);
+
     public AppOpsListViewModel(@NonNull Application application) {
         super(application);
         registerEventReceivers();
@@ -50,7 +53,7 @@ public class AppOpsListViewModel extends AndroidViewModel {
         isDataLoading.set(true);
         disposables.add(Single
                 .create((SingleOnSubscribe<List<OpGroup>>) emitter ->
-                        emitter.onSuccess(new PkgOpsLoader().getPkgOps(getApplication(), appInfo)))
+                        emitter.onSuccess(new PkgOpsLoader().getPkgOps(getApplication(), appInfo, categoryIndex.get())))
                 .flatMapObservable((Function<List<OpGroup>, ObservableSource<OpGroup>>) Observable::fromIterable)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -82,5 +85,9 @@ public class AppOpsListViewModel extends AndroidViewModel {
                     newMode);
             op.setMode(newMode);
         }
+    }
+
+    void setModeFilter(int index) {
+        categoryIndex.set(index);
     }
 }

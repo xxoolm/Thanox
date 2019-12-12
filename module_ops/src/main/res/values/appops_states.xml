@@ -345,4 +345,10 @@
         <item>@drawable/ic_apps_fill</item>
 
     </integer-array>
+
+    <string-array name="module_ops_filter_by_op_mode">
+        <item>@string/module_ops_mode_allow</item>
+        <item>@string/module_ops_mode_ignore</item>
+        <item>@string/module_ops_mode_all</item>
+    </string-array>
 </resources>

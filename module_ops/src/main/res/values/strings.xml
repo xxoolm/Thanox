@@ -22,4 +22,8 @@
 
     <string name="module_ops_feature_title_ops_remind_list">Op remind</string>
     <string name="module_ops_feature_summary_ops_remind">Remind you during op</string>
+
+    <string name="module_ops_mode_allow">Allowed</string>
+    <string name="module_ops_mode_ignore">Ignored</string>
+    <string name="module_ops_mode_all">All</string>
 </resources>

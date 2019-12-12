@@ -36,6 +36,12 @@
                     app:titleTextColor="?menuIconTint"
                     tools:title="Title very long very very long!!!!">
 
+                <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spinner"
+                        android:layout_width="?actionBarSize"
+                        android:layout_height="wrap_content"
+                        android:enabled="@{!viewModel.isDataLoading}" />
+
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
