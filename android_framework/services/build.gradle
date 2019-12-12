@@ -28,7 +28,6 @@ dependencies {
 
     // Rules.
     implementation project(':third_party:easy_rules')
-    implementation deps.slf4j_simple
 
     // Xposed
     compileOnly deps.xposed.api
