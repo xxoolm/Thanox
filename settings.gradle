@@ -1,4 +1,9 @@
-include ':app', ':module_donate', ':module_ops', ':module_easteregg', ':module_activity_trampoline', ':module_profile'
+include ':app'
+include ':module_donate'
+include ':module_ops'
+include ':module_easteregg'
+include ':module_activity_trampoline'
+include ':module_profile'
 include ':module_locker'
 include ':module_common'
 
@@ -16,6 +21,7 @@ include ':third_party:recyclerview-fastscroll'
 include ':third_party:search'
 include ':third_party:badge'
 include ':third_party:nativesyntax'
+include ':third_party:easy_rules'
 
 include ':android_framework:base'
 include ':android_framework:services'
