@@ -164,7 +164,7 @@
     <string name="pre_cheat_field_category_others">Others</string>
     <string name="pre_title_cheat_sim_serial">SIM serial</string>
     <string name="pre_title_cheat_line_one_num">Phone number</string>
-    <string name="pre_title_cheat_device_id">Device ID</string>
+    <string name="pre_title_cheat_device_id">Device ID(Deprecated API)</string>
     <string name="pre_title_cheat_android_id">Android ID</string>
 
     <string name="pre_title_cheat_imei_slot1">IMEI(Slot 1)</string>

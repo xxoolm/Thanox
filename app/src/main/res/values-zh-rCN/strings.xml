@@ -164,7 +164,7 @@
     <string name="pre_cheat_field_category_others">其他</string>
     <string name="pre_title_cheat_sim_serial">SIM系列号</string>
     <string name="pre_title_cheat_line_one_num">电话号码</string>
-    <string name="pre_title_cheat_device_id">设备ID</string>
+    <string name="pre_title_cheat_device_id">设备ID（旧版接口）</string>
     <string name="pre_title_cheat_android_id">Android ID</string>
 
     <string name="pre_title_cheat_imei_slot1">IMEI(卡一)</string>
