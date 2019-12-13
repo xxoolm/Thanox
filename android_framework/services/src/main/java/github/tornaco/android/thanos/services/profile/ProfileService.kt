@@ -37,6 +37,7 @@ import github.tornaco.android.thanos.services.n.NotificationHelper
 import github.tornaco.android.thanos.services.n.NotificationIdFactory
 import github.tornaco.android.thanos.services.n.SystemUI
 import github.tornaco.android.thanos.services.pm.PackageMonitor
+import github.tornaco.android.thanos.services.profile.fact.ThanoxFacts
 import github.tornaco.android.thanos.services.profile.handle.Handle
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -88,9 +89,10 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
                     setupAutoConfigForNewInstalledAppsIfNeed(packageName)
 
                     if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
-                        val pkgFacts = Facts()
-                        pkgFacts.put("pkgAdded", true)
-                        pkgFacts.put("pkgName", packageName)
+                        val pkgFacts = ThanoxFacts().apply {
+                            pkgAdded = true
+                            pkgName = packageName
+                        }.compose()
                         publishFacts(pkgFacts)
                     }
                 }
@@ -100,21 +102,31 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
         override fun onPackageRemoved(packageName: String?, uid: Int) {
             super.onPackageRemoved(packageName, uid)
             Timber.w("onPackageRemoved: $packageName")
+
+            if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
+                val pkgFacts = ThanoxFacts().apply {
+                    pkgRemoved = true
+                    pkgName = packageName
+                }.compose()
+                publishFacts(pkgFacts)
+            }
         }
     }
 
     private val frontEventSubscriber = object : IEventSubscriber.Stub() {
         override fun onEvent(e: ThanosEvent) {
             val intent = e.intent
-            val from = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_FROM)
-            val to = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO)
+            val fromPkg =
+                intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_FROM)
+            val toPkg = intent.getStringExtra(T.Actions.ACTION_FRONT_PKG_CHANGED_EXTRA_PACKAGE_TO)
 
             if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
-                val pkgFacts = Facts()
-                pkgFacts.put("from", from)
-                pkgFacts.put("to", to)
-                pkgFacts.put("frontPkgChanged", true)
-                publishFacts(pkgFacts)
+                val facts = ThanoxFacts().apply {
+                    from = fromPkg
+                    to = toPkg
+                    frontPkgChanged = true
+                }.compose()
+                publishFacts(facts)
             }
         }
     }
@@ -122,18 +134,20 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
     private val taskEventSubscriber = object : IEventSubscriber.Stub() {
         override fun onEvent(e: ThanosEvent) {
             val intent = e.intent
-            val userId = intent.getIntExtra(
+            val taskUserId = intent.getIntExtra(
                 T.Actions.ACTION_TASK_REMOVED_EXTRA_USER_ID,
                 UserHandle.getCallingUserId()
             )
-            val pkgName = intent.getStringExtra(T.Actions.ACTION_TASK_REMOVED_EXTRA_PACKAGE_NAME)
+            val packageName =
+                intent.getStringExtra(T.Actions.ACTION_TASK_REMOVED_EXTRA_PACKAGE_NAME)
 
             if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
-                val pkgFacts = Facts()
-                pkgFacts.put("userId", userId)
-                pkgFacts.put("pkgName", pkgName)
-                pkgFacts.put("taskRemoved", true)
-                publishFacts(pkgFacts)
+                val facts = ThanoxFacts().apply {
+                    userId = taskUserId
+                    pkgName = packageName
+                    taskRemoved = true
+                }.compose()
+                publishFacts(facts)
             }
         }
     }
@@ -144,17 +158,18 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             val name = intent.getParcelableExtra<ComponentName>(
                 T.Actions.ACTION_ACTIVITY_RESUMED_EXTRA_COMPONENT_NAME
             )
-            val pkgName =
+            val packageName =
                 intent.getStringExtra(T.Actions.ACTION_ACTIVITY_RESUMED_EXTRA_PACKAGE_NAME)
 
             if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
-                val pkgFacts = Facts()
-                pkgFacts.put("componentName", name)
-                pkgFacts.put("componentNameAsString", name.flattenToString())
-                pkgFacts.put("componentNameAsShortString", name.flattenToShortString())
-                pkgFacts.put("pkgName", pkgName)
-                pkgFacts.put("activityResumed", true)
-                publishFacts(pkgFacts)
+                val facts = ThanoxFacts().apply {
+                    componentName = name
+                    componentNameAsString = name.flattenToString()
+                    componentNameAsShortString = name.flattenToShortString()
+                    pkgName = packageName
+                    activityResumed = true
+                }.compose()
+                publishFacts(facts)
             }
         }
     }
@@ -164,10 +179,11 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
                 val intent = e.intent
                 val pkg = intent.getStringExtra(T.Actions.ACTION_PACKAGE_STOPPED_EXTRA_PACKAGE_NAME)
-                val pkgFacts = Facts()
-                pkgFacts.put("pkgKilled", true)
-                pkgFacts.put("pkgName", pkg)
-                publishFacts(pkgFacts)
+                val facts = ThanoxFacts().apply {
+                    pkgName = pkg
+                    pkgKilled = true
+                }.compose()
+                publishFacts(facts)
             }
         }
     }
