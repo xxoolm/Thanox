@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -19,6 +20,10 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.balda.flipper.DocumentFileCompat;
+import com.balda.flipper.OperationFailedException;
+import com.balda.flipper.Root;
+import com.balda.flipper.StorageManagerCompat;
 import com.bumptech.glide.Glide;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
@@ -28,12 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import de.psdev.licensesdialog.LicensesDialog;
-import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
-import de.psdev.licensesdialog.licenses.MITLicense;
-import de.psdev.licensesdialog.licenses.MozillaPublicLicense20;
-import de.psdev.licensesdialog.model.Notice;
-import de.psdev.licensesdialog.model.Notices;
 import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
@@ -46,6 +45,7 @@ import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.profile.ProfileManager;
 import github.tornaco.android.thanos.core.util.ObjectToStringUtils;
 import github.tornaco.android.thanos.core.util.Optional;
+import github.tornaco.android.thanos.core.util.OsUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.module.easteregg.paint.PlatLogoActivity;
 import github.tornaco.android.thanos.theme.AppThemePreferences;
@@ -63,6 +63,15 @@ import util.CollectionUtils;
 public class SettingsFragment extends PreferenceFragmentCompat {
     private final static int REQUEST_CODE_BACKUP_FILE_PICK = 0x100;
     private final static int REQUEST_CODE_RESTORE_FILE_PICK = 0x200;
+    private final static int REQUEST_CODE_RESTORE_FILE_PICK_Q = 0x300;
+
+    private StorageManagerCompat storageManagerCompat;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        storageManagerCompat = new StorageManagerCompat(Objects.requireNonNull(getContext()));
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -241,7 +250,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         Preference licensePref = findPreference(getString(R.string.key_open_source_license));
         licensePref.setOnPreferenceClickListener(preference12 -> {
-            showLicenseDialog();
+            LicenseHelper.showLicenseDialog(getActivity());
             return true;
         });
 
@@ -265,6 +274,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_BACKUP_FILE_PICK) {
             onBackupFilePickRequestResult(data);
+        }
+        if (requestCode == REQUEST_CODE_RESTORE_FILE_PICK_Q && resultCode == Activity.RESULT_OK) {
+            onBackupFilePickRequestResultQ(data);
         }
     }
 
@@ -311,6 +323,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         }, uri));
     }
 
+    private void onBackupFilePickRequestResultQ(Intent data) {
+        Root root = storageManagerCompat.addRoot(Objects.requireNonNull(getContext()),
+                StorageManagerCompat.DEF_MAIN_ROOT, data);
+        if (root == null) return;
+        DocumentFile f = root.toRootDirectory(getContext());
+        if (f == null) return;
+        try {
+            DocumentFile subFolder = DocumentFileCompat.getSubFolder(f, "mysub");
+            DocumentFile myFile = DocumentFileCompat.getFile(subFolder, "myfile", "image/png");
+
+        } catch (OperationFailedException e) {
+            Timber.e(e);
+        }
+    }
+
     private void onBackupFilePickRequestResult(Intent data) {
         if (data == null) {
             Timber.e("No data.");
@@ -338,26 +365,43 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
 
         Optional.ofNullable(getActivity())
-                .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity).performBackup(new SettingsViewModel.BackupListener() {
-                    @Override
-                    public void onSuccess(File dest) {
-                        if (getActivity() == null) return;
-                        new AlertDialog.Builder(getActivity())
-                                .setMessage(getString(R.string.pre_message_backup_success) + "\n" + dest.getAbsolutePath())
-                                .setCancelable(true)
-                                .setPositiveButton(android.R.string.ok, null)
-                                .show();
-                    }
+                .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity)
+                        .performBackup(new SettingsViewModel.BackupListener() {
+                            @Override
+                            public void onSuccess(File dest) {
+                                if (getActivity() == null) return;
+                                new AlertDialog.Builder(getActivity())
+                                        .setMessage(getString(R.string.pre_message_backup_success) + "\n" + dest.getAbsolutePath())
+                                        .setCancelable(true)
+                                        .setPositiveButton(android.R.string.ok, null)
+                                        .show();
+                            }
 
-                    @Override
-                    public void onFail(String errMsg) {
-                        Toast.makeText(fragmentActivity.getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
-                    }
-                }, file));
+                            @Override
+                            public void onFail(String errMsg) {
+                                Toast.makeText(fragmentActivity.getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
+                            }
+                        }, file));
     }
 
     @RequiresPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void backupRequested() {
+        if (OsUtils.isQOrAbove()) {
+            backupRequestedQAndAbove();
+        } else {
+            backupRequestedQBelow();
+        }
+    }
+
+    private void backupRequestedQAndAbove() {
+        Root root = storageManagerCompat.getRoot(StorageManagerCompat.DEF_MAIN_ROOT);
+        if (root == null || !root.isAccessGranted(getContext())) {
+            Intent requireExternalAccess = storageManagerCompat.requireExternalAccess(Objects.requireNonNull(getContext()));
+            startActivityForResult(requireExternalAccess, REQUEST_CODE_RESTORE_FILE_PICK_Q);
+        }
+    }
+
+    private void backupRequestedQBelow() {
         Intent i = new Intent(getContext(), FilePickerActivity.class);
         i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
         i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
@@ -375,184 +419,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
         startActivityForResult(intent, REQUEST_CODE_RESTORE_FILE_PICK);
-    }
-
-    private void showLicenseDialog() {
-        final Notices notices = new Notices();
-
-        notices.addNotice(
-                new Notice(
-                        "Thanox",
-                        "https://github.com/Tornaco/Thanox",
-                        null,
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "X-APM",
-                        "https://github.com/Tornaco/X-APM",
-                        null,
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "Lombok",
-                        "https://projectlombok.org/",
-                        " Copyright © 2009-2018 The Project Lombok Authors",
-                        new MITLicense()));
-
-        notices.addNotice(
-                new Notice(
-                        "guava",
-                        "https://github.com/google/guava",
-                        null,
-                        new MITLicense()));
-
-        notices.addNotice(
-                new Notice(
-                        "retrofit",
-                        "https://github.com/square/retrofit",
-                        "Copyright 2013 Square, Inc.",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "RxJava",
-                        "https://github.com/ReactiveX/RxJava",
-                        "Copyright (c) 2016-present, RxJava Contributors.",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "RxAndroid",
-                        "https://github.com/ReactiveX/RxAndroid",
-                        "Copyright 2015 The RxAndroid authors",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "RecyclerView-FastScroll",
-                        "https://github.com/timusus/RecyclerView-FastScroll",
-                        null,
-                        new MITLicense()));
-
-        notices.addNotice(
-                new Notice(
-                        "glide",
-                        "https://github.com/bumptech/glide",
-                        null,
-                        new GlideLicense()));
-
-        notices.addNotice(
-                new Notice(
-                        "material-searchview",
-                        "https://github.com/Shahroz16/material-searchview",
-                        " Copyright (C) 2016 Tim Malseed",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "PatternLockView",
-                        "https://github.com/aritraroy/PatternLockView",
-                        null,
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "PinLockView",
-                        "https://github.com/aritraroy/PinLockView",
-                        null,
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "MPAndroidChart",
-                        "https://github.com/PhilJay/MPAndroidChart",
-                        "Copyright 2019 Philipp Jahoda",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "easy-rules",
-                        "https://github.com/j-easy/easy-rules",
-                        "Copyright (c) 2019 Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)",
-                        new MITLicense()));
-
-        notices.addNotice(
-                new Notice(
-                        "Timber",
-                        "https://github.com/JakeWharton/timber",
-                        "Copyright 2013 Jake Wharton",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "FireCrasher",
-                        "https://github.com/osama-raddad/FireCrasher",
-                        "Copyright 2019, Osama Raddad",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "Xposed",
-                        "https://github.com/rovo89/Xposed",
-                        null,
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "lombok",
-                        "https://github.com/rzwitserloot/lombok",
-                        null,
-                        new MITLicense()));
-
-        notices.addNotice(
-                new Notice(
-                        "MaterialBadgeTextView",
-                        "https://github.com/matrixxun/MaterialBadgeTextView",
-                        null,
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "FuzzyDateFormatter",
-                        "https://github.com/izacus/FuzzyDateFormatter",
-                        "Copyright 2015 Jernej Virag",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "MaterialSearchView",
-                        "https://github.com/MiguelCatalan/MaterialSearchView",
-                        "Copyright 2015 Miguel Catalan Bañuls",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "zip4j",
-                        "https://github.com/srikanth-lingala/zip4j",
-                        null,
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "android_native_code_view",
-                        "https://github.com/vic797/android_native_code_view",
-                        "Copyright 2017 Victor Campos",
-                        new ApacheSoftwareLicense20()));
-
-        notices.addNotice(
-                new Notice(
-                        "NoNonsense-FilePicker",
-                        "https://github.com/spacecowboy/NoNonsense-FilePicker",
-                        null,
-                        new MozillaPublicLicense20()));
-
-        new LicensesDialog.Builder(Objects.requireNonNull(getActivity()))
-                .setNotices(notices)
-                .setIncludeOwnLicense(true)
-                .build()
-                .show();
     }
 
     @Override
