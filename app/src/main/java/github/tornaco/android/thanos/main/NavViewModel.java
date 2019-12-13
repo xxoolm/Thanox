@@ -84,6 +84,8 @@ public class NavViewModel extends AndroidViewModel {
     private final ObservableList<Tile> secureFeatures = new ObservableArrayList<>();
     @Getter
     private final ObservableList<Tile> expFeatures = new ObservableArrayList<>();
+    @Getter
+    private final ObservableList<Tile> pluginFeatures = new ObservableArrayList<>();
 
     public NavViewModel(@NonNull Application application) {
         super(application);
@@ -96,6 +98,7 @@ public class NavViewModel extends AndroidViewModel {
         loadBoostFeatures();
         loadSecureFeatures();
         loadExpFeatures();
+        loadPluginFeatures();
 
         loadRunningApps();
         loadMemoryUsagePercent();
@@ -358,19 +361,10 @@ public class NavViewModel extends AndroidViewModel {
         disposables.add(Observable
                 .just(
                         Tile.builder()
-                                .iconRes(R.drawable.ic_cloud_fill)
-                                .title(resources.getString(R.string.feature_title_push_delegate))
-                                .category(resources.getString(R.string.feature_category_notification))
-                                .themeColor(R.color.md_grey_400)
-                                .disabled(!thanosManager.isServiceInstalled()
-                                        || !thanosManager.hasFeature(BuildProp.THANOX_FEATURE_PUSH_DELEGATE))
-                                .onClickListener(view -> {
-                                })
-                                .build(),
-                        Tile.builder()
                                 .iconRes(R.drawable.ic_notification_badge_fill)
                                 .title(resources.getString(R.string.feature_title_light_on_notification))
                                 .summary(resources.getString(R.string.feature_summary_light_on_notification))
+                                .category(resources.getString(R.string.feature_category_notification))
                                 .themeColor(R.color.md_red_500)
                                 .onClickListener(view -> ScreenOnNotificationActivity.start(getApplication()))
                                 .build(),
@@ -416,6 +410,32 @@ public class NavViewModel extends AndroidViewModel {
         );
     }
 
+    private void loadPluginFeatures() {
+        ThanosManager thanosManager = ThanosManager.from(getApplication());
+        Resources resources = getApplication().getResources();
+        disposables.add(Observable
+                .just(
+                        Tile.builder()
+                                .iconRes(R.drawable.ic_cloud_fill)
+                                .title(resources.getString(R.string.feature_title_push_delegate))
+                                .category(resources.getString(R.string.feature_category_plugins))
+                                .themeColor(R.color.md_grey_400)
+                                .disabled(!thanosManager.isServiceInstalled()
+                                        || !thanosManager.hasFeature(BuildProp.THANOX_FEATURE_PUSH_DELEGATE))
+                                .onClickListener(view -> {
+                                })
+                                .build()
+                )
+                .filter(tile -> !tile.isDisabled())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(tile -> {
+                    if (!pluginFeatures.contains(tile)) {
+                        pluginFeatures.add(tile);
+                    }
+                })
+        );
+    }
 
     private void loadStartBlockCount() {
         disposables.add(Single.create((SingleOnSubscribe<Long>) emitter -> {

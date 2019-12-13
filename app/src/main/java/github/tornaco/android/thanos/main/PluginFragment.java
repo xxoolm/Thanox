@@ -31,6 +31,8 @@ public class PluginFragment extends NavFragment {
     }
 
     private void setupView() {
+        pluginBinding.features.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        pluginBinding.features.setAdapter(new DashboardAdapter());
     }
 
     @Override

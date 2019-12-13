@@ -82,6 +82,8 @@
     <string name="feature_summary_light_on_notification">Light up screen on new notification</string>
     <string name="feature_title_push_delegate">Push delegate</string>
 
+    <string name="feature_category_plugins">Available features</string>
+
     <string name="feature_category_ext">Extension</string>
     <string name="feature_category_power_save">Power</string>
     <string name="feature_title_smart_app_standby">Smart standby</string>

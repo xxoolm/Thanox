@@ -29,12 +29,11 @@
                 app:cardCornerRadius="@dimen/common_view_corner_radius"
                 app:cardElevation="@dimen/common_view_elevation">
 
-            <TextView
-                    android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/title_no_plugins_installed"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+                    android:id="@+id/features"
+                    android:features="@{viewmodel.pluginFeatures}"/>
 
         </androidx.cardview.widget.CardView>
 

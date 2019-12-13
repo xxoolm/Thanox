@@ -258,8 +258,14 @@ public class ActivityManagerService extends ThanoxSystemService implements IActi
                 .notify(NotificationIdFactory.getIdByTag(N_TAG_THANOX_ACTIVATED), n);
 
         // Cancel later.
-        executeInternal(() -> NotificationManagerCompat.from(getContext())
-                .cancel(NotificationIdFactory.getIdByTag(N_TAG_THANOX_ACTIVATED)), 60 * 1000);
+        executeInternal(new Runnable() {
+            @Override
+            public void run() {
+                Timber.w("Cancel active n.");
+                NotificationManagerCompat.from(getContext())
+                        .cancel(NotificationIdFactory.getIdByTag(N_TAG_THANOX_ACTIVATED));
+            }
+        }, 60 * 1000);
 
     }
 
