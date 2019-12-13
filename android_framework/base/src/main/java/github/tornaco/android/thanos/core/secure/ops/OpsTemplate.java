@@ -84,11 +84,13 @@ public class OpsTemplate {
                     AppOpsManager.OP_ASSIST_STRUCTURE,
                     AppOpsManager.OP_ASSIST_SCREENSHOT,
                     AppOpsManager.OP_CHANGE_WIFI_STATE,
-                    AppOpsManager.OP_READ_DEVICE_IDENTIFIERS}
+                    AppOpsManager.OP_READ_DEVICE_IDENTIFIERS,
+                    AppOpsManager.OP_REQUEST_INSTALL_PACKAGES}
     );
 
     public static final OpsTemplate RUN_IN_BACKGROUND_TEMPLATE = new OpsTemplate(
-            new int[]{AppOpsManager.OP_RUN_IN_BACKGROUND}
+            new int[]{AppOpsManager.OP_RUN_IN_BACKGROUND,
+                    AppOpsManager.OP_RUN_ANY_IN_BACKGROUND}
     );
 
     public static final OpsTemplate THANOX_TEMPLATE = new OpsTemplate(

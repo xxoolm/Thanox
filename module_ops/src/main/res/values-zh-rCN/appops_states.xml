@@ -85,13 +85,14 @@
         <item>"获取帐号"</item>
         <item>"在后台运行"</item>
         <item>"无障碍功能音量"</item>
+
         <item>Read phone number</item>
-        <item>Install packages</item>
+        <item>请求安装应用</item>
         <item>Picture in picture</item>
         <item>Instant app start foreground</item>
         <item>Answer incoming phone calls</item>
-        <item>Run jobs when in background</item>
-        <item>Change Wi-Fi connectivity state</item>
+        <item>在后台运行任务</item>
+        <item>更改Wifi连接状态</item>
         <item>Request package deletion through package installer</item>
         <item>Bind an accessibility service</item>
         <item>Continue handover of a call from another app</item>
@@ -109,8 +110,8 @@
         <item>Read media of image type</item>
         <item>Write media of image type</item>
         <item>Has a legacy (non-isolated) view of storage</item>
-        <item>Accessing accessibility features</item>
-        <item>Read the device identifiers (IMEI / MEID, IMSI, SIM / Build serial)</item>
+        <item>使用辅助功能</item>
+        <item>读取设备信息(IMEI / MEID, IMSI, SIM / Build serial)</item>
 
         <item>Placeholder</item>
         <item>Placeholder</item>
@@ -195,12 +196,12 @@
         <item>"在后台运行"</item>
         <item>"无障碍功能音量"</item>
         <item>Read phone number</item>
-        <item>Install packages</item>
+        <item>安装应用</item>
         <item>Picture in picture</item>
         <item>Instant app start foreground</item>
         <item>Answer incoming phone calls</item>
-        <item>Run jobs when in background</item>
-        <item>Change Wi-Fi connectivity state</item>
+        <item>在后台运行任务</item>
+        <item>更改Wifi连接状态</item>
         <item>Request package deletion through package installer</item>
         <item>Bind an accessibility service</item>
         <item>Continue handover of a call from another app</item>
@@ -218,8 +219,8 @@
         <item>Read media of image type</item>
         <item>Write media of image type</item>
         <item>Has a legacy view of storage</item>
-        <item>Accessing accessibility features</item>
-        <item>Read the device identifiers</item>
+        <item>使用辅助功能</item>
+        <item>读取设备信息</item>
 
         <item>Placeholder</item>
         <item>Placeholder</item>
@@ -234,6 +235,6 @@
         <item>Placeholder</item>
 
         <item>获取已安装应用列表</item>
-        <item>Query intent activities</item>
+        <item>查询意图活动</item>
     </string-array>
 </resources>
