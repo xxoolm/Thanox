@@ -179,6 +179,7 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
             if (FeatureManager.hasFeature(BuildProp.THANOX_FEATURE_PROFILE)) {
                 val intent = e.intent
                 val pkg = intent.getStringExtra(T.Actions.ACTION_PACKAGE_STOPPED_EXTRA_PACKAGE_NAME)
+                Timber.v("Package stopped event received: $pkg")
                 val facts = ThanoxFacts().apply {
                     pkgName = pkg
                     pkgKilled = true
@@ -724,6 +725,9 @@ class ProfileService(s: S) : ThanoxSystemService(s), IProfileManager {
 
 
     fun publishFacts(facts: Facts) {
+        if (!BootStrap.IS_RELEASE_BUILD) {
+            Timber.e(Throwable("Show trace of publishFacts"))
+        }
         executeInternal(Runnable {
             publishFactsInternal(facts)
         })
