@@ -17,7 +17,6 @@ import androidx.lifecycle.AndroidViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.tornaco.android.thanos.BuildConfig;
 import github.tornaco.android.thanos.BuildProp;
 import github.tornaco.android.thanos.R;
 import github.tornaco.android.thanos.ThanosApp;
@@ -461,9 +460,8 @@ public class NavViewModel extends AndroidViewModel {
         unRegisterEventReceivers();
     }
 
-    @SuppressWarnings("ConstantConditions")
     private String getChannelString() {
-        return BuildConfig.FLAVOR.contains("row") ? "PRO" : null;
+        return null;
     }
 
     void cleanUpBackgroundTasks() {

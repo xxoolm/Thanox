@@ -59,8 +59,19 @@ public class NavActivity extends ThemeActivity implements NavFragment.FragmentAt
             case R.id.settings:
                 SettingsActivity.start(this);
                 return true;
+            case R.id.feedback:
+                showFeedbackDialog();
+                return true;
         }
         return false;
+    }
+
+    private void showFeedbackDialog() {
+        new AlertDialog.Builder(thisActivity())
+                .setTitle(R.string.nav_title_feedback)
+                .setMessage(R.string.dialog_message_feedback)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 
     private void initFirstRun() {
