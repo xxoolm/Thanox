@@ -89,8 +89,7 @@ public class SettingsViewModel extends AndroidViewModel {
                 });
     }
 
-    void performBackup(BackupListener listener) {
-        File backupDir = new File(getApplication().getCacheDir(), "backup");
+    void performBackup(BackupListener listener, File backupDir) {
         File externalBackupDir = new File(getApplication().getExternalCacheDir(), "backup");
         ThanosManager.from(getApplication())
                 .ifServiceInstalled(thanosManager -> thanosManager.getBackupAgent()

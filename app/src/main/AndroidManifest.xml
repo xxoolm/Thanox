@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="github.tornaco.android.thanos">
+        xmlns:tools="http://schemas.android.com/tools"
+        package="github.tornaco.android.thanos">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
             android:name=".ThanosApp"
@@ -18,48 +18,62 @@
 
         <meta-data
                 android:name="xposedmodule"
-                android:value="true"/>
+                android:value="true" />
         <meta-data
                 android:name="xposeddescription"
-                android:value="I am thanos!"/>
+                android:value="I am thanos!" />
         <meta-data
                 android:name="xposedminversion"
-                android:value="53"/>
-        <activity android:name=".main.NavActivity"
-                  android:theme="@style/AppThemeLauncher">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                android:value="53" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+        <activity
+                android:name=".main.NavActivity"
+                android:theme="@style/AppThemeLauncher">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".process.ProcessManageActivity"
-                  android:exported="false"/>
-        <activity android:name=".start.StartRestrictActivity"
-                  android:exported="false"/>
-        <activity android:name=".start.BackgroundRestrictActivity"
-                  android:exported="false"/>
-        <activity android:name=".task.CleanUpOnTaskRemovedActivity"
-                  android:exported="false"/>
-        <activity android:name=".privacy.DataCheatActivity"
-                  android:exported="false"/>
-        <activity android:name=".settings.SettingsActivity"
-                  android:exported="false"/>
-        <activity android:name=".apps.AppsManageActivity"/>
-        <activity android:name=".privacy.CheatFieldSettingsActivity"/>
-        <activity android:name=".start.BgRestrictSettingsActivity"/>
-        <activity android:name=".apps.AppDetailsActivity" android:exported="true" android:enabled="true"/>
-        <activity android:name=".notification.ScreenOnNotificationActivity"/>
-        <activity android:name=".task.RecentTaskBlurListActivity"/>
-        <activity android:name=".power.SmartStandbyActivity"/>
-        <activity android:name=".apps.SuggestedAppsActivity" android:label="@string/feature_title_apps_manager"/>
+        <activity
+                android:name=".process.ProcessManageActivity"
+                android:exported="false" />
+        <activity
+                android:name=".start.StartRestrictActivity"
+                android:exported="false" />
+        <activity
+                android:name=".start.BackgroundRestrictActivity"
+                android:exported="false" />
+        <activity
+                android:name=".task.CleanUpOnTaskRemovedActivity"
+                android:exported="false" />
+        <activity
+                android:name=".privacy.DataCheatActivity"
+                android:exported="false" />
+        <activity
+                android:name=".settings.SettingsActivity"
+                android:exported="false" />
+        <activity android:name=".apps.AppsManageActivity" />
+        <activity android:name=".privacy.CheatFieldSettingsActivity" />
+        <activity android:name=".start.BgRestrictSettingsActivity" />
+        <activity
+                android:name=".apps.AppDetailsActivity"
+                android:enabled="true"
+                android:exported="true" />
+        <activity android:name=".notification.ScreenOnNotificationActivity" />
+        <activity android:name=".task.RecentTaskBlurListActivity" />
+        <activity android:name=".power.SmartStandbyActivity" />
+        <activity
+                android:name=".apps.SuggestedAppsActivity"
+                android:label="@string/feature_title_apps_manager" />
         <activity android:name=".start.StartChartActivity" />
 
-        <service android:name=".testing.FakeService"
-                 android:exported="true">
+        <service
+                android:name=".testing.FakeService"
+                android:exported="true">
             <intent-filter>
-                <action android:name="github.thanos.app.service.fake.START"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="github.thanos.app.service.fake.START" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
     </application>

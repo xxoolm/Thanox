@@ -19,7 +19,7 @@
     <string name="nav_title_exp">拓展</string>
     <string name="nav_title_plugin">插件</string>
 
-    <string name="dialog_message_feedback">Thanox是一个100%开源的应用，请在聊天软件群组或者前往github/tornaco/Thanox新建issue进行反馈。\n\n<b>反馈问题请务必提供下列信息：</b>\n1. 问题描述：xxxx  \n2. 对于这个问题我做了什么尝试，例如（如果反馈的是智能休眠不work）我尝试看了使用说明，打开了系统设置中的xxx。 \n3. 发生问题的Thanox app版本，系统的Android版本。\n4. 日志：Thanox应用崩溃相关问题在/sdcard/Android/data/github…thanos/cache/logging下，系统相关问题在/data/system/thanos/logging下。</string>
+    <string name="dialog_message_feedback">Thanox是一个100%开源的应用，请在聊天软件群组或者前往github/tornaco/Thanox新建issue进行反馈。\n\n<b>反馈问题请务必提供下列信息：</b>\n\n1. 问题描述：xxxx  \n2. 对于这个问题我做了什么尝试，例如（如果反馈的是智能休眠不work）我尝试看了使用说明，打开了系统设置中的xxx。 \n3. 发生问题的Thanox app版本，系统的Android版本。\n4. 日志：Thanox应用崩溃相关问题在/sdcard/Android/data/github…thanos/cache/logging下，系统相关问题在/data/system/thanos/logging下。</string>
 
     <string name="title_no_plugins_installed">暂无插件可用</string>
 

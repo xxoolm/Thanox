@@ -1,6 +1,7 @@
 include ':app', ':module_donate', ':module_ops', ':module_easteregg', ':module_activity_trampoline', ':module_profile'
 include ':module_locker'
 include ':module_common'
+include ':module_filepicker'
 
 include ':gradle_plugins:xposed_hook_annotation'
 include ':gradle_plugins:xposed_hook_compiler'

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.bumptech.glide.Glide;
+import com.nononsenseapps.filepicker.FilePickerActivity;
+import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ import java.util.Objects;
 import de.psdev.licensesdialog.LicensesDialog;
 import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
 import de.psdev.licensesdialog.licenses.MITLicense;
+import de.psdev.licensesdialog.licenses.MozillaPublicLicense20;
 import de.psdev.licensesdialog.model.Notice;
 import de.psdev.licensesdialog.model.Notices;
 import github.tornaco.android.thanos.BuildConfig;
@@ -53,6 +57,7 @@ import github.tornaco.permission.requester.RuntimePermissions;
 import io.reactivex.Completable;
 import io.reactivex.schedulers.Schedulers;
 import rx2.android.schedulers.AndroidSchedulers;
+import util.CollectionUtils;
 
 @RuntimePermissions
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -256,51 +261,82 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         super.onActivityResult(requestCode, resultCode, data);
         Timber.d("onActivityResult: %s %s %s", requestCode, resultCode, ObjectToStringUtils.intentToString(data));
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_RESTORE_FILE_PICK) {
-            if (data == null) {
-                Timber.e("No data.");
-                return;
-            }
-
-            if (getActivity() == null) return;
-
-            Uri uri = data.getData();
-            if (uri == null) {
-                Toast.makeText(getActivity(), "uri == null", Toast.LENGTH_LONG).show();
-                Timber.e("No uri.");
-                return;
-            }
-
-            Optional.ofNullable(getActivity())
-                    .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity)
-                            .performRestore(new SettingsViewModel.RestoreListener() {
-                                @Override
-                                public void onSuccess() {
-                                    if (getActivity() == null) return;
-                                    Completable.fromAction(() ->
-                                            new AlertDialog.Builder(getActivity())
-                                                    .setMessage(getString(R.string.pre_message_restore_success))
-                                                    .setCancelable(false)
-                                                    .setPositiveButton(android.R.string.ok, null)
-                                                    .show())
-                                            .subscribeOn(AndroidSchedulers.mainThread())
-                                            .subscribe();
-                                }
-
-                                @Override
-                                public void onFail(String errMsg) {
-                                    Completable.fromAction(() ->
-                                            Toast.makeText(
-                                                    fragmentActivity.getApplicationContext(),
-                                                    errMsg, Toast.LENGTH_LONG).show())
-                                            .subscribeOn(AndroidSchedulers.mainThread())
-                                            .subscribe();
-                                }
-                            }, uri));
+            onRestoreFilePickRequestResult(data);
+        }
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_BACKUP_FILE_PICK) {
+            onBackupFilePickRequestResult(data);
         }
     }
 
-    @RequiresPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    void backupRequested() {
+    private void onRestoreFilePickRequestResult(@Nullable Intent data) {
+        if (data == null) {
+            Timber.e("No data.");
+            return;
+        }
+
+        if (getActivity() == null) return;
+
+        Uri uri = data.getData();
+        if (uri == null) {
+            Toast.makeText(getActivity(), "uri == null", Toast.LENGTH_LONG).show();
+            Timber.e("No uri.");
+            return;
+        }
+
+        Optional.ofNullable(getActivity())
+                .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity)
+                        .performRestore(new SettingsViewModel.RestoreListener() {
+                            @Override
+                            public void onSuccess() {
+                                if (getActivity() == null) return;
+                                Completable.fromAction(() ->
+                                        new AlertDialog.Builder(getActivity())
+                                                .setMessage(getString(R.string.pre_message_restore_success))
+                                                .setCancelable(false)
+                                                .setPositiveButton(android.R.string.ok, null)
+                                                .show())
+                                        .subscribeOn(AndroidSchedulers.mainThread())
+                                        .subscribe();
+                            }
+
+                            @Override
+                            public void onFail(String errMsg) {
+                                Completable.fromAction(() ->
+                                        Toast.makeText(
+                                                fragmentActivity.getApplicationContext(),
+                                                errMsg, Toast.LENGTH_LONG).show())
+                                        .subscribeOn(AndroidSchedulers.mainThread())
+                                        .subscribe();
+                            }
+                        }, uri));
+    }
+
+    private void onBackupFilePickRequestResult(Intent data) {
+        if (data == null) {
+            Timber.e("No data.");
+            return;
+        }
+
+        if (getActivity() == null) return;
+
+        List<Uri> files = Utils.getSelectedFilesFromResult(data);
+        if (CollectionUtils.isNullOrEmpty(files)) {
+            Toast.makeText(getActivity(), "No selection", Toast.LENGTH_LONG).show();
+            return;
+        }
+        File file = Utils.getFileForUriNoThrow(files.get(0));
+        Timber.w("onBackupFilePickRequestResult file is: %s", file);
+
+        if (file == null) {
+            Toast.makeText(getActivity(), "file == null", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!file.isDirectory()) {
+            Toast.makeText(getActivity(), "file is not dir", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Optional.ofNullable(getActivity())
                 .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity).performBackup(new SettingsViewModel.BackupListener() {
                     @Override
@@ -317,12 +353,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     public void onFail(String errMsg) {
                         Toast.makeText(fragmentActivity.getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
                     }
-                }));
+                }, file));
+    }
+
+    @RequiresPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    void backupRequested() {
+        Intent i = new Intent(getContext(), FilePickerActivity.class);
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
+        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+        // Configure initial directory by specifying a String.
+        // You could specify a String like "/storage/emulated/0/", but that can
+        // dangerous. Always use Android's API calls to getSingleton paths to the SD-card or
+        // internal memory.
+        i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+        startActivityForResult(i, REQUEST_CODE_BACKUP_FILE_PICK);
     }
 
     @RequiresPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void restoreRequested() {
-        Intent intent = new Intent("android.intent.action.OPEN_DOCUMENT");
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
         startActivityForResult(intent, REQUEST_CODE_RESTORE_FILE_PICK);
     }
@@ -490,6 +540,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         "https://github.com/vic797/android_native_code_view",
                         "Copyright 2017 Victor Campos",
                         new ApacheSoftwareLicense20()));
+
+        notices.addNotice(
+                new Notice(
+                        "NoNonsense-FilePicker",
+                        "https://github.com/spacecowboy/NoNonsense-FilePicker",
+                        null,
+                        new MozillaPublicLicense20()));
 
         new LicensesDialog.Builder(Objects.requireNonNull(getActivity()))
                 .setNotices(notices)
