@@ -10,11 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.backup.IBackupCallback;
@@ -25,6 +27,7 @@ import github.tornaco.android.thanos.core.util.FileUtils;
 import github.tornaco.android.thanos.core.util.Timber;
 import io.reactivex.Observable;
 import rx2.android.schedulers.AndroidSchedulers;
+import util.IoUtils;
 
 public class SettingsViewModel extends AndroidViewModel {
 
@@ -89,7 +92,8 @@ public class SettingsViewModel extends AndroidViewModel {
                 });
     }
 
-    void performBackup(BackupListener listener, File externalBackupDir) {
+    @SuppressWarnings("UnstableApiUsage")
+    void performBackup(BackupListener listener, OutputStream externalBackupDirOs) {
         File backupDir = new File(getApplication().getCacheDir(), "backup");
         // File externalBackupDir = new File(getApplication().getExternalCacheDir(), "backup");
         ThanosManager.from(getApplication())
@@ -119,19 +123,16 @@ public class SettingsViewModel extends AndroidViewModel {
                                 null,
                                 null,
                                 new IBackupCallback.Stub() {
-                                    @SuppressWarnings("UnstableApiUsage")
                                     @Override
                                     public void onBackupFinished(String domain, String path) {
                                         Timber.d("onBackupFinished: " + path);
                                         File subFile = new File(backupDir, path);
                                         // Move it to dest.
                                         try {
-                                            File destFile = new File(externalBackupDir, subFile.getName());
-                                            Files.createParentDirs(destFile);
-                                            Files.move(subFile, destFile);
-                                            DevNull.accept(Observable.just(destFile)
+                                            ByteStreams.copy(Files.asByteSource(subFile).openStream(), externalBackupDirOs);
+                                            DevNull.accept(Observable.just("Success...")
                                                     .observeOn(AndroidSchedulers.mainThread())
-                                                    .subscribe(listener::onSuccess));
+                                                    .subscribe(o -> listener.onSuccess()));
                                         } catch (Throwable e) {
                                             DevNull.accept(Observable.just(backupDir)
                                                     .observeOn(AndroidSchedulers.mainThread())
@@ -140,6 +141,7 @@ public class SettingsViewModel extends AndroidViewModel {
                                         } finally {
                                             FileUtils.deleteDirQuiet(backupDir);
                                             Timber.d("deleteDirQuiet cleanup: " + backupDir);
+                                            IoUtils.closeQuietly(externalBackupDirOs);
                                         }
                                     }
 
@@ -164,7 +166,7 @@ public class SettingsViewModel extends AndroidViewModel {
 
     interface BackupListener {
         @UiThread
-        void onSuccess(File dest);
+        void onSuccess();
 
         @UiThread
         void onFail(String errMsg);

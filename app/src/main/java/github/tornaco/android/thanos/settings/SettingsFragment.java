@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,15 +20,16 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.balda.flipper.DocumentFileCompat;
-import com.balda.flipper.OperationFailedException;
 import com.balda.flipper.Root;
 import com.balda.flipper.StorageManagerCompat;
 import com.bumptech.glide.Glide;
+import com.google.common.io.Files;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +44,7 @@ import github.tornaco.android.thanos.apps.AppDetailsActivity;
 import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.core.profile.ProfileManager;
+import github.tornaco.android.thanos.core.util.DateUtils;
 import github.tornaco.android.thanos.core.util.ObjectToStringUtils;
 import github.tornaco.android.thanos.core.util.Optional;
 import github.tornaco.android.thanos.core.util.OsUtils;
@@ -50,6 +52,7 @@ import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.module.easteregg.paint.PlatLogoActivity;
 import github.tornaco.android.thanos.theme.AppThemePreferences;
 import github.tornaco.android.thanos.theme.Theme;
+import github.tornaco.android.thanos.util.AndroidFileUtils;
 import github.tornaco.android.thanos.util.iconpack.IconPack;
 import github.tornaco.android.thanos.util.iconpack.IconPackManager;
 import github.tornaco.permission.requester.RequiresPermission;
@@ -326,15 +329,27 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void onBackupFilePickRequestResultQ(Intent data) {
         Root root = storageManagerCompat.addRoot(Objects.requireNonNull(getContext()),
                 StorageManagerCompat.DEF_MAIN_ROOT, data);
-        if (root == null) return;
-        DocumentFile f = root.toRootDirectory(getContext());
-        if (f == null) return;
-        try {
-            DocumentFile subFolder = DocumentFileCompat.getSubFolder(f, "mysub");
-            DocumentFile myFile = DocumentFileCompat.getFile(subFolder, "myfile", "image/png");
+        if (root == null) {
+            Toast.makeText(getContext(), "root == null", Toast.LENGTH_LONG).show();
+            return;
+        }
+        onBackupFileAvailableQ(root);
+    }
 
-        } catch (OperationFailedException e) {
+    private void onBackupFileAvailableQ(Root root) {
+        try {
+            if (root.getUri() == null) {
+                Toast.makeText(getContext(), "root.getUri() == null", Toast.LENGTH_LONG).show();
+                return;
+            }
+            String rootPath = AndroidFileUtils.getPath(getContext(), root.getUri());
+            String backupFileNameWithExt = "Thanox-Backup-" + DateUtils.formatForFileName(System.currentTimeMillis()) + ".zip";
+            Uri destUri = Uri.fromFile(new File(rootPath, backupFileNameWithExt));
+            OutputStream os = Objects.requireNonNull(getContext()).getContentResolver().openOutputStream(destUri);
+            invokeBackup(rootPath, os);
+        } catch (IOException e) {
             Timber.e(e);
+            Toast.makeText(getActivity(), Log.getStackTraceString(e), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -364,14 +379,27 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return;
         }
 
+        try {
+            String backupFileNameWithExt = "Thanox-Backup-" + DateUtils.formatForFileName(System.currentTimeMillis()) + ".zip";
+            File destFile = new File(file, backupFileNameWithExt);
+            Files.createParentDirs(destFile);
+            //noinspection UnstableApiUsage
+            invokeBackup(destFile.getAbsolutePath(), Files.asByteSink(destFile).openStream());
+        } catch (IOException e) {
+            Timber.e(e);
+            Toast.makeText(getActivity(), Log.getStackTraceString(e), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void invokeBackup(String destPathToTellUser, OutputStream os) {
         Optional.ofNullable(getActivity())
                 .ifPresent(fragmentActivity -> obtainViewModel(fragmentActivity)
                         .performBackup(new SettingsViewModel.BackupListener() {
                             @Override
-                            public void onSuccess(File dest) {
+                            public void onSuccess() {
                                 if (getActivity() == null) return;
                                 new AlertDialog.Builder(getActivity())
-                                        .setMessage(getString(R.string.pre_message_backup_success) + "\n" + dest.getAbsolutePath())
+                                        .setMessage(getString(R.string.pre_message_backup_success) + "\n" + destPathToTellUser)
                                         .setCancelable(true)
                                         .setPositiveButton(android.R.string.ok, null)
                                         .show();
@@ -381,7 +409,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             public void onFail(String errMsg) {
                                 Toast.makeText(fragmentActivity.getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
                             }
-                        }, file));
+                        }, os));
     }
 
     @RequiresPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
@@ -394,10 +422,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void backupRequestedQAndAbove() {
+        storageManagerCompat.deleteRoot(StorageManagerCompat.DEF_MAIN_ROOT);
         Root root = storageManagerCompat.getRoot(StorageManagerCompat.DEF_MAIN_ROOT);
         if (root == null || !root.isAccessGranted(getContext())) {
             Intent requireExternalAccess = storageManagerCompat.requireExternalAccess(Objects.requireNonNull(getContext()));
             startActivityForResult(requireExternalAccess, REQUEST_CODE_RESTORE_FILE_PICK_Q);
+        } else {
+            onBackupFileAvailableQ(root);
         }
     }
 
