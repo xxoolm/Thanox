@@ -21,6 +21,9 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.os.IBinder;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import github.tornaco.android.thanos.core.annotation.Nullable;
 import github.tornaco.android.thanos.core.compat.ManifestCompat;
 import github.tornaco.android.thanos.core.util.ArrayUtils;
@@ -640,6 +643,8 @@ public class AppOpsManager {
     final Context context;
     final IAppOpsService service;
 
+    private static final Set<Integer> CONTROLABLE_OPS = new HashSet<>();
+
     @SneakyThrows
     public void setMode(int code, int uid, String packageName, int mode) {
         service.setMode(code, uid, packageName, mode);
@@ -705,5 +710,14 @@ public class AppOpsManager {
     @SneakyThrows
     public boolean isPkgOpRemindEnable(String pkg) {
         return service.isPkgOpRemindEnable(pkg);
+    }
+
+    public static boolean isConttrolableOp(int op) {
+        if (CONTROLABLE_OPS.contains(op)) return true;
+        if (OpsTemplate.templateOfOp(op) != null) {
+            CONTROLABLE_OPS.add(op);
+            return true;
+        }
+        return false;
     }
 }

@@ -2,13 +2,15 @@ package github.tornaco.thanos.android.ops.model;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+
+import java.util.Arrays;
+
 import github.tornaco.android.thanos.core.annotation.Nullable;
 import github.tornaco.android.thanos.core.util.Preconditions;
 import github.tornaco.thanos.android.ops.R;
-
-import java.util.Arrays;
 
 import static github.tornaco.android.thanos.core.secure.ops.AppOpsManager._NUM_OP;
 
@@ -18,7 +20,7 @@ public class Ops {
     @Nullable
     public static OpsTemplate templateOfOp(int op) {
         for (OpsTemplate template : OpsTemplate.ALL_PERMS_TEMPLATES) {
-            if (Arrays.binarySearch(template.ops, op) >= 0) {
+            if (Arrays.binarySearch(template.legacy.ops, op) >= 0) {
                 return template;
             }
         }

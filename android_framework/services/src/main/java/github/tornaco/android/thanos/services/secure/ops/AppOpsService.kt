@@ -145,6 +145,10 @@ class AppOpsService(s: S) : ThanoxSystemService(s), IAppOpsService {
 
     @Throws(RemoteException::class)
     override fun checkOperation(code: Int, uid: Int, packageName: String): Int {
+        // Always allow if op is not under our control.
+        if (!AppOpsManager.isConttrolableOp(code)) {
+            return AppOpsManager.MODE_ALLOWED
+        }
         // IllegalArgumentException: Bad operation #71
         val mode = opSettingsRepo["$packageName-$code"]?.toInt() ?: AppOpsManager.MODE_ALLOWED
         if (debugOp) Timber.v("checkOperation: $packageName $code, mode: $mode")
