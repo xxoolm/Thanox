@@ -3,6 +3,7 @@ package github.tornaco.android.thanos.core.secure.ops;
 import java.util.Arrays;
 
 import github.tornaco.android.thanos.core.annotation.Nullable;
+import github.tornaco.android.thanos.core.util.OsUtils;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -72,21 +73,37 @@ public class OpsTemplate {
             }
     );
 
-    public static final OpsTemplate DEVICE_TEMPLATE = new OpsTemplate(
-            new int[]{AppOpsManager.OP_POST_NOTIFICATION,
-                    AppOpsManager.OP_ACCESS_NOTIFICATIONS,
-                    AppOpsManager.OP_CALL_PHONE,
-                    AppOpsManager.OP_WRITE_SETTINGS,
-                    AppOpsManager.OP_SYSTEM_ALERT_WINDOW,
-                    AppOpsManager.OP_WAKE_LOCK,
-                    AppOpsManager.OP_PROJECT_MEDIA,
-                    AppOpsManager.OP_ACTIVATE_VPN,
-                    AppOpsManager.OP_ASSIST_STRUCTURE,
-                    AppOpsManager.OP_ASSIST_SCREENSHOT,
-                    AppOpsManager.OP_CHANGE_WIFI_STATE,
-                    AppOpsManager.OP_READ_DEVICE_IDENTIFIERS,
-                    AppOpsManager.OP_REQUEST_INSTALL_PACKAGES}
-    );
+    public static final OpsTemplate DEVICE_TEMPLATE = OsUtils.isQOrAbove()
+            ?
+            new OpsTemplate(
+                    new int[]{AppOpsManager.OP_POST_NOTIFICATION,
+                            AppOpsManager.OP_ACCESS_NOTIFICATIONS,
+                            AppOpsManager.OP_CALL_PHONE,
+                            AppOpsManager.OP_WRITE_SETTINGS,
+                            AppOpsManager.OP_SYSTEM_ALERT_WINDOW,
+                            AppOpsManager.OP_WAKE_LOCK,
+                            AppOpsManager.OP_PROJECT_MEDIA,
+                            AppOpsManager.OP_ACTIVATE_VPN,
+                            AppOpsManager.OP_ASSIST_STRUCTURE,
+                            AppOpsManager.OP_ASSIST_SCREENSHOT,
+                            AppOpsManager.OP_CHANGE_WIFI_STATE,
+                            AppOpsManager.OP_READ_DEVICE_IDENTIFIERS,
+                            AppOpsManager.OP_REQUEST_INSTALL_PACKAGES})
+            :
+            new OpsTemplate(
+                    new int[]{AppOpsManager.OP_POST_NOTIFICATION,
+                            AppOpsManager.OP_ACCESS_NOTIFICATIONS,
+                            AppOpsManager.OP_CALL_PHONE,
+                            AppOpsManager.OP_WRITE_SETTINGS,
+                            AppOpsManager.OP_SYSTEM_ALERT_WINDOW,
+                            AppOpsManager.OP_WAKE_LOCK,
+                            AppOpsManager.OP_PROJECT_MEDIA,
+                            AppOpsManager.OP_ACTIVATE_VPN,
+                            AppOpsManager.OP_ASSIST_STRUCTURE,
+                            AppOpsManager.OP_ASSIST_SCREENSHOT,
+                            AppOpsManager.OP_CHANGE_WIFI_STATE,
+                            AppOpsManager.OP_REQUEST_INSTALL_PACKAGES}
+            );
 
     public static final OpsTemplate RUN_IN_BACKGROUND_TEMPLATE = new OpsTemplate(
             new int[]{AppOpsManager.OP_RUN_IN_BACKGROUND,
