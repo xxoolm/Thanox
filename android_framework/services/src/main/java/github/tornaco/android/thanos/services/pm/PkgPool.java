@@ -152,6 +152,7 @@ public class PkgPool {
             whiteListApps.remove(appInfo);
             whiteListApps.add(appInfo);
         }
+
         if ((flags & AppInfo.FLAGS_WEB_VIEW_PROVIDER) != 0) {
             webViewProviderApps.remove(appInfo);
             webViewProviderApps.add(appInfo);

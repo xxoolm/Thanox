@@ -18,7 +18,8 @@ import github.tornaco.android.thanos.core.app.ThanosManager;
 import github.tornaco.android.thanos.core.pm.AppInfo;
 import github.tornaco.android.thanos.util.ActivityUtils;
 import github.tornaco.android.thanos.widget.SwitchBar;
-import util.CollectionUtils;
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class AppsManageActivity extends CommonAppListFilterActivity {
 
@@ -47,14 +48,15 @@ public class AppsManageActivity extends CommonAppListFilterActivity {
             if (!thanos.isServiceInstalled()) {
                 return Lists.newArrayList(new AppListModel(AppInfo.dummy()));
             }
-            List<AppInfo> installed = Lists.newArrayList(thanos.getPkgManager().getInstalledPkgs(index.flag));
             List<AppListModel> res = new ArrayList<>();
-            CollectionUtils.consumeRemaining(installed, appInfo -> {
-                res.add(new AppListModel(
-                        appInfo,
-                        thanos.getActivityManager().isPackageRunning(appInfo.getPkgName()) ? runningBadge : null,
-                        thanos.getActivityManager().isPackageIdle(appInfo.getPkgName()) ? idleBadge : null));
-            });
+            CompositeDisposable disposable = new CompositeDisposable();
+            disposable.add(Observable.fromArray(thanos.getPkgManager().getInstalledPkgs(index.flag))
+                    .distinct()
+                    .doOnComplete(disposable::dispose)
+                    .subscribe(appInfo -> res.add(new AppListModel(
+                            appInfo,
+                            thanos.getActivityManager().isPackageRunning(appInfo.getPkgName()) ? runningBadge : null,
+                            thanos.getActivityManager().isPackageIdle(appInfo.getPkgName()) ? idleBadge : null))));
             return res;
         };
     }

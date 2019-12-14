@@ -34,6 +34,9 @@ public class AppListModel extends ListModel<AppListModel> {
 
     @Override
     public int compareTo(@NonNull AppListModel listModel) {
+        if (this.appInfo.disabled() != listModel.appInfo.disabled()) {
+            return this.appInfo.disabled() ? 1 : -1;
+        }
         if (this.appInfo.isSelected() != listModel.appInfo.isSelected()) {
             return this.appInfo.isSelected() ? -1 : 1;
         }
