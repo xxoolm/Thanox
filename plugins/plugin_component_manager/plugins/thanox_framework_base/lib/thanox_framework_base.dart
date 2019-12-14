@@ -24,10 +24,15 @@ class ThanoxFrameworkBase {
     return fp;
   }
 
-  static Future<AppInfoList> get getInstalledPkgs async {
+  static Future<AppInfoList> getInstalledPkgs(int flags) async {
     final String res = await _channel.invokeMethod('getInstalledPkgs');
     List<dynamic> list = json.decode(res);
     AppInfoList appList = AppInfoList.fromJson(list);
     return appList;
+  }
+
+  static Future<String> getAppIconCachePath(String pkg) async {
+    final String res = await _channel.invokeMethod('getAppIconCachePath', pkg);
+    return res;
   }
 }

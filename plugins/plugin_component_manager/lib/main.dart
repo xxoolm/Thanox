@@ -1,5 +1,7 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:thanox_framework_base/app_info.dart';
 import 'package:thanox_framework_base/thanox_framework_base.dart';
 
@@ -46,103 +48,101 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _platformVersion = 'Unknown';
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  AppInfoList _appList;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    initInstalledPkgs();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await ThanoxFrameworkBase.fingerPrint;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
+  Future<void> initInstalledPkgs() async {
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-    AppInfoList appList = await ThanoxFrameworkBase.getInstalledPkgs;
-    appList.appList
-        .forEach((member) => print('App name is ${member.appLabel}'));
+    AppInfoList appList =
+        await ThanoxFrameworkBase.getInstalledPkgs(AppInfoList.FLAGS_ALL);
 
     setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _appList = appList;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              'Plat: $_platformVersion',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
+    TabController tabController = new TabController(length: 2, vsync: this);
+
+    var tabBarItem = new TabBar(
+      tabs: [
+        new Tab(
+          icon: new Icon(Icons.list),
+        ),
+        new Tab(
+          icon: new Icon(Icons.grid_on),
+        ),
+      ],
+      controller: tabController,
+      indicatorColor: Colors.white,
+    );
+
+    print(
+        "_appList.appList.length ${_appList == null ? 0 : _appList.appList.length}");
+
+    var listItem = new ListView.builder(
+      itemCount: _appList == null ? 0 : _appList.appList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return new ListTile(
+          title: Text(_appList.appList[index].appLabel),
+          leading: _appList.appList[index].payload == null
+              ? Icon(Icons.android)
+              : Image.file(File(_appList.appList[index].payload)),
+          onTap: () {
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                child: new CupertinoAlertDialog(
+                  title: new Column(
+                    children: <Widget>[
+                      new Text("ListView"),
+                      new Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      ),
+                    ],
+                  ),
+                  content: new Text("Selected Item $index"),
+                  actions: <Widget>[
+                    new FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: new Text("OK"))
+                  ],
+                ));
+          },
+        );
+      },
+    );
+
+    return new DefaultTabController(
+      length: 2,
+      child: new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Flutter TabBar"),
+          bottom: tabBarItem,
+        ),
+        body: new TabBarView(
+          controller: tabController,
+          children: [
+            listItem,
+            listItem,
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

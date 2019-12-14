@@ -51,6 +51,8 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
     private boolean isDummy;
     // Ignore Parcelable
     private boolean isSelected;
+    // You can store something here.
+    private transient String payload;
 
     private AppInfo(Parcel in) {
         pkgName = in.readString();
@@ -136,6 +138,7 @@ public class AppInfo implements Parcelable, Comparable<AppInfo> {
                 PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
                 false,
                 false,
-                true);
+                true,
+                null);
     }
 }

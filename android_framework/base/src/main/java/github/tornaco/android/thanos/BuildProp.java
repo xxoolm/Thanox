@@ -13,13 +13,13 @@ public final class BuildProp
 
    public static final String THANOS_BUILD_HOST = "tornacos-MacBook-Pro.local";
 
-   public static final String THANOS_APP_PKG_NAME = "github.tornaco.android.thanos";
+   public static final String THANOS_APP_PKG_NAME = "github.tornaco.android.thanos.pro";
 
    public static final String THANOS_APP_PKG_NAME_PREFIX = "github.tornaco.android.thanos";
 
-   public static final String FINGERPRINT = "thanos@tornaco:77f50a5b-7899-3c38-b416-374eb0b8f11d";
+   public static final String FINGERPRINT = "thanos@tornaco:f98fbb6b-6dda-3b8f-bad3-892b1f1a5c36";
 
-   public static final java.util.Date BUILD_DATE = new java.util.Date(1576285559610L);
+   public static final java.util.Date BUILD_DATE = new java.util.Date(1576313341211L);
 
    public static final String ACTIVITY_APP_LOCK_VERIFIER = "github.tornaco.practice.honeycomb.locker.ui.verify.VerifyActivity";
 

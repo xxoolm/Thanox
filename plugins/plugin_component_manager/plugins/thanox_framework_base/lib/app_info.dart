@@ -1,4 +1,6 @@
 class AppInfoList {
+  static const int FLAGS_ALL = 127;
+
   List<AppInfo> appList;
 
   AppInfoList({this.appList});
@@ -22,6 +24,7 @@ class AppInfo {
   int uid;
   int versionCode;
   String versionName;
+  String payload;
 
   AppInfo(
       {this.appLabel,
@@ -33,7 +36,8 @@ class AppInfo {
       this.state,
       this.uid,
       this.versionCode,
-      this.versionName});
+      this.versionName,
+      this.payload});
 
   factory AppInfo.fromJson(Map<String, dynamic> json) {
     return AppInfo(
@@ -47,6 +51,7 @@ class AppInfo {
       uid: json['uid'],
       versionCode: json['versionCode'],
       versionName: json['versionName'],
+      payload: json['payload'],
     );
   }
 
@@ -62,6 +67,7 @@ class AppInfo {
     data['uid'] = this.uid;
     data['versionCode'] = this.versionCode;
     data['versionName'] = this.versionName;
+    data['payload'] = this.payload;
     return data;
   }
 }
