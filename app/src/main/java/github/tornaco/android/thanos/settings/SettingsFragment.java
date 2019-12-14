@@ -20,8 +20,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.balda.flipper.Root;
-import com.balda.flipper.StorageManagerCompat;
 import com.bumptech.glide.Glide;
 import com.google.common.io.Files;
 import com.nononsenseapps.filepicker.FilePickerActivity;
@@ -52,7 +50,6 @@ import github.tornaco.android.thanos.core.util.Timber;
 import github.tornaco.android.thanos.module.easteregg.paint.PlatLogoActivity;
 import github.tornaco.android.thanos.theme.AppThemePreferences;
 import github.tornaco.android.thanos.theme.Theme;
-import github.tornaco.android.thanos.util.AndroidFileUtils;
 import github.tornaco.android.thanos.util.iconpack.IconPack;
 import github.tornaco.android.thanos.util.iconpack.IconPackManager;
 import github.tornaco.permission.requester.RequiresPermission;
@@ -64,17 +61,10 @@ import util.CollectionUtils;
 
 @RuntimePermissions
 public class SettingsFragment extends PreferenceFragmentCompat {
+
     private final static int REQUEST_CODE_BACKUP_FILE_PICK = 0x100;
     private final static int REQUEST_CODE_RESTORE_FILE_PICK = 0x200;
     private final static int REQUEST_CODE_RESTORE_FILE_PICK_Q = 0x300;
-
-    private StorageManagerCompat storageManagerCompat;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        storageManagerCompat = new StorageManagerCompat(Objects.requireNonNull(getContext()));
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -327,26 +317,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void onBackupFilePickRequestResultQ(Intent data) {
-        Root root = storageManagerCompat.addRoot(Objects.requireNonNull(getContext()),
-                StorageManagerCompat.DEF_MAIN_ROOT, data);
-        if (root == null) {
-            Toast.makeText(getContext(), "root == null", Toast.LENGTH_LONG).show();
+        if (data == null) {
+            Timber.e("No data.");
             return;
         }
-        onBackupFileAvailableQ(root);
+
+        Uri fileUri = data.getData();
+
+        if (fileUri == null) {
+            Toast.makeText(getActivity(), "fileUri == null", Toast.LENGTH_LONG).show();
+            Timber.e("No fileUri.");
+            return;
+        }
+
+        Timber.d("fileUri == %s", fileUri);
+
+        onBackupFileAvailableQ(fileUri);
     }
 
-    private void onBackupFileAvailableQ(Root root) {
+    private void onBackupFileAvailableQ(@NonNull Uri fileUri) {
         try {
-            if (root.getUri() == null) {
-                Toast.makeText(getContext(), "root.getUri() == null", Toast.LENGTH_LONG).show();
-                return;
-            }
-            String rootPath = AndroidFileUtils.getPath(getContext(), root.getUri());
-            String backupFileNameWithExt = "Thanox-Backup-" + DateUtils.formatForFileName(System.currentTimeMillis()) + ".zip";
-            Uri destUri = Uri.fromFile(new File(rootPath, backupFileNameWithExt));
-            OutputStream os = Objects.requireNonNull(getContext()).getContentResolver().openOutputStream(destUri);
-            invokeBackup(rootPath, os);
+            OutputStream os = Objects.requireNonNull(getContext()).getContentResolver().openOutputStream(fileUri);
+            invokeBackup(fileUri.getPath(), os);
         } catch (IOException e) {
             Timber.e(e);
             Toast.makeText(getActivity(), Log.getStackTraceString(e), Toast.LENGTH_LONG).show();
@@ -422,14 +414,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void backupRequestedQAndAbove() {
-        storageManagerCompat.deleteRoot(StorageManagerCompat.DEF_MAIN_ROOT);
-        Root root = storageManagerCompat.getRoot(StorageManagerCompat.DEF_MAIN_ROOT);
-        if (root == null || !root.isAccessGranted(getContext())) {
-            Intent requireExternalAccess = storageManagerCompat.requireExternalAccess(Objects.requireNonNull(getContext()));
-            startActivityForResult(requireExternalAccess, REQUEST_CODE_RESTORE_FILE_PICK_Q);
-        } else {
-            onBackupFileAvailableQ(root);
-        }
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        // you can set file mime-type
+        intent.setType("*/*");
+        // default file name
+        String backupFileNameWithExt = "Thanox-Backup-" + DateUtils.formatForFileName(System.currentTimeMillis()) + ".zip";
+        intent.putExtra(Intent.EXTRA_TITLE, backupFileNameWithExt);
+        startActivityForResult(intent, REQUEST_CODE_RESTORE_FILE_PICK_Q);
     }
 
     private void backupRequestedQBelow() {

@@ -11,15 +11,15 @@ public final class BuildProp
 
    public static final String THANOS_BUILD_VARIANT = "debug";
 
-   public static final String THANOS_BUILD_HOST = "twcns-Mac-mini-107.local";
+   public static final String THANOS_BUILD_HOST = "tornacos-MacBook-Pro.local";
 
-   public static final String THANOS_APP_PKG_NAME = "github.tornaco.android.thanos.pro";
+   public static final String THANOS_APP_PKG_NAME = "github.tornaco.android.thanos";
 
    public static final String THANOS_APP_PKG_NAME_PREFIX = "github.tornaco.android.thanos";
 
-   public static final String FINGERPRINT = "thanos@tornaco:2d10d24e-e9fc-3457-bd53-df40043701aa";
+   public static final String FINGERPRINT = "thanos@tornaco:7e2256a9-1f5b-3355-b040-5e951af697e4";
 
-   public static final java.util.Date BUILD_DATE = new java.util.Date(1576226280746L);
+   public static final java.util.Date BUILD_DATE = new java.util.Date(1576284697525L);
 
    public static final String ACTIVITY_APP_LOCK_VERIFIER = "github.tornaco.practice.honeycomb.locker.ui.verify.VerifyActivity";
 
